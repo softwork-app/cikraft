@@ -1,0 +1,10 @@
+FILE: wrongDynamicHeader.kt
+    public final class Foo : R|kotlin/Any| {
+        public constructor(foo: R|kotlin/collections/Map<kotlin/String, kotlin/Int>|): R|Foo| {
+            super<R|kotlin/Any|>()
+        }
+
+        @R|app/softwork/cikraft/DynamicHeaders|() public final val foo: R|kotlin/collections/Map<kotlin/String, kotlin/Int>| = R|<local>/foo|
+            public get(): R|kotlin/collections/Map<kotlin/String, kotlin/Int>|
+
+    }

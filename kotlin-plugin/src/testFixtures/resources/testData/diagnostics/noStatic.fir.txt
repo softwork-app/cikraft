@@ -1,0 +1,10 @@
+FILE: noStatic.kt
+    public final class M : R|kotlin/Any| {
+        public constructor(): R|M| {
+            super<R|kotlin/Any|>()
+        }
+
+        @R|app/softwork/cikraft/ScriptEntry|() public final fun foo(): R|kotlin/Unit| {
+        }
+
+    }

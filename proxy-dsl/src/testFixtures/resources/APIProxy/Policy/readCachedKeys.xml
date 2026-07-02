@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<LookupCache xmlns="http://www.sap.com/apimgmt" async="false" continueOnError="false" enabled="true">
+    <CacheKey>
+        <KeyFragment>{private.idp.cache_name}</KeyFragment>
+    </CacheKey>
+    <Scope>Exclusive</Scope>
+    <AssignTo>JWTKeys.content</AssignTo>
+</LookupCache>

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>LongMethod:APITest.kt:APITest$@Test fun deployIFlow</ID>
+    <ID>TooManyFunctions:Api.kt:app.softwork.cikraft.api.proxy.Api.kt</ID>
+    <ID>TooManyFunctions:SapCIApi.kt:app.softwork.cikraft.api.SapCIApi.kt</ID>
+  </CurrentIssues>
+</SmellBaseline>

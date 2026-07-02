@@ -1,0 +1,16 @@
+FILE: multipleThrows.kt
+    public final data class Fault : R|{kotlin/Exception=} java/lang/Exception| {
+        public constructor(message: R|kotlin/String|): R|Fault| {
+            super<R|{kotlin/Exception=} java/lang/Exception|>(R|<local>/message|)
+        }
+
+        public open override val message: R|kotlin/String| = R|<local>/message|
+            public get(): R|kotlin/String|
+
+        public final operator fun component1(): R|kotlin/String|
+
+        public final fun copy(message: R|kotlin/String| = this@R|/Fault|.R|/Fault.message|): R|Fault|
+
+    }
+    @R|app/softwork/cikraft/ScriptEntry|() @R|kotlin/jvm/Throws|(exceptionClasses = vararg(<getClass>(Q|Fault|), <getClass>(Q|java/io/IOException|)) [evaluated = vararg(<getClass>(Q|Fault|), <getClass>(Q|java/io/IOException|))]) public final fun foo(): R|kotlin/Unit| {
+    }

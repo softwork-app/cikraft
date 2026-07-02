@@ -1,0 +1,7 @@
+<ServiceCallout async="true" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
+	<Response>JWTKeys</Response>
+	<Timeout>55000</Timeout>
+	<HTTPTargetConnection>
+		<URL>https://{private.idp.jwks_uri}/</URL>
+ 	</HTTPTargetConnection>
+</ServiceCallout>

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>Filename:SapCIBaseApplyAction.kt:app.softwork.cikraft.gradle.SapCIBaseApplyAction.kt</ID>
+    <ID>LongMethod:APIProxyFeature.kt:APIProxyFeature.ApplyAction$override fun apply</ID>
+    <ID>LongMethod:DeployIFlow.kt:CreateInfrastructureWorker$override fun execute</ID>
+    <ID>LongMethod:InfrastructureIntegrationFlowsFeature.kt:InfrastructureIntegrationFlowsFeature.ApplyAction$override fun apply</ID>
+    <ID>LongMethod:OpenApiFeature.kt:OpenApiFeature.ApplyAction$override fun apply</ID>
+    <ID>MatchingDeclarationName:SapCIBaseApplyAction.kt:InfrastructureFeature : PluginProjectFeatureBinding</ID>
+    <ID>MaxLineLength:JvmTestSuiteFeature.kt:JvmTestSuiteFeature.JvmTestSuiteFeatureAction$// TaskProvider&lt;Test> getTestTask(); is not supported in DCL, so we use this workaround for lifecycle task dependencies</ID>
+    <ID>MaxLineLength:KotlinJvmIFlowFeature.kt:KotlinJvmIFlowFeature.ApplyAction$pluginManager.apply(SapCIKotlinPlugin::class.java)</ID>
+    <ID>MaxLineLength:SapCIBaseApplyAction.kt:InfrastructureFeature.ApplyAction$ProjectFeatureApplyAction&lt;SAPCIInfrastructureDefinition, SAPCIInfrastructureBuildModel, JvmApplicationProjectType></ID>
+  </CurrentIssues>
+</SmellBaseline>

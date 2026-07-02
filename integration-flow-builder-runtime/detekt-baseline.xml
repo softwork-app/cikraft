@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>LongMethod:IntegrationFlowBuilder.kt:IntegrationFlowBuilder$public fun createPackageAndFlow</ID>
+    <ID>UnusedParameter:ApiProxies.kt:baseUrl: String</ID>
+    <ID>UnusedParameter:ApiProxies.kt:suffix: String</ID>
+  </CurrentIssues>
+</SmellBaseline>

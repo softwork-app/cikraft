@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<AssignMessage xmlns="http://www.sap.com/apimgmt" async="false" continueOnError="false" enabled="true">
+    <Set>
+        <Headers>
+            <Header name="Foo">Bar</Header>
+        </Headers>
+    </Set>
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" type="response">response</AssignTo>
+</AssignMessage>

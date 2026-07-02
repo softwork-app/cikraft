@@ -1,0 +1,3 @@
+FILE: hasReceiver.kt
+    @R|app/softwork/cikraft/ScriptEntry|() public final fun R|kotlin/String|.foo(): R|kotlin/Unit| {
+    }

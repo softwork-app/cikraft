@@ -1,0 +1,63 @@
+[versions]
+kotlin = "2.4.0"
+ktor = "3.5.0"
+ksp = "2.3.9"
+kfx = "0.2.10"
+serialization = "1.11.0"
+
+[libraries]
+serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+serialization-properties = { module = "org.jetbrains.kotlinx:kotlinx-serialization-properties", version.ref = "serialization" }
+serialization-xml = { module = "io.github.pdvrieze.xmlutil:serialization", version = "1.0.0-rc3" }
+kotlinx-io-bytestring = { module = "org.jetbrains.kotlinx:kotlinx-io-bytestring", version = "0.9.0" }
+
+kfx-core = { module = "io.github.hfhbd.kfx:core", version.ref = "kfx" }
+kfx-openapi-model = { module = "io.github.hfhbd.kfx:openapi-model", version.ref = "kfx" }
+kfx-kotlin = { module = "io.github.hfhbd.kfx:kotlin", version.ref = "kfx" }
+
+kotlinpoet = { module = "com.squareup:kotlinpoet", version = "2.3.0" }
+
+ktor-resources = { module = "io.ktor:ktor-resources", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
+
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-resources = { module = "io.ktor:ktor-client-resources", version.ref = "ktor" }
+
+ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+
+apache-camel = { module = "org.apache.camel:camel-core", version = "2.24.2" }
+sapci-script-api = { module = "com.sap.cloud.script:script.api", version = "2.15.0" }
+sapci-generic-api = { module = "com.sap.cloud.adk:generic.api", version = "3.18.2" }
+sapci-adapter-api = { module = "com.sap.cloud.adk:adapter.api", version = "3.18.2" }
+sapci-javax-activation = { module = "javax.activation:activation", version = "1.1.1" }
+
+groovy-all = { module = "org.codehaus.groovy:groovy-all", version = "3.0.25" }
+
+validation-runtime = { module = "app.softwork.validation:runtime", version = "0.0.18" }
+
+logback = { module = "ch.qos.logback:logback-classic", version = "1.5.34" }
+
+kotlin-ecosystem = { module = "org.jetbrains.ecosystem:ecosystem-plugin", version = "0.117.0" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
+licensee = { id = "app.cash.licensee", version = "1.14.1" }
+detekt = { id = "dev.detekt", version = "2.0.0-alpha.5" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.24" }
+kotlin-compiler-testing = { id = "io.github.hfhbd.kotlin-compiler-testing", version = "0.0.3" }
+foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
+r8 = { id = "io.github.hfhbd.r8", version = "0.0.2" }

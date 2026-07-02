@@ -1,0 +1,35 @@
+ktlint:
+  NoWildcardImports:
+    active: false
+  ChainMethodContinuation:
+    active: false
+  FunctionSignature:
+    active: false
+  MaximumLineLength:
+    active: false
+  MultilineExpressionWrapping:
+    active: false
+  NoEmptyFirstLineInClassBody:
+    active: true
+  SpacingAroundSquareBrackets:
+    active: true
+  StringTemplateIndent:
+    active: false
+
+naming:
+  TopLevelPropertyNaming:
+    constantPattern: '[A-Za-z][_A-Za-z0-9]*'
+
+style:
+  WildcardImport:
+    active: false
+  CollapsibleIfStatements:
+    active: true
+  DataClassShouldBeImmutable:
+    active: true
+  ReturnCount:
+    max: 5
+
+empty-blocks:
+  EmptyFunctionBlock:
+    ignoreOverridden: true

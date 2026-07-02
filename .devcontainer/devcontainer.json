@@ -1,0 +1,13 @@
+{
+    "image": "mcr.microsoft.com/devcontainers/java:21",
+    "features": {
+        "ghcr.io/devcontainers/features/sshd:1": {},
+        "ghcr.io/devcontainers/features/java:1": {
+            "version": "8"
+        }
+    },
+    "onCreateCommand": "./gradlew build",
+    "remoteEnv": {
+        "ORG_GRADLE_PROJECT_githubToken": "${localEnv:GITHUB_TOKEN}"
+    }
+}
