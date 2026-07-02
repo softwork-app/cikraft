@@ -1,0 +1,111 @@
+FILE: simple.kt
+    @R|kotlinx/serialization/Serializable|() public final data class Fault : R|{kotlin/Exception=} java/lang/Exception| {
+        public constructor(message: R|kotlin/String|, input: R|kotlin/String?|, statusCode: R|kotlin/Int?|, @R|app/softwork/cikraft/Header|(name = String(CamelHttpResponseCode) [evaluated = String(CamelHttpResponseCode)]) httpReturnCode: R|kotlin/Int|, sapMessageProcessingLogID: R|kotlin/String|): R|Fault| {
+            super<R|{kotlin/Exception=} java/lang/Exception|>(R|<local>/message|)
+        }
+
+        public open override val message: R|kotlin/String| = R|<local>/message|
+            public get(): R|kotlin/String|
+
+        public final val input: R|kotlin/String?| = R|<local>/input|
+            public get(): R|kotlin/String?|
+
+        public final val statusCode: R|kotlin/Int?| = R|<local>/statusCode|
+            public get(): R|kotlin/Int?|
+
+        @R|app/softwork/cikraft/Header|(name = String(CamelHttpResponseCode) [evaluated = String(CamelHttpResponseCode)]) public final val httpReturnCode: R|kotlin/Int| = R|<local>/httpReturnCode|
+            public get(): R|kotlin/Int|
+
+        public final val sapMessageProcessingLogID: R|kotlin/String| = R|<local>/sapMessageProcessingLogID|
+            public get(): R|kotlin/String|
+
+        @R|app/softwork/cikraft/Body|(first = <getClass>(Q|Fault.ErrorJsonFactory|) [evaluated = <getClass>(Q|Fault.ErrorJsonFactory|)]) public final val jsonError: R|Fault|
+            public get(): R|Fault| {
+                ^ this@R|/Fault|
+            }
+
+        @R|app/softwork/cikraft/ContentType|(value = String(application/json) [evaluated = String(application/json)]) public final companion object ErrorJsonFactory : R|kotlinx/serialization/StringFormat| {
+            private constructor(): R|Fault.ErrorJsonFactory| {
+                super<R|kotlin/Any|>()
+            }
+
+            public open override fun <T> decodeFromString(deserializer: R|kotlinx/serialization/DeserializationStrategy<T>|, string: R|kotlin/String|): R|T| {
+                R|kotlin/TODO|(String(Not yet implemented))
+            }
+
+            public open override fun <T> encodeToString(serializer: R|kotlinx/serialization/SerializationStrategy<T>|, value: R|T|): R|kotlin/String| {
+                R|kotlin/TODO|(String(Not yet implemented))
+            }
+
+            public open override val serializersModule: R|kotlinx/serialization/modules/SerializersModule|
+                public get(): R|kotlinx/serialization/modules/SerializersModule| {
+                    ^ R|kotlin/TODO|(String(Not yet implemented))
+                }
+
+            public final fun contentType(): R|kotlin/String|
+
+        }
+
+        public final operator fun component1(): R|kotlin/String|
+
+        public final operator fun component2(): R|kotlin/String?|
+
+        public final operator fun component3(): R|kotlin/Int?|
+
+        public final operator fun component4(): R|kotlin/Int|
+
+        public final operator fun component5(): R|kotlin/String|
+
+        public final fun copy(message: R|kotlin/String| = this@R|/Fault|.R|/Fault.message|, input: R|kotlin/String?| = this@R|/Fault|.R|/Fault.input|, statusCode: R|kotlin/Int?| = this@R|/Fault|.R|/Fault.statusCode|, @R|app/softwork/cikraft/Header|(name = String(CamelHttpResponseCode) [evaluated = String(CamelHttpResponseCode)]) httpReturnCode: R|kotlin/Int| = this@R|/Fault|.R|/Fault.httpReturnCode|, sapMessageProcessingLogID: R|kotlin/String| = this@R|/Fault|.R|/Fault.sapMessageProcessingLogID|): R|Fault|
+
+    }
+    @R|app/softwork/cikraft/ContentType|(value = String(application/json) [evaluated = String(application/json)], parameters = <collectionLiteralCall>(String(foo=value), String(bar=value)) [evaluated = <collectionLiteralCall>(String(foo=value), String(bar=value))]) public final data object JsonFactory : R|kotlinx/serialization/StringFormat| {
+        private constructor(): R|JsonFactory| {
+            super<R|kotlin/Any|>()
+        }
+
+        private final field $$delegate_0: R|kotlinx/serialization/StringFormat| = R|kotlinx/serialization/json/Json|(Json@fun R|kotlinx/serialization/json/JsonBuilder|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+            this@R|special/anonymous|.R|kotlinx/serialization/json/JsonBuilder.prettyPrint| = Boolean(true)
+        }
+        )
+
+        public final fun contentType(): R|kotlin/String|
+
+    }
+    @R|app/softwork/cikraft/ScriptEntry|() @R|kotlin/jvm/Throws|(exceptionClasses = vararg(<getClass>(Q|Fault|)) [evaluated = vararg(<getClass>(Q|Fault|))]) public final fun foo(@R|app/softwork/cikraft/Body|(first = <getClass>(Q|JsonFactory|) [evaluated = <getClass>(Q|JsonFactory|)]) body: R|FooInput|, @R|app/softwork/cikraft/Header|(name = String(B) [evaluated = String(B)]) b: R|kotlin/String|, @R|app/softwork/cikraft/Password|() c: R|kotlin/CharArray|, @R|app/softwork/cikraft/Password|() d: R|kotlin/CharArray|, @R|app/softwork/cikraft/Parameter|() e: R|kotlin/Int?|, km: R|javax/net/ssl/KeyManager|, ignored: R|kotlin/String?| = Null(null)): R|FooOutput| {
+        ^foo R|kotlin/error|(String())
+    }
+    @R|kotlinx/serialization/Serializable|() public final data class FooInput : R|kotlin/Any| {
+        public constructor(s: R|kotlin/String|): R|FooInput| {
+            super<R|kotlin/Any|>()
+        }
+
+        public final val s: R|kotlin/String| = R|<local>/s|
+            public get(): R|kotlin/String|
+
+        public final operator fun component1(): R|kotlin/String|
+
+        public final fun copy(s: R|kotlin/String| = this@R|/FooInput|.R|/FooInput.s|): R|FooInput|
+
+    }
+    public final class FooOutput : R|kotlin/Any| {
+        public constructor(@R|app/softwork/cikraft/Body|(first = <getClass>(Q|JsonFactory|) [evaluated = <getClass>(Q|JsonFactory|)]) body: R|kotlin/String|, @R|app/softwork/cikraft/Property|(name = String(FOO) [evaluated = String(FOO)]) foo: R|kotlin/String|, @R|app/softwork/cikraft/Header|(name = R|app/softwork/cikraft/STATUS_CODE_HEADER| [evaluated = String(CamelHttpResponseCode)]) fooHeader: R|kotlin/Int|, headers: R|kotlin/collections/Map<kotlin/String, kotlin/String>|): R|FooOutput| {
+            super<R|kotlin/Any|>()
+        }
+
+        @R|app/softwork/cikraft/Body|(first = <getClass>(Q|JsonFactory|) [evaluated = <getClass>(Q|JsonFactory|)]) public final val body: R|kotlin/String| = R|<local>/body|
+            public get(): R|kotlin/String|
+
+        @R|app/softwork/cikraft/Property|(name = String(FOO) [evaluated = String(FOO)]) public final val foo: R|kotlin/String| = R|<local>/foo|
+            public get(): R|kotlin/String|
+
+        @R|app/softwork/cikraft/Header|(name = R|app/softwork/cikraft/STATUS_CODE_HEADER| [evaluated = String(CamelHttpResponseCode)]) public final val fooHeader: R|kotlin/Int| = R|<local>/fooHeader|
+            public get(): R|kotlin/Int|
+
+        @R|app/softwork/cikraft/DynamicHeaders|() public final val headers: R|kotlin/collections/Map<kotlin/String, kotlin/String>| = R|<local>/headers|
+            public get(): R|kotlin/collections/Map<kotlin/String, kotlin/String>|
+
+    }
+    public final fun box(): R|kotlin/String| {
+        ^box String(OK)
+    }

@@ -1,0 +1,216 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "New IP",
+        "description": "IP Description",
+        "version": "1.0.0"
+    },
+    "tags": [
+        {
+            "name": "Com_Example_Ktor_Resources",
+            "description": "A Description"
+        }
+    ],
+    "servers": [
+        {
+            "url": "https://localhost/foo"
+        }
+    ],
+    "paths": {
+        "/foo/bar/baz": {
+            "head": {
+                "operationId": "BazA_CsrfToken",
+                "summary": "Get the CSRF Token for BazA",
+                "tags": [
+                    "Com_Example_Ktor_Resources"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-CSRF-Token",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "FETCH"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The CSRF Token for BazA",
+                        "headers": {
+                            "X-CSRF-Token": {
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "4XX": {
+                        "description": "Unexpected Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/com.example.core.Fault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Foo": []
+                    }
+                ]
+            },
+            "post": {
+                "operationId": "BazA",
+                "summary": "Foo Bar API",
+                "tags": [
+                    "Com_Example_Ktor_Resources"
+                ],
+                "requestBody": {
+                    "description": "",
+                    "required": true,
+                    "content": {
+                        "application/json; charset=utf-8": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/com.example.FooInput"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "X-CSRF-Token",
+                        "in": "header",
+                        "description": "The CSRF Token fetched by executing BazA_CsrfToken first.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "B",
+                        "in": "header",
+                        "description": "some Header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "sap_messageprocessinglogid": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "X-FOO": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Authorization failed",
+                        "content": {
+                            "text/html": {}
+                        }
+                    },
+                    "4XX": {
+                        "description": "Unexpected Error",
+                        "headers": {
+                            "sap_messageprocessinglogid": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/com.example.core.Fault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Foo": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "com.example.FooInput": {
+                "type": "object",
+                "required": [
+                    "s"
+                ],
+                "properties": {
+                    "s": {
+                        "type": "string",
+                        "description": "asdf"
+                    }
+                },
+                "description": "Foo input sample"
+            },
+            "com.example.core.Fault": {
+                "type": "object",
+                "required": [
+                    "message",
+                    "httpReturnCode",
+                    "sapMessageProcessingLogID"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "input": {
+                        "type": "string",
+                        "description": "a message",
+                        "nullable": true
+                    },
+                    "statusCode": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "httpReturnCode": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "sapMessageProcessingLogID": {
+                        "type": "string"
+                    }
+                },
+                "description": "Some Fault"
+            }
+        },
+        "securitySchemes": {
+            "Foo": {
+                "type": "mutualTLS",
+                "description": "Client Cert connected to the User Role Foo"
+            }
+        }
+    }
+}

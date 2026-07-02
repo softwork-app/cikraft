@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ComplexCondition:ProxyDsl.kt:headers.isEmpty() &amp;&amp; statusCode == null &amp;&amp; reasonPhrase == null &amp;&amp; payload == null</ID>
+    <ID>CyclomaticComplexMethod:ProxyDsl.kt:ApiProxyBuilder$internal fun toTransport: ApiProxyTransport</ID>
+    <ID>LongMethod:ProxyDsl.kt:ApiProxyBuilder$internal fun toTransport: ApiProxyTransport</ID>
+    <ID>TooManyFunctions:ProxyDsl.kt:PoliciesDelegate</ID>
+  </CurrentIssues>
+</SmellBaseline>

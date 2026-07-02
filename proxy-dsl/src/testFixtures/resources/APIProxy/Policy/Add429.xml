@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<RaiseFault xmlns="http://www.sap.com/apimgmt" async="false" continueOnError="false" enabled="true">
+    <FaultResponse>
+        <Set>
+            <Headers>
+                <Header name="Retry-After">60</Header>
+            </Headers>
+            <Payload></Payload>
+            <StatusCode>429</StatusCode>
+            <ReasonPhrase>Too Many Requests</ReasonPhrase>
+        </Set>
+    </FaultResponse>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

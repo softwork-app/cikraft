@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<SpikeArrest xmlns="http://www.sap.com/apimgmt" async="true" continueOnError="false" enabled="true">
+    <Identifier ref="client.ip" />
+    <Rate>5pm</Rate>
+    <UseEffectiveCount>true</UseEffectiveCount>
+</SpikeArrest>

@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<APIProxy xmlns="http://www.sap.com/apimgmt">
+    <name>Test_API_FOO_URL2</name>
+    <title>Test API FOO URL2</title>
+    <isVersioned>false</isVersioned>
+    <service_code>REST</service_code>
+    <APIState>Active</APIState>
+    <proxyEndPoints>
+        <proxyEndPoint>
+            <proxyEndPointName>default</proxyEndPointName>
+            <apiResourceName>SWAGGER_JSON</apiResourceName>
+        </proxyEndPoint>
+    </proxyEndPoints>
+    <targetEndPoints>
+        <targetEndPoint>default</targetEndPoint>
+    </targetEndPoints>
+    <policies>
+        <policy type="LookupCache">readCachedKeys</policy>
+        <policy type="ServiceCallout">readJWTKeys</policy>
+        <policy type="PopulateCache">cacheJWTKeys</policy>
+        <policy type="VerifyJWT">verifyJWT</policy>
+        <policy type="SpikeArrest">Spike</policy>
+        <policy type="Quota">RateLimit</policy>
+        <policy type="RaiseFault">Add429</policy>
+        <policy type="AssignMessage">MMM</policy>
+        <policy type="KeyValueMapOperations">GetCredentials</policy>
+        <policy type="BasicAuth">AddCredentials</policy>
+    </policies>
+</APIProxy>

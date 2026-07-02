@@ -1,0 +1,16 @@
+FILE: wrongHeaderType.kt
+    public final class Foo : R|kotlin/Any| {
+        public constructor(@R|app/softwork/cikraft/Header|() foo: R|kotlin/time/Duration|, @R|app/softwork/cikraft/Header|() s: R|kotlin/String|, @R|app/softwork/cikraft/Header|() i: R|kotlin/Int|): R|Foo| {
+            super<R|kotlin/Any|>()
+        }
+
+        @R|app/softwork/cikraft/Header|() public final val foo: R|kotlin/time/Duration| = R|<local>/foo|
+            public get(): R|kotlin/time/Duration|
+
+        @R|app/softwork/cikraft/Header|() public final val s: R|kotlin/String| = R|<local>/s|
+            public get(): R|kotlin/String|
+
+        @R|app/softwork/cikraft/Header|() public final val i: R|kotlin/Int| = R|<local>/i|
+            public get(): R|kotlin/Int|
+
+    }

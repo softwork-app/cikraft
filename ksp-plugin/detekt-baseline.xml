@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:SapCIGroovyEntrypointPlugin.kt:SapCIGroovyEntrypointPlugin$override fun process: List&lt;KSAnnotated></ID>
+    <ID>CyclomaticComplexMethod:SapCIGroovyEntrypointPlugin.kt:private fun KSDeclaration.toType: Type</ID>
+    <ID>CyclomaticComplexMethod:SapCIGroovyEntrypointPlugin.kt:private fun Sequence&lt;KSAnnotation>.asAnnoMap: List&lt;CodeGenTree.Annotation></ID>
+    <ID>LongMethod:SapCIGroovyEntrypointPlugin.kt:SapCIGroovyEntrypointPlugin$override fun process: List&lt;KSAnnotated></ID>
+    <ID>LongMethod:SapCIGroovyEntrypointPlugin.kt:private fun KSDeclaration.toType: Type</ID>
+  </CurrentIssues>
+</SmellBaseline>

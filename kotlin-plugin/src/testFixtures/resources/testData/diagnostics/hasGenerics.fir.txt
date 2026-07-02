@@ -1,0 +1,3 @@
+FILE: hasGenerics.kt
+    @R|app/softwork/cikraft/ScriptEntry|() public final fun <T> foo(): R|kotlin/Unit| {
+    }

@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<TargetEndPoint xmlns="http://www.sap.com/apimgmt">
+    <name>default</name>
+    <url>https://api.predic8.de/shop/v2/products</url>
+    <properties>
+        <property><name>request.streaming.enabled</name><value>true</value></property>
+        <property><name>response.streaming.enabled</name><value>true</value></property>
+    </properties>
+    <provider_id>NONE</provider_id>
+    <isDefault>true</isDefault>
+    <preFlow>
+        <name>PreFlow</name>
+        <request>
+            <isRequest>true</isRequest>
+            <steps>
+                <step>
+                    <policy_name>GetCredentials</policy_name>
+                    <sequence>1</sequence>
+                </step>
+                <step>
+                    <policy_name>AddCredentials</policy_name>
+                    <sequence>2</sequence>
+                </step>
+            </steps>
+        </request>
+    </preFlow>
+    <postFlow>
+        <name>PostFlow</name>
+    </postFlow>
+    <loadBalancerConfigurations>
+        <isRetry>false</isRetry>
+        <healthMonitor>
+            <isEnabled>false</isEnabled>
+        </healthMonitor>
+    </loadBalancerConfigurations>
+</TargetEndPoint>

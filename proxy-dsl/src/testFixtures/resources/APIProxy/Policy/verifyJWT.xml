@@ -1,0 +1,12 @@
+<VerifyJWT async="false" continueOnError="false" enabled="true" xmlns="http://www.sap.com/apimgmt">
+    <Algorithm>RS256</Algorithm>
+     <PublicKey>
+    		<JWKS ref="JWTKeys.content"/>
+    </PublicKey>
+    <Issuer ref='private.idp.issuer'/>
+    <Subject ref='private.idp.subject'/>
+    <Audience ref='private.idp.audience'/>
+    <AdditionalClaims>
+        <Claim name="acr">2</Claim>
+   </AdditionalClaims>
+</VerifyJWT>

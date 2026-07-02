@@ -1,0 +1,228 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "New IP",
+        "description": "IP Description",
+        "version": "unspecified"
+    },
+    "tags": [
+        {
+            "name": "Com_Example_Ktor_Resources",
+            "description": "A Description"
+        }
+    ],
+    "servers": [
+        {
+            "url": "https://localhost/foo"
+        }
+    ],
+    "paths": {
+        "/foo/bar/baz": {
+            "head": {
+                "operationId": "IFBa_CsrfToken",
+                "summary": "Get the CSRF Token for IFBa",
+                "tags": [
+                    "Com_Example_Ktor_Resources"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-CSRF-Token",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "FETCH"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The CSRF Token for IFBa",
+                        "headers": {
+                            "X-CSRF-Token": {
+                                "required": true,
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "4XX": {
+                        "description": "Unexpected Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/com.example.core.Fault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "SomeRole.send": []
+                    }
+                ]
+            },
+            "post": {
+                "operationId": "IFBa",
+                "summary": "Ba test",
+                "tags": [
+                    "Com_Example_Ktor_Resources"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-CSRF-Token",
+                        "in": "header",
+                        "description": "The CSRF Token fetched by executing IFBa_CsrfToken first.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "B",
+                        "in": "header",
+                        "description": "some Header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "sap_messageprocessinglogid": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/DInt"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Authorization failed",
+                        "content": {
+                            "text/html": {}
+                        }
+                    },
+                    "4XX": {
+                        "description": "Unexpected Error",
+                        "headers": {
+                            "sap_messageprocessinglogid": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/com.example.core.Fault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "SomeRole.send": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "DInt": {
+                "type": "object",
+                "required": [
+                    "x",
+                    "nested",
+                    "e"
+                ],
+                "properties": {
+                    "x": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "nested": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/E"
+                    },
+                    "e": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/ENUM",
+                        "description": "Some Enum description at D"
+                    }
+                }
+            },
+            "E": {
+                "type": "object",
+                "required": [
+                    "f"
+                ],
+                "properties": {
+                    "f": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ENUM": {
+                "type": "string",
+                "enum": [
+                    "foo",
+                    "Bar"
+                ]
+            },
+            "com.example.core.Fault": {
+                "type": "object",
+                "required": [
+                    "message",
+                    "httpReturnCode",
+                    "sapMessageProcessingLogID"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "input": {
+                        "type": "string",
+                        "description": "a message",
+                        "nullable": true
+                    },
+                    "statusCode": {
+                        "type": "integer",
+                        "format": "int32",
+                        "nullable": true
+                    },
+                    "httpReturnCode": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "sapMessageProcessingLogID": {
+                        "type": "string"
+                    }
+                },
+                "description": "Some Fault"
+            }
+        },
+        "securitySchemes": {
+            "SomeRole.send": {
+                "type": "mutualTLS",
+                "description": "Client Cert connected to the User Role SomeRole.send"
+            }
+        }
+    }
+}

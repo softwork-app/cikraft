@@ -1,0 +1,3068 @@
+{
+    "x-odata-version": "4.0",
+    "swagger": "2.0",
+    "info": {
+        "title": "API Portal - API Proxy (CF)",
+        "description": "The API allows you to decouple the application-facing APIs from your backend changes, shielding those APIs from backend code changes. This provides flexibility to application developers to continue calling the same API.",
+        "version": "1.0",
+        "x-targetEndpoint": "https://us10trialapiportal.cfapps.us10.hana.ondemand.com/apiportal/api/1.0/Management.svc/"
+    },
+    "securityDefinitions": {
+        "OAuth2_ClientCredentials": {
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://{tokenUrl}/oauth/token?grant_type=client_credentials",
+            "scopes": {}
+        }
+    },
+    "security": [
+        {
+            "OAuth2_ClientCredentials": []
+        }
+    ],
+    "externalDocs": {
+        "description": "Business Documentation",
+        "url": "https://help.sap.com/viewer/66d066d903c2473f81ec33acfe2ccdb4/Cloud/en-US/8962643388fc4df6b7a165baa14475d9.html"
+    },
+    "x-sap-api-type": "ODATA",
+    "host": "sandbox.api.sap.com",
+    "schemes": [
+        "https"
+    ],
+    "x-sap-shortText": "Decouples an API from any backend changes",
+    "basePath": "/sapapimanagement/apiportal/Management.svc",
+    "x-servers": [
+        {
+            "url": "https://eu20apiportal.cfapps.eu20.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal EU20 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal EU20 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://us20apiportal.cfapps.us20.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal US20 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal US20 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://jp20apiportal.cfapps.jp20.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal jp20 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal jp20 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://ap21apiportal.cfapps.ap21.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal ap21 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal ap21 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://us21apiportal.cfapps.us21.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal us21 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal us21 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://ap10apiportal.cfapps.ap10.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal ap10 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal ap10 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://br10apiportal.cfapps.br10.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal br10 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal br10 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://jp10apiportal.cfapps.jp10.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal jp10 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal jp10 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://eu10apiportal.cfapps.eu10.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal eu10 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal eu10 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://us10apiportal.cfapps.us10.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal us10 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal us10 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://ca10apiportal.cfapps.ca10.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal ca10 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal ca10 tokenUrl"
+                }
+            }
+        },
+        {
+            "url": "https://ap11apiportal.cfapps.ap11.hana.ondemand.com/apiportal/api/1.0/Management.svc",
+            "description": "API Portal ap11 API endpoint",
+            "templates": {
+                "tokenUrl": {
+                    "description": "SAP API Management API Portal ap11 tokenUrl"
+                }
+            }
+        }
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "definitions": {
+        "payload": {
+            "type": "string",
+            "description": "\n\n--request-separator\n\nContent-Type: multipart/mixed;boundary=changeset-separator\n\nContent-Transfer-Encoding: binary\n\n--changeset-separator\n\nPUT APIProxies({name})/?saveLocal=true HTTP/1.1\r\n\nx-csrf-token: {x-csrf-token}\r\n\nAccept-Language: en\r\n\nAccept: application/json\r\n\n\nRequestId: {requestId}\r\n\nContent-Type: application/json\r\n\nContent-Length: {content-length}\r\n\r\n\n\n{...}\n\n--changeset-separator\n\n\n\nContent-Type: application/http\r\n\nContent-Transfer-Encoding: binary\r\n\r\nPOST Policies HTTP/1.1\r\n\nx-csrf-token: {x-csrf-token}\r\n\nAccept-Language: en\r\n\nAccept: application/json\r\n\n\nRequestId: {requestId}\r\n\nContent-Type: application/json\r\n\nContent-Length: {content-length}\r\n\r\n{...}\r\n\n--changeset-separator--\n\n--request-separator--"
+        },
+        "odata.error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/odata.error.main"
+                }
+            }
+        },
+        "odata.error.main": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "message": {
+                    "$ref": "#/definitions/odata.error.message"
+                },
+                "innererror": {
+                    "description": "The contents of this object are service-defined"
+                }
+            }
+        },
+        "odata.error.message": {
+            "type": "object",
+            "properties": {
+                "lang": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "apiportal.Resource": {
+            "type": "object",
+            "properties": {
+                "locale": {
+                    "type": "string",
+                    "maxLength": 5
+                },
+                "long_text": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048
+                },
+                "medium_text": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "object_id": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "short_text": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "type": {
+                    "type": "string",
+                    "maxLength": 2
+                }
+            },
+            "title": "Resource"
+        },
+        "apiportal.APIProxyPost": {
+            "type": "object",
+            "required": [
+                "name",
+                "state",
+                "title",
+                "proxyEndPoints",
+                "isPublished",
+                "status_code",
+                "targetEndPoints"
+            ],
+            "properties": {
+                "isPublished": {
+                    "type": "boolean",
+                    "default": "false",
+                    "description": "Indicates whether the API Proxy is published or not."
+                },
+                "isVersioned": {
+                    "type": "boolean",
+                    "default": "null",
+                    "description": "Indicates whether the version is enabled for API Proxy or not."
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Technical name of the API Proxy."
+                },
+                "provider_name": {
+                    "type": "string",
+                    "default": "NONE",
+                    "maxLength": 200,
+                    "description": "Technical name of the API Proxy Provider."
+                },
+                "service_code": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "default": "REST",
+                    "description": "APIProxy of the type REST, ODATA or SOAP."
+                },
+                "state": {
+                    "type": "string",
+                    "maxLength": 10,
+                    "default": "UNDEPLOYED",
+                    "description": "It verifies whether the status of the API Proxy on the runtime is DEPLOYED or UNDEPLOYED."
+                },
+                "status_code": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "default": "REGISTERED",
+                    "description": "Checks whether the API Proxy status is EXTERNAL or REGISTERED."
+                },
+                "releaseStatus": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 15,
+                    "description": "Current state of the API Proxy."
+                },
+                "version": {
+                    "type": "string",
+                    "default": "1",
+                    "maxLength": 10,
+                    "description": "Current version of the API Proxy."
+                },
+                "title": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255,
+                    "description": "Title of the API Proxy displayed on the Product."
+                },
+                "description": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048,
+                    "description": "API Proxy description."
+                },
+                "shortText": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255,
+                    "description": "API Proxy short text."
+                },
+                "policyTemplateNames": {
+                    "type": "string",
+                    "default": "null",
+                    "example": "policy-template-name1,policy-template-name2",
+                    "maxLength": 16000,
+                    "description": "Policy templates attached to the API Proxy."
+                },
+                "apiProvider": {
+                    "type": "array",
+                    "description": "List of the API Providers associated with the API Proxy.",
+                    "default": "null",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "description": {
+                                "type": "string",
+                                "default": "null",
+                                "maxLength": 16000,
+                                "description": "Description of the API Provider."
+                            },
+                            "destType": {
+                                "type": "string",
+                                "default": "null",
+                                "enum": [
+                                    "ODATA",
+                                    "CPIDISCOVERY",
+                                    "CPIRUNTIME"
+                                ],
+                                "maxLength": 10,
+                                "description": "Destination type of the API Provider."
+                            },
+                            "host": {
+                                "type": "string",
+                                "maxLength": 2048,
+                                "default": "example.com",
+                                "description": "API Provider host."
+                            },
+                            "name": {
+                                "type": "string",
+                                "maxLength": 200,
+                                "description": "The technical name of the API Provider."
+                            },
+                            "trustAll": {
+                                "type": "boolean",
+                                "default": "null",
+                                "enum": [
+                                    false,
+                                    true
+                                ],
+                                "description": "Indicates whether all the certificates attached to the API Provider are authorized."
+                            },
+                            "title": {
+                                "type": "string",
+                                "default": "null",
+                                "maxLength": 255,
+                                "description": "API Provider title"
+                            },
+                            "authType": {
+                                "type": "string",
+                                "enum": [
+                                    "NONE",
+                                    "BASIC"
+                                ],
+                                "maxLength": 126,
+                                "description": "API Provider authentication type."
+                            },
+                            "port": {
+                                "type": "integer",
+                                "format": "int32",
+                                "default": 1,
+                                "description": "API Provider port."
+                            },
+                            "pathPrefix": {
+                                "type": "string",
+                                "default": "null",
+                                "maxLength": 2048,
+                                "description": "API Provider path prefix."
+                            },
+                            "useSSL": {
+                                "type": "boolean",
+                                "enum": [
+                                    false,
+                                    true
+                                ],
+                                "description": "Indicates whether the API Provider is useSSL enabled or not."
+                            },
+                            "isOnPremise": {
+                                "type": "boolean",
+                                "default": "null",
+                                "enum": [
+                                    false,
+                                    true
+                                ],
+                                "description": "Indicates whether the API Provider is on-premise or not."
+                            },
+                            "cloudConnectorLocation": {
+                                "type": "string",
+                                "default": "null",
+                                "maxLength": 2048,
+                                "description": "Name of API Provider cloudConnectorLocation."
+                            },
+                            "rt_auth": {
+                                "type": "string",
+                                "default": "null",
+                                "enum": [
+                                    "NONE",
+                                    "PRINCIPALPROPAGATION"
+                                ],
+                                "maxLength": 255,
+                                "description": "Name of API Provider runtime authentication type."
+                            },
+                            "url": {
+                                "type": "string",
+                                "default": "null",
+                                "description": "API Provider url"
+                            },
+                            "userName": {
+                                "type": "string",
+                                "default": "null",
+                                "maxLength": 2048,
+                                "description": "API Provider authentication username."
+                            },
+                            "password": {
+                                "type": "string",
+                                "default": "null",
+                                "maxLength": 126,
+                                "description": "API Provider authentication password."
+                            },
+                            "sslInfo": {
+                                "type": "object",
+                                "default": "null",
+                                "description": "It's the API Provider SSL configuration.",
+                                "properties": {
+                                    "ciphers": {
+                                        "type": "string",
+                                        "default": "null",
+                                        "maxLength": 255
+                                    },
+                                    "clientAuthEnabled": {
+                                        "type": "boolean",
+                                        "default": "null"
+                                    },
+                                    "enabled": {
+                                        "type": "boolean",
+                                        "default": "null"
+                                    },
+                                    "ignoreValidationErrors": {
+                                        "type": "boolean",
+                                        "default": "null"
+                                    },
+                                    "keyAlias": {
+                                        "type": "string",
+                                        "default": "null",
+                                        "maxLength": 255
+                                    },
+                                    "keyStore": {
+                                        "type": "string",
+                                        "default": "null",
+                                        "maxLength": 255
+                                    },
+                                    "protocols": {
+                                        "type": "string",
+                                        "default": "null",
+                                        "maxLength": 255
+                                    },
+                                    "trustStore": {
+                                        "type": "string",
+                                        "default": "null",
+                                        "maxLength": 255
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "proxyEndPoints": {
+                    "type": "array",
+                    "description": "API Proxy proxyEndPoints",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "isDefault",
+                            "name",
+                            "base_path"
+                        ],
+                        "properties": {
+                            "base_path": {
+                                "type": "string",
+                                "default": "/{api_base_path}",
+                                "description": "It's the proxyEndPoint basepath."
+                            },
+                            "isDefault": {
+                                "type": "boolean",
+                                "default": "false",
+                                "description": "Checks whether it's the default API proxyEndPoint."
+                            },
+                            "name": {
+                                "type": "string",
+                                "maxLength": 255,
+                                "default": "default",
+                                "description": "Name of the proxyEndPoint associated with the API Proxy."
+                            },
+                            "apiResources": {
+                                "type": "array",
+                                "default": "null",
+                                "description": "Name of the API Resources associated with the proxyEndPoint."
+                            },
+                            "conditionalFlows": {
+                                "type": "array",
+                                "default": "null",
+                                "description": "ConditionalFlows of the API proxyEndPoint."
+                            },
+                            "routeRules": {
+                                "type": "array",
+                                "description": "It's the route rules configuration of the API proxyEndPoint.",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "maxLength": 255
+                                        },
+                                        "sequence": {
+                                            "type": "integer",
+                                            "format": "int32"
+                                        },
+                                        "targetEndPointName": {
+                                            "type": "string",
+                                            "maxLength": 255
+                                        }
+                                    }
+                                }
+                            },
+                            "virtualhosts": {
+                                "description": "It's the virtualhosts configuration of the API proxyEndPoint.",
+                                "type": "array",
+                                "default": "null"
+                            }
+                        }
+                    }
+                },
+                "targetEndPoints": {
+                    "type": "array",
+                    "description": "API Proxy targetEndPoints.",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "isDefault",
+                            "name",
+                            "url",
+                            "provider_id"
+                        ],
+                        "properties": {
+                            "isDefault": {
+                                "type": "boolean",
+                                "default": "false",
+                                "description": "Checks whether it's the default API targetEndPoints."
+                            },
+                            "name": {
+                                "type": "string",
+                                "default": "default",
+                                "maxLength": 255,
+                                "description": "Name of the targetEndPoint associated with the API Proxy."
+                            },
+                            "provider_id": {
+                                "type": "string",
+                                "default": "NONE",
+                                "maxLength": 200,
+                                "description": "It's the provider id associated with the API Proxy."
+                            },
+                            "relativePath": {
+                                "type": "string",
+                                "default": "null",
+                                "maxLength": 255,
+                                "description": "Relative path of the API targetEndPoint."
+                            },
+                            "url": {
+                                "type": "string",
+                                "default": "null",
+                                "maxLength": 2083,
+                                "description": "Url of the API targetEndPoint."
+                            },
+                            "properties": {
+                                "type": "array",
+                                "default": [],
+                                "description": "Properties of the API targetEndPoint."
+                            },
+                            "targetAPIProxyName": {
+                                "type": "string",
+                                "default": "null",
+                                "description": "Name of the target API Proxy."
+                            }
+                        }
+                    }
+                },
+                "isCopy": {
+                    "type": "boolean",
+                    "default": "null",
+                    "description": "Checks whether the API Proxy is to be cloned or not."
+                },
+                "hasChanges": {
+                    "type": "boolean",
+                    "default": "null",
+                    "description": "Checks whether the API Proxy has delta changes or not."
+                },
+                "isUnmanaged": {
+                    "type": "boolean",
+                    "default": "null",
+                    "description": "Checks whether the API Proxy is externally managed or not."
+                }
+            }
+        },
+        "apiportal.APIProxy": {
+            "type": "object",
+            "properties": {
+                "FK_PROVIDERNAME": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 200
+                },
+                "isPublished": {
+                    "type": "boolean",
+                    "default": "false",
+                    "description": "Indicates whether the API Proxy is published or not."
+                },
+                "isVersioned": {
+                    "type": "boolean",
+                    "default": "false",
+                    "description": "Indicates whether the version is enabled for API Proxy or not."
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History",
+                    "description": "API Proxy history"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Technical name of the API Proxy."
+                },
+                "apiVersionGroup": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "default": "null",
+                    "description": "Version used in the API Proxy export."
+                },
+                "provider_name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 200,
+                    "description": "Technical name of the API Proxy Provider."
+                },
+                "service_code": {
+                    "type": "string",
+                    "default": "REST",
+                    "maxLength": 20,
+                    "description": "APIProxy of the type REST, ODATA or SOAP.",
+                    "enum": [
+                        "REST",
+                        "ODATA",
+                        "SOAP"
+                    ]
+                },
+                "state": {
+                    "type": "string",
+                    "default": "UNDEPLOYED",
+                    "maxLength": 10,
+                    "description": "It verifies whether the status of the API Proxy on the runtime is DEPLOYED or UNDEPLOYED.",
+                    "enum": [
+                        "DEPLOYED",
+                        "UNDEPLOYED"
+                    ]
+                },
+                "status_code": {
+                    "type": "string",
+                    "default": "REGISTERED",
+                    "maxLength": 20,
+                    "description": "Checks whether the API Proxy status is EXTERNAL or REGISTERED.",
+                    "enum": [
+                        "EXTERNAL",
+                        "REGISTERED"
+                    ]
+                },
+                "releaseStatus": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 15,
+                    "description": "Current state of the API Proxy."
+                },
+                "releaseMetadata": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255,
+                    "description": "API Proxy release metadata"
+                },
+                "version": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 10,
+                    "description": "Current version of the API Proxy."
+                },
+                "title": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255,
+                    "description": "Title of the API Proxy displayed on the Product."
+                },
+                "description": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048,
+                    "description": "API Proxy description."
+                },
+                "apiProducts": {
+                    "title": "Related Collection(apiportal.APIProduct)",
+                    "description": "List of Products associated with an api proxy.",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.APIProduct"
+                            }
+                        }
+                    }
+                },
+                "apiProvider": {
+                    "description": "List of the API Providers associated with the API Proxy.",
+                    "$ref": "#/definitions/apiportal.APIProvider"
+                },
+                "fileResources": {
+                    "title": "Related Collection(apiportal.FileResource)",
+                    "description": "List of the fileResources associated with the API Proxy.",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.FileResource"
+                            }
+                        }
+                    }
+                },
+                "policies": {
+                    "title": "Related Collection(apiportal.Policy)",
+                    "description": "List of the policies associated with the API Proxy.",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Policy"
+                            }
+                        }
+                    }
+                },
+                "proxyEndPoints": {
+                    "title": "Related Collection(apiportal.APIProxyEndPoint)",
+                    "description": "List of the proxyEndPoints associated with the API Proxy.",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.APIProxyEndPoint"
+                            }
+                        }
+                    }
+                },
+                "resources": {
+                    "title": "Related Collection(apiportal.Resource)",
+                    "description": "List of the resources associated with the API Proxy.",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Resource"
+                            }
+                        }
+                    }
+                },
+                "targetEndPoints": {
+                    "title": "Related Collection(apiportal.APITargetEndPoint)",
+                    "description": "Available targetEndPoints for the API Proxy.",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.APITargetEndPoint"
+                            }
+                        }
+                    }
+                },
+                "policyTemplateNames": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 16000,
+                    "description": "Policy templates attached to the API Proxy."
+                },
+                "isCopy": {
+                    "type": "boolean",
+                    "default": "false",
+                    "description": "Checks whether the API Proxy to be  cloned or not."
+                },
+                "hasChanges": {
+                    "type": "boolean",
+                    "default": "false",
+                    "description": "Checks whether the API Proxy has delta changes or not"
+                },
+                "isUnmanaged": {
+                    "type": "boolean",
+                    "default": "false",
+                    "description": "Checks whether the API Proxy is externally managed or not."
+                }
+            },
+            "title": "APIProxy"
+        },
+        "apiportal.Developer": {
+            "type": "object",
+            "properties": {
+                "country": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "emailId": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "firstName": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "lastName": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "applications": {
+                    "title": "Related Collection(apiportal.Application)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Application"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "Developer"
+        },
+        "apiportal.EndPointProperty": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 512
+                },
+                "FK_PROXYENDPOINT_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "FK_TARGETENDPOINT_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "value": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "proxyEndPoint": {
+                    "$ref": "#/definitions/apiportal.APIProxyEndPoint"
+                },
+                "targetEndPoint": {
+                    "$ref": "#/definitions/apiportal.APITargetEndPoint"
+                }
+            },
+            "title": "EndPointProperty"
+        },
+        "apiportal.APITargetEndPoint": {
+            "type": "object",
+            "properties": {
+                "FK_API_NAME": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "FK_DEFAULTFAULTRULE_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "isDefault": {
+                    "type": "boolean",
+                    "default": "null"
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "FK_POSTFLOW_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "FK_PREFLOW_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "provider_id": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 200
+                },
+                "relativePath": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "url": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2083
+                },
+                "apiProxy": {
+                    "$ref": "#/definitions/apiportal.APIProxy"
+                },
+                "conditionalFlows": {
+                    "title": "Related Collection(apiportal.ConditionalFlowRule)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.ConditionalFlowRule"
+                            }
+                        }
+                    }
+                },
+                "defaultFaultRule": {
+                    "$ref": "#/definitions/apiportal.DefaultFaultRule"
+                },
+                "faultRules": {
+                    "title": "Related Collection(apiportal.FaultRule)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.FaultRule"
+                            }
+                        }
+                    }
+                },
+                "postFlow": {
+                    "$ref": "#/definitions/apiportal.FlowRule"
+                },
+                "preFlow": {
+                    "$ref": "#/definitions/apiportal.FlowRule"
+                },
+                "properties": {
+                    "title": "Related Collection(apiportal.EndPointProperty)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.EndPointProperty"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "APITargetEndPoint"
+        },
+        "apiportal.Certificate": {
+            "type": "object",
+            "properties": {
+                "certName": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "description": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "storeName": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "password": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "storeType": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "expiryDate": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "issuerEmail": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048
+                },
+                "subjectEmail": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048
+                },
+                "signAlgName": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "isValid": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "validFrom": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "version": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "content": {
+                    "type": "string",
+                    "default": "null",
+                    "format": "base64url"
+                },
+                "certificateStore": {
+                    "$ref": "#/definitions/apiportal.CertificateStore"
+                }
+            },
+            "title": "Certificate"
+        },
+        "apiportal.Step": {
+            "type": "object",
+            "properties": {
+                "condition": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "FK_DEFAULTFAULTRULE_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "FK_FAULTRULE_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "policy_name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "sequence": {
+                    "type": "integer",
+                    "default": "null",
+                    "format": "int32"
+                },
+                "FK_STREAM_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "defaultFaultRule": {
+                    "$ref": "#/definitions/apiportal.DefaultFaultRule"
+                },
+                "faultRule": {
+                    "$ref": "#/definitions/apiportal.FaultRule"
+                },
+                "stream": {
+                    "$ref": "#/definitions/apiportal.Stream"
+                }
+            },
+            "title": "Step"
+        },
+        "apiportal.APIProxyEndPoint": {
+            "type": "object",
+            "properties": {
+                "FK_API_NAME": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "base_path": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "FK_DEFAULTFAULTRULE_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "isDefault": {
+                    "type": "boolean",
+                    "default": "null"
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "FK_POSTCLIENTFLOW_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "FK_POSTFLOW_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "FK_PREFLOW_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "apiProxy": {
+                    "$ref": "#/definitions/apiportal.APIProxy"
+                },
+                "apiResources": {
+                    "title": "Related Collection(apiportal.APIResource)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.APIResource"
+                            }
+                        }
+                    }
+                },
+                "conditionalFlows": {
+                    "title": "Related Collection(apiportal.ConditionalFlowRule)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.ConditionalFlowRule"
+                            }
+                        }
+                    }
+                },
+                "defaultFaultRule": {
+                    "$ref": "#/definitions/apiportal.DefaultFaultRule"
+                },
+                "faultRules": {
+                    "title": "Related Collection(apiportal.FaultRule)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.FaultRule"
+                            }
+                        }
+                    }
+                },
+                "postClientFlow": {
+                    "$ref": "#/definitions/apiportal.FlowRule"
+                },
+                "postFlow": {
+                    "$ref": "#/definitions/apiportal.FlowRule"
+                },
+                "preFlow": {
+                    "$ref": "#/definitions/apiportal.FlowRule"
+                },
+                "properties": {
+                    "title": "Related Collection(apiportal.EndPointProperty)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.EndPointProperty"
+                            }
+                        }
+                    }
+                },
+                "routeRules": {
+                    "title": "Related Collection(apiportal.RouteRule)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.RouteRule"
+                            }
+                        }
+                    }
+                },
+                "virtualhosts": {
+                    "title": "Related Collection(apiportal.VirtualHost)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.VirtualHost"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "APIProxyEndPoint"
+        },
+        "apiportal.RouteRule": {
+            "type": "object",
+            "properties": {
+                "conditions": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "FK_PROXYENDPOINT_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "sequence": {
+                    "type": "integer",
+                    "default": "null",
+                    "format": "int32"
+                },
+                "targetEndPointName": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "url": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "faultRules": {
+                    "title": "Related Collection(apiportal.FaultRule)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.FaultRule"
+                            }
+                        }
+                    }
+                },
+                "proxyEndPoint": {
+                    "$ref": "#/definitions/apiportal.APIProxyEndPoint"
+                }
+            },
+            "title": "RouteRule"
+        },
+        "apiportal.DefaultFaultRule": {
+            "type": "object",
+            "properties": {
+                "alwaysEnforce": {
+                    "type": "boolean",
+                    "default": "null"
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "FK_PROXYENDPOINT_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "FK_TARGETENDPOINT_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "proxyEndPoint": {
+                    "$ref": "#/definitions/apiportal.APIProxyEndPoint"
+                },
+                "steps": {
+                    "title": "Related Collection(apiportal.Step)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Step"
+                            }
+                        }
+                    }
+                },
+                "targetEndPoint": {
+                    "$ref": "#/definitions/apiportal.APITargetEndPoint"
+                }
+            },
+            "title": "DefaultFaultRule"
+        },
+        "apiportal.Stream": {
+            "type": "object",
+            "properties": {
+                "FK_FLOW_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "isRequest": {
+                    "type": "boolean",
+                    "default": "null"
+                },
+                "flow": {
+                    "$ref": "#/definitions/apiportal.FlowRule"
+                },
+                "steps": {
+                    "title": "Related Collection(apiportal.Step)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Step"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "Stream"
+        },
+        "apiportal.APIResource": {
+            "type": "object",
+            "properties": {
+                "FK_PROXYENDPOINT_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "canShowDelete": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "canShowGet": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "canShowPost": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "canShowPut": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "isDeleteChecked": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "isGetChecked": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "isPostChecked": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "isPutChecked": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "proxyEndPointName": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "resource_path": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "title": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "description": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048
+                },
+                "apiProxyEndPoint": {
+                    "$ref": "#/definitions/apiportal.APIProxyEndPoint"
+                },
+                "documentations": {
+                    "title": "Related Collection(apiportal.Documentation)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Documentation"
+                            }
+                        }
+                    }
+                },
+                "resources": {
+                    "title": "Related Collection(apiportal.Resource)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Resource"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "APIResource"
+        },
+        "apiportal.FaultRule": {
+            "type": "object",
+            "properties": {
+                "condition": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "FK_PROXYENDPOINT_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "FK_ROUTERULE_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "FK_TARGETENDPOINT_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "proxyEndPoint": {
+                    "$ref": "#/definitions/apiportal.APIProxyEndPoint"
+                },
+                "routeRule": {
+                    "$ref": "#/definitions/apiportal.RouteRule"
+                },
+                "steps": {
+                    "title": "Related Collection(apiportal.Step)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Step"
+                            }
+                        }
+                    }
+                },
+                "targetEndPoint": {
+                    "$ref": "#/definitions/apiportal.APITargetEndPoint"
+                }
+            },
+            "title": "FaultRule"
+        },
+        "apiportal.FileResource": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "scope": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 20
+                },
+                "type": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 10
+                },
+                "apiProxies": {
+                    "title": "Related Collection(apiportal.APIProxy)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.APIProxy"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "FileResource"
+        },
+        "apiportal.CertificateStore": {
+            "type": "object",
+            "properties": {
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "storeType": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 20
+                },
+                "certificates": {
+                    "title": "Related Collection(apiportal.Certificate)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Certificate"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "CertificateStore"
+        },
+        "apiportal.KeyMapEntryValue": {
+            "type": "object",
+            "properties": {
+                "map_name": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "value": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "keyMapEntry": {
+                    "$ref": "#/definitions/apiportal.KeyMapEntry"
+                }
+            },
+            "title": "KeyMapEntryValue"
+        },
+        "apiportal.APIProduct": {
+            "type": "object",
+            "properties": {
+                "isPublished": {
+                    "type": "boolean",
+                    "default": "null"
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "published_at": {
+                    "type": "string",
+                    "default": "null",
+                    "format": "date-time"
+                },
+                "published_by": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "quotaCount": {
+                    "type": "integer",
+                    "default": "null",
+                    "format": "int32"
+                },
+                "quotaInterval": {
+                    "type": "integer",
+                    "default": "null",
+                    "format": "int32"
+                },
+                "quotaTimeUnit": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 10
+                },
+                "scope": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "status_code": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 20
+                },
+                "version": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 10
+                },
+                "title": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "description": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048
+                },
+                "apiProxies": {
+                    "title": "Related Collection(apiportal.APIProxy)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.APIProxy"
+                            }
+                        }
+                    }
+                },
+                "apiResources": {
+                    "title": "Related Collection(apiportal.APIResource)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.APIResource"
+                            }
+                        }
+                    }
+                },
+                "applications": {
+                    "title": "Related Collection(apiportal.Application)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Application"
+                            }
+                        }
+                    }
+                },
+                "resources": {
+                    "title": "Related Collection(apiportal.Resource)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Resource"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "APIProduct"
+        },
+        "apiportal.APIProvider": {
+            "type": "object",
+            "properties": {
+                "isOnPremise": {
+                    "type": "boolean",
+                    "default": "null",
+                    "description": "Indicates whether API Provider is on-premise or not"
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "description": "The technical name of the API Provider."
+                },
+                "sslInfo": {
+                    "description": "It's the API Provider SSL configuration",
+                    "$ref": "#/definitions/apiportal.SSLInfo"
+                },
+                "url": {
+                    "type": "string",
+                    "default": "null",
+                    "description": "API Provider url"
+                },
+                "title": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255,
+                    "description": "API Provider title"
+                },
+                "description": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048,
+                    "description": "Description of the API Provider."
+                },
+                "destType": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 10,
+                    "description": "Destination type of the API Provider."
+                },
+                "host": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048,
+                    "description": "API Provider host."
+                },
+                "port": {
+                    "type": "integer",
+                    "default": "null",
+                    "format": "int32",
+                    "description": "API Provider port"
+                },
+                "useSSL": {
+                    "type": "boolean",
+                    "default": "null",
+                    "description": "Indicates whether API Provider useSSL or not"
+                },
+                "trustAll": {
+                    "type": "boolean",
+                    "default": "null",
+                    "description": "Indicates whether all the certificates attached to the API Provider are authorized."
+                },
+                "userName": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048,
+                    "description": "API Provider authentication username"
+                },
+                "password": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 126,
+                    "description": "API Provider authentication password"
+                },
+                "authType": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 126,
+                    "description": "API Provider authentication type"
+                },
+                "pathPrefix": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048,
+                    "description": "API Provider path prefix"
+                },
+                "timeout": {
+                    "type": "integer",
+                    "default": "null",
+                    "format": "int32",
+                    "description": "API Provider timeout"
+                },
+                "cockpit_url": {
+                    "type": "string",
+                    "default": "null",
+                    "description": "API Provider cockpit url"
+                },
+                "apiProxies": {
+                    "title": "Related Collection(apiportal.APIProxy)",
+                    "type": "object",
+                    "description": "API Provider associated API Proxies",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.APIProxy"
+                            }
+                        }
+                    }
+                },
+                "resources": {
+                    "title": "Related Collection(apiportal.Resource)",
+                    "type": "object",
+                    "description": "API Provider associated Resources",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Resource"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "APIProvider"
+        },
+        "apiportal.KeyMapEntry": {
+            "type": "object",
+            "properties": {
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "keyMapEntryValues": {
+                    "title": "Related Collection(apiportal.KeyMapEntryValue)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.KeyMapEntryValue"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "KeyMapEntry"
+        },
+        "apiportal.FlowRule": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "FK_REQUEST_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "FK_RESPONSE_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "request": {
+                    "$ref": "#/definitions/apiportal.Stream"
+                },
+                "response": {
+                    "$ref": "#/definitions/apiportal.Stream"
+                }
+            },
+            "title": "FlowRule"
+        },
+        "apiportal.ConditionalFlowRule": {
+            "type": "object",
+            "properties": {
+                "FK_APIRESOURCE_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "conditions": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "FK_PROXYENDPOINT_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "readOnly": {
+                    "type": "boolean",
+                    "default": "null"
+                },
+                "FK_REQUEST_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "FK_RESPONSE_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "sequence": {
+                    "type": "integer",
+                    "default": "null",
+                    "format": "int32"
+                },
+                "FK_TARGETENDPOINT_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "apiResource": {
+                    "$ref": "#/definitions/apiportal.APIResource"
+                },
+                "proxyEndPoint": {
+                    "$ref": "#/definitions/apiportal.APIProxyEndPoint"
+                },
+                "request": {
+                    "$ref": "#/definitions/apiportal.Stream"
+                },
+                "response": {
+                    "$ref": "#/definitions/apiportal.Stream"
+                },
+                "targetEndPoint": {
+                    "$ref": "#/definitions/apiportal.APITargetEndPoint"
+                }
+            },
+            "title": "ConditionalFlowRule"
+        },
+        "apiportal.Policy": {
+            "type": "object",
+            "properties": {
+                "FK_API_NAME": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "policy_content": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "type": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 40
+                },
+                "apiProxy": {
+                    "$ref": "#/definitions/apiportal.APIProxy"
+                }
+            },
+            "title": "Policy"
+        },
+        "apiportal.Documentation": {
+            "type": "object",
+            "properties": {
+                "FK_APIRESOURCE_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 36
+                },
+                "apiResourceName": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "content": {
+                    "type": "string",
+                    "default": "null"
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "locale": {
+                    "type": "string",
+                    "maxLength": 5
+                },
+                "mime_type": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "apiResource": {
+                    "$ref": "#/definitions/apiportal.APIResource"
+                }
+            },
+            "title": "Documentation"
+        },
+        "apiportal.Application": {
+            "type": "object",
+            "properties": {
+                "callbackurl": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "FK_DEVELOPER_ID": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "status_code": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 20
+                },
+                "valid_from": {
+                    "type": "string",
+                    "default": "null",
+                    "format": "date-time"
+                },
+                "valid_to": {
+                    "type": "string",
+                    "default": "null",
+                    "format": "date-time"
+                },
+                "version": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 10
+                },
+                "title": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "description": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048
+                },
+                "app_key": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 256
+                },
+                "app_secret": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 1000
+                },
+                "apiProducts": {
+                    "title": "Related Collection(apiportal.APIProduct)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.APIProduct"
+                            }
+                        }
+                    }
+                },
+                "developer": {
+                    "$ref": "#/definitions/apiportal.Developer"
+                },
+                "resources": {
+                    "title": "Related Collection(apiportal.Resource)",
+                    "type": "object",
+                    "properties": {
+                        "results": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/apiportal.Resource"
+                            }
+                        }
+                    }
+                }
+            },
+            "title": "Application"
+        },
+        "apiportal.VirtualHost": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "maxLength": 36
+                },
+                "isDefault": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "isSSL": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "name": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "projectPath": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "virtual_host": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 2048
+                },
+                "virtual_port": {
+                    "type": "integer",
+                    "default": "null",
+                    "format": "int32"
+                }
+            },
+            "title": "VirtualHost"
+        },
+        "apiportal.ApiRevision": {
+            "type": "object",
+            "properties": {
+                "life_cycle": {
+                    "$ref": "#/definitions/apiportal.History"
+                },
+                "changed_at": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "created_at": {
+                    "type": "string",
+                    "default": "null",
+                    "format": "date-time"
+                },
+                "created_by": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                }
+            },
+            "title": "ApiRevision"
+        },
+        "apiportal.History": {
+            "type": "object",
+            "properties": {
+                "changed_at": {
+                    "type": "string",
+                    "default": "null",
+                    "format": "date-time"
+                },
+                "changed_by": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "created_at": {
+                    "type": "string",
+                    "default": "null",
+                    "format": "date-time"
+                },
+                "created_by": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                }
+            },
+            "title": "History"
+        },
+        "apiportal.SSLInfo": {
+            "type": "object",
+            "properties": {
+                "ciphers": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "clientAuthEnabled": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "enabled": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "ignoreValidationErrors": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "keyAlias": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "keyStore": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "protocols": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                },
+                "trustStore": {
+                    "type": "string",
+                    "default": "null",
+                    "maxLength": 255
+                }
+            },
+            "title": "SSLInfo"
+        }
+    },
+    "x-schemas": {
+        "Org.OData.Core.V1": {
+            "uri": "http://localhost/examples/Org.OData.Core.V1.openapi.json"
+        },
+        "Core": {
+            "aliasFor": "Org.OData.Core.V1"
+        },
+        "apiportal": {}
+    },
+    "x-entityContainer": {
+        "name": "apiportalContainer",
+        "resources": {
+            "KeyMapEntries": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.KeyMapEntry",
+                "navigationPropertyBindings": {
+                    "keyMapEntryValues": "KeyMapEntryValues"
+                }
+            },
+            "APIResources": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.APIResource",
+                "navigationPropertyBindings": {
+                    "apiProxyEndPoint": "APIProxyEndPoints",
+                    "documentations": "Documentations",
+                    "resources": "Resources"
+                }
+            },
+            "VirtualHosts": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.VirtualHost"
+            },
+            "Resources": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.Resource"
+            },
+            "Documentations": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.Documentation",
+                "navigationPropertyBindings": {
+                    "apiResource": "APIResources"
+                }
+            },
+            "APITargetEndPoints": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.APITargetEndPoint",
+                "navigationPropertyBindings": {
+                    "apiProxy": "APIProxies",
+                    "defaultFaultRule": "DefaultFaultRules",
+                    "postFlow": "FlowRules",
+                    "preFlow": "FlowRules",
+                    "faultRules": "FaultRules",
+                    "conditionalFlows": "ConditionalFlowRules",
+                    "properties": "EndPointProperties"
+                }
+            },
+            "DefaultFaultRules": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.DefaultFaultRule",
+                "navigationPropertyBindings": {
+                    "proxyEndPoint": "APIProxyEndPoints",
+                    "targetEndPoint": "APITargetEndPoints",
+                    "steps": "Steps"
+                }
+            },
+            "APIProviders": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.APIProvider",
+                "navigationPropertyBindings": {
+                    "apiProxies": "APIProxies",
+                    "resources": "Resources"
+                }
+            },
+            "FlowRules": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.FlowRule",
+                "navigationPropertyBindings": {
+                    "request": "Streams",
+                    "response": "Streams"
+                }
+            },
+            "Steps": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.Step",
+                "navigationPropertyBindings": {
+                    "defaultFaultRule": "DefaultFaultRules",
+                    "faultRule": "FaultRules",
+                    "stream": "Streams"
+                }
+            },
+            "FaultRules": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.FaultRule",
+                "navigationPropertyBindings": {
+                    "steps": "Steps",
+                    "proxyEndPoint": "APIProxyEndPoints",
+                    "routeRule": "RouteRules",
+                    "targetEndPoint": "APITargetEndPoints"
+                }
+            },
+            "FileResources": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.FileResource",
+                "navigationPropertyBindings": {
+                    "apiProxies": "APIProxies"
+                }
+            },
+            "ConditionalFlowRules": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.ConditionalFlowRule",
+                "navigationPropertyBindings": {
+                    "apiResource": "APIResources",
+                    "proxyEndPoint": "APIProxyEndPoints",
+                    "request": "Streams",
+                    "response": "Streams",
+                    "targetEndPoint": "APITargetEndPoints"
+                }
+            },
+            "APIProxyEndPoints": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.APIProxyEndPoint",
+                "navigationPropertyBindings": {
+                    "apiResources": "APIResources",
+                    "faultRules": "FaultRules",
+                    "conditionalFlows": "ConditionalFlowRules",
+                    "apiProxy": "APIProxies",
+                    "defaultFaultRule": "DefaultFaultRules",
+                    "postFlow": "FlowRules",
+                    "preFlow": "FlowRules",
+                    "routeRules": "RouteRules",
+                    "properties": "EndPointProperties",
+                    "virtualhosts": "VirtualHosts"
+                }
+            },
+            "Streams": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.Stream",
+                "navigationPropertyBindings": {
+                    "steps": "Steps",
+                    "flow": "FlowRules"
+                }
+            },
+            "CacheResources": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.CacheResource"
+            },
+            "Policies": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.Policy",
+                "navigationPropertyBindings": {
+                    "apiProxy": "APIProxies"
+                }
+            },
+            "Developers": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.Developer",
+                "navigationPropertyBindings": {
+                    "applications": "Applications"
+                }
+            },
+            "RouteRules": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.RouteRule",
+                "navigationPropertyBindings": {
+                    "faultRules": "FaultRules",
+                    "proxyEndPoint": "APIProxyEndPoints"
+                }
+            },
+            "APIProducts": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.APIProduct",
+                "navigationPropertyBindings": {
+                    "apiProxies": "APIProxies",
+                    "apiResources": "APIResources",
+                    "applications": "Applications",
+                    "resources": "Resources"
+                }
+            },
+            "APIProxies": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.APIProxy",
+                "navigationPropertyBindings": {
+                    "targetEndPoints": "APITargetEndPoints",
+                    "proxyEndPoints": "APIProxyEndPoints",
+                    "policies": "Policies",
+                    "apiProvider": "APIProviders",
+                    "apiProducts": "APIProducts",
+                    "fileResources": "FileResources",
+                    "resources": "Resources"
+                }
+            },
+            "EndPointProperties": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.EndPointProperty",
+                "navigationPropertyBindings": {
+                    "proxyEndPoint": "APIProxyEndPoints",
+                    "targetEndPoint": "APITargetEndPoints"
+                }
+            },
+            "Applications": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.Application",
+                "navigationPropertyBindings": {
+                    "developer": "Developers",
+                    "apiProducts": "APIProducts",
+                    "resources": "Resources"
+                }
+            },
+            "KeyMapEntryValues": {
+                "kind": "EntitySet",
+                "entityType": "apiportal.KeyMapEntryValue",
+                "navigationPropertyBindings": {
+                    "keyMapEntry": "KeyMapEntries"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "APIProxies"
+        },
+        {
+            "name": "Batch Requests"
+        },
+        {
+            "name": "Proxy Revision"
+        }
+    ],
+    "paths": {
+        "/APIProxies": {
+            "get": {
+                "summary": "API proxies on the API portal",
+                "description": "Returns all the API proxies on the API portal. An API proxy anonymize any HTTP endpoints like REST, OData or SOAP and enhance it with policies, and routes.",
+                "tags": [
+                    "APIProxies"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/top"
+                    },
+                    {
+                        "$ref": "#/parameters/skip"
+                    },
+                    {
+                        "$ref": "#/parameters/filter"
+                    },
+                    {
+                        "$ref": "#/parameters/count"
+                    },
+                    {
+                        "$ref": "#/parameters/search"
+                    },
+                    {
+                        "name": "$orderby",
+                        "in": "query",
+                        "description": "Order by property values, see [OData Sorting](http://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398305)",
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string"
+                        },
+                        "enum": [
+                            "isPublished",
+                            "isPublished desc",
+                            "life_cycle",
+                            "life_cycle desc",
+                            "isVersioned",
+                            "isVersioned desc",
+                            "apiVersionGroup",
+                            "apiVersionGroup desc",
+                            "name",
+                            "name desc",
+                            "provider_name",
+                            "provider_name desc",
+                            "service_code",
+                            "service_code desc",
+                            "state",
+                            "state desc",
+                            "status_code",
+                            "status_code desc",
+                            "version",
+                            "version desc",
+                            "title",
+                            "title desc",
+                            "description",
+                            "description desc"
+                        ]
+                    },
+                    {
+                        "name": "$select",
+                        "in": "query",
+                        "description": "Select properties to be returned, see [OData Select](http://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398297)",
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string"
+                        },
+                        "enum": [
+                            "isPublished",
+                            "life_cycle",
+                            "isVersioned",
+                            "apiVersionGroup",
+                            "name",
+                            "provider_name",
+                            "service_code",
+                            "state",
+                            "status_code",
+                            "version",
+                            "title",
+                            "description"
+                        ]
+                    },
+                    {
+                        "name": "$expand",
+                        "in": "query",
+                        "description": "Expand related entities, see [OData Expand](http://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398298)",
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string"
+                        },
+                        "enum": [
+                            "apiProducts",
+                            "apiProvider",
+                            "fileResources",
+                            "policies",
+                            "proxyEndPoints",
+                            "resources",
+                            "targetEndPoints"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "EntitySet APIProxies",
+                        "schema": {
+                            "type": "object",
+                            "title": "Collection of apiportal.APIProxy",
+                            "properties": {
+                                "value": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/apiportal.APIProxy"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/responses/error"
+                    }
+                }
+            },
+            "post": {
+                "summary": "API proxies on the API portal",
+                "description": "Adds a new entity to the API proxies.",
+                "tags": [
+                    "APIProxies"
+                ],
+                "parameters": [
+                    {
+                        "name": "APIProxy",
+                        "in": "body",
+                        "description": "New entity",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/apiportal.APIProxyPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created entity",
+                        "schema": {
+                            "title": "Created APIProxy",
+                            "type": "object",
+                            "properties": {
+                                "d": {
+                                    "$ref": "#/definitions/apiportal.APIProxy"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/responses/error"
+                    }
+                }
+            }
+        },
+        "/APIProxies('{name}')": {
+            "get": {
+                "summary": "API Proxy name used to identify the entity",
+                "description": "Returns the entity with the specified name from the API proxies.",
+                "tags": [
+                    "APIProxies"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "description": "key: name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "revisionID",
+                        "in": "query",
+                        "description": "Revision number of the API proxy",
+                        "type": "integer",
+                        "uniqueItems": true
+                    },
+                    {
+                        "name": "$select",
+                        "in": "query",
+                        "description": "Select properties to be returned, see [OData Select](http://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398297)",
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string"
+                        },
+                        "enum": [
+                            "isPublished",
+                            "life_cycle",
+                            "isVersioned",
+                            "apiVersionGroup",
+                            "name",
+                            "provider_name",
+                            "service_code",
+                            "state",
+                            "status_code",
+                            "version",
+                            "title",
+                            "description"
+                        ]
+                    },
+                    {
+                        "name": "$expand",
+                        "in": "query",
+                        "description": "Expand related entities, see [OData Expand](http://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398298)",
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string"
+                        },
+                        "enum": [
+                            "apiProducts",
+                            "apiProvider",
+                            "fileResources",
+                            "policies",
+                            "proxyEndPoints",
+                            "resources",
+                            "targetEndPoints"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Entity APIProxy",
+                        "schema": {
+                            "$ref": "#/definitions/apiportal.APIProxy"
+                        }
+                    },
+                    "404": {
+                        "description": "APIProxy Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/responses/error"
+                    }
+                }
+            },
+            "patch": {
+                "summary": "API proxy update",
+                "description": "Allows multiple actions on an API proxy revision, based on the mode `query parameter`. Supported values for mode include saveasrevision, revertrevision, deploy, and undeploy.",
+                "tags": [
+                    "APIProxies"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "description": "key: name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "mode",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "saveasrevision",
+                            "revertfromrevision",
+                            "deploy",
+                            "undeploy"
+                        ]
+                    },
+                    {
+                        "name": "revisionID",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Required only for `revertfromrevision` mode"
+                    },
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "description": "Patch request \n ***Note**: *When copying the code, remove the comments and keep only the payload relevant to the selected mode*",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "\"***** Sample payload for saving revision or reverting a revision ***\"\n{ \"revisionName\" : \"REVISION_NAME\", \"revisionDescription\": \"Revision Description\" }\n\n\"***** Sample payload for deploying a proxy ***\n{ \"state\": \"DEPLOYED\" }\n\n\"***** Sample payload for undeploying a proxy ***\n{ \"state\": \"UNDEPLOYED\" }\n\n"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "This API cannot be undeployed as it is the only API Proxy associated with the product.",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "404": {
+                        "description": "Requested entity could not be found.",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "405":{
+                        "description": "UPDATE operation not supported on APIProxy entity.",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "500": {
+                        "description": "API Proxy Revision creation or revert is not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/responses/error"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "API proxy from API proxies",
+                "description": "Deletes the specified API proxy and its revision from the API portal. The behavior of the revision deletion depends on the selected `mode`.\n\n-If the mode is set to `discarddraft`, the revision is deleted only if it is in a draft state.\n\n-If the mode is `discardrevision`, the specified revision is deleted regardless of its state.\n\n**Note**: That this operation is irreversible.",
+                "tags": [
+                    "APIProxies"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "description": "key: name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "mode",
+                        "in": "query",
+                        "uniqueItems": true,
+                        "type": "string",
+                        "enum": [
+                            "discarddraft",
+                            "discardrevision"
+                        ]
+                    },
+                    {
+                        "name": "revisionID",
+                        "in": "query",
+                        "uniqueItems": true,
+                        "description": "Required only for `discardrevision` mode",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "The specified API proxy does not exist or has been deleted. Please provide a valid API proxy and try again.",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "500": {
+                        "description": "API proxy revision or draft deletion is not allowed.",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/responses/error"
+                    }
+                }
+            }
+        },
+        "/$batch": {
+            "post": {
+                "tags": [
+                    "Batch Requests"
+                ],
+                "summary": "Send a group of requests",
+                "description": "Group multiple requests into a single request payload. For more information, see [Batch Requests](https://help.sap.com/doc/5890d27be418427993fafa6722cdc03b/Cloud/en-US/OdataV2.pdf#page=152).\n\n ***Note:** *The \"Try out\" action is not supported for this request.*",
+                "consumes": [
+                    "multipart/mixed;boundary=request-separator"
+                ],
+                "produces": [
+                    "multipart/mixed"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "payload",
+                        "description": "Batch request \n***Note**: *While copying the code, please remove the comments from the examples.*",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "--batch_5cdc-ee83-2166\r\nContent-Type: multipart/mixed; boundary=changeset_f584-c116-39bb\r\n\r\n\"***** Sample payload for updating description ***\"\n--changeset_f584-c116-39bb\r\nContent-Type: application/http\r\nContent-Transfer-Encoding: binary\r\n\r\nPUT APIProxies(name='SampleAPIProxy')/?saveLocal=true HTTP/1.1\r\nx-csrf-token: 4544637193DA36CE32BEBA1FBBE2D261\r\nAccept-Language: en\r\nAccept: application/json\r\nMaxDataServiceVersion: 2.0\r\nDataServiceVersion: 2.0\r\nRequestId: bde4145f-0d6b-4ac8-8d84-2aad55c0b6a9\r\nContent-Type: application/json\r\nContent-Length: 295\r\n\r\n{\"name\":\"SampleAPIProxy\",\"title\":\"SampleAPIProxy\",\"description\":\"<p>sample text</p>\",\"version\":\"1\",\"status_code\":\"PUBLISHED\",\"service_code\":\"REST\",\"isPublished\":false,\"releaseStatus\":\"Active\",\"successorAPI\":null,\"isUnmanaged\":false,\"releaseMetadata\":\"\",\"provider_name\":\"NONE\",\"state\":\"DEPLOYED\"}\r\n\n\"***** Sample payload for updating targetEndPoints ***\"\n--changeset_f584-c116-39bb\r\nContent-Type: application/http\r\nContent-Transfer-Encoding: binary\r\n\r\nPUT APITargetEndPoints(id='5F484574-8C13-47E6-8968-9C3127EB7253') HTTP/1.1\r\nx-csrf-token: 4544637193DA36CE32BEBA1FBBE2D261\r\nAccept-Language: en\r\nAccept: application/json\r\nMaxDataServiceVersion: 2.0\r\nDataServiceVersion: 2.0\r\nRequestId: bde4145f-0d6b-4ac8-8d84-2aad55c0b6a9\r\nContent-Type: application/json\r\nContent-Length: 185\r\n\r\n{\"id\":\"5F484574-8C13-47E6-8968-9C3127EB7253\",\"name\":\"default\",\"provider_id\":\"NONE\",\"url\":\"http://sap.com\",\"relativePath\":null,\"isDefault\":true,\"properties\":[],\"targetAPIProxyName\":null}\r\n\n\"***** Sample payload for adding conditionalflow rules ***\"\n--changeset_f584-c116-39bb\r\nContent-Type: application/http\r\nContent-Transfer-Encoding: binary\r\n\r\nPOST ConditionalFlowRules HTTP/1.1\r\nx-csrf-token: 4544637193DA36CE32BEBA1FBBE2D261\r\nAccept-Language: en\r\nAccept: application/json\r\nMaxDataServiceVersion: 2.0\r\nDataServiceVersion: 2.0\r\nRequestId: bde4145f-0d6b-4ac8-8d84-2aad55c0b6a9\r\nContent-Type: application/json\r\nContent-Length: 314\r\n\r\n{\"name\":\"/\",\"conditions\":\"(proxy.pathsuffix MatchesPath \\\"/\\\" OR proxy.pathsuffix MatchesPath \\\"/**\\\")AND(request.verb = \\\"POST\\\" OR request.verb = \\\"PUT\\\" OR request.verb = \\\"GET\\\")\",\"readOnly\":true,\"sequence\":1,\"proxyEndPoint\":[{\"__metadata\":{\"uri\":\"APIProxyEndPoints('6215ECAC-5B80-48E5-BCC8-914443EF8BA8')\"}}]}\r\n--changeset_f584-c116-39bb\r\nContent-Type: application/http\r\nContent-Transfer-Encoding: binary\r\n\r\nPOST ConditionalFlowRules HTTP/1.1\r\nx-csrf-token: 4544637193DA36CE32BEBA1FBBE2D261\r\nAccept-Language: en\r\nAccept: application/json\r\nMaxDataServiceVersion: 2.0\r\nDataServiceVersion: 2.0\r\nRequestId: bde4145f-0d6b-4ac8-8d84-2aad55c0b6a9\r\nContent-Type: application/json\r\nContent-Length: 368\r\n\r\n{\"name\":\"DefaultFaultFlow\",\"conditions\":\"proxy.pathsuffix MatchesPath \\\"//\\\" OR proxy.pathsuffix MatchesPath \\\"///**\\\" OR proxy.pathsuffix MatchesPath \\\"//(**\\\"\",\"sequence\":2,\"request\":{\"steps\":[{\"policy_name\":\"defaultRaiseFaultPolicy\",\"condition\":\"\",\"sequence\":1}]},\"proxyEndPoint\":[{\"__metadata\":{\"uri\":\"APIProxyEndPoints('6215ECAC-5B80-48E5-BCC8-914443EF8BA8')\"}}]}\r\n--changeset_f584-c116-39bb\r\nContent-Type: application/http\r\nContent-Transfer-Encoding: binary\r\n\r\nPOST EndPointProperties HTTP/1.1\r\nx-csrf-token: 4544637193DA36CE32BEBA1FBBE2D261\r\nAccept-Language: en\r\nAccept: application/json\r\nMaxDataServiceVersion: 2.0\r\nDataServiceVersion: 2.0\r\nRequestId: bde4145f-0d6b-4ac8-8d84-2aad55c0b6a9\r\nContent-Type: application/json\r\nContent-Length: 132\r\n\r\n{\"name\":\"property\",\"value\":\"1\",\"proxyEndPoint\":[{\"__metadata\":{\"uri\":\"APIProxyEndPoints('6215ECAC-5B80-48E5-BCC8-914443EF8BA8')\"}}]}\r\n\n\"***** Sample payload for adding APIResources ***\"\n--changeset_f584-c116-39bb\r\nContent-Type: application/http\r\nContent-Transfer-Encoding: binary\r\n\r\nPOST APIResources HTTP/1.1\r\nx-csrf-token: 4544637193DA36CE32BEBA1FBBE2D261\r\nAccept-Language: en\r\nAccept: application/json\r\nMaxDataServiceVersion: 2.0\r\nDataServiceVersion: 2.0\r\nRequestId: bde4145f-0d6b-4ac8-8d84-2aad55c0b6a9\r\nContent-Type: application/json\r\nContent-Length: 513\r\n\r\n{\"title\":\"/\",\"canShowGet\":true,\"canShowPost\":true,\"canShowPut\":true,\"canShowDelete\":true,\"canShowPatch\":true,\"canShowHead\":true,\"canShowOption\":true,\"isGetChecked\":true,\"isPostChecked\":true,\"isPutChecked\":true,\"isDeleteChecked\":false,\"isOptionChecked\":false,\"isHeadChecked\":false,\"isPatchChecked\":false,\"resource_path\":\"/\",\"name\":\"/\",\"apiProxyEndPoint\":[{\"__metadata\":{\"uri\":\"APIProxyEndPoints('6215ECAC-5B80-48E5-BCC8-914443EF8BA8')\"}}],\"documentations\":[{\"mime_type\":\"HTML\",\"apiResourceName\":\"/\",\"content\":\"\"}]}\r\n\n\"***** Sample payload for updating Documentation ***\"\n--changeset_f584-c116-39bb\r\nContent-Type: application/http\r\nContent-Transfer-Encoding: binary\r\n\r\nPUT Documentations(id='c4644553-c735-4458-9b59-99149f0e1ef3',locale='en') HTTP/1.1\r\nx-csrf-token: 4544637193DA36CE32BEBA1FBBE2D261\r\nAccept-Language: en\r\nAccept: application/json\r\nMaxDataServiceVersion: 2.0\r\nDataServiceVersion: 2.0\r\nRequestId: bde4145f-0d6b-4ac8-8d84-2aad55c0b6a9\r\nContent-Type: application/json\r\nContent-Length: 1848\r\n\r\n{\"locale\":\"en\",\"mime_type\":\"json\",\"apiResourceName\":\"SWAGGER_JSON\",\"content\":\"eyJvcGVuYXBpIjoiMy4wLjEiLCJpbmZvIjp7InRpdGxlIjoiU2FtcGxlQVBJUHJveHkiLCJ4LXRhcmdldEVuZHBvaW50IjoiaHR0cDovL3NhcC5jb20iLCJ2ZXJzaW9uIjoiMSJ9LCJzZXJ2ZXJzIjpbeyJ1cmwiOiJodHRwczovLzE1NS41Ni4xMjkuMTc2OjQ0My9zYW1wbGVBUEkifV0sInBhdGhzIjp7Ii8iOnsiZ2V0Ijp7InRhZ3MiOlsiVGVzdCJdLCJkZXNjcmlwdGlvbiI6IiIsInJlc3BvbnNlcyI6eyJkZWZhdWx0Ijp7ImRlc2NyaXB0aW9uIjoiZXJyb3IgcGF5bG9hZCIsImNvbnRlbnQiOnsiYXBwbGljYXRpb24vanNvbiI6eyJzY2hlbWEiOnsiJHJlZiI6IiMvY29tcG9uZW50cy9zY2hlbWFzL0Vycm9yIn19fX19fSwicG9zdCI6eyJ0YWdzIjpbIlRlc3QiXSwiZGVzY3JpcHRpb24iOiIiLCJyZXF1ZXN0Qm9keSI6eyJkZXNjcmlwdGlvbiI6IlBheWxvYWQgdG8gYWRkIHRvIHJlc291cmNlIGNvbGxlY3Rpb24iLCJjb250ZW50Ijp7ImFwcGxpY2F0aW9uL2pzb24iOnsic2NoZW1hIjp7IiRyZWYiOiIjL2NvbXBvbmVudHMvc2NoZW1hcy9QYXlsb2FkIn19fSwicmVxdWlyZWQiOnRydWV9LCJyZXNwb25zZXMiOnsiZGVmYXVsdCI6eyJkZXNjcmlwdGlvbiI6ImVycm9yIHBheWxvYWQiLCJjb250ZW50Ijp7ImFwcGxpY2F0aW9uL2pzb24iOnsic2NoZW1hIjp7IiRyZWYiOiIjL2NvbXBvbmVudHMvc2NoZW1hcy9FcnJvciJ9fX19fX0sInB1dCI6eyJ0YWdzIjpbIlRlc3QiXSwiZGVzY3JpcHRpb24iOiIiLCJyZXF1ZXN0Qm9keSI6eyJkZXNjcmlwdGlvbiI6IlBheWxvYWQgdG8gYWRkIHRvIHJlc291cmNlIGNvbGxlY3Rpb24iLCJjb250ZW50Ijp7ImFwcGxpY2F0aW9uL2pzb24iOnsic2NoZW1hIjp7IiRyZWYiOiIjL2NvbXBvbmVudHMvc2NoZW1hcy9QYXlsb2FkIn19fSwicmVxdWlyZWQiOnRydWV9LCJyZXNwb25zZXMiOnsiZGVmYXVsdCI6eyJkZXNjcmlwdGlvbiI6ImVycm9yIHBheWxvYWQiLCJjb250ZW50Ijp7ImFwcGxpY2F0aW9uL2pzb24iOnsic2NoZW1hIjp7IiRyZWYiOiIjL2NvbXBvbmVudHMvc2NoZW1hcy9FcnJvciJ9fX19fX19fSwiY29tcG9uZW50cyI6eyJzY2hlbWFzIjp7IkVycm9yIjp7InR5cGUiOiJvYmplY3QiLCJwcm9wZXJ0aWVzIjp7Im1lc3NhZ2UiOnsidHlwZSI6InN0cmluZyJ9LCJjb2RlIjp7InR5cGUiOiJpbnRlZ2VyIiwiZm9ybWF0IjoiaW50MzIifSwiZmllbGRzIjp7InR5cGUiOiJzdHJpbmcifX19LCJQYXlsb2FkIjp7InR5cGUiOiJvYmplY3QiLCJwcm9wZXJ0aWVzIjp7IlBheWxvYWQiOnsidHlwZSI6InN0cmluZyJ9fX19fSwidGFncyI6W119\",\"id\":\"c4644553-c735-4458-9b59-99149f0e1ef3\"}\r\n\n\"***** Sample payload for adding default policy ***\"\n--changeset_f584-c116-39bb\r\nContent-Type: application/http\r\nContent-Transfer-Encoding: binary\r\n\r\nPOST Policies HTTP/1.1\r\nx-csrf-token: 4544637193DA36CE32BEBA1FBBE2D261\r\nAccept-Language: en\r\nAccept: application/json\r\nMaxDataServiceVersion: 2.0\r\nDataServiceVersion: 2.0\r\nRequestId: bde4145f-0d6b-4ac8-8d84-2aad55c0b6a9\r\nContent-Type: application/json\r\nContent-Length: 497\r\n\r\n{\"name\":\"defaultRaiseFaultPolicy\",\"policy_content\":\"<RaiseFault async=\\\"false\\\" continueOnError=\\\"false\\\" enabled=\\\"true\\\" xmlns=\\\"http://www.sap.com/apimgmt\\\">\\r\\n\\t<FaultResponse>\\r\\n\\t\\t<Set>\\r\\n\\t\\t\\t<StatusCode>405</StatusCode>\\r\\n\\t\\t\\t<ReasonPhrase>Method Not Allowed</ReasonPhrase>\\r\\n\\t\\t</Set>\\r\\n\\t</FaultResponse>\\r\\n\\t<IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>\\r\\n</RaiseFault>\",\"type\":\"RaiseFault\",\"apiProxy\":[{\"__metadata\":{\"uri\":\"APIProxies('SampleAPIProxy')\"}}]}\r\n--changeset_f584-c116-39bb--\r\n\r\n--batch_5cdc-ee83-2166"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Batch response",
+                        "schema": {
+                            "type": "string",
+                            "example": "--response-separator\nContent-Type: application/http\n\nHTTP/1.1 200 OK\nContent-Type: application/json\n\n{...}\n--response-separator--"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/odata.error"
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/responses/error"
+                    }
+                }
+            }
+        },
+        "/GetAllRevisions": {
+            "get": {
+                "summary": "API proxies revisions on the API portal",
+                "description": "Returns all the revisions of API proxies on the API portal.",
+                "tags": [
+                    "Proxy Revision"
+                ],
+                "parameters": [
+                    {
+                        "name": "apiProxyName",
+                        "in": "query",
+                        "description": "'key:apiProxyName'",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "APIProxies Revision",
+                        "schema": {
+                            "type": "object",
+                            "title": "Collection of apiportal.ApiRevision",
+                            "properties": {
+                                "value": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/apiportal.ApiRevision"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/responses/error"
+                    }
+                }
+            }
+        }
+    },
+    "parameters": {
+        "top": {
+            "name": "$top",
+            "in": "query",
+            "description": "Show only the first n items",
+            "type": "integer"
+        },
+        "skip": {
+            "name": "$skip",
+            "in": "query",
+            "description": "Skip the first n items",
+            "type": "integer"
+        },
+        "count": {
+            "name": "$count",
+            "in": "query",
+            "description": "Include count of items",
+            "type": "boolean"
+        },
+        "filter": {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter items by property values",
+            "type": "string"
+        },
+        "search": {
+            "name": "$search",
+            "in": "query",
+            "description": "Search items by search phrases",
+            "type": "string"
+        }
+    },
+    "responses": {
+        "error": {
+            "description": "Error",
+            "schema": {
+                "$ref": "#/definitions/odata.error"
+            }
+        }
+    }
+}

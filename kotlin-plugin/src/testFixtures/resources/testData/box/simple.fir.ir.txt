@@ -1,0 +1,728 @@
+FILE fqName:<root> fileName:/simple.kt
+  CLASS CLASS name:Fault modality:FINAL visibility:public [data] superTypes:[java.lang.Exception]
+    annotations:
+      Serializable(with = <null>)
+    thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.Fault
+    PROPERTY name:message visibility:public modality:OPEN [val]
+      overridden:
+        public open message: kotlin.String? declared in java.lang.Exception
+      FIELD PROPERTY_BACKING_FIELD name:message type:kotlin.String visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 'message: kotlin.String declared in <root>.Fault.<init>' type=kotlin.String origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-message> visibility:public modality:OPEN returnType:kotlin.String
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+        correspondingProperty: PROPERTY name:message visibility:public modality:OPEN [val]
+        overridden:
+          public open fun <get-message> (): kotlin.String? declared in java.lang.Exception
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public open fun <get-message> (): kotlin.String declared in <root>.Fault'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:message type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.<get-message>' type=<root>.Fault origin=null
+    PROPERTY name:input visibility:public modality:FINAL [val]
+      FIELD PROPERTY_BACKING_FIELD name:input type:kotlin.String? visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 'input: kotlin.String? declared in <root>.Fault.<init>' type=kotlin.String? origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-input> visibility:public modality:FINAL returnType:kotlin.String?
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+        correspondingProperty: PROPERTY name:input visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-input> (): kotlin.String? declared in <root>.Fault'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:input type:kotlin.String? visibility:private [final]' type=kotlin.String? origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.<get-input>' type=<root>.Fault origin=null
+    PROPERTY name:statusCode visibility:public modality:FINAL [val]
+      FIELD PROPERTY_BACKING_FIELD name:statusCode type:kotlin.Int? visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 'statusCode: kotlin.Int? declared in <root>.Fault.<init>' type=kotlin.Int? origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-statusCode> visibility:public modality:FINAL returnType:kotlin.Int?
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+        correspondingProperty: PROPERTY name:statusCode visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-statusCode> (): kotlin.Int? declared in <root>.Fault'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:statusCode type:kotlin.Int? visibility:private [final]' type=kotlin.Int? origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.<get-statusCode>' type=<root>.Fault origin=null
+    PROPERTY name:httpReturnCode visibility:public modality:FINAL [val]
+      annotations:
+        Header(name = "CamelHttpResponseCode")
+      FIELD PROPERTY_BACKING_FIELD name:httpReturnCode type:kotlin.Int visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 'httpReturnCode: kotlin.Int declared in <root>.Fault.<init>' type=kotlin.Int origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-httpReturnCode> visibility:public modality:FINAL returnType:kotlin.Int
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+        correspondingProperty: PROPERTY name:httpReturnCode visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-httpReturnCode> (): kotlin.Int declared in <root>.Fault'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:httpReturnCode type:kotlin.Int visibility:private [final]' type=kotlin.Int origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.<get-httpReturnCode>' type=<root>.Fault origin=null
+    PROPERTY name:sapMessageProcessingLogID visibility:public modality:FINAL [val]
+      FIELD PROPERTY_BACKING_FIELD name:sapMessageProcessingLogID type:kotlin.String visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 'sapMessageProcessingLogID: kotlin.String declared in <root>.Fault.<init>' type=kotlin.String origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-sapMessageProcessingLogID> visibility:public modality:FINAL returnType:kotlin.String
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+        correspondingProperty: PROPERTY name:sapMessageProcessingLogID visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-sapMessageProcessingLogID> (): kotlin.String declared in <root>.Fault'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:sapMessageProcessingLogID type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.<get-sapMessageProcessingLogID>' type=<root>.Fault origin=null
+    CLASS OBJECT name:ErrorJsonFactory modality:FINAL visibility:public [companion] superTypes:[kotlinx.serialization.StringFormat]
+      annotations:
+        ContentType(value = "application/json", parameters = <null>)
+      thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.Fault.ErrorJsonFactory
+      CONSTRUCTOR visibility:private returnType:<root>.Fault.ErrorJsonFactory [primary]
+        BLOCK_BODY
+          DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
+          INSTANCE_INITIALIZER_CALL classDescriptor='CLASS OBJECT name:ErrorJsonFactory modality:FINAL visibility:public [companion] superTypes:[kotlinx.serialization.StringFormat]' type=kotlin.Unit
+      FUN FAKE_OVERRIDE name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [fake_override,operator]
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+        VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
+        overridden:
+          public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in kotlinx.serialization.StringFormat
+      FUN FAKE_OVERRIDE name:hashCode visibility:public modality:OPEN returnType:kotlin.Int [fake_override]
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+        overridden:
+          public open fun hashCode (): kotlin.Int declared in kotlinx.serialization.StringFormat
+      FUN FAKE_OVERRIDE name:toString visibility:public modality:OPEN returnType:kotlin.String [fake_override]
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+        overridden:
+          public open fun toString (): kotlin.String declared in kotlinx.serialization.StringFormat
+      FUN GENERATED[app.softwork.cikraft.kotlin.SapCIFir] name:contentType visibility:public modality:FINAL returnType:kotlin.String
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault.ErrorJsonFactory
+        EXPRESSION_BODY
+          CONST String type=kotlin.String value="application/json"
+      FUN name:decodeFromString visibility:public modality:OPEN returnType:T of <root>.Fault.ErrorJsonFactory.decodeFromString
+        TYPE_PARAMETER name:T index:0 variance: superTypes:[kotlin.Any?] reified:false
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault.ErrorJsonFactory
+        VALUE_PARAMETER kind:Regular name:deserializer index:1 type:kotlinx.serialization.DeserializationStrategy<T of <root>.Fault.ErrorJsonFactory.decodeFromString>
+        VALUE_PARAMETER kind:Regular name:string index:2 type:kotlin.String
+        overridden:
+          public abstract fun decodeFromString <T> (deserializer: kotlinx.serialization.DeserializationStrategy<T of kotlinx.serialization.StringFormat.decodeFromString>, string: kotlin.String): T of kotlinx.serialization.StringFormat.decodeFromString declared in kotlinx.serialization.StringFormat
+        BLOCK_BODY
+          CALL 'public final fun TODO (reason: kotlin.String): kotlin.Nothing declared in kotlin' type=kotlin.Nothing origin=null
+            ARG reason: CONST String type=kotlin.String value="Not yet implemented"
+      FUN name:encodeToString visibility:public modality:OPEN returnType:kotlin.String
+        TYPE_PARAMETER name:T index:0 variance: superTypes:[kotlin.Any?] reified:false
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault.ErrorJsonFactory
+        VALUE_PARAMETER kind:Regular name:serializer index:1 type:kotlinx.serialization.SerializationStrategy<T of <root>.Fault.ErrorJsonFactory.encodeToString>
+        VALUE_PARAMETER kind:Regular name:value index:2 type:T of <root>.Fault.ErrorJsonFactory.encodeToString
+        overridden:
+          public abstract fun encodeToString <T> (serializer: kotlinx.serialization.SerializationStrategy<T of kotlinx.serialization.StringFormat.encodeToString>, value: T of kotlinx.serialization.StringFormat.encodeToString): kotlin.String declared in kotlinx.serialization.StringFormat
+        BLOCK_BODY
+          CALL 'public final fun TODO (reason: kotlin.String): kotlin.Nothing declared in kotlin' type=kotlin.Nothing origin=null
+            ARG reason: CONST String type=kotlin.String value="Not yet implemented"
+      PROPERTY name:serializersModule visibility:public modality:OPEN [val]
+        overridden:
+          public abstract serializersModule: kotlinx.serialization.modules.SerializersModule declared in kotlinx.serialization.StringFormat
+        FUN name:<get-serializersModule> visibility:public modality:OPEN returnType:kotlinx.serialization.modules.SerializersModule
+          VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault.ErrorJsonFactory
+          correspondingProperty: PROPERTY name:serializersModule visibility:public modality:OPEN [val]
+          overridden:
+            public abstract fun <get-serializersModule> (): kotlinx.serialization.modules.SerializersModule declared in kotlinx.serialization.StringFormat
+          BLOCK_BODY
+            RETURN type=kotlin.Nothing from='public open fun <get-serializersModule> (): kotlinx.serialization.modules.SerializersModule declared in <root>.Fault.ErrorJsonFactory'
+              CALL 'public final fun TODO (reason: kotlin.String): kotlin.Nothing declared in kotlin' type=kotlin.Nothing origin=null
+                ARG reason: CONST String type=kotlin.String value="Not yet implemented"
+    CONSTRUCTOR visibility:public returnType:<root>.Fault [primary]
+      VALUE_PARAMETER kind:Regular name:message index:0 type:kotlin.String
+      VALUE_PARAMETER kind:Regular name:input index:1 type:kotlin.String?
+      VALUE_PARAMETER kind:Regular name:statusCode index:2 type:kotlin.Int?
+      VALUE_PARAMETER kind:Regular name:httpReturnCode index:3 type:kotlin.Int
+        annotations:
+          Header(name = "CamelHttpResponseCode")
+      VALUE_PARAMETER kind:Regular name:sapMessageProcessingLogID index:4 type:kotlin.String
+      BLOCK_BODY
+        DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> (p0: @[FlexibleNullability] kotlin.String?) declared in java.lang.Exception'
+          ARG p0: GET_VAR 'message: kotlin.String declared in <root>.Fault.<init>' type=kotlin.String origin=null
+        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS CLASS name:Fault modality:FINAL visibility:public [data] superTypes:[java.lang.Exception]' type=kotlin.Unit
+    FUN FAKE_OVERRIDE name:addSuppressed visibility:public modality:FINAL returnType:kotlin.Unit [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Throwable
+      VALUE_PARAMETER kind:Regular name:p0 index:1 type:@[FlexibleNullability] kotlin.Throwable?
+      overridden:
+        public final fun addSuppressed (p0: @[FlexibleNullability] kotlin.Throwable?): kotlin.Unit declared in java.lang.Exception
+    FUN FAKE_OVERRIDE name:fillInStackTrace visibility:public modality:OPEN returnType:@[FlexibleNullability] kotlin.Throwable? [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Throwable
+      overridden:
+        public open fun fillInStackTrace (): @[FlexibleNullability] kotlin.Throwable? declared in java.lang.Exception
+    FUN FAKE_OVERRIDE name:getLocalizedMessage visibility:public modality:OPEN returnType:@[FlexibleNullability] kotlin.String? [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Throwable
+      overridden:
+        public open fun getLocalizedMessage (): @[FlexibleNullability] kotlin.String? declared in java.lang.Exception
+    FUN FAKE_OVERRIDE name:getStackTrace visibility:public modality:OPEN returnType:@[FlexibleNullability] @[FlexibleArrayElementVariance] kotlin.Array<out @[FlexibleNullability] java.lang.StackTraceElement?>? [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Throwable
+      overridden:
+        public open fun getStackTrace (): @[FlexibleNullability] @[FlexibleArrayElementVariance] kotlin.Array<out @[FlexibleNullability] java.lang.StackTraceElement?>? declared in java.lang.Exception
+    FUN FAKE_OVERRIDE name:getSuppressed visibility:public modality:FINAL returnType:@[FlexibleNullability] @[FlexibleArrayElementVariance] kotlin.Array<out @[FlexibleNullability] kotlin.Throwable?>? [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Throwable
+      overridden:
+        public final fun getSuppressed (): @[FlexibleNullability] @[FlexibleArrayElementVariance] kotlin.Array<out @[FlexibleNullability] kotlin.Throwable?>? declared in java.lang.Exception
+    FUN FAKE_OVERRIDE name:initCause visibility:public modality:OPEN returnType:@[FlexibleNullability] kotlin.Throwable? [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Throwable
+      VALUE_PARAMETER kind:Regular name:p0 index:1 type:@[FlexibleNullability] kotlin.Throwable?
+      overridden:
+        public open fun initCause (p0: @[FlexibleNullability] kotlin.Throwable?): @[FlexibleNullability] kotlin.Throwable? declared in java.lang.Exception
+    FUN FAKE_OVERRIDE name:printStackTrace visibility:public modality:OPEN returnType:kotlin.Unit [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Throwable
+      overridden:
+        public open fun printStackTrace (): kotlin.Unit declared in java.lang.Exception
+    FUN FAKE_OVERRIDE name:printStackTrace visibility:public modality:OPEN returnType:kotlin.Unit [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Throwable
+      VALUE_PARAMETER kind:Regular name:p0 index:1 type:@[FlexibleNullability] java.io.PrintStream?
+      overridden:
+        public open fun printStackTrace (p0: @[FlexibleNullability] java.io.PrintStream?): kotlin.Unit declared in java.lang.Exception
+    FUN FAKE_OVERRIDE name:printStackTrace visibility:public modality:OPEN returnType:kotlin.Unit [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Throwable
+      VALUE_PARAMETER kind:Regular name:p0 index:1 type:@[FlexibleNullability] java.io.PrintWriter?
+      overridden:
+        public open fun printStackTrace (p0: @[FlexibleNullability] java.io.PrintWriter?): kotlin.Unit declared in java.lang.Exception
+    FUN FAKE_OVERRIDE name:setStackTrace visibility:public modality:OPEN returnType:kotlin.Unit [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Throwable
+      VALUE_PARAMETER kind:Regular name:p0 index:1 type:@[FlexibleNullability] @[FlexibleArrayElementVariance] kotlin.Array<out @[FlexibleNullability] java.lang.StackTraceElement?>?
+      overridden:
+        public open fun setStackTrace (p0: @[FlexibleNullability] @[FlexibleArrayElementVariance] kotlin.Array<out @[FlexibleNullability] java.lang.StackTraceElement?>?): kotlin.Unit declared in java.lang.Exception
+    FUN GENERATED_DATA_CLASS_MEMBER name:component1 visibility:public modality:FINAL returnType:kotlin.String [operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public final fun component1 (): kotlin.String declared in <root>.Fault'
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:message type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+            receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.component1' type=<root>.Fault origin=null
+    FUN GENERATED_DATA_CLASS_MEMBER name:component2 visibility:public modality:FINAL returnType:kotlin.String? [operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public final fun component2 (): kotlin.String? declared in <root>.Fault'
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:input type:kotlin.String? visibility:private [final]' type=kotlin.String? origin=null
+            receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.component2' type=<root>.Fault origin=null
+    FUN GENERATED_DATA_CLASS_MEMBER name:component3 visibility:public modality:FINAL returnType:kotlin.Int? [operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public final fun component3 (): kotlin.Int? declared in <root>.Fault'
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:statusCode type:kotlin.Int? visibility:private [final]' type=kotlin.Int? origin=null
+            receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.component3' type=<root>.Fault origin=null
+    FUN GENERATED_DATA_CLASS_MEMBER name:component4 visibility:public modality:FINAL returnType:kotlin.Int [operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public final fun component4 (): kotlin.Int declared in <root>.Fault'
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:httpReturnCode type:kotlin.Int visibility:private [final]' type=kotlin.Int origin=null
+            receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.component4' type=<root>.Fault origin=null
+    FUN GENERATED_DATA_CLASS_MEMBER name:component5 visibility:public modality:FINAL returnType:kotlin.String [operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public final fun component5 (): kotlin.String declared in <root>.Fault'
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:sapMessageProcessingLogID type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+            receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.component5' type=<root>.Fault origin=null
+    FUN GENERATED_DATA_CLASS_MEMBER name:copy visibility:public modality:FINAL returnType:<root>.Fault
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+      VALUE_PARAMETER kind:Regular name:message index:1 type:kotlin.String
+        EXPRESSION_BODY
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:message type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+            receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.copy' type=<root>.Fault origin=null
+      VALUE_PARAMETER kind:Regular name:input index:2 type:kotlin.String?
+        EXPRESSION_BODY
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:input type:kotlin.String? visibility:private [final]' type=kotlin.String? origin=null
+            receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.copy' type=<root>.Fault origin=null
+      VALUE_PARAMETER kind:Regular name:statusCode index:3 type:kotlin.Int?
+        EXPRESSION_BODY
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:statusCode type:kotlin.Int? visibility:private [final]' type=kotlin.Int? origin=null
+            receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.copy' type=<root>.Fault origin=null
+      VALUE_PARAMETER kind:Regular name:httpReturnCode index:4 type:kotlin.Int
+        annotations:
+          Header(name = "CamelHttpResponseCode")
+        EXPRESSION_BODY
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:httpReturnCode type:kotlin.Int visibility:private [final]' type=kotlin.Int origin=null
+            receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.copy' type=<root>.Fault origin=null
+      VALUE_PARAMETER kind:Regular name:sapMessageProcessingLogID index:5 type:kotlin.String
+        EXPRESSION_BODY
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:sapMessageProcessingLogID type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+            receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.copy' type=<root>.Fault origin=null
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public final fun copy (message: kotlin.String, input: kotlin.String?, statusCode: kotlin.Int?, httpReturnCode: kotlin.Int, sapMessageProcessingLogID: kotlin.String): <root>.Fault declared in <root>.Fault'
+          CONSTRUCTOR_CALL 'public constructor <init> (message: kotlin.String, input: kotlin.String?, statusCode: kotlin.Int?, httpReturnCode: kotlin.Int, sapMessageProcessingLogID: kotlin.String) declared in <root>.Fault' type=<root>.Fault origin=null
+            ARG message: GET_VAR 'message: kotlin.String declared in <root>.Fault.copy' type=kotlin.String origin=null
+            ARG input: GET_VAR 'input: kotlin.String? declared in <root>.Fault.copy' type=kotlin.String? origin=null
+            ARG statusCode: GET_VAR 'statusCode: kotlin.Int? declared in <root>.Fault.copy' type=kotlin.Int? origin=null
+            ARG httpReturnCode: GET_VAR 'httpReturnCode: kotlin.Int declared in <root>.Fault.copy' type=kotlin.Int origin=null
+            ARG sapMessageProcessingLogID: GET_VAR 'sapMessageProcessingLogID: kotlin.String declared in <root>.Fault.copy' type=kotlin.String origin=null
+    FUN GENERATED_DATA_CLASS_MEMBER name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+      VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
+      overridden:
+        public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in java.lang.Exception
+      BLOCK_BODY
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: CALL 'public final fun EQEQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQEQ
+              ARG arg0: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+              ARG arg1: GET_VAR 'other: kotlin.Any? declared in <root>.Fault.equals' type=kotlin.Any? origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.Fault'
+              CONST Boolean type=kotlin.Boolean value=true
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: TYPE_OP type=kotlin.Boolean origin=NOT_INSTANCEOF typeOperand=<root>.Fault
+              GET_VAR 'other: kotlin.Any? declared in <root>.Fault.equals' type=kotlin.Any? origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.Fault'
+              CONST Boolean type=kotlin.Boolean value=false
+        VAR IR_TEMPORARY_VARIABLE name:tmp_0 type:<root>.Fault [val]
+          TYPE_OP type=<root>.Fault origin=IMPLICIT_CAST typeOperand=<root>.Fault
+            GET_VAR 'other: kotlin.Any? declared in <root>.Fault.equals' type=kotlin.Any? origin=null
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                ARG arg0: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:message type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+                  receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+                ARG arg1: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:message type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+                  receiver: GET_VAR 'val tmp_0: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.Fault'
+              CONST Boolean type=kotlin.Boolean value=false
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                ARG arg0: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:input type:kotlin.String? visibility:private [final]' type=kotlin.String? origin=null
+                  receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+                ARG arg1: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:input type:kotlin.String? visibility:private [final]' type=kotlin.String? origin=null
+                  receiver: GET_VAR 'val tmp_0: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.Fault'
+              CONST Boolean type=kotlin.Boolean value=false
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                ARG arg0: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:statusCode type:kotlin.Int? visibility:private [final]' type=kotlin.Int? origin=null
+                  receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+                ARG arg1: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:statusCode type:kotlin.Int? visibility:private [final]' type=kotlin.Int? origin=null
+                  receiver: GET_VAR 'val tmp_0: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.Fault'
+              CONST Boolean type=kotlin.Boolean value=false
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                ARG arg0: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:httpReturnCode type:kotlin.Int visibility:private [final]' type=kotlin.Int origin=null
+                  receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+                ARG arg1: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:httpReturnCode type:kotlin.Int visibility:private [final]' type=kotlin.Int origin=null
+                  receiver: GET_VAR 'val tmp_0: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.Fault'
+              CONST Boolean type=kotlin.Boolean value=false
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                ARG arg0: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:sapMessageProcessingLogID type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+                  receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+                ARG arg1: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:sapMessageProcessingLogID type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+                  receiver: GET_VAR 'val tmp_0: <root>.Fault declared in <root>.Fault.equals' type=<root>.Fault origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.Fault'
+              CONST Boolean type=kotlin.Boolean value=false
+        RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.Fault'
+          CONST Boolean type=kotlin.Boolean value=true
+    FUN GENERATED_DATA_CLASS_MEMBER name:hashCode visibility:public modality:OPEN returnType:kotlin.Int
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+      overridden:
+        public open fun hashCode (): kotlin.Int declared in java.lang.Exception
+      BLOCK_BODY
+        VAR name:result type:kotlin.Int [var]
+          CALL 'public open fun hashCode (): kotlin.Int declared in kotlin.String' type=kotlin.Int origin=null
+            ARG <this>: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:message type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.hashCode' type=<root>.Fault origin=null
+        SET_VAR 'var result: kotlin.Int declared in <root>.Fault.hashCode' type=kotlin.Unit origin=EQ
+          CALL 'public final fun plus (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=null
+            ARG <this>: CALL 'public final fun times (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=null
+              ARG <this>: GET_VAR 'var result: kotlin.Int declared in <root>.Fault.hashCode' type=kotlin.Int origin=null
+              ARG other: CONST Int type=kotlin.Int value=31
+            ARG other: WHEN type=kotlin.Int origin=null
+              BRANCH
+                if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                  ARG arg0: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:input type:kotlin.String? visibility:private [final]' type=kotlin.String? origin=null
+                    receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.hashCode' type=<root>.Fault origin=null
+                  ARG arg1: CONST Null type=kotlin.Nothing? value=null
+                then: CONST Int type=kotlin.Int value=0
+              BRANCH
+                if: CONST Boolean type=kotlin.Boolean value=true
+                then: CALL 'public open fun hashCode (): kotlin.Int declared in kotlin.String' type=kotlin.Int origin=null
+                  ARG <this>: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:input type:kotlin.String? visibility:private [final]' type=kotlin.String? origin=null
+                    receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.hashCode' type=<root>.Fault origin=null
+        SET_VAR 'var result: kotlin.Int declared in <root>.Fault.hashCode' type=kotlin.Unit origin=EQ
+          CALL 'public final fun plus (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=null
+            ARG <this>: CALL 'public final fun times (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=null
+              ARG <this>: GET_VAR 'var result: kotlin.Int declared in <root>.Fault.hashCode' type=kotlin.Int origin=null
+              ARG other: CONST Int type=kotlin.Int value=31
+            ARG other: WHEN type=kotlin.Int origin=null
+              BRANCH
+                if: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQ
+                  ARG arg0: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:statusCode type:kotlin.Int? visibility:private [final]' type=kotlin.Int? origin=null
+                    receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.hashCode' type=<root>.Fault origin=null
+                  ARG arg1: CONST Null type=kotlin.Nothing? value=null
+                then: CONST Int type=kotlin.Int value=0
+              BRANCH
+                if: CONST Boolean type=kotlin.Boolean value=true
+                then: CALL 'public open fun hashCode (): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=null
+                  ARG <this>: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:statusCode type:kotlin.Int? visibility:private [final]' type=kotlin.Int? origin=null
+                    receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.hashCode' type=<root>.Fault origin=null
+        SET_VAR 'var result: kotlin.Int declared in <root>.Fault.hashCode' type=kotlin.Unit origin=EQ
+          CALL 'public final fun plus (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=null
+            ARG <this>: CALL 'public final fun times (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=null
+              ARG <this>: GET_VAR 'var result: kotlin.Int declared in <root>.Fault.hashCode' type=kotlin.Int origin=null
+              ARG other: CONST Int type=kotlin.Int value=31
+            ARG other: CALL 'public open fun hashCode (): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=null
+              ARG <this>: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:httpReturnCode type:kotlin.Int visibility:private [final]' type=kotlin.Int origin=null
+                receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.hashCode' type=<root>.Fault origin=null
+        SET_VAR 'var result: kotlin.Int declared in <root>.Fault.hashCode' type=kotlin.Unit origin=EQ
+          CALL 'public final fun plus (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=null
+            ARG <this>: CALL 'public final fun times (other: kotlin.Int): kotlin.Int declared in kotlin.Int' type=kotlin.Int origin=null
+              ARG <this>: GET_VAR 'var result: kotlin.Int declared in <root>.Fault.hashCode' type=kotlin.Int origin=null
+              ARG other: CONST Int type=kotlin.Int value=31
+            ARG other: CALL 'public open fun hashCode (): kotlin.Int declared in kotlin.String' type=kotlin.Int origin=null
+              ARG <this>: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:sapMessageProcessingLogID type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+                receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.hashCode' type=<root>.Fault origin=null
+        RETURN type=kotlin.Nothing from='public open fun hashCode (): kotlin.Int declared in <root>.Fault'
+          GET_VAR 'var result: kotlin.Int declared in <root>.Fault.hashCode' type=kotlin.Int origin=null
+    FUN GENERATED_DATA_CLASS_MEMBER name:toString visibility:public modality:OPEN returnType:kotlin.String
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+      overridden:
+        public open fun toString (): kotlin.String declared in java.lang.Exception
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public open fun toString (): kotlin.String declared in <root>.Fault'
+          STRING_CONCATENATION type=kotlin.String
+            CONST String type=kotlin.String value="Fault("
+            CONST String type=kotlin.String value="message="
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:message type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.toString' type=<root>.Fault origin=null
+            CONST String type=kotlin.String value=", "
+            CONST String type=kotlin.String value="input="
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:input type:kotlin.String? visibility:private [final]' type=kotlin.String? origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.toString' type=<root>.Fault origin=null
+            CONST String type=kotlin.String value=", "
+            CONST String type=kotlin.String value="statusCode="
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:statusCode type:kotlin.Int? visibility:private [final]' type=kotlin.Int? origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.toString' type=<root>.Fault origin=null
+            CONST String type=kotlin.String value=", "
+            CONST String type=kotlin.String value="httpReturnCode="
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:httpReturnCode type:kotlin.Int visibility:private [final]' type=kotlin.Int origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.toString' type=<root>.Fault origin=null
+            CONST String type=kotlin.String value=", "
+            CONST String type=kotlin.String value="sapMessageProcessingLogID="
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:sapMessageProcessingLogID type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              receiver: GET_VAR '<this>: <root>.Fault declared in <root>.Fault.toString' type=<root>.Fault origin=null
+            CONST String type=kotlin.String value=")"
+    PROPERTY FAKE_OVERRIDE name:cause visibility:public modality:OPEN [fake_override,val]
+      overridden:
+        public open cause: kotlin.Throwable? declared in java.lang.Exception
+      FUN FAKE_OVERRIDE name:<get-cause> visibility:public modality:OPEN returnType:kotlin.Throwable? [fake_override]
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:java.lang.Exception
+        correspondingProperty: PROPERTY FAKE_OVERRIDE name:cause visibility:public modality:OPEN [fake_override,val]
+        overridden:
+          public open fun <get-cause> (): kotlin.Throwable? declared in java.lang.Exception
+    PROPERTY name:jsonError visibility:public modality:FINAL [val]
+      annotations:
+        Body(first = ErrorJsonFactory::class, other = [] type=kotlin.Array<out kotlin.reflect.KClass<out kotlinx.serialization.StringFormat>> varargElementType=kotlin.reflect.KClass<out kotlinx.serialization.StringFormat>)
+      FUN name:<get-jsonError> visibility:public modality:FINAL returnType:<root>.Fault
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.Fault
+        correspondingProperty: PROPERTY name:jsonError visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-jsonError> (): <root>.Fault declared in <root>.Fault'
+            GET_VAR '<this>: <root>.Fault declared in <root>.Fault.<get-jsonError>' type=<root>.Fault origin=null
+  CLASS CLASS name:FooInput modality:FINAL visibility:public [data] superTypes:[kotlin.Any]
+    annotations:
+      Serializable(with = <null>)
+    thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.FooInput
+    PROPERTY name:s visibility:public modality:FINAL [val]
+      FIELD PROPERTY_BACKING_FIELD name:s type:kotlin.String visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 's: kotlin.String declared in <root>.FooInput.<init>' type=kotlin.String origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-s> visibility:public modality:FINAL returnType:kotlin.String
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.FooInput
+        correspondingProperty: PROPERTY name:s visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-s> (): kotlin.String declared in <root>.FooInput'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:s type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              receiver: GET_VAR '<this>: <root>.FooInput declared in <root>.FooInput.<get-s>' type=<root>.FooInput origin=null
+    CONSTRUCTOR visibility:public returnType:<root>.FooInput [primary]
+      VALUE_PARAMETER kind:Regular name:s index:0 type:kotlin.String
+      BLOCK_BODY
+        DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
+        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS CLASS name:FooInput modality:FINAL visibility:public [data] superTypes:[kotlin.Any]' type=kotlin.Unit
+    FUN GENERATED_DATA_CLASS_MEMBER name:component1 visibility:public modality:FINAL returnType:kotlin.String [operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.FooInput
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public final fun component1 (): kotlin.String declared in <root>.FooInput'
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:s type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+            receiver: GET_VAR '<this>: <root>.FooInput declared in <root>.FooInput.component1' type=<root>.FooInput origin=null
+    FUN GENERATED_DATA_CLASS_MEMBER name:copy visibility:public modality:FINAL returnType:<root>.FooInput
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.FooInput
+      VALUE_PARAMETER kind:Regular name:s index:1 type:kotlin.String
+        EXPRESSION_BODY
+          GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:s type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+            receiver: GET_VAR '<this>: <root>.FooInput declared in <root>.FooInput.copy' type=<root>.FooInput origin=null
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public final fun copy (s: kotlin.String): <root>.FooInput declared in <root>.FooInput'
+          CONSTRUCTOR_CALL 'public constructor <init> (s: kotlin.String) declared in <root>.FooInput' type=<root>.FooInput origin=null
+            ARG s: GET_VAR 's: kotlin.String declared in <root>.FooInput.copy' type=kotlin.String origin=null
+    FUN GENERATED_DATA_CLASS_MEMBER name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.FooInput
+      VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
+      overridden:
+        public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in kotlin.Any
+      BLOCK_BODY
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: CALL 'public final fun EQEQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQEQ
+              ARG arg0: GET_VAR '<this>: <root>.FooInput declared in <root>.FooInput.equals' type=<root>.FooInput origin=null
+              ARG arg1: GET_VAR 'other: kotlin.Any? declared in <root>.FooInput.equals' type=kotlin.Any? origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.FooInput'
+              CONST Boolean type=kotlin.Boolean value=true
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: TYPE_OP type=kotlin.Boolean origin=NOT_INSTANCEOF typeOperand=<root>.FooInput
+              GET_VAR 'other: kotlin.Any? declared in <root>.FooInput.equals' type=kotlin.Any? origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.FooInput'
+              CONST Boolean type=kotlin.Boolean value=false
+        VAR IR_TEMPORARY_VARIABLE name:tmp_1 type:<root>.FooInput [val]
+          TYPE_OP type=<root>.FooInput origin=IMPLICIT_CAST typeOperand=<root>.FooInput
+            GET_VAR 'other: kotlin.Any? declared in <root>.FooInput.equals' type=kotlin.Any? origin=null
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: CALL 'public final fun not (): kotlin.Boolean declared in kotlin.Boolean' type=kotlin.Boolean origin=EXCLEQ
+              ARG <this>: CALL 'public final fun EQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EXCLEQ
+                ARG arg0: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:s type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+                  receiver: GET_VAR '<this>: <root>.FooInput declared in <root>.FooInput.equals' type=<root>.FooInput origin=null
+                ARG arg1: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:s type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+                  receiver: GET_VAR 'val tmp_1: <root>.FooInput declared in <root>.FooInput.equals' type=<root>.FooInput origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.FooInput'
+              CONST Boolean type=kotlin.Boolean value=false
+        RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.FooInput'
+          CONST Boolean type=kotlin.Boolean value=true
+    FUN GENERATED_DATA_CLASS_MEMBER name:hashCode visibility:public modality:OPEN returnType:kotlin.Int
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.FooInput
+      overridden:
+        public open fun hashCode (): kotlin.Int declared in kotlin.Any
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public open fun hashCode (): kotlin.Int declared in <root>.FooInput'
+          CALL 'public open fun hashCode (): kotlin.Int declared in kotlin.String' type=kotlin.Int origin=null
+            ARG <this>: GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:s type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              receiver: GET_VAR '<this>: <root>.FooInput declared in <root>.FooInput.hashCode' type=<root>.FooInput origin=null
+    FUN GENERATED_DATA_CLASS_MEMBER name:toString visibility:public modality:OPEN returnType:kotlin.String
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.FooInput
+      overridden:
+        public open fun toString (): kotlin.String declared in kotlin.Any
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public open fun toString (): kotlin.String declared in <root>.FooInput'
+          STRING_CONCATENATION type=kotlin.String
+            CONST String type=kotlin.String value="FooInput("
+            CONST String type=kotlin.String value="s="
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:s type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              receiver: GET_VAR '<this>: <root>.FooInput declared in <root>.FooInput.toString' type=<root>.FooInput origin=null
+            CONST String type=kotlin.String value=")"
+  CLASS CLASS name:FooOutput modality:FINAL visibility:public superTypes:[kotlin.Any]
+    thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.FooOutput
+    PROPERTY name:body visibility:public modality:FINAL [val]
+      annotations:
+        Body(first = JsonFactory::class, other = [] type=kotlin.Array<out kotlin.reflect.KClass<out kotlinx.serialization.StringFormat>> varargElementType=kotlin.reflect.KClass<out kotlinx.serialization.StringFormat>)
+      FIELD PROPERTY_BACKING_FIELD name:body type:kotlin.String visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 'body: kotlin.String declared in <root>.FooOutput.<init>' type=kotlin.String origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-body> visibility:public modality:FINAL returnType:kotlin.String
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.FooOutput
+        correspondingProperty: PROPERTY name:body visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-body> (): kotlin.String declared in <root>.FooOutput'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:body type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              receiver: GET_VAR '<this>: <root>.FooOutput declared in <root>.FooOutput.<get-body>' type=<root>.FooOutput origin=null
+    PROPERTY name:foo visibility:public modality:FINAL [val]
+      annotations:
+        Property(name = "FOO")
+      FIELD PROPERTY_BACKING_FIELD name:foo type:kotlin.String visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 'foo: kotlin.String declared in <root>.FooOutput.<init>' type=kotlin.String origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-foo> visibility:public modality:FINAL returnType:kotlin.String
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.FooOutput
+        correspondingProperty: PROPERTY name:foo visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-foo> (): kotlin.String declared in <root>.FooOutput'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:foo type:kotlin.String visibility:private [final]' type=kotlin.String origin=null
+              receiver: GET_VAR '<this>: <root>.FooOutput declared in <root>.FooOutput.<get-foo>' type=<root>.FooOutput origin=null
+    PROPERTY name:fooHeader visibility:public modality:FINAL [val]
+      annotations:
+        Header(name = "CamelHttpResponseCode")
+      FIELD PROPERTY_BACKING_FIELD name:fooHeader type:kotlin.Int visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 'fooHeader: kotlin.Int declared in <root>.FooOutput.<init>' type=kotlin.Int origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-fooHeader> visibility:public modality:FINAL returnType:kotlin.Int
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.FooOutput
+        correspondingProperty: PROPERTY name:fooHeader visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-fooHeader> (): kotlin.Int declared in <root>.FooOutput'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:fooHeader type:kotlin.Int visibility:private [final]' type=kotlin.Int origin=null
+              receiver: GET_VAR '<this>: <root>.FooOutput declared in <root>.FooOutput.<get-fooHeader>' type=<root>.FooOutput origin=null
+    PROPERTY name:headers visibility:public modality:FINAL [val]
+      annotations:
+        DynamicHeaders
+      FIELD PROPERTY_BACKING_FIELD name:headers type:kotlin.collections.Map<kotlin.String, kotlin.String> visibility:private [final]
+        EXPRESSION_BODY
+          GET_VAR 'headers: kotlin.collections.Map<kotlin.String, kotlin.String> declared in <root>.FooOutput.<init>' type=kotlin.collections.Map<kotlin.String, kotlin.String> origin=INITIALIZE_PROPERTY_FROM_PARAMETER
+      FUN DEFAULT_PROPERTY_ACCESSOR name:<get-headers> visibility:public modality:FINAL returnType:kotlin.collections.Map<kotlin.String, kotlin.String>
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.FooOutput
+        correspondingProperty: PROPERTY name:headers visibility:public modality:FINAL [val]
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public final fun <get-headers> (): kotlin.collections.Map<kotlin.String, kotlin.String> declared in <root>.FooOutput'
+            GET_FIELD 'FIELD PROPERTY_BACKING_FIELD name:headers type:kotlin.collections.Map<kotlin.String, kotlin.String> visibility:private [final]' type=kotlin.collections.Map<kotlin.String, kotlin.String> origin=null
+              receiver: GET_VAR '<this>: <root>.FooOutput declared in <root>.FooOutput.<get-headers>' type=<root>.FooOutput origin=null
+    CONSTRUCTOR visibility:public returnType:<root>.FooOutput [primary]
+      VALUE_PARAMETER kind:Regular name:body index:0 type:kotlin.String
+        annotations:
+          Body(first = JsonFactory::class, other = [] type=kotlin.Array<out kotlin.reflect.KClass<out kotlinx.serialization.StringFormat>> varargElementType=kotlin.reflect.KClass<out kotlinx.serialization.StringFormat>)
+      VALUE_PARAMETER kind:Regular name:foo index:1 type:kotlin.String
+        annotations:
+          Property(name = "FOO")
+      VALUE_PARAMETER kind:Regular name:fooHeader index:2 type:kotlin.Int
+        annotations:
+          Header(name = "CamelHttpResponseCode")
+      VALUE_PARAMETER kind:Regular name:headers index:3 type:kotlin.collections.Map<kotlin.String, kotlin.String>
+      BLOCK_BODY
+        DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
+        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS CLASS name:FooOutput modality:FINAL visibility:public superTypes:[kotlin.Any]' type=kotlin.Unit
+    FUN FAKE_OVERRIDE name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [fake_override,operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+      VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
+      overridden:
+        public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in kotlin.Any
+    FUN FAKE_OVERRIDE name:hashCode visibility:public modality:OPEN returnType:kotlin.Int [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+      overridden:
+        public open fun hashCode (): kotlin.Int declared in kotlin.Any
+    FUN FAKE_OVERRIDE name:toString visibility:public modality:OPEN returnType:kotlin.String [fake_override]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:kotlin.Any
+      overridden:
+        public open fun toString (): kotlin.String declared in kotlin.Any
+  CLASS OBJECT name:JsonFactory modality:FINAL visibility:public [data] superTypes:[kotlinx.serialization.StringFormat]
+    annotations:
+      ContentType(value = "application/json", parameters = ["foo=value", "bar=value"] type=kotlin.Array<kotlin.String> varargElementType=kotlin.String)
+    thisReceiver: VALUE_PARAMETER INSTANCE_RECEIVER kind:DispatchReceiver name:<this> type:<root>.JsonFactory
+    FIELD DELEGATE name:$$delegate_0 type:kotlinx.serialization.json.Json visibility:private [final]
+      EXPRESSION_BODY
+        CALL 'public final fun Json (from: kotlinx.serialization.json.Json, builderAction: @[ExtensionFunctionType] kotlin.Function1<kotlinx.serialization.json.JsonBuilder, kotlin.Unit>): kotlinx.serialization.json.Json declared in kotlinx.serialization.json' type=kotlinx.serialization.json.Json origin=null
+          ARG builderAction: FUN_EXPR type=@[ExtensionFunctionType] kotlin.Function1<kotlinx.serialization.json.JsonBuilder, kotlin.Unit> origin=LAMBDA
+            FUN LOCAL_FUNCTION_FOR_LAMBDA name:<anonymous> visibility:local modality:FINAL returnType:kotlin.Unit
+              VALUE_PARAMETER kind:ExtensionReceiver name:$this$Json index:0 type:kotlinx.serialization.json.JsonBuilder
+              BLOCK_BODY
+                CALL 'public final fun <set-prettyPrint> (<set-?>: kotlin.Boolean): kotlin.Unit declared in kotlinx.serialization.json.JsonBuilder' type=kotlin.Unit origin=EQ
+                  ARG <this>: GET_VAR '$this$Json: kotlinx.serialization.json.JsonBuilder declared in <root>.JsonFactory.$$delegate_0.<anonymous>' type=kotlinx.serialization.json.JsonBuilder origin=IMPLICIT_ARGUMENT
+                  ARG <set-?>: CONST Boolean type=kotlin.Boolean value=true
+    CONSTRUCTOR visibility:private returnType:<root>.JsonFactory [primary]
+      BLOCK_BODY
+        DELEGATING_CONSTRUCTOR_CALL 'public constructor <init> () declared in kotlin.Any'
+        INSTANCE_INITIALIZER_CALL classDescriptor='CLASS OBJECT name:JsonFactory modality:FINAL visibility:public [data] superTypes:[kotlinx.serialization.StringFormat]' type=kotlin.Unit
+    FUN DELEGATED_MEMBER name:decodeFromString visibility:public modality:OPEN returnType:T of <root>.JsonFactory.decodeFromString
+      TYPE_PARAMETER name:T index:0 variance: superTypes:[kotlin.Any?] reified:false
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.JsonFactory
+      VALUE_PARAMETER kind:Regular name:deserializer index:1 type:kotlinx.serialization.DeserializationStrategy<T of <root>.JsonFactory.decodeFromString>
+      VALUE_PARAMETER kind:Regular name:string index:2 type:kotlin.String
+      overridden:
+        public abstract fun decodeFromString <T> (deserializer: kotlinx.serialization.DeserializationStrategy<T of kotlinx.serialization.StringFormat.decodeFromString>, string: kotlin.String): T of kotlinx.serialization.StringFormat.decodeFromString declared in kotlinx.serialization.StringFormat
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public open fun decodeFromString <T> (deserializer: kotlinx.serialization.DeserializationStrategy<T of <root>.JsonFactory.decodeFromString>, string: kotlin.String): T of <root>.JsonFactory.decodeFromString declared in <root>.JsonFactory'
+          CALL 'public final fun decodeFromString <T> (deserializer: kotlinx.serialization.DeserializationStrategy<T of kotlinx.serialization.json.Json.decodeFromString>, string: kotlin.String): T of kotlinx.serialization.json.Json.decodeFromString declared in kotlinx.serialization.json.Json' type=T of <root>.JsonFactory.decodeFromString origin=null
+            TYPE_ARG T: T of <root>.JsonFactory.decodeFromString
+            ARG <this>: GET_FIELD 'FIELD DELEGATE name:$$delegate_0 type:kotlinx.serialization.json.Json visibility:private [final] declared in <root>.JsonFactory' type=kotlinx.serialization.json.Json origin=null
+              receiver: GET_VAR '<this>: <root>.JsonFactory declared in <root>.JsonFactory.decodeFromString' type=<root>.JsonFactory origin=null
+            ARG deserializer: GET_VAR 'deserializer: kotlinx.serialization.DeserializationStrategy<T of <root>.JsonFactory.decodeFromString> declared in <root>.JsonFactory.decodeFromString' type=kotlinx.serialization.DeserializationStrategy<T of <root>.JsonFactory.decodeFromString> origin=null
+            ARG string: GET_VAR 'string: kotlin.String declared in <root>.JsonFactory.decodeFromString' type=kotlin.String origin=null
+    FUN DELEGATED_MEMBER name:encodeToString visibility:public modality:OPEN returnType:kotlin.String
+      TYPE_PARAMETER name:T index:0 variance: superTypes:[kotlin.Any?] reified:false
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.JsonFactory
+      VALUE_PARAMETER kind:Regular name:serializer index:1 type:kotlinx.serialization.SerializationStrategy<T of <root>.JsonFactory.encodeToString>
+      VALUE_PARAMETER kind:Regular name:value index:2 type:T of <root>.JsonFactory.encodeToString
+      overridden:
+        public abstract fun encodeToString <T> (serializer: kotlinx.serialization.SerializationStrategy<T of kotlinx.serialization.StringFormat.encodeToString>, value: T of kotlinx.serialization.StringFormat.encodeToString): kotlin.String declared in kotlinx.serialization.StringFormat
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public open fun encodeToString <T> (serializer: kotlinx.serialization.SerializationStrategy<T of <root>.JsonFactory.encodeToString>, value: T of <root>.JsonFactory.encodeToString): kotlin.String declared in <root>.JsonFactory'
+          CALL 'public final fun encodeToString <T> (serializer: kotlinx.serialization.SerializationStrategy<T of kotlinx.serialization.json.Json.encodeToString>, value: T of kotlinx.serialization.json.Json.encodeToString): kotlin.String declared in kotlinx.serialization.json.Json' type=kotlin.String origin=null
+            TYPE_ARG T: T of <root>.JsonFactory.encodeToString
+            ARG <this>: GET_FIELD 'FIELD DELEGATE name:$$delegate_0 type:kotlinx.serialization.json.Json visibility:private [final] declared in <root>.JsonFactory' type=kotlinx.serialization.json.Json origin=null
+              receiver: GET_VAR '<this>: <root>.JsonFactory declared in <root>.JsonFactory.encodeToString' type=<root>.JsonFactory origin=null
+            ARG serializer: GET_VAR 'serializer: kotlinx.serialization.SerializationStrategy<T of <root>.JsonFactory.encodeToString> declared in <root>.JsonFactory.encodeToString' type=kotlinx.serialization.SerializationStrategy<T of <root>.JsonFactory.encodeToString> origin=null
+            ARG value: GET_VAR 'value: T of <root>.JsonFactory.encodeToString declared in <root>.JsonFactory.encodeToString' type=T of <root>.JsonFactory.encodeToString origin=null
+    FUN GENERATED[app.softwork.cikraft.kotlin.SapCIFir] name:contentType visibility:public modality:FINAL returnType:kotlin.String
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.JsonFactory
+      EXPRESSION_BODY
+        CONST String type=kotlin.String value="application/json; foo=value; bar=value"
+    FUN GENERATED_DATA_CLASS_MEMBER name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [operator]
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.JsonFactory
+      VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?
+      overridden:
+        public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in kotlinx.serialization.StringFormat
+      BLOCK_BODY
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: CALL 'public final fun EQEQEQ (arg0: kotlin.Any?, arg1: kotlin.Any?): kotlin.Boolean declared in kotlin.internal.ir' type=kotlin.Boolean origin=EQEQEQ
+              ARG arg0: GET_VAR '<this>: <root>.JsonFactory declared in <root>.JsonFactory.equals' type=<root>.JsonFactory origin=null
+              ARG arg1: GET_VAR 'other: kotlin.Any? declared in <root>.JsonFactory.equals' type=kotlin.Any? origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.JsonFactory'
+              CONST Boolean type=kotlin.Boolean value=true
+        WHEN type=kotlin.Unit origin=null
+          BRANCH
+            if: TYPE_OP type=kotlin.Boolean origin=NOT_INSTANCEOF typeOperand=<root>.JsonFactory
+              GET_VAR 'other: kotlin.Any? declared in <root>.JsonFactory.equals' type=kotlin.Any? origin=null
+            then: RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.JsonFactory'
+              CONST Boolean type=kotlin.Boolean value=false
+        VAR IR_TEMPORARY_VARIABLE name:tmp_2 type:<root>.JsonFactory [val]
+          TYPE_OP type=<root>.JsonFactory origin=IMPLICIT_CAST typeOperand=<root>.JsonFactory
+            GET_VAR 'other: kotlin.Any? declared in <root>.JsonFactory.equals' type=kotlin.Any? origin=null
+        RETURN type=kotlin.Nothing from='public open fun equals (other: kotlin.Any?): kotlin.Boolean declared in <root>.JsonFactory'
+          CONST Boolean type=kotlin.Boolean value=true
+    FUN GENERATED_DATA_CLASS_MEMBER name:hashCode visibility:public modality:OPEN returnType:kotlin.Int
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.JsonFactory
+      overridden:
+        public open fun hashCode (): kotlin.Int declared in kotlinx.serialization.StringFormat
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public open fun hashCode (): kotlin.Int declared in <root>.JsonFactory'
+          CONST Int type=kotlin.Int value=-710234398
+    FUN GENERATED_DATA_CLASS_MEMBER name:toString visibility:public modality:OPEN returnType:kotlin.String
+      VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.JsonFactory
+      overridden:
+        public open fun toString (): kotlin.String declared in kotlinx.serialization.StringFormat
+      BLOCK_BODY
+        RETURN type=kotlin.Nothing from='public open fun toString (): kotlin.String declared in <root>.JsonFactory'
+          CONST String type=kotlin.String value="JsonFactory"
+    PROPERTY DELEGATED_MEMBER name:serializersModule visibility:public modality:OPEN [val]
+      overridden:
+        public abstract serializersModule: kotlinx.serialization.modules.SerializersModule declared in kotlinx.serialization.StringFormat
+      FUN DELEGATED_MEMBER name:<get-serializersModule> visibility:public modality:OPEN returnType:kotlinx.serialization.modules.SerializersModule
+        VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.JsonFactory
+        correspondingProperty: PROPERTY DELEGATED_MEMBER name:serializersModule visibility:public modality:OPEN [val]
+        overridden:
+          public abstract fun <get-serializersModule> (): kotlinx.serialization.modules.SerializersModule declared in kotlinx.serialization.StringFormat
+        BLOCK_BODY
+          RETURN type=kotlin.Nothing from='public open fun <get-serializersModule> (): kotlinx.serialization.modules.SerializersModule declared in <root>.JsonFactory'
+            CALL 'public open fun <get-serializersModule> (): kotlinx.serialization.modules.SerializersModule declared in kotlinx.serialization.json.Json' type=kotlinx.serialization.modules.SerializersModule origin=null
+              ARG <this>: GET_FIELD 'FIELD DELEGATE name:$$delegate_0 type:kotlinx.serialization.json.Json visibility:private [final] declared in <root>.JsonFactory' type=kotlinx.serialization.json.Json origin=null
+                receiver: GET_VAR '<this>: <root>.JsonFactory declared in <root>.JsonFactory.<get-serializersModule>' type=<root>.JsonFactory origin=null
+  FUN name:box visibility:public modality:FINAL returnType:kotlin.String
+    BLOCK_BODY
+      RETURN type=kotlin.Nothing from='public final fun box (): kotlin.String declared in <root>'
+        CONST String type=kotlin.String value="OK"
+  FUN name:foo visibility:public modality:FINAL returnType:<root>.FooOutput
+    VALUE_PARAMETER kind:Regular name:body index:0 type:<root>.FooInput
+      annotations:
+        Body(first = JsonFactory::class, other = [] type=kotlin.Array<out kotlin.reflect.KClass<out kotlinx.serialization.StringFormat>> varargElementType=kotlin.reflect.KClass<out kotlinx.serialization.StringFormat>)
+    VALUE_PARAMETER kind:Regular name:b index:1 type:kotlin.String
+      annotations:
+        Header(name = "B")
+    VALUE_PARAMETER kind:Regular name:c index:2 type:kotlin.CharArray
+      annotations:
+        Password
+    VALUE_PARAMETER kind:Regular name:d index:3 type:kotlin.CharArray
+      annotations:
+        Password
+    VALUE_PARAMETER kind:Regular name:e index:4 type:kotlin.Int?
+      annotations:
+        Parameter(name = <null>)
+    VALUE_PARAMETER kind:Regular name:km index:5 type:javax.net.ssl.KeyManager
+    VALUE_PARAMETER kind:Regular name:ignored index:6 type:kotlin.String?
+      EXPRESSION_BODY
+        CONST Null type=kotlin.Nothing? value=null
+    annotations:
+      ScriptEntry
+      Throws(exceptionClasses = [Fault::class] type=kotlin.Array<out kotlin.reflect.KClass<out kotlin.Throwable>> varargElementType=kotlin.reflect.KClass<out kotlin.Throwable>)
+    BLOCK_BODY
+      RETURN type=kotlin.Nothing from='public final fun foo (body: <root>.FooInput, b: kotlin.String, c: kotlin.CharArray, d: kotlin.CharArray, e: kotlin.Int?, km: javax.net.ssl.KeyManager, ignored: kotlin.String?): <root>.FooOutput declared in <root>'
+        CALL 'public final fun error (message: kotlin.Any): kotlin.Nothing declared in kotlin' type=kotlin.Nothing origin=null
+          ARG message: CONST String type=kotlin.String value=""

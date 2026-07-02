@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:GenerateFunction.kt:private fun FunSpec.Builder.callScripts: List&lt;Input></ID>
+    <ID>CyclomaticComplexMethod:GenerateKtorServer.kt:private fun FunSpec.Builder.returnResultClass</ID>
+    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun NormalClass.toNormalSchema: OBJECT</ID>
+    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun Type.toSchema: Schema</ID>
+    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun Type.toSimpleName: String</ID>
+    <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:public fun generateOpenApi: OpenApi</ID>
+    <ID>CyclomaticComplexMethod:GenerateTypedKotlinFlows.kt:@ExperimentalKotlinPoetApi private fun createEntryPointFunction: FunSpec</ID>
+    <ID>CyclomaticComplexMethod:WriteKotlinEntryPoints.kt:private fun CodeGenTree.Type.getSerializerOrFail: CodeBlock</ID>
+    <ID>CyclomaticComplexMethod:WriteKotlinEntryPoints.kt:private fun FunSpec.Builder.addOutputs</ID>
+    <ID>CyclomaticComplexMethod:WriteKotlinEntryPoints.kt:private fun Script.getInputs: CodeBlock</ID>
+    <ID>LongMethod:GenerateFunction.kt:private fun FunSpec.Builder.callScripts: List&lt;Input></ID>
+    <ID>LongMethod:GenerateKtorServer.kt:private fun FunSpec.Builder.returnResultClass</ID>
+    <ID>LongMethod:GenerateOpenApi.kt:private fun NormalClass.toNormalSchema: OBJECT</ID>
+    <ID>LongMethod:GenerateOpenApi.kt:private fun Type.toSchema: Schema</ID>
+    <ID>LongMethod:GenerateOpenApi.kt:private fun iFlowOperation: Operation</ID>
+    <ID>LongMethod:GenerateOpenApi.kt:public fun generateOpenApi: OpenApi</ID>
+    <ID>LongMethod:GenerateTypedKotlinFlows.kt:@ExperimentalKotlinPoetApi private fun createEntryPointFunction: FunSpec</ID>
+    <ID>LongMethod:GenerateTypedKotlinFlows.kt:@ExperimentalKotlinPoetApi public fun generateTypedKotlinFlows: List&lt;FileSpec></ID>
+    <ID>LongMethod:WriteKotlinEntryPoints.kt:private fun CodeGenTree.Type.getSerializerOrFail: CodeBlock</ID>
+    <ID>LongMethod:WriteKotlinEntryPoints.kt:private fun FunSpec.Builder.addOutputs</ID>
+    <ID>LongMethod:WriteKotlinEntryPoints.kt:private fun FunSpec.Builder.callMethod</ID>
+    <ID>LongMethod:WriteKotlinEntryPoints.kt:private fun Script.getInputs: CodeBlock</ID>
+    <ID>LoopWithTooManyJumpStatements:GenerateFunction.kt:for</ID>
+    <ID>LoopWithTooManyJumpStatements:GenerateKtorServer.kt:for</ID>
+    <ID>LoopWithTooManyJumpStatements:GenerateOpenApi.kt:for</ID>
+    <ID>MaxLineLength:CreateR8Rule.kt:"public static com.sap.gateway.ip.core.customdev.util.Message ${script.name}(com.sap.gateway.ip.core.customdev.util.Message, com.sap.it.api.msglog.MessageLog);"</ID>
+    <ID>MaxLineLength:GenerateFunction.kt:"${input.propertyName} = ${previousEntrypoint.resultName}.${previousOutputHeader.propertyName},"</ID>
+    <ID>MaxLineLength:GenerateFunction.kt:"${input.propertyName} = ${previousEntrypoint.resultName}.${previousOutputProperty.propertyName},"</ID>
+    <ID>MaxLineLength:WriteKotlinEntryPoints.kt:"${input.propertyName} = %T.getService&lt;%T>(%T::class.java, null).getUserCredential(getProperty(%S) as %T).password,\n"</ID>
+    <ID>TooManyFunctions:GenerateKtorServer.kt:app.softwork.cikraft.generator.GenerateKtorServer.kt</ID>
+    <ID>TooManyFunctions:GenerateOpenApi.kt:app.softwork.cikraft.generator.GenerateOpenApi.kt</ID>
+    <ID>TooManyFunctions:WriteKotlinEntryPoints.kt:app.softwork.cikraft.generator.WriteKotlinEntryPoints.kt</ID>
+  </CurrentIssues>
+</SmellBaseline>

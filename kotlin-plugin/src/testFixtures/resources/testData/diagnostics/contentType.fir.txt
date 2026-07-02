@@ -1,0 +1,56 @@
+FILE: contentType.kt
+    @R|app/softwork/cikraft/ContentType|(value = String(text/xml) [evaluated = String(text/xml)], parameters = <collectionLiteralCall>(String(foo=value), String(bar=value)) [evaluated = <collectionLiteralCall>(String(foo=value), String(bar=value))]) public final data object TextFactory : R|kotlinx/serialization/StringFormat| {
+        private constructor(): R|TextFactory| {
+            super<R|kotlin/Any|>()
+        }
+
+        private final field $$delegate_0: R|kotlinx/serialization/StringFormat| = R|kotlinx/serialization/json/Json|(Json@fun R|kotlinx/serialization/json/JsonBuilder|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+            this@R|special/anonymous|.R|kotlinx/serialization/json/JsonBuilder.prettyPrint| = Boolean(true)
+        }
+        )
+
+        public final fun contentType(): R|kotlin/String|
+
+    }
+    @R|app/softwork/cikraft/ContentType|(value = String(text/xml) [evaluated = String(text/xml)], parameters = <collectionLiteralCall>(String(foo=value), String(bar=value)) [evaluated = <collectionLiteralCall>(String(foo=value), String(bar=value))]) public final class TextSoapFactory : R|kotlinx/serialization/StringFormat| {
+        public constructor(): R|TextSoapFactory| {
+            super<R|kotlin/Any|>()
+        }
+
+        private final field $$delegate_0: R|kotlinx/serialization/StringFormat| = R|kotlinx/serialization/json/Json|(Json@fun R|kotlinx/serialization/json/JsonBuilder|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+            this@R|special/anonymous|.R|kotlinx/serialization/json/JsonBuilder.prettyPrint| = Boolean(true)
+        }
+        )
+
+        public final fun contentType(): R|kotlin/String|
+
+    }
+    @R|app/softwork/cikraft/ContentType|(value = String(application/json) [evaluated = String(application/json)], parameters = <collectionLiteralCall>(String(foo=value), String(bar=value)) [evaluated = <collectionLiteralCall>(String(foo=value), String(bar=value))]) public abstract class JsonFactory : R|kotlinx/serialization/StringFormat| {
+        public constructor(): R|JsonFactory| {
+            super<R|kotlin/Any|>()
+        }
+
+        private final field $$delegate_0: R|kotlinx/serialization/StringFormat| = R|kotlinx/serialization/json/Json|(Json@fun R|kotlinx/serialization/json/JsonBuilder|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+            this@R|special/anonymous|.R|kotlinx/serialization/json/JsonBuilder.prettyPrint| = Boolean(true)
+        }
+        )
+
+        public final fun contentType(): R|kotlin/String|
+
+    }
+    @R|app/softwork/cikraft/ContentType|(value = String(text/xml) [evaluated = String(text/xml)], parameters = <collectionLiteralCall>(String(foo=value), String(bar=value)) [evaluated = <collectionLiteralCall>(String(foo=value), String(bar=value))]) public final class TextWrongSoapFactory : R|kotlinx/serialization/StringFormat| {
+        public constructor(s: R|kotlin/String|): R|TextWrongSoapFactory| {
+            super<R|kotlin/Any|>()
+        }
+
+        private final field $$delegate_0: R|kotlinx/serialization/StringFormat| = R|kotlinx/serialization/json/Json|(Json@fun R|kotlinx/serialization/json/JsonBuilder|.<anonymous>(): R|kotlin/Unit| <inline=NoInline>  {
+            this@R|special/anonymous|.R|kotlinx/serialization/json/JsonBuilder.prettyPrint| = Boolean(true)
+        }
+        )
+
+        public final val s: R|kotlin/String| = R|<local>/s|
+            public get(): R|kotlin/String|
+
+        public final fun contentType(): R|kotlin/String|
+
+    }
