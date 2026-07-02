@@ -40,6 +40,7 @@ jobs:
 
     environment:
       name: SBX
+      url: https://sbx/${{ github.ref }}
 
     env:
       ORG_GRADLE_PROJECT_SBX_API_CLIENT_SECRET: ${{ secrets.SBX_API_CLIENT_SECRET }}
@@ -63,28 +64,6 @@ jobs:
         with:
           path: api/build/reports/tests/sandboxTest
           name: 'sbx-test-results'
-
-  functionalTest:
-    runs-on: ubuntu-26.04-arm
-    permissions:
-      contents: read
-      packages: read
-
-    environment:
-      name: SBX
-
-    env:
-      ORG_GRADLE_PROJECT_SBX_API_CLIENT_SECRET: ${{ secrets.SBX_API_CLIENT_SECRET }}
-      ORG_GRADLE_PROJECT_SBX_RT_CLIENT_SECRET: ${{ secrets.SBX_RT_CLIENT_SECRET }}
-
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
-        with:
-          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-          build-scan-publish: true
-          build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
-          build-scan-terms-of-use-agree: 'yes'
 
       - name: Run functional tests
         run: ./gradlew :gradle-plugin:functionalTest --rerun
