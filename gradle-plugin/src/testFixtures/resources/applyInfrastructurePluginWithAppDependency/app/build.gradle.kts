@@ -1,5 +1,3 @@
-package applyInfrastructurePluginWithAppDependency.app
-
 jvmApplication {
   toolchain.releaseVersion = 8
 

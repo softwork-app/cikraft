@@ -1,5 +1,3 @@
-package applyInfrastructurePluginWithAppDependency.infra
-
 jvmApplication {
     ciKraftInfrastructure {
         apiStages {
