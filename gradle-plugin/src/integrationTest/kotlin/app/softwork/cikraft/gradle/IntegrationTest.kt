@@ -191,8 +191,8 @@ class IntegrationTest {
             val result = createRunner(
                 projectDir,
                 "deployDevInfrastructure",
-                "-PciKraftDevUsername=foo",
-                "-PciKraftDevPassword=bar",
+                "-PcikraftDevUsername=foo",
+                "-PcikraftDevPassword=bar",
                 "--stacktrace",
                 "-PsapCIPort=$port",
             ).buildAndFail()
