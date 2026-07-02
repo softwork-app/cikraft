@@ -10,7 +10,7 @@ dokka {
 
     dependencies {
         for (sub in subprojects) {
-            dokka(sub)
+            dokka(project(sub.path))
         }
     }
 }
