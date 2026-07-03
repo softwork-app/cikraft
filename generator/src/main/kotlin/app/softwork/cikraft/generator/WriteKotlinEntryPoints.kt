@@ -29,12 +29,15 @@ import io.github.hfhbd.kfx.kotlin.toPoetType
 
 public fun writeKotlinEntryPoints(
     scripts: List<Script>,
+    useAndroidxAnnotation: Boolean,
 ): FileSpec = FileSpec.builder("", "CiKraftEntrypoints").apply {
     for (entryPoint in scripts) {
         with(entryPoint) {
             addFunction(
                 FunSpec.builder(name).apply {
-                    addAnnotation(ClassName("androidx.annotation", "Keep"))
+                    if (useAndroidxAnnotation) {
+                        addAnnotation(ClassName("androidx.annotation", "Keep"))
+                    }
                     receiver(MESSAGE)
                     addParameter("messageLog", MESSAGE_LOG)
                     returns(MESSAGE)

@@ -6,6 +6,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.*
 import org.gradle.api.*
 import org.gradle.api.file.*
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.*
 import org.gradle.work.*
@@ -24,6 +25,10 @@ public abstract class CreateKotlinEntryPoints : DefaultTask() {
     @get:PathSensitive(PathSensitivity.RELATIVE)
     public abstract val scripts: ConfigurableFileCollection
 
+    @get:Input
+    @get:Optional
+    abstract val useAndroidxAnnotation: Property<Boolean>
+
     @get:OutputDirectory
     public abstract val kotlinEntryPoints: DirectoryProperty
 
@@ -40,6 +45,7 @@ public abstract class CreateKotlinEntryPoints : DefaultTask() {
         }.submit(CreateKotlinEntryPointsAction::class) {
             scripts.from(this@CreateKotlinEntryPoints.scripts)
             kotlinEntryPointsDir.set(this@CreateKotlinEntryPoints.kotlinEntryPoints)
+            useAndroidxAnnotation.set(this@CreateKotlinEntryPoints.useAndroidxAnnotation)
         }
     }
 }
@@ -48,12 +54,13 @@ internal abstract class CreateKotlinEntryPointsAction : WorkAction<CreateKotlinE
     interface WorkParameters : org.gradle.workers.WorkParameters {
         val scripts: ConfigurableFileCollection
         val kotlinEntryPointsDir: DirectoryProperty
+        val useAndroidxAnnotation: Property<Boolean>
     }
 
     override fun execute() {
         val scripts = parameters.scripts.flatMap {
             Json.decodeFromString(ListSerializer(Script.serializer()), it.readText())
         }
-        writeKotlinEntryPoints(scripts).writeTo(parameters.kotlinEntryPointsDir.asFile.get())
+        writeKotlinEntryPoints(scripts, parameters.useAndroidxAnnotation.orNull ?: false).writeTo(parameters.kotlinEntryPointsDir.asFile.get())
     }
 }

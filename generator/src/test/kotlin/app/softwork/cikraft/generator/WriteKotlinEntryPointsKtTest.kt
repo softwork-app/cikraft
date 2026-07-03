@@ -40,6 +40,35 @@ class WriteKotlinEntryPointsKtTest {
                     injectedBooleanScript,
                     nullableReturnScript,
                 ),
+                useAndroidxAnnotation = true,
+            ).toString(),
+        )
+    }
+
+    @Test
+    fun generatesValidKotlinEntryPoints() {
+        assertEquals(
+            (Path("src/testFixtures") / "kotlin" / "Entrypoints.kt").readText(),
+            writeKotlinEntryPoints(
+                listOf(
+                    fooScript,
+                    fooSuspendScript,
+                    serializedScript,
+                    typedScript,
+                    fooScriptNoError,
+                    rawScript,
+                    rawSuspendScript,
+                    noOutputsScript,
+                    setupScript,
+                    twoPart1Script,
+                    twoPart2Script,
+                    javaStreamScript,
+                    binaryRedirectScript,
+                    kotlinxIoScript,
+                    injectedBooleanScript,
+                    nullableReturnScript,
+                ),
+                useAndroidxAnnotation = true,
             ).toString(),
         )
     }
@@ -47,7 +76,7 @@ class WriteKotlinEntryPointsKtTest {
     @Test
     fun failsWithStarScript() {
         val exception = assertFailsWith<IllegalStateException> {
-            writeKotlinEntryPoints(listOf(starScript))
+            writeKotlinEntryPoints(listOf(starScript), useAndroidxAnnotation = false)
         }
         assertEquals("Star types are not allowed", exception.message)
     }

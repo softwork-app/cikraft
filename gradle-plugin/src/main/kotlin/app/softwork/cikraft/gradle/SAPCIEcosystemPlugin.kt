@@ -1,5 +1,7 @@
 package app.softwork.cikraft.gradle
 
+import io.github.hfhbd.r8.R8VersionRule
+import io.github.hfhbd.r8.R8_MODULE
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings
 import org.gradle.features.annotations.RegistersProjectFeatures
@@ -26,6 +28,8 @@ import org.gradle.features.annotations.RegistersProjectFeatures
 )
 abstract class SAPCIEcosystemPlugin : Plugin<Settings> {
     override fun apply(settings: Settings) {
+        settings.dependencyResolutionManagement.components.withModule(R8_MODULE, R8VersionRule::class.java)
+
         settings.gradle.lifecycle.beforeProject {
             dependencies.attributesSchema {
                 attribute(SAPCI.attribute)

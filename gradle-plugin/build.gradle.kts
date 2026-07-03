@@ -16,7 +16,7 @@ dependencies {
     compileOnly(libs.kotlin.ecosystem)
     compileOnly(libs.plugins.kotlin.serialization.dep)
     compileOnly(libs.plugins.ksp.dep)
-    implementation(libs.plugins.r8.dep)
+    implementation(libs.r8.feature)
     implementation(projects.gradleWorker)
 
     compileOnly(projects.generator)
