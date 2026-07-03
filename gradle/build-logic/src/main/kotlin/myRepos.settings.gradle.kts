@@ -12,6 +12,8 @@ dependencyResolutionManagement {
             url = uri("https://raw.githubusercontent.com/Kotlin/declarative-gradle-jetbrains-ecosystem-plugin/refs/heads/maven2")
         }
 
+        google()
+
         exclusiveContent {
             forRepository {
                 ivy("https://nodejs.org/dist/") {

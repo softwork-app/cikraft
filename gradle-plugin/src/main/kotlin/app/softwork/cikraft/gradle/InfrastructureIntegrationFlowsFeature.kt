@@ -23,6 +23,7 @@ import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.newInstance
@@ -73,6 +74,9 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
         @get:Inject
         abstract val objectFactory: ObjectFactory
+
+        @get:Inject
+        abstract val javaToolchainService: JavaToolchainService
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -296,18 +300,20 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         )
                     }
 
-                    val createR8Rule = tasks.register("createR8Rule${iFlowBuildModel.name}", CreateR8Rule::class.java) {
-                        this.outputFile.set(r8Rule)
-                        this.scriptEntries.from(entrypointsJson)
-                        this.workerClasspath.from(generatorClasspath)
-                    }
-
                     val r8Jar = tasks.register("r8Jar${iFlowBuildModel.name}", R8JarTask::class.java) {
                         this.r8Jar.set(libs.map { it.file("r8.jar") })
-                        this.rules.from(createR8Rule.flatMap { it.outputFile })
-                        this.inputJars.from(projectJar, classesKotlinEntryPoints)
+                        this.additionalRules.addAll(
+                            "-dontobfuscate",
+                            "-allowaccessmodification",
+                            "-keepattributes SourceFile, LineNumberTable",
+                        )
+                        this.programFiles.from(projectJar, classesKotlinEntryPoints)
                         this.libJars.from(r8LibJars)
-                        this.targetJvmVersion.set(JavaLanguageVersion.of(SAPCI_JVM_TARGET))
+                        this.javaHome.set(
+                            javaToolchainService.compilerFor {
+                                languageVersion.set(JavaLanguageVersion.of(SAPCI_JVM_TARGET))
+                            }.map { it.metadata }.map { it.installationPath },
+                        )
                     }
 
                     val generatedTypedKotlinFlows: TaskProvider<GenerateTypedKotlinFlow> = tasks.register(

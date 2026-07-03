@@ -38,6 +38,7 @@ public fun writeKotlinEntryPoints(
             with(entryPoint) {
                 addFunction(
                     FunSpec.builder(name).apply {
+                        addAnnotation(ClassName("androidx.annotation", "Keep"))
                         addAnnotation(ClassName("kotlin.jvm", "JvmStatic"))
                         receiver(MESSAGE)
                         addParameter("messageLog", MESSAGE_LOG)

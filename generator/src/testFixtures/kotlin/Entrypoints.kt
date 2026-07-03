@@ -1,3 +1,4 @@
+import androidx.`annotation`.Keep
 import com.example.FooInput
 import com.example.FooOutput2
 import com.example.JsonFactory
@@ -45,6 +46,7 @@ import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 
 public data object Entrypoints {
+  @Keep
   @JvmStatic
   public fun Message.foo(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -146,6 +148,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.fooSuspend(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -255,6 +258,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.serialized(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -344,6 +348,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.typed(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -435,6 +440,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.noError(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -483,6 +489,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.raw(messageLog: MessageLog): Message {
     raw(rawMessage = this@raw,
@@ -492,6 +499,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.rawSuspend(messageLog: MessageLog): Message {
     val executor = Executors.newCachedThreadPool()
@@ -512,6 +520,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.noOutputs(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -559,6 +568,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.setup(messageLog: MessageLog): Message {
     val output = setup()
@@ -566,6 +576,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.twoPart1(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -646,6 +657,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.twoPart2(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -732,6 +744,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.javaStreams(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -821,6 +834,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.binaryRedirect(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -888,6 +902,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.kotlinxIO(messageLog: MessageLog): Message {
     val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
@@ -978,6 +993,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.injectedBoolean(messageLog: MessageLog): Message {
     val output = injectedBoolean()
@@ -985,6 +1001,7 @@ public data object Entrypoints {
     return this
   }
 
+  @Keep
   @JvmStatic
   public fun Message.nullableReturn(messageLog: MessageLog): Message {
     val output = nullableReturn() ?: return this

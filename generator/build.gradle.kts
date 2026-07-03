@@ -23,6 +23,8 @@ dependencies {
 
     testFixturesApi(testFixtures(projects.runtime))
     testFixturesApi(projects.integrationFlowBuilderRuntime)
+
+    testFixturesCompileOnly(libs.androidx.annotations)
 }
 
 testing.suites.register("integrationTest", JvmTestSuite::class) {

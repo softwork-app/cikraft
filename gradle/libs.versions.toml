@@ -50,6 +50,8 @@ logback = { module = "ch.qos.logback:logback-classic", version = "1.5.37" }
 
 kotlin-ecosystem = { module = "org.jetbrains.ecosystem:ecosystem-plugin", version = "0.117.0" }
 
+androidx-annotations = { module = "androidx.annotation:annotation", version = "1.10.0" }
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
