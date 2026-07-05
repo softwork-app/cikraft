@@ -227,15 +227,19 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
                         dependencies.add(dependencyFactory.create(SAPCI_CAMEL))
                         dependencies.add(dependencyFactory.create(SAPCI_ACTIVATION))
-                        dependencies.add(dependencyFactory.create(ANNOTATIONS))
                     }
 
                     val r8LibJars = configurations.resolvable("cikraft${iFlowBuildModel.name}LibJars") {
                         extendsFrom(r8Lib)
                     }
 
+                    val androidxAnnotation = configurations.dependencyScope("cikraft${iFlowBuildModel.name}Annotation") {
+                        dependencies.add(dependencyFactory.create(ANNOTATIONS))
+                    }
+
                     val projectJar = configurations.resolvable("cikraft${iFlowBuildModel.name}ProjectJars") {
                         fromDependencyCollector(integrationFlowM.dependencies.implementation)
+                        extendsFrom(androidxAnnotation)
                         attributes {
                             attribute(Usage.USAGE_ATTRIBUTE, named(Usage.JAVA_RUNTIME))
                         }
