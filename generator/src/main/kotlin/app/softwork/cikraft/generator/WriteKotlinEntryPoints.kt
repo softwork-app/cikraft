@@ -12,7 +12,6 @@ import com.squareup.kotlinpoet.FLOAT
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.INT
-import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.LIST
 import com.squareup.kotlinpoet.LONG
 import com.squareup.kotlinpoet.MAP
@@ -21,7 +20,6 @@ import com.squareup.kotlinpoet.NOTHING
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.SHORT
 import com.squareup.kotlinpoet.STRING
-import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.UNIT
 import com.squareup.kotlinpoet.joinToCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree
@@ -31,60 +29,55 @@ import io.github.hfhbd.kfx.kotlin.toPoetType
 
 public fun writeKotlinEntryPoints(
     scripts: List<Script>,
-): FileSpec = FileSpec.builder("", "Entrypoints").apply {
-    val entrypointsObject = TypeSpec.objectBuilder("Entrypoints").apply {
-        addModifiers(KModifier.DATA)
-        for (entryPoint in scripts) {
-            with(entryPoint) {
-                addFunction(
-                    FunSpec.builder(name).apply {
-                        addAnnotation(ClassName("androidx.annotation", "Keep"))
-                        addAnnotation(ClassName("kotlin.jvm", "JvmStatic"))
-                        receiver(MESSAGE)
-                        addParameter("messageLog", MESSAGE_LOG)
-                        returns(MESSAGE)
+): FileSpec = FileSpec.builder("", "CiKraftEntrypoints").apply {
+    for (entryPoint in scripts) {
+        with(entryPoint) {
+            addFunction(
+                FunSpec.builder(name).apply {
+                    addAnnotation(ClassName("androidx.annotation", "Keep"))
+                    receiver(MESSAGE)
+                    addParameter("messageLog", MESSAGE_LOG)
+                    returns(MESSAGE)
 
-                        val bodyOutput = entryPoint.bodyOutput?.takeUnless {
-                            it.contentNegotiations.isEmpty()
-                        }
-                        val error = error
+                    val bodyOutput = entryPoint.bodyOutput?.takeUnless {
+                        it.contentNegotiations.isEmpty()
+                    }
+                    val error = error
 
-                        if (bodyOutput != null || error != null) {
-                            validateAcceptHeader(bodyOutput, error?.bodyOutput)
-                        }
+                    if (bodyOutput != null || error != null) {
+                        validateAcceptHeader(bodyOutput, error?.bodyOutput)
+                    }
 
-                        val bodyInput = entryPoint.bodyInput
-                        if (bodyInput != null) {
-                            validateContentType(bodyInput)
-                        }
+                    val bodyInput = entryPoint.bodyInput
+                    if (bodyInput != null) {
+                        validateContentType(bodyInput)
+                    }
 
-                        if (error != null) {
-                            beginControlFlow("try")
-                        }
+                    if (error != null) {
+                        beginControlFlow("try")
+                    }
 
-                        callMethod(entryPoint)
+                    callMethod(entryPoint)
 
-                        if (outputJvmName != "kotlin.Unit") {
-                            addOutputs(outputs, "output", isError = false)
-                        }
+                    if (outputJvmName != "kotlin.Unit") {
+                        addOutputs(outputs, "output", isError = false)
+                    }
 
-                        if (error != null) {
-                            val errorClass = ClassName(
-                                error.packageName,
-                                error.name,
-                            )
-                            nextControlFlow("catch (error: %T)", errorClass)
-                            addOutputs(error.outputs, "error", isError = true)
-                            endControlFlow()
-                        }
+                    if (error != null) {
+                        val errorClass = ClassName(
+                            error.packageName,
+                            error.name,
+                        )
+                        nextControlFlow("catch (error: %T)", errorClass)
+                        addOutputs(error.outputs, "error", isError = true)
+                        endControlFlow()
+                    }
 
-                        addStatement("return this")
-                    }.build(),
-                )
-            }
+                    addStatement("return this")
+                }.build(),
+            )
         }
     }
-    addType(entrypointsObject.build())
 }.build()
 
 private fun FunSpec.Builder.validateAcceptHeader(

@@ -227,6 +227,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
                         dependencies.add(dependencyFactory.create(SAPCI_CAMEL))
                         dependencies.add(dependencyFactory.create(SAPCI_ACTIVATION))
+                        dependencies.add(dependencyFactory.create(ANNOTATIONS))
                     }
 
                     val r8LibJars = configurations.resolvable("cikraft${iFlowBuildModel.name}LibJars") {

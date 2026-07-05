@@ -8,10 +8,10 @@ public fun writeGroovyEntryPoints(
     appendLine("import com.sap.gateway.ip.core.customdev.util.Message")
     appendLine()
 
-    for (entryPoint in scripts) {
-        appendLine("Message ${entryPoint.name}(Message message) {")
+    for (script in scripts) {
+        appendLine("Message ${script.name}(Message message) {")
         appendLine(
-            "  return Entrypoints.${entryPoint.name}(message, messageLogFactory.getMessageLog(message))",
+            "  return CiKraftEntrypointsKt.${script.name}(message, messageLogFactory.getMessageLog(message))",
         )
         appendLine("}")
     }
