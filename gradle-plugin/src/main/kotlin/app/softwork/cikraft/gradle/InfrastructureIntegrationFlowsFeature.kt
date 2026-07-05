@@ -233,7 +233,9 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         extendsFrom(r8Lib)
                     }
 
-                    val androidxAnnotation = configurations.dependencyScope("cikraft${iFlowBuildModel.name}Annotation") {
+                    val androidxAnnotation = configurations.dependencyScope(
+                        "cikraft${iFlowBuildModel.name}Annotation",
+                    ) {
                         dependencies.add(dependencyFactory.create(ANNOTATIONS))
                     }
 
