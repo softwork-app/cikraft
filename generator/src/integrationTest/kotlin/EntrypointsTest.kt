@@ -13,9 +13,7 @@ class EntrypointsTest {
             ),
         )
         val messageLog = MockMessageLog()
-        with(Entrypoints) {
-            message.serialized(messageLog = messageLog)
-        }
+        message.serialized(messageLog = messageLog)
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
             """{
@@ -44,9 +42,7 @@ class EntrypointsTest {
             ),
         )
         val messageLog = MockMessageLog()
-        with(Entrypoints) {
-            message.serialized(messageLog = messageLog)
-        }
+        message.serialized(messageLog = messageLog)
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
             """{
@@ -75,9 +71,7 @@ class EntrypointsTest {
             ),
         )
         val messageLog = MockMessageLog()
-        with(Entrypoints) {
-            message.serialized(messageLog = messageLog)
-        }
+        message.serialized(messageLog = messageLog)
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
             """{
@@ -107,9 +101,7 @@ class EntrypointsTest {
             ),
         )
         val messageLog = MockMessageLog()
-        with(Entrypoints) {
-            message.serialized(messageLog = messageLog)
-        }
+        message.serialized(messageLog = messageLog)
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
             """{
@@ -139,9 +131,7 @@ class EntrypointsTest {
             ),
         )
         val messageLog = MockMessageLog()
-        with(Entrypoints) {
-            message.serialized(messageLog = messageLog)
-        }
+        message.serialized(messageLog = messageLog)
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
             """{
@@ -171,9 +161,7 @@ class EntrypointsTest {
             ),
         )
         val messageLog = MockMessageLog()
-        with(Entrypoints) {
-            message.serialized(messageLog = messageLog)
-        }
+        message.serialized(messageLog = messageLog)
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
             """{
@@ -203,9 +191,7 @@ class EntrypointsTest {
             ),
         )
         val messageLog = MockMessageLog()
-        with(Entrypoints) {
-            message.serialized(messageLog = messageLog)
-        }
+        message.serialized(messageLog = messageLog)
         assertEquals(406, message.headers[STATUS_CODE_HEADER])
         assertEquals(null, message.body)
         assertEquals(mapOf(), message.properties)
