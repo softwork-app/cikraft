@@ -19,9 +19,7 @@ import org.gradle.testkit.runner.TaskOutcome
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.Path
-import kotlin.io.path.deleteIfExists
 import kotlin.io.path.div
-import kotlin.io.path.writeText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -56,21 +54,14 @@ class FunctionalTest {
     fun createOpenApi() {
         val id = Uuid.random()
         val projectDir = fixtureDir / "resources" / "deployToSandbox"
-        val gradlePropertiesFile = projectDir / "gradle.properties"
-        gradlePropertiesFile.writeText(
-            """|version=1.0.0
-               |cikraftSbxUsername=sb-08b6afaa-f349-4ad3-ba76-28dbcfdd62e3!b131200|it!b196
-               |cikraftSbxPassword=${System.getenv("SBX_API_CLIENT_SECRET")}
-               |suffix=/$id
-               |
-            """.trimMargin(),
-        )
+
         try {
             val result = build(
                 projectDir,
                 "clean",
                 ":infra:deploySbxInfrastructure",
                 "--stacktrace",
+                id = id,
             )
 
             assertEquals(TaskOutcome.SUCCESS, result.task(":infra:deploySbxInfrastructure")?.outcome)
@@ -111,21 +102,31 @@ class FunctionalTest {
                 projectDir,
                 ":infra:undeploySbxInfrastructure",
                 "--stacktrace",
+                id = id,
             )
 
             assertEquals(TaskOutcome.SUCCESS, result.task(":infra:undeploySbxInfrastructure")?.outcome)
-
-            gradlePropertiesFile.deleteIfExists()
         }
     }
 
-    private fun build(projectDir: Path, vararg tasks: String): BuildResult = GradleRunner.create()
+    private fun build(
+        projectDir: Path,
+        vararg tasks: String,
+        id: Uuid,
+    ): BuildResult = GradleRunner.create()
         .withProjectDir(projectDir.toFile())
         .forwardOutput()
         .withArguments(
             *tasks,
             "--configuration-cache",
             "-Porg.gradle.kotlin.dsl.dcl=true",
+            "--info",
+            "-PKDGPUsername=${System.getenv("KDGP_USERNAME")}",
+            "-PKDGPPassword=${System.getenv("KDGP_PASSWORD")}",
+            "-Pversion=1.0.0",
+            "-PcikraftSbxUsername=sb-08b6afaa-f349-4ad3-ba76-28dbcfdd62e3!b131200|it!b196",
+            "-PcikraftSbxPassword=${System.getenv("SBX_API_CLIENT_SECRET")}",
+            "-Psuffix=/$id",
         )
         .build()
 }
