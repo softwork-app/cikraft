@@ -5,7 +5,7 @@ class PersonConstructor {
     String name
     Integer age
 
-    PersonConstructor(name, age) {
+    PersonConstructor(String name, Integer age) {
         this.name = name
         this.age = age
     }

@@ -7,9 +7,9 @@ jvmApplication {
                 description = "Sandbox Stage for unit tests"
                 web =
                     "https://b3d0decftrial.integrationsuite-trial.cfapps.us10-001.hana.ondemand.com/shell/home"
-                apiServer = "https://b3d0decftrial.it-cpitrial05.cfapps.us10-001.hana.ondemand.com"
-                authServer = "https://b3d0decftrial.authentication.us10.hana.ondemand.com"
-                httpServer = "https://b3d0decftrial.it-cpitrial05-rt.cfapps.us10-001.hana.ondemand.com/http"
+                apiServer = "https://8c5e4266trial.it-cpitrial03.cfapps.ap21.hana.ondemand.com"
+                authServer = "https://8c5e4266trial.authentication.ap21.hana.ondemand.com"
+                httpServer = "https://8c5e4266trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http"
             }
         }
 

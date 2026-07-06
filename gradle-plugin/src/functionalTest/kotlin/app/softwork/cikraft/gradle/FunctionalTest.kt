@@ -35,8 +35,8 @@ class FunctionalTest {
 
     val consumerClient = HttpClient(CIO) {
         setupRuntimeAuth(
-            tokenUrl = "https://b3d0decftrial.authentication.us10.hana.ondemand.com/oauth/token",
-            clientId = "sb-07e739da-e974-4299-a3e6-86777fa2309a!b657590|it-rt-b3d0decftrial!b26655",
+            tokenUrl = "https://8c5e4266trial.authentication.ap21.hana.ondemand.com/oauth/token",
+            clientId = "sb-cd8c42c8-1525-4225-8ce2-5fcd70fac8fd!b131200|it-rt-8c5e4266trial!b196",
             clientSecret = System.getenv("SBX_RT_CLIENT_SECRET")
         )
         install(Logging) {
@@ -47,7 +47,7 @@ class FunctionalTest {
             jsonIo(Json)
         }
         defaultRequest {
-            url("https://b3d0decftrial.it-cpitrial05-rt.cfapps.us10-001.hana.ondemand.com")
+            url("https://8c5e4266trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com")
         }
         install(HttpCookies)
     }
@@ -59,7 +59,7 @@ class FunctionalTest {
         val gradlePropertiesFile = projectDir / "gradle.properties"
         gradlePropertiesFile.writeText(
             """|version=1.0.0
-               |cikraftSbxUsername=sb-d765e19b-8e9a-4bd0-af14-d5149b54d539!b657590|it!b26655
+               |cikraftSbxUsername=sb-08b6afaa-f349-4ad3-ba76-28dbcfdd62e3!b131200|it!b196
                |cikraftSbxPassword=${System.getenv("SBX_API_CLIENT_SECRET")}
                |suffix=/$id
                |
