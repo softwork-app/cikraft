@@ -1,5 +1,6 @@
 package app.softwork.cikraft.gradle
 
+import io.github.hfhbd.r8.ANNOTATIONS
 import io.github.hfhbd.r8.R8JarTask
 import io.github.hfhbd.r8.R8Plugin
 import org.gradle.api.Plugin
@@ -23,6 +24,7 @@ import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.newInstance
@@ -73,6 +75,9 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
         @get:Inject
         abstract val objectFactory: ObjectFactory
+
+        @get:Inject
+        abstract val javaToolchainService: JavaToolchainService
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -218,18 +223,25 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     iFlowBuildModel.scripts.from(integrationFlowM.scripts)
 
                     val r8Lib = configurations.dependencyScope("cikraft${iFlowBuildModel.name}Lib") {
-                        dependencies.add(project.dependencies.create(SAPCI_SCRIPT_API))
-                        dependencies.add(project.dependencies.create(SAPCI_GENERIC_API))
-                        dependencies.add(project.dependencies.create(SAPCI_CAMEL))
-                        dependencies.add(project.dependencies.create(SAPCI_ACTIVATION))
+                        dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
+                        dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
+                        dependencies.add(dependencyFactory.create(SAPCI_CAMEL))
+                        dependencies.add(dependencyFactory.create(SAPCI_ACTIVATION))
                     }
 
                     val r8LibJars = configurations.resolvable("cikraft${iFlowBuildModel.name}LibJars") {
                         extendsFrom(r8Lib)
                     }
 
+                    val androidxAnnotation = configurations.dependencyScope(
+                        "cikraft${iFlowBuildModel.name}Annotation",
+                    ) {
+                        dependencies.add(dependencyFactory.create(ANNOTATIONS))
+                    }
+
                     val projectJar = configurations.resolvable("cikraft${iFlowBuildModel.name}ProjectJars") {
                         fromDependencyCollector(integrationFlowM.dependencies.implementation)
+                        extendsFrom(androidxAnnotation)
                         attributes {
                             attribute(Usage.USAGE_ATTRIBUTE, named(Usage.JAVA_RUNTIME))
                         }
@@ -280,7 +292,8 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         project.configurations.named(implementationConfigurationName) {
                             fromDependencyCollector(integrationFlowM.dependencies.implementation)
                             extendsFrom(r8Lib)
-                            dependencies.add(project.dependencies.create("app.softwork.cikraft:runtime:$VERSION"))
+                            dependencies.add(dependencyFactory.create("app.softwork.cikraft:runtime:$VERSION"))
+                            dependencies.add(dependencyFactory.create(ANNOTATIONS))
                         }
                     }.map {
                         project.fileTree(it.kotlin.classesDirectory) {
@@ -290,24 +303,21 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     }
 
                     val libs = layout.contextBuildDirectory.map { it.dir("cikraft/${iFlowBuildModel.name}/libs") }
-                    val r8Rule = layout.contextBuildDirectory.map {
-                        it.file(
-                            "cikraft/${iFlowBuildModel.name}/r8/rule.txt",
-                        )
-                    }
-
-                    val createR8Rule = tasks.register("createR8Rule${iFlowBuildModel.name}", CreateR8Rule::class.java) {
-                        this.outputFile.set(r8Rule)
-                        this.scriptEntries.from(entrypointsJson)
-                        this.workerClasspath.from(generatorClasspath)
-                    }
 
                     val r8Jar = tasks.register("r8Jar${iFlowBuildModel.name}", R8JarTask::class.java) {
                         this.r8Jar.set(libs.map { it.file("r8.jar") })
-                        this.rules.from(createR8Rule.flatMap { it.outputFile })
-                        this.inputJars.from(projectJar, classesKotlinEntryPoints)
+                        this.additionalRules.addAll(
+                            "-dontobfuscate",
+                            "-allowaccessmodification",
+                            "-keepattributes SourceFile, LineNumberTable",
+                        )
+                        this.programFiles.from(classesKotlinEntryPoints, projectJar)
                         this.libJars.from(r8LibJars)
-                        this.targetJvmVersion.set(JavaLanguageVersion.of(SAPCI_JVM_TARGET))
+                        this.javaHome.set(
+                            javaToolchainService.launcherFor {
+                                languageVersion.set(JavaLanguageVersion.of(SAPCI_JVM_TARGET))
+                            }.map { it.metadata.installationPath },
+                        )
                     }
 
                     val generatedTypedKotlinFlows: TaskProvider<GenerateTypedKotlinFlow> = tasks.register(

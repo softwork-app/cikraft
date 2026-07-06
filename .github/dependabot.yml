@@ -1,4 +1,9 @@
 version: 2
+registries:
+  google:
+    type: maven-repository
+    url: https://dl.google.com/dl/android/maven2
+
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -13,3 +18,5 @@ updates:
     schedule:
       interval: "daily"
     open-pull-requests-limit: 25
+    registries:
+      - google

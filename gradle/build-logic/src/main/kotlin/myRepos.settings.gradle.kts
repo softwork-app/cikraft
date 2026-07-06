@@ -8,8 +8,24 @@ dependencyResolutionManagement {
 
         mavenCentral()
 
-        maven {
-            url = uri("https://raw.githubusercontent.com/Kotlin/declarative-gradle-jetbrains-ecosystem-plugin/refs/heads/maven2")
+        google()
+
+        exclusiveContent {
+            forRepository {
+                maven {
+                    setUrl(
+                        "https://maven.pkg.github.com/Kotlin/declarative-gradle-jetbrains-ecosystem-plugin"
+                    )
+                    name = "KDGP"
+                    metadataSources {
+                        gradleMetadata()
+                    }
+                    credentials(org.gradle.api.credentials.PasswordCredentials::class)
+                }
+            }
+            filter {
+                includeGroupAndSubgroups("org.jetbrains.ecosystem")
+            }
         }
 
         exclusiveContent {

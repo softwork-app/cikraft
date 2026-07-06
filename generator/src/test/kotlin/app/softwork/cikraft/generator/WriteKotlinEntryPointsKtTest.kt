@@ -20,7 +20,7 @@ class WriteKotlinEntryPointsKtTest {
     @Test
     fun generatesValidKotlinEntryPoints() {
         assertEquals(
-            (Path("src/testFixtures") / "kotlin" / "Entrypoints.kt").readText(),
+            (Path("src/testFixtures") / "kotlin" / "CiKraftEntrypoints.kt").readText(),
             writeKotlinEntryPoints(
                 listOf(
                     fooScript,
