@@ -1,6 +1,5 @@
 package app.softwork.cikraft.gradle
 
-import io.github.hfhbd.r8.ANNOTATIONS
 import io.github.hfhbd.r8.ANNOTATION_MODULE
 import io.github.hfhbd.r8.ANNOTATION_VERSION
 import io.github.hfhbd.r8.R8BuildModel
@@ -53,8 +52,6 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
     abstract class ApplyAction :
         ProjectFeatureApplyAction<SAPCIIFlowsDefinition, SAPCIIFlowsBuildModel, SAPCIInfrastructureDefinition> {
-        @get:Inject
-        abstract val pluginManager: PluginManager
 
         @get:Inject
         abstract val configurations: ConfigurationRegistrar
@@ -79,9 +76,6 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
         @get:Inject
         abstract val objectFactory: ObjectFactory
-
-        @get:Inject
-        abstract val javaToolchainService: JavaToolchainService
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -229,12 +223,12 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     iFlowBuildModel.sapciRuntimeLibs.add(SAPCI_CAMEL)
                     iFlowBuildModel.sapciRuntimeLibs.add(SAPCI_ACTIVATION)
 
-                    val projectJar = configurations.resolvable("cikraft${iFlowBuildModel.name}ProjectJars") {
+                    iFlowBuildModel.dependenciesJars.from(configurations.resolvable("cikraft${iFlowBuildModel.name}ProjectJars") {
                         fromDependencyCollector(integrationFlowM.dependencies.implementation)
                         attributes {
                             attribute(Usage.USAGE_ATTRIBUTE, named(Usage.JAVA_RUNTIME))
                         }
-                    }
+                    })
 
                     val entrypointsJson = configurations.resolvable("cikraft${iFlowBuildModel.name}Entrypoints") {
                         fromDependencyCollector(integrationFlowM.dependencies.implementation)
@@ -278,25 +272,34 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                     val compileKotlinEntrypointsSourceSet = sourceSets.create(iFlowBuildModel.name.replace("_", "")) {
                         kotlin.srcDir(generateKotlinEntrypoints)
-                        project.configurations.named(implementationConfigurationName) {
+                        configurationContainer.named(implementationConfigurationName) {
                             fromDependencyCollector(integrationFlowM.dependencies.implementation)
                             fromDependencyCollector(iFlowBuildModel.sapciRuntimeLibs)
                         }
                     }
 
-                    iFlowBuildModel.kotlinEntryPointsClasses = project.fileTree(compileKotlinEntrypointsSourceSet.kotlin.classesDirectory) {
-                            include("**.class")
-                            builtBy(compileKotlinEntrypointsSourceSet.classesTaskName)
-                        }
+                    println(
+                        configurationContainer.getByName(compileKotlinEntrypointsSourceSet.implementationConfigurationName).allDependencies
+                            .joinToString(prefix = "ASDFASDF", separator = ":")
+                    )
+
+                    iFlowBuildModel.kotlinEntryPointsClasses = project.fileTree(
+                        compileKotlinEntrypointsSourceSet.kotlin.classesDirectory,
+                    ) {
+                        include("**.class")
+                        builtBy(compileKotlinEntrypointsSourceSet.classesTaskName)
+                    }
 
                     val jar = tasks.register("cikraft" + iFlowBuildModel.name + "Jar", Jar::class.java) {
                         from(iFlowBuildModel.kotlinEntryPointsClasses)
-                        into(layout.contextBuildDirectory.map {
+                        into(
+                            layout.contextBuildDirectory.map {
                             it.file("cikraft/${iFlowBuildModel.name}/entrypoints.jar")
-                        })
+                        }
+                        )
                     }
 
-                    iFlowBuildModel.libs.from(jar, projectJar)
+                    iFlowBuildModel.libs.from(jar, iFlowBuildModel.dependenciesJars)
 
                     val generatedTypedKotlinFlows: TaskProvider<GenerateTypedKotlinFlow> = tasks.register(
                         "generateFlowAccessor$name",
@@ -441,18 +444,15 @@ abstract class InfrastructureIntegrationFlowsR8Feature :
             .withUnsafeApplyAction()
     }
 
-    abstract class ApplyAction :
-        ProjectFeatureApplyAction<R8Definition, R8BuildModel, IntegrationFlow> {
+    abstract class ApplyAction : ProjectFeatureApplyAction<R8Definition, R8BuildModel, IntegrationFlow> {
         @get:Inject
         abstract val tasks: TaskRegistrar
+
         @get:Inject
         abstract val configurations: ConfigurationRegistrar
 
         @get:Inject
         abstract val layout: ProjectFeatureLayout
-
-        @get:Inject
-        abstract val dependencyFactory: DependencyFactory
 
         @get:Inject
         abstract val javaToolchainService: JavaToolchainService
@@ -465,14 +465,13 @@ abstract class InfrastructureIntegrationFlowsR8Feature :
         ) {
             val iFlowBuildModel = context.getBuildModel(parentDefinition)
 
-            val androidxAnnotation = configurations.dependencyScope("cikraft${iFlowBuildModel.name}Annotation") {
-                dependencies.add(dependencyFactory.create("$ANNOTATION_MODULE:$ANNOTATION_VERSION"))
-            }
-
             iFlowBuildModel.kotlinEntrypointImplementation.add("$ANNOTATION_MODULE:$ANNOTATION_VERSION")
 
             val libs = layout.contextBuildDirectory.map { it.dir("cikraft/${iFlowBuildModel.name}/libs") }
 
+            val r8LibJars = configurations.resolvable("r8LibJars${iFlowBuildModel.name}") {
+                fromDependencyCollector(iFlowBuildModel.sapciRuntimeLibs)
+            }
 
             val r8Jar = tasks.register("r8Jar${iFlowBuildModel.name}", R8JarTask::class.java) {
                 this.r8Jar.set(libs.map { it.file("r8.jar") })
@@ -481,7 +480,7 @@ abstract class InfrastructureIntegrationFlowsR8Feature :
                     "-allowaccessmodification",
                     "-keepattributes SourceFile, LineNumberTable",
                 )
-                this.programFiles.from(classesKotlinEntryPoints, projectJar)
+                this.programFiles.from(iFlowBuildModel.kotlinEntryPointsClasses, iFlowBuildModel.dependenciesJars)
                 this.libJars.from(r8LibJars)
                 this.javaHome.set(
                     javaToolchainService.launcherFor {

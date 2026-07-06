@@ -61,6 +61,9 @@ internal abstract class CreateKotlinEntryPointsAction : WorkAction<CreateKotlinE
         val scripts = parameters.scripts.flatMap {
             Json.decodeFromString(ListSerializer(Script.serializer()), it.readText())
         }
-        writeKotlinEntryPoints(scripts, parameters.useAndroidxAnnotation.orNull ?: false).writeTo(parameters.kotlinEntryPointsDir.asFile.get())
+        writeKotlinEntryPoints(
+            scripts,
+            parameters.useAndroidxAnnotation.orNull ?: false,
+        ).writeTo(parameters.kotlinEntryPointsDir.asFile.get())
     }
 }

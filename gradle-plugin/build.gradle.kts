@@ -112,6 +112,9 @@ testing.suites {
                 environment("fixtureDir", project.file("src/testFixtures").path)
 
                 environment("offlineMode", isOffline)
+
+                environment("KDGP_USERNAME", providers.gradleProperty("KDGPUsername").get())
+                environment("KDGP_PASSWORD", providers.gradleProperty("KDGPPassword").get())
             }
         }
     }

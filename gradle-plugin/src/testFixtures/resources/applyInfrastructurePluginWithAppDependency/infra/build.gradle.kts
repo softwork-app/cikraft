@@ -23,6 +23,8 @@ jvmApplication {
                             dependencies {
                                 implementation(projects.app)
                             }
+
+                            r8 {}
                         }
                     }
                 }

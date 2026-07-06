@@ -9,6 +9,7 @@ import org.gradle.features.annotations.RegistersProjectFeatures
 @RegistersProjectFeatures(
     InfrastructureFeature::class,
     InfrastructureIntegrationFlowsFeature::class,
+    InfrastructureIntegrationFlowsR8Feature::class,
     OpenApiFeature::class,
 
     APIProxyFeature::class,

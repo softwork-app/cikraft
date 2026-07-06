@@ -44,6 +44,7 @@ interface IntegrationFlowBuildModel :
     val generatedScripts: ConfigurableFileCollection
 
     val sapciRuntimeLibs: DependencyCollector
+    val dependenciesJars: ConfigurableFileCollection
 
     val kotlinEntrypointImplementation: DependencyCollector
     val kotlinEntryPointsClasses: ConfigurableFileTree
