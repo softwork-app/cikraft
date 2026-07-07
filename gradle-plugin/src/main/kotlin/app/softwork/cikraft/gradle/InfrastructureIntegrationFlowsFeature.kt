@@ -27,7 +27,7 @@ import org.gradle.features.registration.TaskRegistrar
 import org.gradle.jvm.tasks.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JavaToolchainService
-import org.gradle.kotlin.dsl.apply
+import org.gradle.jvm.toolchain.JvmImplementation
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.newInstance
 import javax.inject.Inject
@@ -107,10 +107,12 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 extendsFrom(generator)
             }
 
-            configurationContainer.named("implementation") {
-                dependencies.add(
-                    dependencyFactory.create("app.softwork.cikraft:integration-flow-builder-runtime:$VERSION"),
-                )
+            val integrationFlowsSourceSet = sourceSets.create("integrationFlows") {
+                configurationContainer.named(implementationConfigurationName) {
+                    dependencies.add(
+                        dependencyFactory.create("app.softwork.cikraft:integration-flow-builder-runtime:$VERSION"),
+                    )
+                }
             }
 
             val generateStages = tasks.register("generateStages", CreateSAPCIStagesEnum::class.java) {
@@ -136,7 +138,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                 classpath.from(generatorClasspath)
             }
-            sourceSets.getByName("main").kotlin.srcDir(generateStages)
+            integrationFlowsSourceSet.kotlin.srcDir(generateStages)
 
             val createInfrastructureDryRunOutputFolder =
                 layout.contextBuildDirectory.map { it.dir("cikraft/flows/dryrun") }
@@ -148,8 +150,8 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 this.stageNames.set(buildModel.stages.names)
                 this.outputFolder.convention(createInfrastructureDryRunOutputFolder)
                 classpath.from(
-                    sourceSets.named("main").flatMap { it.kotlin.classesDirectory },
-                    project.configurations.named("runtimeClasspath"),
+                    integrationFlowsSourceSet.kotlin.classesDirectory,
+                    integrationFlowsSourceSet.runtimeClasspath,
                     apiWorkerClasspath,
                 )
             }
@@ -267,9 +269,10 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         this.workerClasspath.from(generatorClasspath)
                     }
 
-                    val compileKotlinEntrypointsSourceSet = sourceSets.create(iFlowBuildModel.name.replace("_", "")) {
-                        kotlin.srcDir(generateKotlinEntryPointsTask)
-                        configurationContainer.named(implementationConfigurationName) {
+                    val compileKotlinEntrypointsSourceSet = parentBuildModel.compilationUnits.create(iFlowBuildModel.name.replace("_", "")) {
+                        sources.srcDir(generateKotlinEntryPointsTask)
+                        jvmEcosystem.jdkToolchain.languageVersion.set(JavaLanguageVersion.of(SAPCI_JVM_TARGET))
+                        jvmEcosystem.implementationConfiguration.apply {
                             fromDependencyCollector(integrationFlowM.dependencies.implementation)
                             dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
                             dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
@@ -280,10 +283,9 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                     iFlowBuildModel.kotlinEntryPointsClasses.from(
                         project.fileTree(
-                            compileKotlinEntrypointsSourceSet.kotlin.classesDirectory,
+                            compileKotlinEntrypointsSourceSet.outputs,
                         ) {
                             include("**.class")
-                            builtBy(compileKotlinEntrypointsSourceSet.classesTaskName)
                         },
                     )
 
@@ -317,9 +319,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         this.groovyScripts.from(iFlowBuildModel.scripts)
                     }
 
-                    sourceSets.named("main") {
-                        kotlin.srcDirs(generatedTypedKotlinFlows)
-                    }
+                    integrationFlowsSourceSet.kotlin.srcDirs(generatedTypedKotlinFlows)
 
                     createInfrastructureDryRun.configure {
                         entryPoints.from(entrypointsJson)

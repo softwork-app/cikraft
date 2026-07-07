@@ -4,7 +4,6 @@ import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.plugins.PluginManager
 import org.gradle.api.plugins.jvm.JvmComponentDependencies
 import org.gradle.api.plugins.jvm.JvmTestSuite
@@ -140,7 +139,7 @@ interface JvmDclTestSuite :
     val targets: NamedDomainObjectContainer<JvmDclTestSuiteTarget>
 
     @get:Nested
-    val dependencies: JvmDclComponentDependencies
+    val dependencies: JvmComponentDependencies
 }
 
 interface JvmDclTestSuiteBuildModel : BuildModel {
@@ -179,9 +178,4 @@ interface TestingSpec {
 
 interface JavaDclForkOptions {
     val environment: MapProperty<String, String>
-}
-
-interface JvmDclComponentDependencies : JvmComponentDependencies {
-    // https://github.com/gradle/gradle/issues/37508
-    override fun project(): ProjectDependency = super.project()
 }

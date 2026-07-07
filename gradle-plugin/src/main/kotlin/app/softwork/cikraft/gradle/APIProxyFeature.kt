@@ -56,6 +56,8 @@ abstract class APIProxyFeature :
                 extendsFrom(deps)
             }
 
+            val apiProxySourceSet = sourceSets.create("apiProxy")
+
             parentBuildModel.apiStages.all {
                 val stage = this
                 val taskName = stage.name.replaceFirstChar { it.uppercase() }
@@ -100,8 +102,8 @@ abstract class APIProxyFeature :
                     this.virtualHost.set(stage.apiVirtualHost)
 
                     workerClasspath.from(
-                        sourceSets.named("main").flatMap { it.kotlin.classesDirectory },
-                        project.configurations.named("runtimeClasspath"),
+                        apiProxySourceSet.kotlin.classesDirectory,
+                        apiProxySourceSet.runtimeClasspath,
                         apiWorkerClasspath,
                     )
                 }
@@ -116,8 +118,8 @@ abstract class APIProxyFeature :
                     this.authServer.set(stage.authServer)
 
                     workerClasspath.from(
-                        sourceSets.named("main").flatMap { it.kotlin.classesDirectory },
-                        project.configurations.named("runtimeClasspath"),
+                        apiProxySourceSet.kotlin.classesDirectory,
+                        apiProxySourceSet.runtimeClasspath,
                         apiWorkerClasspath,
                     )
                 }

@@ -6,6 +6,7 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Nested
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
+import org.jetbrains.kotlin.gradle.declarative.common.buildtypes.JvmCompilationUnit
 
 interface SAPCIInfrastructureDefinition : Definition<SAPCIInfrastructureBuildModel> {
     @get:Nested
@@ -24,9 +25,12 @@ interface SAPCIInfrastructureBuildModel : BuildModel {
     val transportStages: NamedDomainObjectContainer<TransportStage>
     val suffix: Provider<String>
     val httpSuffix: Provider<String>
+
+    val compilationUnits: NamedDomainObjectContainer<JvmCompilationUnit>
 }
 
-interface DefaultSAPCIInfrastructureBuildModel : SAPCIInfrastructureBuildModel {
-    override val suffix: Property<String>
-    override val httpSuffix: Property<String>
+internal abstract class DefaultSAPCIInfrastructureBuildModel : SAPCIInfrastructureBuildModel {
+    abstract override val suffix: Property<String>
+    abstract override val httpSuffix: Property<String>
+    override lateinit var compilationUnits: NamedDomainObjectContainer<JvmCompilationUnit>
 }
