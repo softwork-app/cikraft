@@ -16,7 +16,9 @@ import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmAp
 import javax.inject.Inject
 
 @BindsProjectFeature(ApiFeature::class)
-abstract class ApiFeature : Plugin<Project>, ProjectFeatureBinding {
+abstract class ApiFeature :
+    Plugin<Project>,
+    ProjectFeatureBinding {
     override fun apply(target: Project) {}
     override fun bind(builder: ProjectFeatureBindingBuilder) {
         builder.bindProjectFeature("api", ApplyAction::class)
@@ -32,7 +34,7 @@ abstract class ApiFeature : Plugin<Project>, ProjectFeatureBinding {
             context: ProjectFeatureApplicationContext,
             definition: ApiDefinition,
             buildModel: BuildModel.None,
-            parentDefinition: JvmApplicationProjectType
+            parentDefinition: JvmApplicationProjectType,
         ) {
             configurations.getByName("api").fromDependencyCollector(definition.dependencies.api)
         }

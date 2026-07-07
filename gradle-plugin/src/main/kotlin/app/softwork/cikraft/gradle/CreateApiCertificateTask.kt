@@ -150,10 +150,10 @@ internal abstract class CreateApiCertificateWorker : WorkAction<CreateApiCertifi
 @UntrackedTask(because = "Deleting an API certificate is a remote operation")
 abstract class DeleteApiCertificateTask @Inject constructor(stageName: String, @get:Input val credentialName: String) :
     DefaultTask() {
-        init {
-            val isOffline = project.gradle.startParameter.isOffline
-            onlyIf { !isOffline }
-        }
+    init {
+        val isOffline = project.gradle.startParameter.isOffline
+        onlyIf { !isOffline }
+    }
 
     @get:Input
     abstract val apiPortalServer: Property<String>

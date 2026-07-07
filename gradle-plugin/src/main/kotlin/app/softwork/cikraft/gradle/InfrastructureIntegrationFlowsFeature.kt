@@ -12,7 +12,6 @@ import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.artifacts.type.ArtifactTypeDefinition
 import org.gradle.api.attributes.Usage
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.plugins.PluginManager
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
@@ -52,7 +51,6 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
     abstract class ApplyAction :
         ProjectFeatureApplyAction<SAPCIIFlowsDefinition, SAPCIIFlowsBuildModel, SAPCIInfrastructureDefinition> {
-
         @get:Inject
         abstract val configurations: ConfigurationRegistrar
 
@@ -218,12 +216,16 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     iFlowBuildModel.target.set(integrationFlowM.target)
                     iFlowBuildModel.scripts.from(integrationFlowM.scripts)
 
-                    iFlowBuildModel.dependenciesJars.from(configurations.resolvable("cikraft${iFlowBuildModel.name}ProjectJars") {
-                        fromDependencyCollector(integrationFlowM.dependencies.implementation)
-                        attributes {
-                            attribute(Usage.USAGE_ATTRIBUTE, named(Usage.JAVA_RUNTIME))
-                        }
-                    })
+                    iFlowBuildModel.dependenciesJars.from(
+                        configurations.resolvable(
+                            "cikraft${iFlowBuildModel.name}ProjectJars",
+                        ) {
+                            fromDependencyCollector(integrationFlowM.dependencies.implementation)
+                            attributes {
+                                attribute(Usage.USAGE_ATTRIBUTE, named(Usage.JAVA_RUNTIME))
+                            }
+                        },
+                    )
 
                     val entrypointsJson = configurations.resolvable("cikraft${iFlowBuildModel.name}Entrypoints") {
                         fromDependencyCollector(integrationFlowM.dependencies.implementation)
@@ -276,18 +278,21 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         }
                     }
 
-                    iFlowBuildModel.kotlinEntryPointsClasses.from(project.fileTree(
-                        compileKotlinEntrypointsSourceSet.kotlin.classesDirectory,
-                    ) {
-                        include("**.class")
-                        builtBy(compileKotlinEntrypointsSourceSet.classesTaskName)
-                    })
+                    iFlowBuildModel.kotlinEntryPointsClasses.from(
+                        project.fileTree(
+                            compileKotlinEntrypointsSourceSet.kotlin.classesDirectory,
+                        ) {
+                            include("**.class")
+                            builtBy(compileKotlinEntrypointsSourceSet.classesTaskName)
+                        },
+                    )
 
                     val jar = tasks.register("cikraft" + iFlowBuildModel.name + "Jar", Jar::class.java) {
                         from(iFlowBuildModel.kotlinEntryPointsClasses)
-                        destinationDirectory.set(layout.contextBuildDirectory.map {
-                            it.dir("cikraft/${iFlowBuildModel.name}")
-                        }
+                        destinationDirectory.set(
+                            layout.contextBuildDirectory.map {
+                                it.dir("cikraft/${iFlowBuildModel.name}")
+                            },
                         )
                         archiveFileName.set("entrypoints.jar")
                     }
@@ -471,7 +476,7 @@ abstract class InfrastructureIntegrationFlowsR8Feature :
             buildModel.r8DependencyCollector.add(
                 buildModel.r8Version.map { r8Version ->
                     dependencyFactory.create("$R8_MODULE:$r8Version")
-                }
+                },
             )
 
             val r8ClasspathConfig = configurations.resolvable("r8Classpath${iFlowBuildModel.name}") {

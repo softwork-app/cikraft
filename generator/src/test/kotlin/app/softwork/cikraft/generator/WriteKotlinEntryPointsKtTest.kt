@@ -40,28 +40,6 @@ class WriteKotlinEntryPointsKtTest {
                     injectedBooleanScript,
                     nullableReturnScript,
                 ),
-                useAndroidxAnnotation = true,
-            ).toString(),
-        )
-    }
-
-    @Test
-    fun generatesValidKotlinEntryPointsWithoutKeep() {
-        assertEquals(
-            """import com.sap.gateway.ip.core.customdev.util.Message
-import com.sap.it.api.msglog.MessageLog
-
-public fun Message.injectedBoolean(messageLog: MessageLog): Message {
-  val output = injectedBoolean()
-  setProperty("_RESULT_", output)
-  return this
-}
-""",
-            writeKotlinEntryPoints(
-                listOf(
-                    injectedBooleanScript,
-                ),
-                useAndroidxAnnotation = false,
             ).toString(),
         )
     }
@@ -69,7 +47,7 @@ public fun Message.injectedBoolean(messageLog: MessageLog): Message {
     @Test
     fun failsWithStarScript() {
         val exception = assertFailsWith<IllegalStateException> {
-            writeKotlinEntryPoints(listOf(starScript), useAndroidxAnnotation = false)
+            writeKotlinEntryPoints(listOf(starScript))
         }
         assertEquals("Star types are not allowed", exception.message)
     }

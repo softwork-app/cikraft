@@ -30,7 +30,6 @@ abstract class CreateIntegrationPackageTask @Inject constructor(
     @get:Input
     private val stageName: String,
 ) : DefaultTask() {
-
     init {
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }

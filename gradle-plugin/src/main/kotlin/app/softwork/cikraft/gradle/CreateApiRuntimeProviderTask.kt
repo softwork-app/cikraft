@@ -21,6 +21,7 @@ abstract class CreateApiRuntimeProviderTask @Inject constructor(stageName: Strin
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }
     }
+
     @get:Input
     abstract val apiPortalServer: Property<String>
 
