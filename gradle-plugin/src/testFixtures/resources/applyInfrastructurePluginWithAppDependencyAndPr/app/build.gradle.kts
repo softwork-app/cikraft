@@ -11,7 +11,9 @@ jvmApplication {
 
   }
 
-  dependencies {
-    implementation(libs.serialization.json)
+  api {
+    dependencies {
+      api(libs.serialization.json)
+    }
   }
 }

@@ -63,7 +63,6 @@ internal abstract class CreateKotlinEntryPointsAction : WorkAction<CreateKotlinE
         }
         writeKotlinEntryPoints(
             scripts,
-            parameters.useAndroidxAnnotation.orNull ?: false,
         ).writeTo(parameters.kotlinEntryPointsDir.asFile.get())
     }
 }

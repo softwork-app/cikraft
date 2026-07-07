@@ -17,6 +17,10 @@ import javax.inject.Inject
 
 @UntrackedTask(because = "Because creating a provider is a remote operation")
 abstract class CreateApiRuntimeProviderTask @Inject constructor(stageName: String) : DefaultTask() {
+    init {
+        val isOffline = project.gradle.startParameter.isOffline
+        onlyIf { !isOffline }
+    }
     @get:Input
     abstract val apiPortalServer: Property<String>
 

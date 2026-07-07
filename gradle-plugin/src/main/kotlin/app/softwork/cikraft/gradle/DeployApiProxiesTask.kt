@@ -15,6 +15,8 @@ import kotlin.String
 abstract class ApiProxiesTask(stageName: String) : DefaultTask() {
     init {
         group = "cikraft"
+        val isOffline = project.gradle.startParameter.isOffline
+        onlyIf { !isOffline }
     }
 
     @get:Input
@@ -44,6 +46,11 @@ abstract class ApiProxiesTask(stageName: String) : DefaultTask() {
 
 @UntrackedTask(because = "Create infrastructure is a remote operation")
 abstract class DeployApiProxiesTask @Inject constructor(stageName: String) : ApiProxiesTask(stageName) {
+    init {
+        val isOffline = project.gradle.startParameter.isOffline
+        onlyIf { !isOffline }
+    }
+
     @get:Input
     internal abstract val virtualHost: Property<String>
 
@@ -65,6 +72,11 @@ abstract class DeployApiProxiesTask @Inject constructor(stageName: String) : Api
 
 @UntrackedTask(because = "Create infrastructure is a remote operation")
 abstract class UnDeployApiProxiesTask @Inject constructor(stageName: String) : ApiProxiesTask(stageName) {
+    init {
+        val isOffline = project.gradle.startParameter.isOffline
+        onlyIf { !isOffline }
+    }
+
     @TaskAction
     internal fun deploy() {
         workerExecutor.processIsolation {

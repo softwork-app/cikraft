@@ -23,6 +23,11 @@ import org.gradle.api.logging.Logging as GradleLogger
 
 @UntrackedTask(because = "Deleting an API keystore is a remote operation")
 abstract class DeleteApiKeyStoreTask @Inject constructor(stageName: String) : DefaultTask() {
+    init {
+        val isOffline = project.gradle.startParameter.isOffline
+        onlyIf { !isOffline }
+    }
+
     @get:Input abstract val apiKeyStoreName: Property<String>
 
     @get:Input

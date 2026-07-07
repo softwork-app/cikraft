@@ -24,7 +24,9 @@ jvmApplication {
                                 implementation(projects.app)
                             }
 
-                            r8 {}
+                            r8 {
+                                additionalRules.add("-dontwarn org.slf4j.*")
+                            }
                         }
                     }
                 }
@@ -37,9 +39,4 @@ jvmApplication {
             }
         }
     }
-}
-
-tasks.withType<io.github.hfhbd.r8.R8JarTask>().configureEach {
-    // We don't use slf4j
-    additionalRules.add("-dontwarn org.slf4j.*")
 }

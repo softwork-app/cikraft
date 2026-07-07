@@ -52,7 +52,7 @@ kotlin-ecosystem = { module = "org.jetbrains.ecosystem:ecosystem-plugin", versio
 
 androidx-annotations = { module = "androidx.annotation:annotation", version = "1.10.0" }
 
-r8-feature = { module = "io.github.hfhbd.r8:gradle-feature", version = "0.0.7" }
+r8-feature = { module = "io.github.hfhbd.r8:gradle-feature", version = "0.0.8" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

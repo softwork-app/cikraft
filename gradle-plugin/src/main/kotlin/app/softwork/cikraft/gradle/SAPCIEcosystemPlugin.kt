@@ -26,6 +26,9 @@ import org.gradle.features.annotations.RegistersProjectFeatures
     // Just because there is no test suite feature
     JvmTestSuiteFeature::class,
     KotlinTestJvmTestSuiteFeature::class,
+
+    // Workaround until https://github.com/softwork-app/cikraft/issues/17
+    ApiFeature::class,
 )
 abstract class SAPCIEcosystemPlugin : Plugin<Settings> {
     override fun apply(settings: Settings) {

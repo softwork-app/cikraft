@@ -1,10 +1,14 @@
 package app.softwork.cikraft.gradle
 
 import org.gradle.api.Named
+import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.NamedDomainObjectProvider
+import org.gradle.api.artifacts.DependencyScopeConfiguration
 import org.gradle.api.artifacts.dsl.Dependencies
 import org.gradle.api.artifacts.dsl.DependencyCollector
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.ConfigurableFileTree
+import org.gradle.api.file.FileCollection
+import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
@@ -43,11 +47,8 @@ interface IntegrationFlowBuildModel :
     val scripts: ConfigurableFileCollection
     val generatedScripts: ConfigurableFileCollection
 
-    val sapciRuntimeLibs: DependencyCollector
-    val dependenciesJars: ConfigurableFileCollection
-
-    val kotlinEntrypointImplementation: DependencyCollector
-    val kotlinEntryPointsClasses: ConfigurableFileTree
+    val dependenciesJars: FileCollection
+    val kotlinEntryPointsClasses: FileCollection
 }
 
 abstract class DefaultIntegrationFlowBuildModel : IntegrationFlowBuildModel {
@@ -55,5 +56,6 @@ abstract class DefaultIntegrationFlowBuildModel : IntegrationFlowBuildModel {
     lateinit var internalName: String
     abstract override val flowID: Property<String>
 
-    abstract override var kotlinEntryPointsClasses: ConfigurableFileTree
+    abstract override val dependenciesJars: ConfigurableFileCollection
+    abstract override val kotlinEntryPointsClasses: ConfigurableFileCollection
 }

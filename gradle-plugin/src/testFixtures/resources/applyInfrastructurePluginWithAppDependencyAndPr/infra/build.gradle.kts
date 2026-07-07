@@ -4,6 +4,8 @@ jvmApplication {
             apiStage("Dev") {
                 apiServer = "foo"
                 authServer = "bar"
+                httpServer = "localhost"
+                web = "localhost/shell/home"
             }
         }
 

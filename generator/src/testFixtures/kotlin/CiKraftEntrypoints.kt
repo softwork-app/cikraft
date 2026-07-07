@@ -1,4 +1,3 @@
-import androidx.`annotation`.Keep
 import com.example.FooInput
 import com.example.FooOutput2
 import com.example.JsonFactory
@@ -44,7 +43,6 @@ import kotlinx.serialization.StringFormat
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 
-@Keep
 public fun Message.foo(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -145,7 +143,6 @@ public fun Message.foo(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.fooSuspend(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -254,7 +251,6 @@ public fun Message.fooSuspend(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.serialized(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -343,7 +339,6 @@ public fun Message.serialized(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.typed(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -434,7 +429,6 @@ public fun Message.typed(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.noError(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -482,7 +476,6 @@ public fun Message.noError(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.raw(messageLog: MessageLog): Message {
   raw(rawMessage = this@raw,
       rawMessageLog = messageLog,
@@ -491,7 +484,6 @@ public fun Message.raw(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.rawSuspend(messageLog: MessageLog): Message {
   val executor = Executors.newCachedThreadPool()
   val executorCoroutineDispatcher = executor.asCoroutineDispatcher()
@@ -511,7 +503,6 @@ public fun Message.rawSuspend(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.noOutputs(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -558,14 +549,12 @@ public fun Message.noOutputs(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.setup(messageLog: MessageLog): Message {
   val output = setup()
   setProperty("_RESULT_", output)
   return this
 }
 
-@Keep
 public fun Message.twoPart1(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -645,7 +634,6 @@ public fun Message.twoPart1(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.twoPart2(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -731,7 +719,6 @@ public fun Message.twoPart2(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.javaStreams(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -820,7 +807,6 @@ public fun Message.javaStreams(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.binaryRedirect(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -887,7 +873,6 @@ public fun Message.binaryRedirect(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.kotlinxIO(messageLog: MessageLog): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -977,14 +962,12 @@ public fun Message.kotlinxIO(messageLog: MessageLog): Message {
   return this
 }
 
-@Keep
 public fun Message.injectedBoolean(messageLog: MessageLog): Message {
   val output = injectedBoolean()
   setProperty("_RESULT_", output)
   return this
 }
 
-@Keep
 public fun Message.nullableReturn(messageLog: MessageLog): Message {
   val output = nullableReturn() ?: return this
   setProperty("_RESULT_", output)

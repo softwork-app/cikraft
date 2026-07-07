@@ -8,8 +8,6 @@ dependencyResolutionManagement {
 
         mavenCentral()
 
-        google()
-
         exclusiveContent {
             forRepository {
                 maven {
