@@ -41,6 +41,7 @@ class IFlowTest {
         ) {
             val s = consumerClient.post("http/Foo/foo/$uuid") {
                 header("x-correlation-id", "ASDFFF")
+                header("SAP_MessageProcessingLogLevel", "DEBUG")
                 contentType(ContentType.Application.Json)
                 setBody("""{"foo":"bar"}""")
             }
