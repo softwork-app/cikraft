@@ -28,9 +28,6 @@ plugins {
 }
 
 dependencyResolutionManagement {
-    repositories {
-        google()
-    }
     versionCatalogs.register("libs") {
         from(files("../../../../../gradle/libs.versions.toml"))
     }

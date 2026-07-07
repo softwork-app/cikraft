@@ -10,4 +10,10 @@ jvmApplication {
     iflow {
 
     }
+
+    api {
+        dependencies {
+            api(libs.serialization.json)
+        }
+    }
 }
