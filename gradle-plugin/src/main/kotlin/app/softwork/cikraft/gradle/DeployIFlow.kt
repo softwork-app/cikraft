@@ -51,6 +51,8 @@ internal abstract class DeployIFlow @Inject constructor(
 ) : DefaultTask() {
     init {
         group = "cikraft"
+        val isOffline = project.gradle.startParameter.isOffline
+        onlyIf { !isOffline }
     }
 
     @get:InputFiles

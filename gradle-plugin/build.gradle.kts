@@ -16,7 +16,7 @@ dependencies {
     compileOnly(libs.kotlin.ecosystem)
     compileOnly(libs.plugins.kotlin.serialization.dep)
     compileOnly(libs.plugins.ksp.dep)
-    implementation(libs.plugins.r8.dep)
+    implementation(libs.r8.feature)
     implementation(projects.gradleWorker)
 
     compileOnly(projects.generator)
@@ -112,6 +112,9 @@ testing.suites {
                 environment("fixtureDir", project.file("src/testFixtures").path)
 
                 environment("offlineMode", isOffline)
+
+                environment("KDGP_USERNAME", providers.gradleProperty("KDGPUsername").get())
+                environment("KDGP_PASSWORD", providers.gradleProperty("KDGPPassword").get())
             }
         }
     }

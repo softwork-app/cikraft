@@ -4,6 +4,7 @@ import org.gradle.api.Named
 import org.gradle.api.artifacts.dsl.Dependencies
 import org.gradle.api.artifacts.dsl.DependencyCollector
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
@@ -38,12 +39,19 @@ interface IntegrationFlowBuildModel :
 
     val flowID: Provider<String>
 
+    val libs: ConfigurableFileCollection
     val scripts: ConfigurableFileCollection
     val generatedScripts: ConfigurableFileCollection
+
+    val dependenciesJars: FileCollection
+    val kotlinEntryPointsClasses: FileCollection
 }
 
 abstract class DefaultIntegrationFlowBuildModel : IntegrationFlowBuildModel {
     override fun getName(): String = internalName
     lateinit var internalName: String
     abstract override val flowID: Property<String>
+
+    abstract override val dependenciesJars: ConfigurableFileCollection
+    abstract override val kotlinEntryPointsClasses: ConfigurableFileCollection
 }

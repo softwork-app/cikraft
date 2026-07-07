@@ -34,7 +34,6 @@ public fun writeKotlinEntryPoints(
         with(entryPoint) {
             addFunction(
                 FunSpec.builder(name).apply {
-                    addAnnotation(ClassName("androidx.annotation", "Keep"))
                     receiver(MESSAGE)
                     addParameter("messageLog", MESSAGE_LOG)
                     returns(MESSAGE)
