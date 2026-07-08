@@ -1,6 +1,6 @@
 # cikraft
 
-Automatically deploy your typesafe generated Integration Flows at the SAP Integration Suite.
+Automatically deploy your typesafe generated Integration Flows at the SAP Integration Suite with Gradle.
 
 ### Name
 cikraft comes from:
