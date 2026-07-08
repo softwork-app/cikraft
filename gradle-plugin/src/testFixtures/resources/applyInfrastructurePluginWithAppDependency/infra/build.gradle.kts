@@ -23,6 +23,10 @@ jvmApplication {
                             dependencies {
                                 implementation(projects.app)
                             }
+
+                            r8 {
+                                additionalRules.add("-dontwarn org.slf4j.*")
+                            }
                         }
                     }
                 }

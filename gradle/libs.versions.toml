@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.4.0"
-ktor = "3.5.0"
+ktor = "3.5.1"
 ksp = "2.3.9"
 kfx = "0.2.10"
 serialization = "1.11.0"
@@ -50,6 +50,10 @@ logback = { module = "ch.qos.logback:logback-classic", version = "1.5.37" }
 
 kotlin-ecosystem = { module = "org.jetbrains.ecosystem:ecosystem-plugin", version = "0.117.0" }
 
+androidx-annotations = { module = "androidx.annotation:annotation", version = "1.10.0" }
+
+r8-feature = { module = "io.github.hfhbd.r8:gradle-feature", version = "0.0.8" }
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
@@ -60,4 +64,3 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.24" }
 kotlin-compiler-testing = { id = "io.github.hfhbd.kotlin-compiler-testing", version = "0.0.3" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
-r8 = { id = "io.github.hfhbd.r8", version = "0.0.2" }

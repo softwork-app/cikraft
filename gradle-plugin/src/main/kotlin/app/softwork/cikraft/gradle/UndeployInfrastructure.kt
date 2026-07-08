@@ -21,6 +21,8 @@ import org.gradle.api.logging.Logging as GradleLogging
 abstract class UndeployInfrastructure : DefaultTask() {
     init {
         group = "cikraft"
+        val isOffline = project.gradle.startParameter.isOffline
+        onlyIf { !isOffline }
     }
 
     @get:Input

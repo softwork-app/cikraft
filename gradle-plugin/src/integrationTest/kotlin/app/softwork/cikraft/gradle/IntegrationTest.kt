@@ -218,7 +218,12 @@ class IntegrationTest {
     @Test
     fun applyInfrastructurePluginWithAppDependencyAndPr() {
         val projectDir = fixtureDir / "resources" / "applyInfrastructurePluginWithAppDependencyAndPr"
-        createRunner(projectDir, ":infra:generateFlowAccessorIF_Ba", "-Psuffix=/pr/42").build()
+        val result = createRunner(projectDir, ":infra:deployDevInfrastructure",
+            "-PcikraftDevUsername=foo",
+            "-PcikraftDevPassword=bar",
+            "--offline",
+            "-Psuffix=/pr/42",
+        ).build()
 
         assertEquals(
             (fixtureDir / "kotlin/pr.kt").readText().drop(63),
@@ -516,6 +521,8 @@ public data object IFBa
                     add("-Dorg.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=2g")
                     add("--stacktrace")
                     add("--info")
+                    add("-PKDGPUsername=${System.getenv("KDGP_USERNAME")}")
+                    add("-PKDGPPassword=${System.getenv("KDGP_PASSWORD")}")
                 },
             )
     }
