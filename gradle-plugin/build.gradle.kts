@@ -137,6 +137,8 @@ testing.suites {
 
                 environment("SBX_API_CLIENT_SECRET", providers.gradleProperty("SBX_API_CLIENT_SECRET").get())
                 environment("SBX_RT_CLIENT_SECRET", providers.gradleProperty("SBX_RT_CLIENT_SECRET").get())
+
+                testLogging.showStandardStreams = true
             }
         }
     }
