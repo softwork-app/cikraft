@@ -127,6 +127,7 @@ class FunctionalTest {
             "-PcikraftSbxUsername=sb-08b6afaa-f349-4ad3-ba76-28dbcfdd62e3!b131200|it!b196",
             "-PcikraftSbxPassword=${System.getenv("SBX_API_CLIENT_SECRET")}",
             "-Psuffix=/$id",
+            "-Dorg.gradle.jvmargs=-Xmx4096m",
         )
         .build()
 }
