@@ -12,11 +12,11 @@ kotlin {
     }
 }
 
-dependencies {
-    annotationsRuntime(projects.runtime)
-    annotationsRuntime(libs.serialization.json)
-}
+kotlinTesting {
+    mainClass = "app.softwork.cikraft.kotlin.GenerateTestsKt"
 
-tasks.generateTests {
-    mainClass.set("app.softwork.cikraft.kotlin.GenerateTestsKt")
+    dependencies {
+        annotation(projects.runtime)
+        annotation(libs.serialization.json)
+    }
 }

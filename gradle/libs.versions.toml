@@ -62,5 +62,5 @@ licensee = { id = "app.cash.licensee", version = "1.14.1" }
 detekt = { id = "dev.detekt", version = "2.0.0-alpha.5" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.24" }
-kotlin-compiler-testing = { id = "io.github.hfhbd.kotlin-compiler-testing", version = "0.0.3" }
+kotlin-compiler-testing = { id = "io.github.hfhbd.kotlin-compiler-testing", version = "0.0.4" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
