@@ -142,8 +142,6 @@ testing.suites {
                 environment("SBX_RT_CLIENT_SECRET", providers.gradleProperty("SBX_RT_CLIENT_SECRET").get())
                 environment("KDGP_USERNAME", providers.gradleProperty("KDGPUsername").get())
                 environment("KDGP_PASSWORD", providers.gradleProperty("KDGPPassword").get())
-
-                testLogging.showStandardStreams = true
             }
         }
     }
