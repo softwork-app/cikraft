@@ -25,7 +25,7 @@ public annotation class Parameter(val name: String = "")
 
 /**
  * Injected header value of the header with the given [name].
- * See [SAP Cloud Integration header](https://help.sap.com/docs/cloud-integration/sap-cloud-integration/headers-and-exchange-properties-provided-by-integration-framework?locale=en-US&q=headers)
+ * See [SAP Cloud Integration header](https://help.sap.com/docs/cloud-integration/sap-cloud-integration/headers-and-exchange-properties-provided-by-integration-framework?locale=en-US)
  * for predefined headers.
  * Custom headers are also possible, but could be null if the header is not present in the request.
  */
@@ -54,3 +54,5 @@ public const val SAP_MESSAGE_PROCESSING_LOG_ID_HEADER: String = "sap_messageproc
  * Allowed values: INFO, NONE, DEBUG, ERROR
  */
 public const val SAP_MESSAGE_PROCESSING_LOG_LEVEL: String = "SAP_MessageProcessingLogLevel"
+
+public const val SAP_ApplicationID: String = "SAP_ApplicationID"

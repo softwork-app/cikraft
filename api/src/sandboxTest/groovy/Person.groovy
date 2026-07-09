@@ -14,6 +14,7 @@ class PersonConstructor {
 Message logic(Message message) {
     MessageLog messageLog = messageLogFactory.getMessageLog(message)
     String correlationID = message.getHeader("X-Correlation-ID", String)
+    message.setHeader("SAP_ApplicationID", "FOOOOOO")
     String acceptHeader = message.getHeader("Accept", String)
     String accept
     if (acceptHeader != null) {
