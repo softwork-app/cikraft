@@ -15,8 +15,8 @@ public class IntegrationFlowBuilder(
     private val outputFolder: File?,
     private val stageNames: Set<String>,
 ) {
-    private val _createdFlows = mutableListOf<CreatedFlow>()
-    public val createdFlows: List<CreatedFlow> get() = _createdFlows
+    public val createdFlows: List<CreatedFlow>
+        field = mutableListOf()
 
     public fun createPackageAndFlow(
         packageId: String,
@@ -32,7 +32,15 @@ public class IntegrationFlowBuilder(
         config: CreatedFlowConfig,
         builder: EndpointBuilder.() -> Unit,
     ) {
-        val integrationFlow = config.integrationFlow(builder)
+        val integrationFlow = config.integrationFlow {
+            if (integrationFlowSource.isNotEmpty()) {
+                sender = integrationFlowSource.joinToString()
+            }
+            if (integrationFlowTarget.isNotEmpty()) {
+                receiver = integrationFlowTarget.joinToString()
+            }
+            builder()
+        }
 
         val normalCallActivities = integrationFlow.process.callActivities.filter {
             it.id.startsWith("GroovyScript_")
@@ -111,6 +119,6 @@ public class IntegrationFlowBuilder(
                 )
             }
         }
-        _createdFlows.add(createdFlow)
+        createdFlows.add(createdFlow)
     }
 }
