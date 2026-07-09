@@ -9,7 +9,7 @@ serialization = "1.11.0"
 serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 serialization-properties = { module = "org.jetbrains.kotlinx:kotlinx-serialization-properties", version.ref = "serialization" }
-serialization-xml = { module = "io.github.pdvrieze.xmlutil:serialization", version = "1.0.0" }
+serialization-xml = { module = "io.github.pdvrieze.xmlutil:serialization", version = "1.0.1" }
 kotlinx-io-bytestring = { module = "org.jetbrains.kotlinx:kotlinx-io-bytestring", version = "0.9.1" }
 
 kfx-core = { module = "io.github.hfhbd.kfx:core", version.ref = "kfx" }
