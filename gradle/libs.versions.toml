@@ -46,7 +46,7 @@ groovy-all = { module = "org.codehaus.groovy:groovy-all", version = "3.0.25" }
 
 validation-runtime = { module = "app.softwork.validation:runtime", version = "0.0.18" }
 
-logback = { module = "ch.qos.logback:logback-classic", version = "1.5.37" }
+logback = { module = "ch.qos.logback:logback-classic", version = "1.5.38" }
 
 kotlin-ecosystem = { module = "org.jetbrains.ecosystem:ecosystem-plugin", version = "0.117.0" }
 
