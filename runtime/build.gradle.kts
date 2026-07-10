@@ -1,3 +1,5 @@
+import org.gradle.api.plugins.internal.JavaConfigurationVariantMapping
+
 plugins {
     id("kotlinMPPSetup")
     id("java-test-fixtures")
@@ -18,4 +20,15 @@ dependencies {
     testFixturesApi(libs.sapci.generic.api)
     testFixturesApi(libs.apache.camel)
     testFixturesApi(libs.sapci.javax.activation)
+}
+
+components.named<AdhocComponentWithVariants>("adhocKotlin") {
+    addVariantsFromConfiguration(
+        configurations.testFixturesApiElements.get(),
+        JavaConfigurationVariantMapping("compile", true, configurations.testFixturesCompileClasspath.get())
+    )
+    addVariantsFromConfiguration(
+        configurations.testFixturesRuntimeElements.get(),
+        JavaConfigurationVariantMapping("runtime", true, configurations.testFixturesRuntimeClasspath.get())
+    )
 }
