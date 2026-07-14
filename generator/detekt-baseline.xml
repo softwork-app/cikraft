@@ -27,7 +27,6 @@
     <ID>LoopWithTooManyJumpStatements:GenerateFunction.kt:for</ID>
     <ID>LoopWithTooManyJumpStatements:GenerateKtorServer.kt:for</ID>
     <ID>LoopWithTooManyJumpStatements:GenerateOpenApi.kt:for</ID>
-    <ID>MaxLineLength:CreateR8Rule.kt:"public static com.sap.gateway.ip.core.customdev.util.Message ${script.name}(com.sap.gateway.ip.core.customdev.util.Message, com.sap.it.api.msglog.MessageLog);"</ID>
     <ID>MaxLineLength:GenerateFunction.kt:"${input.propertyName} = ${previousEntrypoint.resultName}.${previousOutputHeader.propertyName},"</ID>
     <ID>MaxLineLength:GenerateFunction.kt:"${input.propertyName} = ${previousEntrypoint.resultName}.${previousOutputProperty.propertyName},"</ID>
     <ID>MaxLineLength:WriteKotlinEntryPoints.kt:"${input.propertyName} = %T.getService&lt;%T>(%T::class.java, null).getUserCredential(getProperty(%S) as %T).password,\n"</ID>

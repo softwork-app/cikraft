@@ -16,6 +16,7 @@ jvmApplication {
         }
 
         httpNamespace = "foo"
+        suffix = providers.gradleProperty("suffix")
 
         integrationArtifacts {
             integrationPackages {

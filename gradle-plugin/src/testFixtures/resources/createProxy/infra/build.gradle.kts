@@ -43,5 +43,8 @@ jvmApplication {
                 }
             }
         }
+        apiProxies {
+
+        }
     }
 }

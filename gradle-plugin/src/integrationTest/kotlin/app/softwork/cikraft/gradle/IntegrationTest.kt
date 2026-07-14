@@ -98,18 +98,16 @@ class IntegrationTest {
     }
 
     @Test
-    fun applyInfrastructurePluginWithoutDependency() {
+    fun applyInfrastructurePluginWithoutDependencyDoesNotGenerateAccessors() {
         val projectDir = fixtureDir / "resources" / "applyInfrastructurePluginWithoutDependency"
         val s = createRunner(projectDir, "assemble").build()
         assertEquals(null, s.task(":infra:r8JarIF_Bar"))
 
         assertEquals(null, (projectDir / "infra/build/cikraft/IF_Bar/libs").toFile().list())
 
-        val fixtureDir = Path(System.getenv("fixtureDir"))
-        assertEquals(
-            (fixtureDir / "kotlin/noDeps.kt").readText().drop(63),
-            (projectDir / "infra/build/cikraft/typedFlows/kotlin/IF_Bar.kt").readText()
-                .replaceProjectDir(projectDir),
+        assertFalse(
+            (projectDir / "infra/build/cikraft/typedFlows/kotlin/IF_Bar.kt").exists(),
+            "without a configuration of the IFlow there are no accessors",
         )
     }
 
@@ -179,12 +177,12 @@ class IntegrationTest {
 
             val projectDir = fixtureDir / "resources" / "applyInfrastructurePluginWithAppDependency"
             val assembleResult = createRunner(projectDir, "assemble", "generateOpenApi").build()
-            assertEquals(null, assembleResult.task(":infra:r8JarIF_Baz")?.outcome)
-            assertEquals(null, assembleResult.task(":infra:generateIF_BazKotlinEntrypoints")?.outcome)
+            assertEquals(null, assembleResult.task(":app:r8JarIF_Baz")?.outcome)
+            assertEquals(null, assembleResult.task(":app:generateIF_BazKotlinEntrypoints")?.outcome)
 
             assertEquals(
                 (fixtureDir / "kotlin/deps.kt").readText().drop(63),
-                (projectDir / "infra/build/cikraft/typedFlows/kotlin/IF_Baz.kt").readText()
+                (projectDir / "app/build/cikraft/typedFlows/kotlin/IF_Baz.kt").readText()
                     .replaceProjectDir(projectDir),
             )
 
@@ -197,10 +195,10 @@ class IntegrationTest {
                 "-PsapCIPort=$port",
             ).buildAndFail()
 
-            assertEquals(TaskOutcome.SUCCESS, result.task(":infra:r8JarIF_Baz")?.outcome)
-            assertEquals(TaskOutcome.SUCCESS, result.task(":infra:generateIF_BazKotlinEntrypoints")?.outcome)
+            assertEquals(TaskOutcome.SUCCESS, result.task(":app:r8JarIF_Baz")?.outcome)
+            assertEquals(TaskOutcome.SUCCESS, result.task(":app:generateIF_BazKotlinEntrypoints")?.outcome)
 
-            val r8Jar = projectDir / "infra/build/cikraft/IF_Baz/libs/r8.jar"
+            val r8Jar = projectDir / "app/build/cikraft/IF_Baz/libs/r8.jar"
             assertTrue(r8Jar.exists())
             assertTrue(
                 r8Jar.fileSize() in 100_000L..200_000L,
@@ -298,8 +296,8 @@ class IntegrationTest {
     fun createProxy() {
         val projectDir = fixtureDir / "resources" / "createProxy"
 
-        val result = createRunner(projectDir, ":infra:compileKotlin", "--stacktrace").build()
-        assertEquals(TaskOutcome.SUCCESS, result.task(":infra:compileKotlin")?.outcome)
+        val result = createRunner(projectDir, ":infra:compileApiProxiesKotlin", "--stacktrace").build()
+        assertEquals(TaskOutcome.SUCCESS, result.task(":infra:compileApiProxiesKotlin")?.outcome)
     }
 
     @Test

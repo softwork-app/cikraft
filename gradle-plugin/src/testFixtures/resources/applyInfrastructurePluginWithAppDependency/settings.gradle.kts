@@ -44,4 +44,3 @@ enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 includeBuild("../../../../../")
 
 include(":app")
-include(":infra")

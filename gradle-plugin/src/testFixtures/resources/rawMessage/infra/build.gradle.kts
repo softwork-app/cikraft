@@ -1,5 +1,7 @@
 jvmApplication {
     ciKraftInfrastructure {
+        suffix = providers.gradleProperty("suffix")
+
         apiStages {
             apiStage("Dev") {
                 apiServer = "foo"

@@ -2,6 +2,7 @@ package app.softwork.cikraft.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.features.annotations.BindsProjectFeature
@@ -32,6 +33,8 @@ abstract class APIProxyFeature :
 
         @get:Inject abstract val configurations: ConfigurationRegistrar
 
+        @get:Inject abstract val configurationContainer: ConfigurationContainer
+
         @get:Inject abstract val dependencyFactory: DependencyFactory
 
         @get:Inject abstract val sourceSets: SourceSetContainer
@@ -54,6 +57,14 @@ abstract class APIProxyFeature :
 
             val apiWorkerClasspath = configurations.resolvable("apiProxyWorkerClasspath") {
                 extendsFrom(deps)
+            }
+
+            val apiProxySourceSet = sourceSets.create("apiProxies") {
+                configurationContainer.named(implementationConfigurationName) {
+                    dependencies.add(
+                        dependencyFactory.create("app.softwork.cikraft:integration-flow-builder-runtime:$VERSION"),
+                    )
+                }
             }
 
             parentBuildModel.apiStages.all {
@@ -100,8 +111,8 @@ abstract class APIProxyFeature :
                     this.virtualHost.set(stage.apiVirtualHost)
 
                     workerClasspath.from(
-                        sourceSets.named("main").flatMap { it.kotlin.classesDirectory },
-                        project.configurations.named("runtimeClasspath"),
+                        apiProxySourceSet.kotlin.classesDirectory,
+                        apiProxySourceSet.runtimeClasspath,
                         apiWorkerClasspath,
                     )
                 }
@@ -116,8 +127,8 @@ abstract class APIProxyFeature :
                     this.authServer.set(stage.authServer)
 
                     workerClasspath.from(
-                        sourceSets.named("main").flatMap { it.kotlin.classesDirectory },
-                        project.configurations.named("runtimeClasspath"),
+                        apiProxySourceSet.kotlin.classesDirectory,
+                        apiProxySourceSet.runtimeClasspath,
                         apiWorkerClasspath,
                     )
                 }
