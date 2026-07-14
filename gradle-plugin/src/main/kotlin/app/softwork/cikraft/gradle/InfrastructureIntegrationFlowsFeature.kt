@@ -213,7 +213,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                         val service = project.gradle.sharedServices.registerIfAbsent(
                             "lockService",
-                            TransportLockBuildService::class.java
+                            TransportLockBuildService::class.java,
                         ) {
                             this.parameters.packageId.set(integrationPackage.name.replace("_", ""))
                             this.parameters.apiSourceStage.set(apiSourceStage.name)
@@ -458,15 +458,16 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                             val service = project.gradle.sharedServices.registerIfAbsent(
                                 "lockService",
-                                TransportLockBuildService::class.java
+                                TransportLockBuildService::class.java,
                             ) {
                                 this.parameters.packageId.set(integrationPackage.name.replace("_", ""))
                                 this.parameters.apiSourceStage.set(apiSourceStage.name)
                                 this.maxParallelUsages.set(1)
                             }
 
-                            val createIPTask = project.tasks.named("create${integrationPackage.name}For${transportStage.name}On${apiSourceStage.name}",
-                            CreateIntegrationPackageTaskForTransport::class.java,
+                            val createIPTask = project.tasks.named(
+                                "create${integrationPackage.name}For${transportStage.name}On${apiSourceStage.name}",
+                                CreateIntegrationPackageTaskForTransport::class.java,
                             )
 
                             val uploadIFlow = tasks.register(
@@ -508,7 +509,11 @@ abstract class InfrastructureIntegrationFlowsFeature :
                                 this.flowTarget.set(iFlowBuildModel.target)
                                 this.parametersFile.set(
                                     createInfrastructureDryRun.flatMap { it.outputFolder }
-                                        .map { it.file("properties/${transportStage.name}/${iFlowBuildModel.name}.properties") },
+                                        .map {
+                                            it.file(
+                                                "properties/${transportStage.name}/${iFlowBuildModel.name}.properties",
+                                            )
+                                        },
                                 )
 
                                 workerClasspath.from(apiWorkerClasspath)

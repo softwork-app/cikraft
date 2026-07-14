@@ -1,37 +1,24 @@
 package app.softwork.cikraft.gradle
 
-import app.softwork.cikraft.api.IntegrationFlow
 import app.softwork.cikraft.api.IntegrationPackage
-import app.softwork.cikraft.api.createIntegrationFlow
 import app.softwork.cikraft.api.createIntegrationPackage
 import app.softwork.cikraft.api.deleteIntegrationPackage
 import app.softwork.cikraft.api.getIntegrationPackage
 import app.softwork.cikraft.api.setupSapCIApiClient
-import app.softwork.cikraft.core.Value
-import app.softwork.cikraft.integrationflow.CreateArtifact
-import app.softwork.cikraft.integrationflow.CreateArtifact.Companion.definitionsXML
-import app.softwork.cikraft.integrationflow.Definitions
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.logging.*
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.Json
 import org.gradle.api.DefaultTask
 import org.gradle.api.credentials.PasswordCredentials
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
-import org.gradle.api.provider.SetProperty
-import org.gradle.api.services.ServiceReference
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
-import org.gradle.api.tasks.options.Option
-import org.gradle.internal.service.scopes.ServiceScope
 import org.gradle.kotlin.dsl.credentials
 import org.gradle.kotlin.dsl.submit
 import org.gradle.workers.WorkAction
@@ -78,10 +65,6 @@ abstract class CreateIntegrationPackageTaskForTransport @Inject constructor(
         group = "cikraft"
     }
 
-    @get:Input
-    @get:Option(description = "Specify the iFlow names that should be uploaded")
-    abstract val iFlowNames: SetProperty<String>
-
     @get:Inject
     internal abstract val workerExecutor: WorkerExecutor
 
@@ -105,7 +88,8 @@ abstract class CreateIntegrationPackageTaskForTransport @Inject constructor(
     }
 }
 
-abstract class CreateIntegrationPackageForTransportWorker : WorkAction<CreateIntegrationPackageForTransportWorker.Params> {
+abstract class CreateIntegrationPackageForTransportWorker :
+    WorkAction<CreateIntegrationPackageForTransportWorker.Params> {
     interface Params : WorkParameters {
         val apiServer: Property<String>
         val authServer: Property<String>
