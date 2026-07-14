@@ -22,5 +22,5 @@ abstract class DefaultSAPCIIFlowsBuildModel : SAPCIIFlowsBuildModel {
 
     // Workaround:
     // only used for the OpenApi Feature until a feature can access the parents parentBuildModel
-    abstract val stages: NamedDomainObjectContainer<Stage>
+    abstract val openApiStages: NamedDomainObjectContainer<Stage>
 }

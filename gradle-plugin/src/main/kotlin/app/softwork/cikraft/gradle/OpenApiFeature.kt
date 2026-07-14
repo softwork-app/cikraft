@@ -90,7 +90,7 @@ abstract class OpenApiFeature :
                 this.title.convention(definition.title)
                 this.apiDescription.convention(definition.description)
 
-                val serverUrls = parentBuildModel.stages.elements.map { stages ->
+                val serverUrls = parentBuildModel.openApiStages.elements.map { stages ->
                     stages.map { stage ->
                         objectFactory.newInstance<Server>().apply {
                             http.set(
