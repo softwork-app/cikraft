@@ -17,6 +17,7 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
 import org.gradle.kotlin.dsl.credentials
@@ -47,6 +48,7 @@ abstract class CreateIntegrationPackageTaskForTransport @Inject constructor(
     abstract val packageID: Property<String>
 
     @get:Input
+    @get:Optional
     abstract val packageVersion: Property<String>
 
     @get:Input
