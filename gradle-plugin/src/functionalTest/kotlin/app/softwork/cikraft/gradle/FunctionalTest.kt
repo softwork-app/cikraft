@@ -59,12 +59,12 @@ class FunctionalTest {
             val result = build(
                 projectDir,
                 "clean",
-                ":infra:deploySbxInfrastructure",
+                "deploySbxInfrastructure",
                 "--stacktrace",
                 id = id,
             )
 
-            assertEquals(TaskOutcome.SUCCESS, result.task(":infra:deploySbxInfrastructure")?.outcome)
+            assertEquals(TaskOutcome.SUCCESS, result.task(":app:deploySbxInfrastructure")?.outcome)
 
             runBlocking {
                 val csrfToken = consumerClient.head("/http/foo/$id/auto-test") {
@@ -100,12 +100,12 @@ class FunctionalTest {
         } finally {
             val result = build(
                 projectDir,
-                ":infra:undeploySbxInfrastructure",
+                "undeploySbxInfrastructure",
                 "--stacktrace",
                 id = id,
             )
 
-            assertEquals(TaskOutcome.SUCCESS, result.task(":infra:undeploySbxInfrastructure")?.outcome)
+            assertEquals(TaskOutcome.SUCCESS, result.task(":app:undeploySbxInfrastructure")?.outcome)
         }
     }
 
