@@ -667,6 +667,7 @@ abstract class InfrastructureIntegrationFlowsR8Feature :
                     "-keepattributes SourceFile, LineNumberTable",
                     "-keep,allowoptimization public class CiKraftEntrypointsKt { <methods>; }",
                 )
+                this.additionalRules.addAll(buildModel.additionalRules)
                 this.programFiles.from(iFlowBuildModel.kotlinEntryPointsClasses, iFlowBuildModel.dependenciesJars)
                 this.libJars.from(r8LibJars)
                 this.javaHome.set(
