@@ -27,9 +27,13 @@ import org.gradle.features.registration.TaskRegistrar
 import org.gradle.jvm.tasks.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JavaToolchainService
-import org.gradle.jvm.toolchain.JvmImplementation
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.newInstance
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinWithJavaCompilation
 import javax.inject.Inject
 
 @BindsProjectFeature(InfrastructureIntegrationFlowsFeature::class)
@@ -269,11 +273,18 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         this.workerClasspath.from(generatorClasspath)
                     }
 
-                    val compileKotlinEntrypointsSourceSet = parentBuildModel.compilationUnits.create(iFlowBuildModel.name.replace("_", "")) {
-                        sources.srcDir(generateKotlinEntryPointsTask)
-                        jvmEcosystem.jdkToolchain.languageVersion.set(JavaLanguageVersion.of(SAPCI_JVM_TARGET))
-                        jvmEcosystem.implementationConfiguration.apply {
+                    val kotlinExtension = project.extensions.getByName("kotlin") as KotlinBaseExtension
+                    val kotlinJvmExtension = kotlinExtension as KotlinJvmExtension
+
+                    val compileKotlinEntrypointCompilation = kotlinJvmExtension.target.compilations.create(iFlowBuildModel.name.replace("_", "")) {
+                        this as KotlinWithJavaCompilation<*, *>
+                        defaultSourceSet.kotlin.srcDir(generateKotlinEntryPointsTask)
+                        compileTaskProvider.configure {
+                            (compilerOptions as KotlinJvmCompilerOptions).jvmTarget.set(JvmTarget.valueOf(SAPCI_JVM_TARGET_STRING))
+                        }
+                        configurationContainer.getByName(implementationConfigurationName) {
                             fromDependencyCollector(integrationFlowM.dependencies.implementation)
+                            extendsFrom(configurationContainer.getByName("implementation"))
                             dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
                             dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
                             dependencies.add(dependencyFactory.create(SAPCI_CAMEL))
@@ -281,13 +292,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         }
                     }
 
-                    iFlowBuildModel.kotlinEntryPointsClasses.from(
-                        project.fileTree(
-                            compileKotlinEntrypointsSourceSet.outputs,
-                        ) {
-                            include("**.class")
-                        },
-                    )
+                    iFlowBuildModel.kotlinEntryPointsClasses.from(compileKotlinEntrypointCompilation.output.classesDirs)
 
                     val jar = tasks.register("cikraft" + iFlowBuildModel.name + "Jar", Jar::class.java) {
                         from(iFlowBuildModel.kotlinEntryPointsClasses)
