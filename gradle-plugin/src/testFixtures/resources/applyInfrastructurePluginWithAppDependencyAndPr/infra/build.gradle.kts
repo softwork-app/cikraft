@@ -1,5 +1,7 @@
 jvmApplication {
     ciKraftInfrastructure {
+        suffix = providers.gradleProperty("suffix")
+
         apiStages {
             apiStage("Dev") {
                 apiServer = "foo"
@@ -15,7 +17,6 @@ jvmApplication {
             integrationPackages {
                 integrationPackage("IP_Foo") {
                     description = "Foo test"
-
 
                     integrationFlows {
                         integrationFlow("IF_Ba") {

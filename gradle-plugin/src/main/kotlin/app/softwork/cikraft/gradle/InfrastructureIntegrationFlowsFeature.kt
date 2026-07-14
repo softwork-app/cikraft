@@ -282,6 +282,9 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         compileTaskProvider.configure {
                             (compilerOptions as KotlinJvmCompilerOptions).jvmTarget.set(JvmTarget.valueOf(SAPCI_JVM_TARGET_STRING))
                         }
+                        compileJavaTaskProvider.configure {
+                            options.release.set(SAPCI_JVM_TARGET)
+                        }
                         configurationContainer.getByName(implementationConfigurationName) {
                             fromDependencyCollector(integrationFlowM.dependencies.implementation)
                             extendsFrom(configurationContainer.getByName("implementation"))

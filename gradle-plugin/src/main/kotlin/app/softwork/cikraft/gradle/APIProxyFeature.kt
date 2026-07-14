@@ -2,6 +2,7 @@ package app.softwork.cikraft.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.features.annotations.BindsProjectFeature
@@ -31,6 +32,7 @@ abstract class APIProxyFeature :
         abstract val tasks: TaskRegistrar
 
         @get:Inject abstract val configurations: ConfigurationRegistrar
+        @get:Inject abstract val configurationContainer: ConfigurationContainer
 
         @get:Inject abstract val dependencyFactory: DependencyFactory
 
@@ -56,7 +58,13 @@ abstract class APIProxyFeature :
                 extendsFrom(deps)
             }
 
-            val apiProxySourceSet = sourceSets.create("apiProxy")
+            val apiProxySourceSet = sourceSets.create("apiProxies") {
+                configurationContainer.named(implementationConfigurationName) {
+                    dependencies.add(
+                        dependencyFactory.create("app.softwork.cikraft:integration-flow-builder-runtime:$VERSION"),
+                    )
+                }
+            }
 
             parentBuildModel.apiStages.all {
                 val stage = this
