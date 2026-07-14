@@ -47,6 +47,9 @@ abstract class CreateIntegrationPackageTaskForTransport @Inject constructor(
     abstract val packageID: Property<String>
 
     @get:Input
+    abstract val packageVersion: Property<String>
+
+    @get:Input
     abstract val packageDescription: Property<String>
 
     @get:Input
@@ -83,6 +86,7 @@ abstract class CreateIntegrationPackageTaskForTransport @Inject constructor(
 
             packageName.set(this@CreateIntegrationPackageTaskForTransport.packageName)
             packageID.set(this@CreateIntegrationPackageTaskForTransport.packageID)
+            packageVersion.set(this@CreateIntegrationPackageTaskForTransport.packageVersion)
             packageDescription.set(this@CreateIntegrationPackageTaskForTransport.packageDescription)
         }
     }
@@ -98,6 +102,7 @@ abstract class CreateIntegrationPackageForTransportWorker :
 
         val packageName: Property<String>
         val packageID: Property<String>
+        val packageVersion: Property<String>
         val packageDescription: Property<String>
     }
 
@@ -121,6 +126,7 @@ abstract class CreateIntegrationPackageForTransportWorker :
                             parameters.packageID.get(),
                             parameters.packageName.get(),
                             parameters.packageDescription.orNull ?: "",
+                            version = parameters.packageVersion.orNull,
                         ),
                     )
                 } else {

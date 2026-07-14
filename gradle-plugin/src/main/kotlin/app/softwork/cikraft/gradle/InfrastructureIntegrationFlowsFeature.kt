@@ -93,6 +93,8 @@ abstract class InfrastructureIntegrationFlowsFeature :
             buildModel.openApiStages.addAll(parentDefinition.transportStages)
             buildModel.integrationPackages.addAll(definition.integrationPackages)
 
+            val projectVersion = project.version.toString().takeUnless { it == Project.DEFAULT_VERSION }
+
             val apiWorker = configurations.dependencyScope("apiWorker") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:api:$VERSION"))
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:core:$VERSION"))
@@ -199,6 +201,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                         this.packageName.set(integrationPackage.name)
                         this.packageID.set(integrationPackage.name.replace("_", ""))
+                        this.packageVersion.set(projectVersion)
                         this.packageDescription.set(integrationPackage.description)
 
                         workerClasspath.from(apiWorkerClasspath)
@@ -233,6 +236,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                             this.packageName.set(integrationPackage.name)
                             this.packageID.set(integrationPackage.name.replace("_", ""))
+                            this.packageVersion.set(projectVersion)
                             this.packageDescription.set(integrationPackage.description)
 
                             workerClasspath.from(apiWorkerClasspath)
@@ -376,8 +380,6 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     createInfrastructureDryRun.configure {
                         entryPoints.from(entrypointsJson)
                     }
-
-                    val projectVersion = project.version.toString().takeUnless { it == Project.DEFAULT_VERSION }
 
                     parentBuildModel.apiStages.all {
                         val stage = this

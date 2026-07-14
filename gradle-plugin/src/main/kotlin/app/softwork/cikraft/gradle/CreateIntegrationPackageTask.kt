@@ -42,6 +42,9 @@ abstract class CreateIntegrationPackageTask @Inject constructor(
     abstract val packageID: Property<String>
 
     @get:Input
+    abstract val packageVersion: Property<String>
+
+    @get:Input
     abstract val packageDescription: Property<String>
 
     @get:Input
@@ -78,6 +81,7 @@ abstract class CreateIntegrationPackageTask @Inject constructor(
 
             packageName.set(this@CreateIntegrationPackageTask.packageName)
             packageID.set(this@CreateIntegrationPackageTask.packageID)
+            packageVersion.set(this@CreateIntegrationPackageTask.packageVersion)
             packageDescription.set(this@CreateIntegrationPackageTask.packageDescription)
         }
     }
@@ -92,6 +96,7 @@ abstract class CreateIntegrationPackageWorker : WorkAction<CreateIntegrationPack
 
         val packageName: Property<String>
         val packageID: Property<String>
+        val packageVersion: Property<String>
         val packageDescription: Property<String>
     }
 
@@ -115,6 +120,7 @@ abstract class CreateIntegrationPackageWorker : WorkAction<CreateIntegrationPack
                             parameters.packageID.get(),
                             parameters.packageName.get(),
                             parameters.packageDescription.orNull ?: "",
+                            version = parameters.packageVersion.orNull,
                         ),
                     )
                 }
