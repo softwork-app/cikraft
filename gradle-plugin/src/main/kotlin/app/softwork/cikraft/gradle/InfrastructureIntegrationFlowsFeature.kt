@@ -204,6 +204,41 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         workerClasspath.from(apiWorkerClasspath)
                     }
                 }
+                parentBuildModel.transportStages.all {
+                    val transportStage = this
+
+                    transportStage.apiSourceStages.all {
+                        val apiSourceStage = this
+                        val apiStage = parentBuildModel.apiStages.named(apiSourceStage.name)
+
+                        val service = project.gradle.sharedServices.registerIfAbsent(
+                            "lockService",
+                            TransportLockBuildService::class.java
+                        ) {
+                            this.parameters.packageId.set(integrationPackage.name.replace("_", ""))
+                            this.parameters.apiSourceStage.set(apiSourceStage.name)
+                            this.maxParallelUsages.set(1)
+                        }
+
+                        tasks.register(
+                            "create${integrationPackage.name}For${transportStage.name}On${apiSourceStage.name}",
+                            CreateIntegrationPackageTaskForTransport::class.java,
+                            apiSourceStage.name,
+                        ).configure {
+                            this.apiServer.set(apiStage.flatMap { it.apiServer })
+                            this.authServer.set(apiStage.flatMap { it.authServer })
+
+                            this.lockService.set(service)
+                            this.usesService(service)
+
+                            this.packageName.set(integrationPackage.name)
+                            this.packageID.set(integrationPackage.name.replace("_", ""))
+                            this.packageDescription.set(integrationPackage.description)
+
+                            workerClasspath.from(apiWorkerClasspath)
+                        }
+                    }
+                }
 
                 this.integrationFlows.all {
                     val integrationFlowM = this
@@ -348,12 +383,12 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         val stage = this
                         val stageName = stage.name.replaceFirstChar { it.uppercase() }
 
-                        val deployIFlow = tasks.register(
-                            "deploy${iFlowBuildModel.name}On${stageName}Infrastructure",
-                            DeployIFlow::class.java,
+                        val uploadIFlow = tasks.register(
+                            "upload${iFlowBuildModel.name}On${stageName}Infrastructure",
+                            UploadIFlow::class.java,
                             stage.name,
                         )
-                        deployIFlow.configure {
+                        uploadIFlow.configure {
                             dependsOn("create${integrationPackage.name}On${stage.name}")
                             this.libs.from(iFlowBuildModel.libs)
                             this.scripts.from(iFlowBuildModel.scripts)
@@ -391,11 +426,94 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             this.version.set(projectVersion)
                         }
 
+                        val deployIFlow = tasks.register(
+                            "deploy${iFlowBuildModel.name}On${stageName}Infrastructure",
+                            DeployIFlow::class.java,
+                            stage.name,
+                        )
+                        deployIFlow.configure {
+                            dependsOn("create${iFlowBuildModel.name}On${stage.name}")
+
+                            this.apiServer.set(stage.apiServer)
+                            this.authServer.set(stage.authServer)
+
+                            this.flowID.set(iFlowBuildModel.flowID)
+                            this.version.set(projectVersion)
+
+                            workerClasspath.from(apiWorkerClasspath)
+                        }
+
                         deployToStage[this]!!.configure {
                             dependsOn(deployIFlow)
                         }
                         undeployToStage[this]!!.configure {
                             flowIds.add(iFlowBuildModel.name)
+                        }
+                    }
+                    parentBuildModel.transportStages.all {
+                        val transportStage = this
+                        apiSourceStages.all {
+                            val apiSourceStage = this
+                            val stage = parentBuildModel.apiStages.named(apiSourceStage.name)
+
+                            val service = project.gradle.sharedServices.registerIfAbsent(
+                                "lockService",
+                                TransportLockBuildService::class.java
+                            ) {
+                                this.parameters.packageId.set(integrationPackage.name.replace("_", ""))
+                                this.parameters.apiSourceStage.set(apiSourceStage.name)
+                                this.maxParallelUsages.set(1)
+                            }
+
+                            val createIPTask = project.tasks.named("create${integrationPackage.name}For${transportStage.name}On${apiSourceStage.name}",
+                            CreateIntegrationPackageTaskForTransport::class.java,
+                            )
+
+                            val uploadIFlow = tasks.register(
+                                "upload${iFlowBuildModel.name}On${apiSourceStage.name}ForTransportTo${transportStage.name}",
+                                UploadIFlow::class.java,
+                                apiSourceStage.name,
+                            )
+                            uploadIFlow.configure {
+                                dependsOn(createIPTask)
+                                this.libs.from(iFlowBuildModel.libs)
+                                this.scripts.from(iFlowBuildModel.scripts)
+                                this.scripts.from(iFlowBuildModel.generatedScripts)
+                                this.flowXmlDefinition.set(
+                                    createInfrastructureDryRun.flatMap { it.outputFolder }
+                                        .map { it.file("definitions/${iFlowBuildModel.name}.xml") },
+                                )
+
+                                this.lockService.set(service)
+                                this.usesService(service)
+
+                                this.apiServer.set(stage.flatMap { it.apiServer })
+                                this.authServer.set(stage.flatMap { it.authServer })
+
+                                this.packageID.set(integrationPackage.name.replace("_", ""))
+
+                                this.flowName.set(
+                                    parentBuildModel.suffix.orElse("").map { suffix ->
+                                        if (suffix.isBlank()) {
+                                            iFlowBuildModel.name
+                                        } else {
+                                            val suffixID = suffix.replace("/", "_").uppercase()
+                                            "${iFlowBuildModel.name}$suffixID"
+                                        }
+                                    },
+                                )
+                                this.flowID.set(iFlowBuildModel.flowID)
+                                this.flowDescription.set(iFlowBuildModel.description)
+                                this.flowSource.set(iFlowBuildModel.source)
+                                this.flowTarget.set(iFlowBuildModel.target)
+                                this.parametersFile.set(
+                                    createInfrastructureDryRun.flatMap { it.outputFolder }
+                                        .map { it.file("properties/${transportStage.name}/${iFlowBuildModel.name}.properties") },
+                                )
+
+                                workerClasspath.from(apiWorkerClasspath)
+                                this.version.set(projectVersion)
+                            }
                         }
                     }
                 }
