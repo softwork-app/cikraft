@@ -384,7 +384,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         val stageName = stage.name.replaceFirstChar { it.uppercase() }
 
                         val uploadIFlow = tasks.register(
-                            "upload${iFlowBuildModel.name}On${stageName}Infrastructure",
+                            "upload${iFlowBuildModel.name}On${stageName}",
                             UploadIFlow::class.java,
                             stage.name,
                         )
@@ -432,7 +432,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             stage.name,
                         )
                         deployIFlow.configure {
-                            dependsOn("create${iFlowBuildModel.name}On${stage.name}")
+                            dependsOn("upload${iFlowBuildModel.name}On${stage.name}")
 
                             this.apiServer.set(stage.apiServer)
                             this.authServer.set(stage.authServer)
