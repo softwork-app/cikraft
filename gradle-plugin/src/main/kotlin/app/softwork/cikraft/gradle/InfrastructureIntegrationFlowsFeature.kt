@@ -452,6 +452,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     }
                     parentBuildModel.transportStages.all {
                         val transportStage = this
+                        val transportStageName = transportStage.name
                         apiSourceStages.all {
                             val apiSourceStage = this
                             val stage = parentBuildModel.apiStages.named(apiSourceStage.name)
@@ -466,12 +467,12 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             }
 
                             val createIPTask = project.tasks.named(
-                                "create${integrationPackage.name}For${transportStage.name}On${apiSourceStage.name}",
+                                "create${integrationPackage.name}For${transportStageName}On${apiSourceStage.name}",
                                 CreateIntegrationPackageTaskForTransport::class.java,
                             )
 
                             val uploadIFlow = tasks.register(
-                                "upload${iFlowBuildModel.name}On${apiSourceStage.name}ForTransportTo${transportStage.name}",
+                                "upload${iFlowBuildModel.name}On${apiSourceStage.name}ForTransportTo${transportStageName}",
                                 UploadIFlow::class.java,
                                 apiSourceStage.name,
                             )
@@ -511,7 +512,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                                     createInfrastructureDryRun.flatMap { it.outputFolder }
                                         .map {
                                             it.file(
-                                                "properties/${transportStage.name}/${iFlowBuildModel.name}.properties",
+                                                "properties/${transportStageName}/${iFlowBuildModel.name}.properties",
                                             )
                                         },
                                 )
