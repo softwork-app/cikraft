@@ -131,7 +131,7 @@ class IntegrationTest {
                                 name = "IP_FOO",
                                 description = "Some description",
                                 shortText = "Some description",
-                                version = "1.0.0",
+                                version = "1.0.1",
                             )
 
                             else -> null
@@ -139,6 +139,8 @@ class IntegrationTest {
                     }
 
                     createIntegrationPackage { new ->
+                        assertEquals("1.0.1", new.version)
+
                         IntegrationPackage(
                             id = new.id,
                             name = new.name,
@@ -151,7 +153,7 @@ class IntegrationTest {
                     createIntegrationFlow {
                         IntegrationFlow(
                             id = it.id,
-                            version = "1.0.0",
+                            version = "1.0.1",
                             packageId = it.packageId,
                             name = it.name,
                             description = "Some description",
@@ -193,7 +195,8 @@ class IntegrationTest {
                 "-PcikraftDevPassword=bar",
                 "--stacktrace",
                 "-PsapCIPort=$port",
-            ).buildAndFail()
+                "-Pversion=1.0.1",
+            ).build()
 
             assertEquals(TaskOutcome.SUCCESS, result.task(":app:r8JarIF_Baz")?.outcome)
             assertEquals(TaskOutcome.SUCCESS, result.task(":app:generateIF_BazKotlinEntrypoints")?.outcome)
