@@ -89,8 +89,8 @@ abstract class InfrastructureIntegrationFlowsFeature :
             val parentBuildModel = context.getBuildModel(parentDefinition)
             buildModel.suffix.set(parentBuildModel.suffix)
             buildModel.httpSuffix.set(parentBuildModel.httpSuffix)
-            buildModel.stages.addAll(parentDefinition.apiStages)
-            buildModel.stages.addAll(parentDefinition.transportStages)
+            buildModel.openApiStages.addAll(parentDefinition.apiStages)
+            buildModel.openApiStages.addAll(parentDefinition.transportStages)
             buildModel.integrationPackages.addAll(definition.integrationPackages)
 
             val apiWorker = configurations.dependencyScope("apiWorker") {
@@ -120,7 +120,10 @@ abstract class InfrastructureIntegrationFlowsFeature :
             }
 
             val generateStages = tasks.register("generateStages", CreateSAPCIStagesEnum::class.java) {
-                val enumStages = project.provider { buildModel.stages }.map { stages ->
+                val enumStages = parentBuildModel.apiStages.elements.zip(
+                    parentBuildModel.transportStages.elements,
+                ) { apiStages, transportStages ->
+                    val stages = apiStages + transportStages
                     stages.map { stage ->
                         objectFactory.newInstance<EnumStage>(stage.name).apply {
                             stageDescription.set(stage.description)
@@ -151,7 +154,9 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 "createInfrastructureDryRun",
                 CreateInfrastructureDryRun::class.java,
             ) {
-                this.stageNames.set(buildModel.stages.names)
+                this.stageNames.addAll(parentBuildModel.apiStages.names)
+                this.stageNames.addAll(parentBuildModel.transportStages.names)
+
                 this.outputFolder.convention(createInfrastructureDryRunOutputFolder)
                 classpath.from(
                     integrationFlowsSourceSet.kotlin.classesDirectory,
@@ -415,7 +420,29 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 }
             }
 
-            buildModel.stages.all {
+            parentBuildModel.apiStages.all {
+                val stageName = name
+                configurations.consumable("properties$stageName") {
+                    attributes {
+                        attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
+                        attribute(SAPCI.attribute, named(SAPCI.STAGE_PROPERTIES))
+                        attribute(SAPCIStage.attribute, named(stageName))
+                    }
+                    outgoing {
+                        val propertiesStageArtifact = objectFactory.newInstance(
+                            LazyDirectoryArtifact::class,
+                            "properties",
+                            "properties",
+                            createInfrastructureDryRun,
+                            createInfrastructureDryRunOutputFolder.map {
+                                it.dir("properties/$stageName")
+                            },
+                        )
+                        artifact(propertiesStageArtifact)
+                    }
+                }
+            }
+            parentBuildModel.transportStages.all {
                 val stageName = name
                 configurations.consumable("properties$stageName") {
                     attributes {
