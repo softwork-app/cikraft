@@ -384,7 +384,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         val stageName = stage.name.replaceFirstChar { it.uppercase() }
 
                         val uploadIFlow = tasks.register(
-                            "upload${iFlowBuildModel.name}On${stageName}",
+                            "upload${iFlowBuildModel.name}On$stageName",
                             UploadIFlow::class.java,
                             stage.name,
                         )
@@ -472,7 +472,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             )
 
                             val uploadIFlow = tasks.register(
-                                "upload${iFlowBuildModel.name}On${apiSourceStage.name}ForTransportTo${transportStageName}",
+                                "upload${iFlowBuildModel.name}On${apiSourceStage.name}ForTransportTo$transportStageName",
                                 UploadIFlow::class.java,
                                 apiSourceStage.name,
                             )
@@ -512,7 +512,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                                     createInfrastructureDryRun.flatMap { it.outputFolder }
                                         .map {
                                             it.file(
-                                                "properties/${transportStageName}/${iFlowBuildModel.name}.properties",
+                                                "properties/$transportStageName/${iFlowBuildModel.name}.properties",
                                             )
                                         },
                                 )
