@@ -120,7 +120,9 @@ abstract class InfrastructureIntegrationFlowsFeature :
             }
 
             val generateStages = tasks.register("generateStages", CreateSAPCIStagesEnum::class.java) {
-                val enumStages = parentBuildModel.apiStages.elements.zip(parentBuildModel.transportStages.elements) { apiStages, transportStages ->
+                val enumStages = parentBuildModel.apiStages.elements.zip(
+                    parentBuildModel.transportStages.elements,
+                ) { apiStages, transportStages ->
                     val stages = apiStages + transportStages
                     stages.map { stage ->
                         objectFactory.newInstance<EnumStage>(stage.name).apply {
