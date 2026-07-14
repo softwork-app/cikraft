@@ -3,10 +3,13 @@ package app.softwork.cikraft.gradle
 import io.github.hfhbd.r8.R8VersionRule
 import io.github.hfhbd.r8.R8_MODULE
 import org.gradle.api.Plugin
+import org.gradle.api.Project
 import org.gradle.api.initialization.Settings
 import org.gradle.features.annotations.RegistersProjectFeatures
 
 @RegistersProjectFeatures(
+    CIKraftBaseFeature::class,
+
     InfrastructureFeature::class,
     InfrastructureIntegrationFlowsFeature::class,
     InfrastructureIntegrationFlowsR8Feature::class,
@@ -14,9 +17,7 @@ import org.gradle.features.annotations.RegistersProjectFeatures
 
     APIProxyFeature::class,
 
-    KotlinJvmIFlowFeature::class,
-
-    SAPCIGeneratorFeature::class,
+    SAPCIGeneratorTestSuiteWrapper::class,
     GenerateFunctionsFeature::class,
     GenerateClientSetupFeature::class,
     GenerateKtorResourcesFeature::class,
@@ -38,7 +39,7 @@ abstract class SAPCIEcosystemPlugin : Plugin<Settings> {
             }
         }
         settings.dependencyResolutionManagement {
-            versionCatalogs.register("ciKraftLibs") {
+            versionCatalogs.register("cikraftLibs") {
                 library("scriptApi", SAPCI_SCRIPT_API)
                 library("genericApi", SAPCI_GENERIC_API)
                 library("adapterApi", SAPCI_ADAPTER)

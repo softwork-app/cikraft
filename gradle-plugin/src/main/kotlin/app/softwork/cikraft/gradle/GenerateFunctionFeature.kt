@@ -3,7 +3,7 @@ package app.softwork.cikraft.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyFactory
-import org.gradle.api.provider.ListProperty
+import org.gradle.api.tasks.Nested
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
@@ -51,20 +51,19 @@ abstract class GenerateFunctionsFeature :
             val parentBuildModel = context.getBuildModel(parentDefinition)
             val buildModelName = parentBuildModel.name
 
-            val functionsWorker = configurations.dependencyScope("cikraftFunctionsWorker" + buildModelName) {
+            val functionsWorker = configurations.dependencyScope("cikraftFunctionsWorker$buildModelName") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
             }
             val functionsWorkerClasspath = configurations.resolvable(
-                "cikraftFunctionsWorkerClasspath" + buildModelName,
+                "cikraftFunctionsWorkerClasspath$buildModelName",
             ) {
                 extendsFrom(functionsWorker)
             }
 
-            val task = tasks.register("generateFunctions" + buildModelName, GenerateFunctionsTask::class.java) {
+            val task = tasks.register("generateFunctions$buildModelName", GenerateFunctionsTask::class.java) {
                 createdFlows.set(parentBuildModel.sapCICreatedFlows)
-                this.functions.set(definition.functions)
                 functionsFolder.convention(
-                    layout.contextBuildDirectory.map { it.dir("cikraft/functions" + buildModelName) },
+                    layout.contextBuildDirectory.map { it.dir("cikraft/functions$buildModelName") },
                 )
                 workerClasspath.from(functionsWorkerClasspath)
             }
@@ -74,5 +73,6 @@ abstract class GenerateFunctionsFeature :
 }
 
 interface GenerateFunctionsDefinition : Definition<BuildModel.None> {
-    val functions: ListProperty<String>
+    @get:Nested
+    val dependencies: IFlowDependencies
 }

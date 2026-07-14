@@ -1,9 +1,9 @@
 jvmApplication {
-    ciKraft {
-        dependencies {
-            infrastructure(projects.infra)
+    cikraft {
+        generateKtorResources {
+            dependencies {
+                infrastructure(projects.infra)
+            }
         }
-
-        generateKtorResources {}
     }
 }

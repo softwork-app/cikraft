@@ -26,23 +26,17 @@ import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmAp
 import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationProjectType
 import javax.inject.Inject
 
-@BindsProjectFeature(SAPCIGeneratorFeature::class)
-abstract class SAPCIGeneratorFeature :
+@BindsProjectFeature(SAPCIGeneratorTestSuiteWrapper::class)
+abstract class SAPCIGeneratorTestSuiteWrapper :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(project: Project) {}
     override fun bind(builder: ProjectFeatureBindingBuilder) {
-        builder.bindProjectFeature("ciKraft", JvmDclTestSuiteApplyAction::class)
-            .withBuildModelImplementationType(DefaultSAPCIGeneratorBuildModel::class.java).withUnsafeDefinition()
-            .withUnsafeApplyAction()
-
-        builder.bindProjectFeature("ciKraft", JvmApplicationApplyAction::class)
-            .withBuildModelImplementationType(DefaultSAPCIGeneratorBuildModel::class.java).withUnsafeDefinition()
-            .withUnsafeApplyAction()
+        builder.bindProjectFeature("cikraft", JvmDclTestSuiteApplyAction::class)
     }
 
     abstract class ApplyAction<ParentBuildModel : BuildModel, ParentDefinition : Definition<ParentBuildModel>> :
-        ProjectFeatureApplyAction<SAPCIGeneratorDefinition, SAPCIGeneratorBuildModel, ParentDefinition> {
+        ProjectFeatureApplyAction<SAPCIGeneratorDefinition, BuildModel.None, ParentDefinition> {
         @get:Inject
         abstract val configurations: ConfigurationRegistrar
 
@@ -103,10 +97,7 @@ abstract class SAPCIGeneratorFeature :
     }
 }
 
-interface SAPCIGeneratorDefinition : Definition<SAPCIGeneratorBuildModel> {
-    @get:Nested
-    val dependencies: IFlowDependencies
-}
+interface SAPCIGeneratorDefinition : Definition<BuildModel.None>
 
 interface SAPCIGeneratorBuildModel :
     HasSourceDirectorySet,

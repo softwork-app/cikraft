@@ -7,16 +7,27 @@ jvmApplication {
     implementation(ciKraftLibs.ktorServerRuntime)
   }
 
-  ciKraft {
-    dependencies {
-      infrastructure(projects.infra)
+  cikraft {
+    generateKtorResources {
+      dependencies {
+        infrastructure(projects.infra)
+      }
     }
-
-    generateKtorResources {}
-    generateKtorServerApi {}
+    generateKtorServerApi {
+      dependencies {
+        infrastructure(projects.infra)
+      }
+    }
     generateProperties {
       stage = "Dev"
+      dependencies {
+        infrastructure(projects.infra)
+      }
     }
-    generateFunctions {}
+    generateFunctions {
+      dependencies {
+        infrastructure(projects.infra)
+      }
+    }
   }
 }
