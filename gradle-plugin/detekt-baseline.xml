@@ -3,10 +3,10 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>LongMethod:APIProxyFeature.kt:APIProxyFeature.ApplyAction$override fun apply</ID>
-    <ID>LongMethod:DeployIFlow.kt:CreateInfrastructureWorker$override fun execute</ID>
     <ID>LongMethod:InfrastructureIntegrationFlowsFeature.kt:InfrastructureIntegrationFlowsFeature.ApplyAction$override fun apply</ID>
     <ID>LongMethod:OpenApiFeature.kt:OpenApiFeature.ApplyAction$override fun apply</ID>
     <ID>MaxLineLength:InfrastructureFeature.kt:InfrastructureFeature.ApplyAction$ProjectFeatureApplyAction&lt;SAPCIInfrastructureDefinition, SAPCIInfrastructureBuildModel, JvmApplicationProjectType></ID>
+    <ID>MaxLineLength:InfrastructureIntegrationFlowsFeature.kt:InfrastructureIntegrationFlowsFeature.ApplyAction$"upload${iFlowBuildModel.name}On${apiSourceStage.name}ForTransportTo${transportStage.name}"</ID>
     <ID>MaxLineLength:JvmTestSuiteFeature.kt:JvmTestSuiteFeature.JvmTestSuiteFeatureAction$// TaskProvider&lt;Test> getTestTask(); is not supported in DCL, so we use this workaround for lifecycle task dependencies</ID>
     <ID>MaxLineLength:KotlinJvmIFlowFeature.kt:KotlinJvmIFlowFeature.ApplyAction$pluginManager.apply(SapCIKotlinPlugin::class.java)</ID>
   </CurrentIssues>
