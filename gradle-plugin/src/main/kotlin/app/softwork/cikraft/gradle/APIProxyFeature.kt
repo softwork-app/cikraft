@@ -32,6 +32,7 @@ abstract class APIProxyFeature :
         abstract val tasks: TaskRegistrar
 
         @get:Inject abstract val configurations: ConfigurationRegistrar
+
         @get:Inject abstract val configurationContainer: ConfigurationContainer
 
         @get:Inject abstract val dependencyFactory: DependencyFactory

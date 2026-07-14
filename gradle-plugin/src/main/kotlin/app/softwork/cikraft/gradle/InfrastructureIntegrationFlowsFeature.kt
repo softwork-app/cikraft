@@ -276,11 +276,15 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     val kotlinExtension = project.extensions.getByName("kotlin") as KotlinBaseExtension
                     val kotlinJvmExtension = kotlinExtension as KotlinJvmExtension
 
-                    val compileKotlinEntrypointCompilation = kotlinJvmExtension.target.compilations.create(iFlowBuildModel.name.replace("_", "")) {
+                    val compileKotlinEntrypointCompilation = kotlinJvmExtension.target.compilations.create(
+                        iFlowBuildModel.name.replace("_", ""),
+                    ) {
                         this as KotlinWithJavaCompilation<*, *>
                         defaultSourceSet.kotlin.srcDir(generateKotlinEntryPointsTask)
                         compileTaskProvider.configure {
-                            (compilerOptions as KotlinJvmCompilerOptions).jvmTarget.set(JvmTarget.valueOf(SAPCI_JVM_TARGET_STRING))
+                            (compilerOptions as KotlinJvmCompilerOptions).jvmTarget.set(
+                                JvmTarget.valueOf(SAPCI_JVM_TARGET_STRING),
+                            )
                         }
                         compileJavaTaskProvider.configure {
                             options.release.set(SAPCI_JVM_TARGET)

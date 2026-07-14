@@ -28,7 +28,6 @@ abstract class InfrastructureFeature :
 
     abstract class ApplyAction :
         ProjectFeatureApplyAction<SAPCIInfrastructureDefinition, SAPCIInfrastructureBuildModel, JvmApplicationProjectType> {
-
         @get:Inject
         abstract val configurations: ConfigurationRegistrar
 
