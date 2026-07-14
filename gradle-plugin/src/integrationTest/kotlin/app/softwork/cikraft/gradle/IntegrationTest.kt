@@ -216,7 +216,7 @@ class IntegrationTest {
     @Test
     fun applyInfrastructurePluginWithAppDependencyAndPr() {
         val projectDir = fixtureDir / "resources" / "applyInfrastructurePluginWithAppDependencyAndPr"
-        val result = createRunner(projectDir, ":infra:deployDevInfrastructure",
+        val result = createRunner(projectDir, ":app:deployDevInfrastructure",
             "-PcikraftDevUsername=foo",
             "-PcikraftDevPassword=bar",
             "--offline",
@@ -225,7 +225,7 @@ class IntegrationTest {
 
         assertEquals(
             (fixtureDir / "kotlin/pr.kt").readText().drop(63),
-            (projectDir / "infra/build/cikraft/typedFlows/kotlin/IF_Ba.kt").readText()
+            (projectDir / "app/build/cikraft/typedFlows/kotlin/IF_Ba.kt").readText()
                 .replaceProjectDir(projectDir),
         )
     }
