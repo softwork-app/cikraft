@@ -61,6 +61,7 @@ abstract class OpenApiFeature :
             parentDefinition: SAPCIIFlowsDefinition,
         ) {
             val parentBuildModel = context.getBuildModel(parentDefinition)
+            parentBuildModel as DefaultSAPCIIFlowsBuildModel
             val flowsFolder = configurations.resolvable("cikraftOpenApiCreatedFlows") {
                 fromDependencyCollector(definition.dependencies.infrastructure)
                 attributes {
@@ -89,7 +90,7 @@ abstract class OpenApiFeature :
                 this.title.convention(definition.title)
                 this.apiDescription.convention(definition.description)
 
-                val serverUrls = project.provider { parentBuildModel.stages }.map { stages ->
+                val serverUrls = parentBuildModel.stages.elements.map { stages ->
                     stages.map { stage ->
                         objectFactory.newInstance<Server>().apply {
                             http.set(
@@ -102,7 +103,7 @@ abstract class OpenApiFeature :
 
                 this.servers.addAll(serverUrls)
                 this.tags.putAll(
-                    project.provider { parentBuildModel.integrationPackages }.map { integrationPackage ->
+                    parentBuildModel.integrationPackages.elements.map { integrationPackage ->
                         integrationPackage.associate { it.name to it.description.get() }
                     },
                 )

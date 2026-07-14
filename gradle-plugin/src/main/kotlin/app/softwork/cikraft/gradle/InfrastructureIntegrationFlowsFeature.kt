@@ -120,7 +120,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
             }
 
             val generateStages = tasks.register("generateStages", CreateSAPCIStagesEnum::class.java) {
-                val enumStages = project.provider { buildModel.stages }.map { stages ->
+                val enumStages = buildModel.stages.elements.map { stages ->
                     stages.map { stage ->
                         objectFactory.newInstance<EnumStage>(stage.name).apply {
                             stageDescription.set(stage.description)

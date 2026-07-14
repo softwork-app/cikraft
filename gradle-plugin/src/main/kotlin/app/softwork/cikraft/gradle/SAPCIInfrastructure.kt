@@ -12,7 +12,6 @@ interface SAPCIIFlowsDefinition : Definition<SAPCIIFlowsBuildModel> {
 
 interface SAPCIIFlowsBuildModel : BuildModel {
     val integrationPackages: NamedDomainObjectContainer<IntegrationPackage>
-    val stages: NamedDomainObjectContainer<Stage>
     val suffix: Provider<String>
     val httpSuffix: Provider<String>
 }
@@ -20,4 +19,8 @@ interface SAPCIIFlowsBuildModel : BuildModel {
 abstract class DefaultSAPCIIFlowsBuildModel : SAPCIIFlowsBuildModel {
     abstract override val httpSuffix: Property<String>
     abstract override val suffix: Property<String>
+
+    // Workaround:
+    // only used for the OpenApi Feature until a feature can access the parents parentBuildModel
+    abstract val stages: NamedDomainObjectContainer<Stage>
 }
