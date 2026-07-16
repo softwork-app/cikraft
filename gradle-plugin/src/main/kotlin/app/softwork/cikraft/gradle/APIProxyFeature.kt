@@ -62,11 +62,20 @@ abstract class APIProxyFeature :
                 extendsFrom(deps)
             }
 
+            definition.dependencies.implementation.add("app.softwork.cikraft:integration-flow-builder-runtime:$VERSION")
+
             val apiProxySourceSet = sourceSets.create("apiProxies") {
                 configurationContainer.named(implementationConfigurationName) {
-                    dependencies.add(
-                        dependencyFactory.create("app.softwork.cikraft:integration-flow-builder-runtime:$VERSION"),
-                    )
+                    fromDependencyCollector(definition.dependencies.implementation)
+                }
+                configurationContainer.named(runtimeOnlyConfigurationName) {
+                    fromDependencyCollector(definition.dependencies.runtimeOnly)
+                }
+                configurationContainer.named(compileOnlyConfigurationName) {
+                    fromDependencyCollector(definition.dependencies.compileOnly)
+                }
+                configurationContainer.named(annotationProcessorConfigurationName) {
+                    fromDependencyCollector(definition.dependencies.annotationProcessor)
                 }
             }
 
