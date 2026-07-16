@@ -13,7 +13,7 @@ fun injectBoolean() = true
 @ScriptEntry
 @Throws(Fault::class)
 fun typed(
-    @Header("B") b: String,
+    @Header("B") b: String?,
     injected: Boolean,
     ignored: String? = null,
 ): TypedOutput = error("")

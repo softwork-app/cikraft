@@ -12,7 +12,7 @@ import kotlinx.serialization.*
 @Throws(Fault::class)
 fun serialized(
     @Body(JsonFactory::class) body: B,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     ignored: String? = null,
 ): SerializedOutput = SerializedOutput(
     B(body.x + body.x),

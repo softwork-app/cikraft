@@ -13,7 +13,7 @@ import kotlin.collections.List
 @JvmOverloads
 fun sealed(
     @Body(JsonFactory::class) body: List<Base>,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     ignored: String? = null,
 ): SealedOutput = error("")
 
