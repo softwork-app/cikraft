@@ -134,11 +134,6 @@ abstract class InfrastructureIntegrationFlowsFeature :
                                     server + suffix
                                 },
                             )
-                            apiHttpServer.set(
-                                stage.apiHttpServer.zip(buildModel.httpSuffix) { server, suffix ->
-                                    server + suffix
-                                },
-                            )
                             web.set(stage.web)
                         }
                     }

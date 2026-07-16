@@ -52,7 +52,7 @@ abstract class DeployApiProxiesTask @Inject constructor(stageName: String) : Api
     }
 
     @get:Input
-    internal abstract val virtualHost: Property<String>
+    internal abstract val virtualHostId: Property<String>
 
     @TaskAction
     internal fun deploy() {
@@ -65,7 +65,7 @@ abstract class DeployApiProxiesTask @Inject constructor(stageName: String) : Api
             this.apiPortalClientId.set(this@DeployApiProxiesTask.credentials.map { it.username })
             this.apiPortalClientSecret.set(this@DeployApiProxiesTask.credentials.map { it.password })
             this.authServer.set(this@DeployApiProxiesTask.authServer)
-            this.virtualHost.set(this@DeployApiProxiesTask.virtualHost)
+            this.virtualHostId.set(this@DeployApiProxiesTask.virtualHostId)
         }
     }
 }

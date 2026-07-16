@@ -6,7 +6,6 @@ import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.features.annotations.BindsProjectFeature
-import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.ProjectFeatureApplicationContext
 import org.gradle.features.binding.ProjectFeatureApplyAction
 import org.gradle.features.binding.ProjectFeatureBinding
@@ -27,7 +26,7 @@ abstract class APIProxyFeature :
     }
 
     abstract class ApplyAction :
-        ProjectFeatureApplyAction<APIProxiesDefinition, BuildModel.None, SAPCIInfrastructureDefinition> {
+        ProjectFeatureApplyAction<APIProxiesDefinition, APIProxiesBuildModel, SAPCIInfrastructureDefinition> {
         @get:Inject
         abstract val tasks: TaskRegistrar
 
@@ -42,9 +41,13 @@ abstract class APIProxyFeature :
         override fun apply(
             context: ProjectFeatureApplicationContext,
             definition: APIProxiesDefinition,
-            buildModel: BuildModel.None,
+            buildModel: APIProxiesBuildModel,
             parentDefinition: SAPCIInfrastructureDefinition,
         ) {
+            buildModel.apiCertificates.addAll(definition.apiCertificates)
+            buildModel.apiKeyStores.addAll(definition.apiKeyStores)
+            buildModel.apiRuntimeProviders.addAll(definition.apiRuntimeProviders)
+
             val parentBuildModel = context.getBuildModel(parentDefinition)
 
             val deps = configurations.dependencyScope("apiProxyWorker") {
@@ -71,7 +74,7 @@ abstract class APIProxyFeature :
                 val stage = this
                 val taskName = stage.name.replaceFirstChar { it.uppercase() }
 
-                definition.apiCertificates.all {
+                buildModel.apiCertificates.all {
                     val apiCertificate = this
                     tasks.register(
                         "createApiCertificate${name}On${stage.name}",
@@ -99,22 +102,25 @@ abstract class APIProxyFeature :
                     }
                 }
 
-                tasks.register(
-                    "deploy${taskName}Api",
-                    DeployApiProxiesTask::class.java,
-                    stage.name,
-                ).configure {
-                    this.url.set(stage.httpServer)
-                    this.httpSuffix.set(parentBuildModel.httpSuffix)
-                    this.apiPortalServer.set(stage.apiPortalServer)
-                    this.authServer.set(stage.authServer)
-                    this.virtualHost.set(stage.apiVirtualHost)
+                stage.apiVirtualHosts.all {
+                    val virtualHost = this
+                    tasks.register(
+                        "deploy${taskName}ApiTo${virtualHost.name}ApiHost",
+                        DeployApiProxiesTask::class.java,
+                        stage.name,
+                    ).configure {
+                        this.url.set(stage.httpServer)
+                        this.httpSuffix.set(parentBuildModel.httpSuffix)
+                        this.apiPortalServer.set(stage.apiPortalServer)
+                        this.authServer.set(stage.authServer)
+                        this.virtualHostId.set(virtualHost.id)
 
-                    workerClasspath.from(
-                        apiProxySourceSet.kotlin.classesDirectory,
-                        apiProxySourceSet.runtimeClasspath,
-                        apiWorkerClasspath,
-                    )
+                        workerClasspath.from(
+                            apiProxySourceSet.kotlin.classesDirectory,
+                            apiProxySourceSet.runtimeClasspath,
+                            apiWorkerClasspath,
+                        )
+                    }
                 }
                 tasks.register(
                     "undeploy${taskName}Api",
@@ -133,7 +139,7 @@ abstract class APIProxyFeature :
                     )
                 }
 
-                definition.apiRuntimeProviders.all {
+                buildModel.apiRuntimeProviders.all {
                     val apiRuntimeProvider = this
                     tasks.register(
                         "deployApiRuntimeProvider${apiRuntimeProvider.name}On${stage.name}",
@@ -153,7 +159,7 @@ abstract class APIProxyFeature :
                     }
                 }
 
-                definition.apiKeyStores.all {
+                buildModel.apiKeyStores.all {
                     val apiKeyStore = this
                     tasks.register(
                         "deleteApiKeyStore${apiKeyStore.name}On${stage.name}",
