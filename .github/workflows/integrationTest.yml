@@ -24,7 +24,7 @@ jobs:
           build-scan-terms-of-use-agree: 'yes'
 
       - name: Run integration tests
-        run: ./gradlew :gradle-plugin:integrationTest
+        run: ./gradlew :gradle-plugin:integrationTest --rerun
         env:
           ORG_GRADLE_PROJECT_KDGPUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_KDGPPassword: ${{ github.token }}
