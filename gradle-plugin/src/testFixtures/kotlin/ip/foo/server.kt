@@ -91,7 +91,7 @@ public fun Route.IFBa(
             }
           }
           try {
-            val result = IFBaFunction(input = requestFactory.decodeFromString(String.serializer(), call.receiveText()),a = a,b = b,c = call.request.requestHeader("CCC")!!,d = d,e = e,other = other,)
+            val result = IFBaFunction(input = requestFactory.decodeFromString(String.serializer(), call.receiveText()),a = a,b = b,c = call.request.requestHeader("CCC"),d = d,e = e,other = other,)
             call.response.responseHeader("bar", result.bar)
             call.response.responseHeader("ASDF", result.baz)
             call.response.responseHeader("DEFAULT", result.default)

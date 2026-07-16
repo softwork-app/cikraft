@@ -8,7 +8,7 @@ fun test(
     @Body(JsonFactory::class) input: String,
     @Parameter a: String,
     @Parameter b: Int,
-    @Header("CCC") c: String,
+    @Header("CCC") c: String?,
     @Password d: CharArray,
     @Password e: CharArray,
     @Suppress("unused") other: String = "",

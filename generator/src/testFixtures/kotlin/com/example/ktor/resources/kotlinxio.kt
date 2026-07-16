@@ -61,7 +61,7 @@ public fun Route.BazKotlinxIO(rawNullableMessageLog: MessageLog?) {
           }
         }
         try {
-          val result = BazKotlinxIOFunction(body = call.receive(),b = call.request.requestHeader("B")!!,rawNullableMessageLog = rawNullableMessageLog,)
+          val result = BazKotlinxIOFunction(body = call.receive(),b = call.request.requestHeader("B"),rawNullableMessageLog = rawNullableMessageLog,)
           call.response.responseHeader(name = io.ktor.http.HttpHeaders.ContentType, value = responseContentType)
           call.respond(result.body)
         } catch (exception: Fault) {

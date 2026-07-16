@@ -72,7 +72,7 @@ FILE: simple.kt
         public final fun contentType(): R|kotlin/String|
 
     }
-    @R|app/softwork/cikraft/ScriptEntry|() @R|kotlin/jvm/Throws|(exceptionClasses = vararg(<getClass>(Q|Fault|)) [evaluated = vararg(<getClass>(Q|Fault|))]) public final fun foo(@R|app/softwork/cikraft/Body|(first = <getClass>(Q|JsonFactory|) [evaluated = <getClass>(Q|JsonFactory|)]) body: R|FooInput|, @R|app/softwork/cikraft/Header|(name = String(B) [evaluated = String(B)]) b: R|kotlin/String|, @R|app/softwork/cikraft/Password|() c: R|kotlin/CharArray|, @R|app/softwork/cikraft/Password|() d: R|kotlin/CharArray|, @R|app/softwork/cikraft/Parameter|() e: R|kotlin/Int?|, km: R|javax/net/ssl/KeyManager|, ignored: R|kotlin/String?| = Null(null)): R|FooOutput| {
+    @R|app/softwork/cikraft/ScriptEntry|() @R|kotlin/jvm/Throws|(exceptionClasses = vararg(<getClass>(Q|Fault|)) [evaluated = vararg(<getClass>(Q|Fault|))]) public final fun foo(@R|app/softwork/cikraft/Body|(first = <getClass>(Q|JsonFactory|) [evaluated = <getClass>(Q|JsonFactory|)]) body: R|FooInput|, @R|app/softwork/cikraft/Header|(name = String(B) [evaluated = String(B)]) b: R|kotlin/String?|, @R|app/softwork/cikraft/Password|() c: R|kotlin/CharArray|, @R|app/softwork/cikraft/Password|() d: R|kotlin/CharArray|, @R|app/softwork/cikraft/Parameter|() e: R|kotlin/Int?|, km: R|javax/net/ssl/KeyManager|, ignored: R|kotlin/String?| = Null(null)): R|FooOutput| {
         ^foo R|kotlin/error|(String())
     }
     @R|kotlinx/serialization/Serializable|() public final data class FooInput : R|kotlin/Any| {

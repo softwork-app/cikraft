@@ -10,7 +10,7 @@ fun injectedBoolean() = true
 @Throws(Fault::class)
 fun typed(
     @Body(JsonFactory::class) body: C<Int>?,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     injected: Boolean,
     ignored: String? = null,
 ): TypedOutput = error("")
@@ -24,7 +24,7 @@ data class TypedOutput(
 @Throws(Fault::class)
 fun star(
     @Body(JsonFactory::class) body: C<Int>?,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     injected: Boolean,
     ignored: String? = null,
 ): StarOutput = error("")

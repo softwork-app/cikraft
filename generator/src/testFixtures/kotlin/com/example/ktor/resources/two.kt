@@ -91,7 +91,7 @@ public fun Route.BazTwo(
             }
           }
           try {
-            val result = BazTwoFunction(body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),b = call.request.requestHeader("B")!!,ignored = ignored,injected = injected,ignored2 = ignored2,)
+            val result = BazTwoFunction(body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),b = call.request.requestHeader("B"),ignored = ignored,injected = injected,ignored2 = ignored2,)
             call.response.responseHeader("D", result.d)
             call.response.status(HttpStatusCode.fromValue(result.fooHeader))
             for ((key, value) in result.headers) {

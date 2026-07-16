@@ -36,7 +36,6 @@
                         "name": "B",
                         "in": "header",
                         "description": "some Header",
-                        "required": true,
                         "schema": {
                             "type": "string"
                         }

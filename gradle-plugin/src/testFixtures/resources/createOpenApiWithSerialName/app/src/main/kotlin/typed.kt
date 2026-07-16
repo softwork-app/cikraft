@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 @Throws(Fault::class)
 fun typed(
     @Body(JsonFactory::class) body: C<Int>?,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     ignored: String? = null,
 ): TypedOutput = error("")
 

@@ -10,7 +10,7 @@ import app.softwork.cikraft.*
 @Throws(Fault::class)
 suspend fun fooSuspend(
     @Body(JsonFactory::class) body: String,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     @Password c: CharArray,
     @Password d: CharArray,
     @Property("E") e: Int,

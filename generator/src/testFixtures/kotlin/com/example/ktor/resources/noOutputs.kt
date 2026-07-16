@@ -66,7 +66,7 @@ public fun Route.BazNoOutputs(
         }
       }
       try {
-        val result = BazNoOutputsFunction(bb = call.request.requestHeader("B")!!,cc = cc,dd = dd,ee = ee,ignored = ignored,)
+        val result = BazNoOutputsFunction(bb = call.request.requestHeader("B"),cc = cc,dd = dd,ee = ee,ignored = ignored,)
         call.respond(NoContent)
       } catch (exception: Fault) {
         call.response.status(HttpStatusCode.fromValue(exception.httpReturnCode))

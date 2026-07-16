@@ -18,6 +18,7 @@ internal data object SapCIErrors : KtDiagnosticsContainer() {
     val CIKRAFT_CONTENT_TYPE_HAS_NOT_NO_ARG_CONSTRUCTOR by error1<KtElement, FirRegularClassSymbol>()
     val CIKRAFT_CONTENT_TYPE_NOT_PUBLIC by error1<KtElement, FirRegularClassSymbol>()
     val CIKRAFT_PASSWORD_IS_NOT_CHARARRAY by error1<KtElement, FirValueParameterSymbol>()
+    val CIKRAFT_ENTRYPOINT_HEADER_IS_NOT_NULLABLE_STRING by error1<KtElement, FirValueParameterSymbol>()
     val CIKRAFT_DYNAMIC_HEADER_IS_NOT_MAP_STRING by error1<KtElement, FirPropertySymbol>()
     val CIKRAFT_HEADER_IS_NOT_PRIMITIVE by error1<KtElement, FirVariableSymbol<*>>()
 

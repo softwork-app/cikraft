@@ -8,7 +8,7 @@ import kotlin.String
 
 public suspend fun BazNoOutputsFunction(
   body: FooInput,
-  b: String,
+  b: String? = null,
   ignored: String? = null,
   injected: Boolean,
   ignored2: String? = null,
