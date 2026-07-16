@@ -14,7 +14,7 @@ import kotlin.collections.Map
 
 public fun BazAFunction(
   body: FooInput,
-  b: String,
+  b: String? = null,
   c: CharArray,
   d: CharArray,
   e: Int? = null,

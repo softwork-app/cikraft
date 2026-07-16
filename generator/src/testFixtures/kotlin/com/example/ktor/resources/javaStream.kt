@@ -84,7 +84,7 @@ public fun Route.BazStream() {
             }
           }
           try {
-            val result = BazStreamFunction(body = call.receive(),b = call.request.requestHeader("B")!!,)
+            val result = BazStreamFunction(body = call.receive(),b = call.request.requestHeader("B"),)
             call.response.responseHeader(name = io.ktor.http.HttpHeaders.ContentType, value = responseContentType)
             call.respond(result.body)
           } catch (exception: Fault) {

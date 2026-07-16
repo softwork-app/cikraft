@@ -6,7 +6,7 @@ import kotlin.Int
 import kotlin.String
 
 public fun BazNoOutputsFunction(
-  bb: String,
+  bb: String? = null,
   cc: CharArray,
   dd: CharArray,
   ee: Int? = null,

@@ -99,7 +99,7 @@ public fun Route.BazA(
             }
           }
           try {
-            val result = BazAFunction(body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),b = call.request.requestHeader("B")!!,c = c,d = d,e = e,km = km,ds = ds,injected = injected,ignored = ignored,)
+            val result = BazAFunction(body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),b = call.request.requestHeader("B"),c = c,d = d,e = e,km = km,ds = ds,injected = injected,ignored = ignored,)
             call.response.status(HttpStatusCode.fromValue(result.fooHeader))
             if (result.optionalHeader != null) {
               call.response.responseHeader("X-FOO", result.optionalHeader)
