@@ -17,13 +17,11 @@ class GenerateStagesEnumTest {
                         description = null,
                         httpServer = "https://dev",
                         web = "https://dev.home",
-                        apiHttpServer = "https://dev.api",
                     ),
                     "Prd" to EnumInput(
                         description = "Prod doc",
                         httpServer = "https://prd",
                         web = "https://prd.home",
-                        apiHttpServer = null,
                     ),
                 ),
             ).toString(),

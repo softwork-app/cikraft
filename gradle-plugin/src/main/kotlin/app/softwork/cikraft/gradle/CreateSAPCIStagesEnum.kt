@@ -34,10 +34,6 @@ internal interface EnumStage : Named {
     val httpServer: Property<String>
 
     @get:Input
-    @get:Optional
-    val apiHttpServer: Property<String>
-
-    @get:Input
     val web: Property<String>
 }
 
@@ -89,7 +85,6 @@ internal abstract class CreateSAPCIStagesEnumWorker : WorkAction<Params> {
                     description = it.stageDescription.orNull,
                     httpServer = it.httpServer.get(),
                     web = it.web.get(),
-                    apiHttpServer = it.apiHttpServer.orNull,
                 )
             },
         )
