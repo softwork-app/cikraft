@@ -36,7 +36,7 @@ ktor-client-resources = { module = "io.ktor:ktor-client-resources", version.ref 
 
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 
-apache-camel = { module = "org.apache.camel:camel-core", version = "2.24.2" }
+apache-camel = { module = "org.apache.camel:camel-core", version = "4.21.0" }
 sapci-script-api = { module = "com.sap.cloud.script:script.api", version = "2.15.0" }
 sapci-generic-api = { module = "com.sap.cloud.adk:generic.api", version = "3.18.2" }
 sapci-adapter-api = { module = "com.sap.cloud.adk:adapter.api", version = "3.18.2" }
