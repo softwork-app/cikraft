@@ -65,13 +65,11 @@ public suspend fun HttpClient.deleteApiProxy(name: String) {
     }
 }
 
-@ExperimentalUuidApi
 public suspend fun HttpClient.getPolicies(apiProxy: String): List<Policy> =
     get("APIProxies('$apiProxy')/policies").getBodyOrThrow(
         ResponseWrapper.serializer(ResultsWrapper.serializer(Policy.serializer())),
     ).d.results
 
-@ExperimentalUuidApi
 public suspend fun HttpClient.updatePolicy(
     policy: Policy.Update,
 ): List<Policy> = put("Policies('${policy.id}')") {

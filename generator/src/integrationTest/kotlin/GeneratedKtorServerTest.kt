@@ -12,7 +12,6 @@ import io.ktor.server.testing.*
 import kotlin.test.*
 import kotlin.uuid.*
 
-@ExperimentalUuidApi
 class GeneratedKtorServerTest {
 
     @Test

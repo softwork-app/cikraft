@@ -23,10 +23,8 @@ import kotlin.io.path.div
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@ExperimentalUuidApi
 @ExperimentalPathApi
 class FunctionalTest {
     private val fixtureDir = Path(System.getenv("fixtureDir"))

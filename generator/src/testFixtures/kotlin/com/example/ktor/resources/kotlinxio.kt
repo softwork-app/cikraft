@@ -18,7 +18,6 @@ import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import app.softwork.cikraft.ktor.server.runtime.contentType as runtimeContentType
 import io.ktor.server.request.`header` as requestHeader
@@ -27,7 +26,6 @@ import io.ktor.server.request.contentType as requestContentType
 import io.ktor.server.response.`header` as responseHeader
 import io.ktor.server.routing.accept as routingAccept
 
-@ExperimentalUuidApi
 public fun Route.BazKotlinxIO(rawNullableMessageLog: MessageLog?) {
   runtimeContentType(OctetStream) {
     routingAccept(OctetStream) {
