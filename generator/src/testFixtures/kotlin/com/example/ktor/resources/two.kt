@@ -23,7 +23,6 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import kotlin.Boolean
 import kotlin.String
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlinx.serialization.builtins.serializer
 import app.softwork.cikraft.ktor.server.runtime.contentType as runtimeContentType
@@ -34,7 +33,6 @@ import io.ktor.server.response.`header` as responseHeader
 import io.ktor.server.routing.`header` as routingHeader
 import io.ktor.server.routing.accept as routingAccept
 
-@ExperimentalUuidApi
 public fun Route.BazTwo(
   ignored: String?,
   injected: Boolean,
