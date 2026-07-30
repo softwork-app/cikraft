@@ -7,7 +7,7 @@ import kotlinx.io.Source
 
 public fun BazKotlinxIOFunction(
   body: Source,
-  b: String,
+  b: String? = null,
   rawNullableMessageLog: MessageLog? = null,
 ): BazKotlinxIOResult {
   val resultKotlinxIO = kotlinxIO(body = body,b = b,rawNullableMessageLog = rawNullableMessageLog,)

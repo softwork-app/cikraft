@@ -21,7 +21,6 @@ import io.ktor.server.routing.Route
 import kotlin.CharArray
 import kotlin.Int
 import kotlin.String
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlinx.serialization.builtins.serializer
 import app.softwork.cikraft.ktor.server.runtime.contentType as runtimeContentType
@@ -32,7 +31,6 @@ import io.ktor.server.response.`header` as responseHeader
 import io.ktor.server.routing.`header` as routingHeader
 import io.ktor.server.routing.accept as routingAccept
 
-@ExperimentalUuidApi
 public fun Route.IFBa(
   a: String = IFBaConfig.a,
   b: Int = IFBaConfig.b,
@@ -91,7 +89,7 @@ public fun Route.IFBa(
             }
           }
           try {
-            val result = IFBaFunction(input = requestFactory.decodeFromString(String.serializer(), call.receiveText()),a = a,b = b,c = call.request.requestHeader("CCC")!!,d = d,e = e,other = other,)
+            val result = IFBaFunction(input = requestFactory.decodeFromString(String.serializer(), call.receiveText()),a = a,b = b,c = call.request.requestHeader("CCC"),d = d,e = e,other = other,)
             call.response.responseHeader("bar", result.bar)
             call.response.responseHeader("ASDF", result.baz)
             call.response.responseHeader("DEFAULT", result.default)

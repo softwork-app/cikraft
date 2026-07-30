@@ -93,6 +93,8 @@ abstract class InfrastructureIntegrationFlowsFeature :
             buildModel.openApiStages.addAll(parentDefinition.transportStages)
             buildModel.integrationPackages.addAll(definition.integrationPackages)
 
+            val projectVersion = project.version.toString().takeUnless { it == Project.DEFAULT_VERSION }
+
             val apiWorker = configurations.dependencyScope("apiWorker") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:api:$VERSION"))
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:core:$VERSION"))
@@ -111,11 +113,20 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 extendsFrom(generator)
             }
 
+            definition.dependencies.implementation.add("app.softwork.cikraft:integration-flow-builder-runtime:$VERSION")
+
             val integrationFlowsSourceSet = sourceSets.create("integrationFlows") {
                 configurationContainer.named(implementationConfigurationName) {
-                    dependencies.add(
-                        dependencyFactory.create("app.softwork.cikraft:integration-flow-builder-runtime:$VERSION"),
-                    )
+                    fromDependencyCollector(definition.dependencies.implementation)
+                }
+                configurationContainer.named(runtimeOnlyConfigurationName) {
+                    fromDependencyCollector(definition.dependencies.runtimeOnly)
+                }
+                configurationContainer.named(compileOnlyConfigurationName) {
+                    fromDependencyCollector(definition.dependencies.compileOnly)
+                }
+                configurationContainer.named(annotationProcessorConfigurationName) {
+                    fromDependencyCollector(definition.dependencies.annotationProcessor)
                 }
             }
 
@@ -129,11 +140,6 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             stageDescription.set(stage.description)
                             httpServer.set(
                                 stage.httpServer.zip(buildModel.httpSuffix) { server, suffix ->
-                                    server + suffix
-                                },
-                            )
-                            apiHttpServer.set(
-                                stage.apiHttpServer.zip(buildModel.httpSuffix) { server, suffix ->
                                     server + suffix
                                 },
                             )
@@ -199,6 +205,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                         this.packageName.set(integrationPackage.name)
                         this.packageID.set(integrationPackage.name.replace("_", ""))
+                        this.packageVersion.set(projectVersion)
                         this.packageDescription.set(integrationPackage.description)
 
                         workerClasspath.from(apiWorkerClasspath)
@@ -233,6 +240,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                             this.packageName.set(integrationPackage.name)
                             this.packageID.set(integrationPackage.name.replace("_", ""))
+                            this.packageVersion.set(projectVersion)
                             this.packageDescription.set(integrationPackage.description)
 
                             workerClasspath.from(apiWorkerClasspath)
@@ -376,8 +384,6 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     createInfrastructureDryRun.configure {
                         entryPoints.from(entrypointsJson)
                     }
-
-                    val projectVersion = project.version.toString().takeUnless { it == Project.DEFAULT_VERSION }
 
                     parentBuildModel.apiStages.all {
                         val stage = this
@@ -667,6 +673,7 @@ abstract class InfrastructureIntegrationFlowsR8Feature :
                     "-keepattributes SourceFile, LineNumberTable",
                     "-keep,allowoptimization public class CiKraftEntrypointsKt { <methods>; }",
                 )
+                this.additionalRules.addAll(buildModel.additionalRules)
                 this.programFiles.from(iFlowBuildModel.kotlinEntryPointsClasses, iFlowBuildModel.dependenciesJars)
                 this.libJars.from(r8LibJars)
                 this.javaHome.set(

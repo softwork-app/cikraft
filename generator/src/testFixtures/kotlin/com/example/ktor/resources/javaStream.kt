@@ -21,7 +21,6 @@ import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import app.softwork.cikraft.ktor.server.runtime.contentType as runtimeContentType
 import io.ktor.server.request.`header` as requestHeader
@@ -31,7 +30,6 @@ import io.ktor.server.response.`header` as responseHeader
 import io.ktor.server.routing.`header` as routingHeader
 import io.ktor.server.routing.accept as routingAccept
 
-@ExperimentalUuidApi
 public fun Route.BazStream() {
   val csrfToken = "csrfTokenBazStream" + Uuid.random()
   val csrfServerSessionCookie = "csrfSessionCookieBazStream" + Uuid.random()
@@ -84,7 +82,7 @@ public fun Route.BazStream() {
             }
           }
           try {
-            val result = BazStreamFunction(body = call.receive(),b = call.request.requestHeader("B")!!,)
+            val result = BazStreamFunction(body = call.receive(),b = call.request.requestHeader("B"),)
             call.response.responseHeader(name = io.ktor.http.HttpHeaders.ContentType, value = responseContentType)
             call.respond(result.body)
           } catch (exception: Fault) {

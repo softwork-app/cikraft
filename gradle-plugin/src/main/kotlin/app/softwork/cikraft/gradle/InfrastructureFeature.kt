@@ -57,11 +57,11 @@ abstract class InfrastructureFeature :
                     buildModel.apiStages.associate {
                         it.name + "_HTTP" to it.httpServer.get()
                     } + buildModel.apiStages.associate {
-                        it.name + "_API" to it.apiHttpServer.get()
+                        it.name + "_API" to it.apiVirtualHosts.joinToString { it.apiHttpServer.get() }
                     } + buildModel.transportStages.associate {
                         it.name + "_HTTP" to it.httpServer.get()
                     } + buildModel.transportStages.associate {
-                        it.name + "_API" to it.apiHttpServer.get()
+                        it.name + "_API" to it.apiVirtualHosts.joinToString { it.apiHttpServer.get() }
                     },
                 )
                 this.httpSuffix.set(buildModel.httpSuffix)

@@ -15,10 +15,8 @@ import kotlinx.serialization.json.Json
 import nl.adaptivity.xmlutil.serialization.XML
 import java.io.File
 import kotlin.time.Duration.Companion.days
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@ExperimentalUuidApi
 fun person(
     uuid: Uuid,
     suffix: String? = null,
@@ -60,7 +58,6 @@ fun person(
     )
 }
 
-@ExperimentalUuidApi
 fun alwaysFails(
     uuid: Uuid,
 ): CreateArtifact {
@@ -94,7 +91,6 @@ fun alwaysFails(
     )
 }
 
-@ExperimentalUuidApi
 fun write(
     uuid: Uuid,
 ): CreateArtifact {
@@ -124,7 +120,6 @@ fun write(
     )
 }
 
-@ExperimentalUuidApi
 fun select(
     uuid: Uuid,
 ): CreateArtifact {
@@ -156,7 +151,6 @@ fun select(
     )
 }
 
-@ExperimentalUuidApi
 fun get(
     uuid: Uuid,
 ): CreateArtifact {
@@ -188,7 +182,6 @@ fun get(
     )
 }
 
-@ExperimentalUuidApi
 fun delete(
     uuid: Uuid,
 ): CreateArtifact = CreateArtifact(

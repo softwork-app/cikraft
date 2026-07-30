@@ -29,7 +29,7 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
         public val apiPortalServer: Property<String>
         public val apiPortalClientId: Property<String>
         public val apiPortalClientSecret: Property<String>
-        public val virtualHost: Property<String>
+        public val virtualHostId: Property<String>
         public val authServer: Property<String>
     }
 
@@ -89,7 +89,7 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
             }
             for (transport in all) {
                 transportClient.transportProxy(
-                    virtualHost = parameters.virtualHost.get(),
+                    virtualHost = parameters.virtualHostId.get(),
                     apiProxyAsBase64 = transport.toBase64(),
                 )
             }

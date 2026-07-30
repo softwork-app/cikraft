@@ -22,13 +22,11 @@ import io.ktor.server.routing.Route
 import kotlin.CharArray
 import kotlin.Int
 import kotlin.String
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import io.ktor.server.request.`header` as requestHeader
 import io.ktor.server.response.`header` as responseHeader
 import io.ktor.server.routing.`header` as routingHeader
 
-@ExperimentalUuidApi
 public fun Route.BazNoOutputs(
   cc: CharArray,
   dd: CharArray,
@@ -66,7 +64,7 @@ public fun Route.BazNoOutputs(
         }
       }
       try {
-        val result = BazNoOutputsFunction(bb = call.request.requestHeader("B")!!,cc = cc,dd = dd,ee = ee,ignored = ignored,)
+        val result = BazNoOutputsFunction(bb = call.request.requestHeader("B"),cc = cc,dd = dd,ee = ee,ignored = ignored,)
         call.respond(NoContent)
       } catch (exception: Fault) {
         call.response.status(HttpStatusCode.fromValue(exception.httpReturnCode))

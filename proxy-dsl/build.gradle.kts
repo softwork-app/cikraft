@@ -7,8 +7,6 @@ dependencies {
 }
 
 kotlin.compilerOptions {
-    optIn.add("kotlin.uuid.ExperimentalUuidApi")
-
     freeCompilerArgs.add("-Xcontext-sensitive-resolution")
 }
 

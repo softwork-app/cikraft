@@ -8,7 +8,10 @@ plugins {
 kotlin {
     jvmToolchain(21)
     compilerOptions {
+        optIn.add("kotlin.uuid.ExperimentalUuidApi")
+
         freeCompilerArgs.add("-Xcontext-parameters")
+        freeCompilerArgs.add("-Xannotation-default-target=param-property")
     }
 }
 

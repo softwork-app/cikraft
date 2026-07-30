@@ -12,7 +12,7 @@ import kotlin.collections.List
 @JvmOverloads
 fun typed(
     @Body(JsonFactory::class) body: List<D<Int>>,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     ignored: String? = null,
 ): TypedOutput = error("")
 

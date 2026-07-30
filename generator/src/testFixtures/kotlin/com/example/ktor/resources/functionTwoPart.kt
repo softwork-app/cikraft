@@ -12,7 +12,7 @@ import kotlin.collections.Map
 
 public suspend fun BazTwoFunction(
   body: FooInput,
-  b: String,
+  b: String? = null,
   ignored: String? = null,
   injected: Boolean,
   ignored2: String? = null,

@@ -5,11 +5,9 @@ import app.softwork.cikraft.api.Metadata
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.intellij.lang.annotations.Language
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Serializable
-@ExperimentalUuidApi
 public data class Policy(
     @SerialName("__metadata")
     val metadata: Metadata? = null,
@@ -24,7 +22,6 @@ public data class Policy(
     val apiProxy: Deferred,
 ) {
     @Serializable
-    @ExperimentalUuidApi
     public data class Update(
         val id: Uuid,
         val name: String,

@@ -14,7 +14,7 @@ import javax.sql.*
 @Throws(Fault::class)
 fun foo(
     @Body(JsonFactory::class) body: FooInput,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     @Password c: CharArray,
     @Password d: CharArray,
     @Parameter e: Int?,
@@ -43,7 +43,7 @@ data class FooInput(
 @Throws(Fault::class)
 suspend fun fooSuspend(
     @Body(JsonFactory::class) body: String,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     @Password c: CharArray,
     @Password d: CharArray,
     @Parameter e: Int?,
@@ -61,7 +61,7 @@ fun noError(
 @ScriptEntry
 @Throws(Fault::class)
 fun noOutputs(
-    @Header("B") bb: String,
+    @Header("B") bb: String?,
     @Password cc: CharArray,
     @Password dd: CharArray,
     @Parameter ee: Int?,
@@ -81,7 +81,7 @@ fun setup(): Boolean = true
 @Throws(Fault::class)
 suspend fun twoPart1(
     @Body(JsonFactory::class) body: FooInput,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     ignored: String? = null,
     injected: Boolean,
 ): TwoPart1Output = throw Fault("", "", 418, 418, "")
@@ -94,14 +94,14 @@ class TwoPart1Output(
 @Throws(Fault::class)
 suspend fun dummy(
     @Body(Nothing::class) body: FooOutput2,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     ignored2: String? = null,
 ) {}
 
 @ScriptEntry
 suspend fun dummyWithOutput(
     @Body(Nothing::class) body: FooOutput2,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     ignored2: String? = null,
 ): DummyOutput = error("")
 
@@ -113,7 +113,7 @@ class DummyOutput(
 @Throws(Fault::class)
 suspend fun twoPart2(
     @Body(Nothing::class) body: FooOutput2,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     ignored2: String? = null,
 ): FooOutput = throw Fault("", "", 418, 418, "")
 
@@ -121,7 +121,7 @@ suspend fun twoPart2(
 @Throws(Fault::class)
 fun javaStreams(
     @Body(JsonFactory::class) body: InputStream,
-    @Header("B") b: String,
+    @Header("B") b: String?,
 ): StreamOutput = error("")
 
 class StreamOutput(
@@ -132,7 +132,7 @@ class StreamOutput(
 @Throws(Fault::class)
 fun kotlinxIO(
     @Body(JsonFactory::class) body: Source,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     rawNullableMessageLog: MessageLog? = null,
 ): SourceOutput = error("")
 

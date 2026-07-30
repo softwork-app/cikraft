@@ -9,7 +9,6 @@ import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.github.hfhbd.kfx.codegen.CodeGenTree.*
 import io.github.hfhbd.kfx.kotlin.*
-import kotlin.uuid.ExperimentalUuidApi
 
 public fun generateKtorServer(
     createdFlow: CreatedFlow,
@@ -62,7 +61,6 @@ private fun generateKtorServerRoute(createdFlow: CreatedFlow): FileSpec {
 
     val function = FunSpec.builder(createdFlow.rawId)
     function.receiver(ClassName("io.ktor.server.routing", "Route"))
-    function.addAnnotation(ExperimentalUuidApi::class)
 
     function.addParameters(createdFlow, configObject)
 

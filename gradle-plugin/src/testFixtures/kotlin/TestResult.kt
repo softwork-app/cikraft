@@ -2,7 +2,7 @@ fun test(
     input: String,
     a: String,
     b: Int?,
-    c: String,
+    c: String?,
     d: CharArray,
     e: CharArray,
     other: String,

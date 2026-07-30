@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.fir.analysis.checkers.context.*
 import org.jetbrains.kotlin.fir.analysis.checkers.declaration.*
 import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.expressions.*
+import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.name.*
 
@@ -82,6 +83,15 @@ internal data object ScriptEntryChecker : FirSimpleFunctionChecker(MppCheckerKin
                     parameter.symbol,
                 )
             }
+            if (matcher.isAnnotatedWithHeader(parameter.symbol) &&
+                !parameter.isNullableHeader()
+            ) {
+                reporter.reportOn(
+                    parameter.source,
+                    SapCIErrors.CIKRAFT_ENTRYPOINT_HEADER_IS_NOT_NULLABLE_STRING,
+                    parameter.symbol,
+                )
+            }
         }
     }
 
@@ -91,4 +101,10 @@ internal data object ScriptEntryChecker : FirSimpleFunctionChecker(MppCheckerKin
     }
 
     private val CHAR_ARRAY = StandardClassIds.byName("CharArray")
+
+    context(context: CheckerContext)
+    private fun FirVariable.isNullableHeader(): Boolean {
+        val coneKotlinType = returnTypeRef.coneTypeOrNull?.fullyExpandedType() ?: return false
+        return coneKotlinType.isNullableString
+    }
 }

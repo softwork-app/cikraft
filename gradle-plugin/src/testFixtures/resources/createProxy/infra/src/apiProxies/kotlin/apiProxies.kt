@@ -6,15 +6,12 @@ import app.softwork.cikraft.proxy.RefValue
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 import kotlin.time.ExperimentalTime
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalTime::class)
 public fun ApiProxiesBuilder.apiProxies(baseUrl: String, suffix: String): Unit {
-    @OptIn(ExperimentalUuidApi::class)
     val uuid = Uuid.random()
 
-    @OptIn(ExperimentalUuidApi::class)
     apiProxy(
         name = "Test_API_FOO_URL_$uuid",
         title = "Test API FOO URL_$uuid",

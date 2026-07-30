@@ -23,7 +23,6 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import kotlin.Boolean
 import kotlin.String
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlinx.serialization.builtins.serializer
 import app.softwork.cikraft.ktor.server.runtime.contentType as runtimeContentType
@@ -34,7 +33,6 @@ import io.ktor.server.response.`header` as responseHeader
 import io.ktor.server.routing.`header` as routingHeader
 import io.ktor.server.routing.accept as routingAccept
 
-@ExperimentalUuidApi
 public fun Route.BazTwo(
   ignored: String?,
   injected: Boolean,
@@ -91,7 +89,7 @@ public fun Route.BazTwo(
             }
           }
           try {
-            val result = BazTwoFunction(body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),b = call.request.requestHeader("B")!!,ignored = ignored,injected = injected,ignored2 = ignored2,)
+            val result = BazTwoFunction(body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),b = call.request.requestHeader("B"),ignored = ignored,injected = injected,ignored2 = ignored2,)
             call.response.responseHeader("D", result.d)
             call.response.status(HttpStatusCode.fromValue(result.fooHeader))
             for ((key, value) in result.headers) {

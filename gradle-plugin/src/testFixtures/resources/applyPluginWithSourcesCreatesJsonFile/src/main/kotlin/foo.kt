@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 @Throws(Fault::class)
 fun foo(
     @Body(JsonFactory::class) body: FooInput,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     @Password c: CharArray,
     @Password d: CharArray,
     @Parameter e: Int?,

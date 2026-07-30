@@ -15,6 +15,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
 import org.gradle.kotlin.dsl.credentials
@@ -40,6 +41,10 @@ abstract class CreateIntegrationPackageTask @Inject constructor(
 
     @get:Input
     abstract val packageID: Property<String>
+
+    @get:Input
+    @get:Optional
+    abstract val packageVersion: Property<String>
 
     @get:Input
     abstract val packageDescription: Property<String>
@@ -78,6 +83,7 @@ abstract class CreateIntegrationPackageTask @Inject constructor(
 
             packageName.set(this@CreateIntegrationPackageTask.packageName)
             packageID.set(this@CreateIntegrationPackageTask.packageID)
+            packageVersion.set(this@CreateIntegrationPackageTask.packageVersion)
             packageDescription.set(this@CreateIntegrationPackageTask.packageDescription)
         }
     }
@@ -92,6 +98,7 @@ abstract class CreateIntegrationPackageWorker : WorkAction<CreateIntegrationPack
 
         val packageName: Property<String>
         val packageID: Property<String>
+        val packageVersion: Property<String>
         val packageDescription: Property<String>
     }
 
@@ -115,6 +122,7 @@ abstract class CreateIntegrationPackageWorker : WorkAction<CreateIntegrationPack
                             parameters.packageID.get(),
                             parameters.packageName.get(),
                             parameters.packageDescription.orNull ?: "",
+                            version = parameters.packageVersion.orNull,
                         ),
                     )
                 }

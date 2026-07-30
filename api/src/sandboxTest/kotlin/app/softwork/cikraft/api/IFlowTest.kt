@@ -26,10 +26,8 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.test.fail
 import kotlin.time.Duration.Companion.seconds
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@ExperimentalUuidApi
 class IFlowTest {
     @Test
     fun httpPost(): Unit = runBlocking {

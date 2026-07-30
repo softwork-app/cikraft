@@ -7,6 +7,7 @@ import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_DYNAMIC_HEADER_IS_NOT
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_HAS_MULTIPLE_THROWS
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_HAS_RECEIVER
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_HAS_TYPE_PARAMETERS
+import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_HEADER_IS_NOT_NULLABLE_STRING
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_NOT_STATIC
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_HEADER_IS_NOT_PRIMITIVE
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_PASSWORD_IS_NOT_CHARARRAY
@@ -57,6 +58,11 @@ internal data object SapCIErrorMessages : BaseDiagnosticRendererFactory() {
         it.put(
             CIKRAFT_PASSWORD_IS_NOT_CHARARRAY,
             "The type of {0} is not kotlin.CharArray",
+            DECLARATION_NAME,
+        )
+        it.put(
+            CIKRAFT_ENTRYPOINT_HEADER_IS_NOT_NULLABLE_STRING,
+            "The type of {0} is not kotlin.String?",
             DECLARATION_NAME,
         )
         it.put(

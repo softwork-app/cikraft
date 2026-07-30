@@ -15,7 +15,7 @@ fun injectBoolean(
 @Throws(Fault::class)
 fun typed(
     @Body(JsonFactory::class) body: C<Int>?,
-    @Header("B") b: String,
+    @Header("B") b: String?,
     injected: Boolean,
     ignored: String? = null,
 ): TypedOutput = error("")
