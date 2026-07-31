@@ -43,7 +43,7 @@ jobs:
 
     environment:
       name: SBX
-      url: https://sbx/${{ github.ref }}
+      deployment: false
 
     env:
       ORG_GRADLE_PROJECT_SBX_API_CLIENT_SECRET: ${{ secrets.SBX_API_CLIENT_SECRET }}
