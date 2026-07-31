@@ -50,3 +50,23 @@ jobs:
         with:
           sarif_file: build/reports/detekt/detekt.sarif
           category: detektBaseline
+
+      -
+
+  upload-coverage:
+    needs: build
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+      code-quality: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: cobertura-report
+
+      - uses: actions/upload-code-coverage@1c15be36fc3733ba839b1dd643bd9556e4426dc1
+        with:
+          file: cobertura.xml
+          language: Java
+          label: code-coverage/kover

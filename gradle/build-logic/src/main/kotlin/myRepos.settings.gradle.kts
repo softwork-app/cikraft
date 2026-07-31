@@ -1,5 +1,6 @@
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention")
+    id("org.jetbrains.kotlinx.kover.aggregation")
 }
 
 dependencyResolutionManagement {
@@ -37,5 +38,13 @@ dependencyResolutionManagement {
             }
             filter { includeGroup("org.nodejs") }
         }
+    }
+}
+
+kover {
+    enableCoverage()
+
+    reports {
+        includedClasses.add("app.softwork.cikraft.*")
     }
 }

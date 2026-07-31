@@ -64,3 +64,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.24" }
 kotlin-compiler-testing = { id = "io.github.hfhbd.kotlin-compiler-testing", version = "0.0.4" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
+kover = { id = "org.jetbrains.kotlinx.kover.aggregation", version = "0.9.9" }
