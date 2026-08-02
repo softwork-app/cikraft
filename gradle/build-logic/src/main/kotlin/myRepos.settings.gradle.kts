@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlinx.kover.aggregation")
 }
 
+pluginManager.apply(KoverCoberturaSettingsPlugin::class)
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
