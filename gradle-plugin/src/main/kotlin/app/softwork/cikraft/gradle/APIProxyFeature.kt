@@ -111,13 +111,16 @@ abstract class APIProxyFeature :
                     }
                 }
 
+                val deployApiTask = tasks.register("deploy${taskName}Api")
+
                 stage.apiVirtualHosts.all {
                     val virtualHost = this
-                    tasks.register(
+                    val deployApiToHostTask = tasks.register(
                         "deploy${taskName}ApiTo${virtualHost.name}ApiHost",
                         DeployApiProxiesTask::class.java,
                         stage.name,
-                    ).configure {
+                    )
+                    deployApiToHostTask.configure {
                         this.url.set(stage.httpServer)
                         this.httpSuffix.set(parentBuildModel.httpSuffix)
                         this.apiPortalServer.set(stage.apiPortalServer)
@@ -129,6 +132,9 @@ abstract class APIProxyFeature :
                             apiProxySourceSet.runtimeClasspath,
                             apiWorkerClasspath,
                         )
+                    }
+                    deployApiTask.configure {
+                        dependsOn(deployApiToHostTask)
                     }
                 }
                 tasks.register(
