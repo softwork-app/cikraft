@@ -3,6 +3,7 @@ package app.softwork.cikraft.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyFactory
+import org.gradle.api.attributes.Usage
 import org.gradle.api.tasks.Nested
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.BuildModel
@@ -15,6 +16,7 @@ import org.gradle.features.dsl.bindProjectFeature
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
+import org.gradle.kotlin.dsl.named
 import javax.inject.Inject
 
 @BindsProjectFeature(GenerateFunctionsFeature::class)
@@ -60,8 +62,16 @@ abstract class GenerateFunctionsFeature :
                 extendsFrom(functionsWorker)
             }
 
+            val sapCICreatedFlows = configurations.resolvable("cikraftFunctionsCreatedFlow$buildModelName") {
+                fromDependencyCollector(definition.dependencies.infrastructure)
+                attributes {
+                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
+                    attribute(SAPCI.attribute, named(SAPCI.API))
+                }
+            }.flatMap { it.elements }.map { it.single().asFile }
+
             val task = tasks.register("generateFunctions$buildModelName", GenerateFunctionsTask::class.java) {
-                createdFlows.set(parentBuildModel.sapCICreatedFlows)
+                this.createdFlows.fileProvider(sapCICreatedFlows)
                 functionsFolder.convention(
                     layout.contextBuildDirectory.map { it.dir("cikraft/functions$buildModelName") },
                 )

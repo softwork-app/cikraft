@@ -1,9 +1,9 @@
 package app.softwork.cikraft.gradle
 
+import TestFixturesFeature
 import io.github.hfhbd.r8.R8VersionRule
 import io.github.hfhbd.r8.R8_MODULE
 import org.gradle.api.Plugin
-import org.gradle.api.Project
 import org.gradle.api.initialization.Settings
 import org.gradle.features.annotations.RegistersProjectFeatures
 
@@ -27,6 +27,7 @@ import org.gradle.features.annotations.RegistersProjectFeatures
     // Just because there is no test suite feature
     JvmTestSuiteFeature::class,
     KotlinTestJvmTestSuiteFeature::class,
+    TestFixturesFeature::class,
 )
 abstract class SAPCIEcosystemPlugin : Plugin<Settings> {
     override fun apply(settings: Settings) {

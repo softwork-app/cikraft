@@ -36,25 +36,15 @@ abstract class SAPCIGeneratorTestSuiteWrapper :
     }
 
     abstract class ApplyAction<ParentBuildModel : BuildModel, ParentDefinition : Definition<ParentBuildModel>> :
-        ProjectFeatureApplyAction<SAPCIGeneratorDefinition, BuildModel.None, ParentDefinition> {
+        ProjectFeatureApplyAction<SAPCIGeneratorDefinition, SAPCIGeneratorBuildModel, ParentDefinition> {
         @get:Inject
         abstract val configurations: ConfigurationRegistrar
 
         fun apply(
             sourceDirectorySet: SourceDirectorySet,
             buildModel: DefaultSAPCIGeneratorBuildModel,
-            infrastructure: DependencyCollector,
         ) {
             buildModel.sourceDirectorySet = sourceDirectorySet
-            buildModel.sapCICreatedFlows.fileProvider(
-                configurations.resolvable("cikraftCreatedFlow" + buildModel.name) {
-                    fromDependencyCollector(infrastructure)
-                    attributes {
-                        attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                        attribute(SAPCI.attribute, named(SAPCI.API))
-                    }
-                }.flatMap { it.elements }.map { it.single().asFile },
-            )
         }
     }
 
@@ -72,7 +62,6 @@ abstract class SAPCIGeneratorTestSuiteWrapper :
             apply(
                 sourceDirectorySet = parentBuildModel.testSuite.sources.kotlin,
                 buildModel = buildModel,
-                infrastructure = definition.dependencies.infrastructure,
             )
         }
     }
@@ -91,24 +80,19 @@ abstract class SAPCIGeneratorTestSuiteWrapper :
             apply(
                 sourceDirectorySet = parentBuildModel.compilationUnits.getByName("main").sources,
                 buildModel = buildModel,
-                infrastructure = definition.dependencies.infrastructure,
             )
         }
     }
 }
 
-interface SAPCIGeneratorDefinition : Definition<BuildModel.None>
+interface SAPCIGeneratorDefinition : Definition<SAPCIGeneratorBuildModel>
 
-interface SAPCIGeneratorBuildModel :
-    HasSourceDirectorySet,
-    BuildModel,
-    Named {
-    val sapCICreatedFlows: Provider<Directory>
+interface SAPCIGeneratorBuildModel : BuildModel, Named {
+    val sourceDirectorySet: SourceDirectorySet
 }
 
 abstract class DefaultSAPCIGeneratorBuildModel : SAPCIGeneratorBuildModel {
     override fun getName(): String = internalName
     lateinit var internalName: String
     override lateinit var sourceDirectorySet: SourceDirectorySet
-    abstract override val sapCICreatedFlows: DirectoryProperty
 }
