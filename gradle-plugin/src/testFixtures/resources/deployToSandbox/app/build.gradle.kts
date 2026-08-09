@@ -20,10 +20,10 @@ jvmApplication {
             apiStage("Sbx") {
                 description = "Sandbox Stage for unit tests"
                 web =
-                    "https://b3d0decftrial.integrationsuite-trial.cfapps.us10-001.hana.ondemand.com/shell/home"
-                apiServer = "https://8c5e4266trial.it-cpitrial03.cfapps.ap21.hana.ondemand.com"
-                authServer = "https://8c5e4266trial.authentication.ap21.hana.ondemand.com"
-                httpServer = "https://8c5e4266trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http"
+                    "https://5f44b7f9trial.integrationsuite-trial.cfapps.ap21.hana.ondemand.com/shell/home"
+                apiServer = "https://5f44b7f9trial.it-cpitrial03.cfapps.ap21.hana.ondemand.com"
+                authServer = "https://5f44b7f9trial.authentication.ap21.hana.ondemand.com"
+                httpServer = "https://5f44b7f9trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http"
             }
         }
 
