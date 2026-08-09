@@ -59,7 +59,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
 licensee = { id = "app.cash.licensee", version = "1.14.1" }
-detekt = { id = "dev.detekt", version = "2.0.0-alpha.5" }
+detekt = { id = "dev.detekt", version = "2.0.0-alpha.6" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.24" }
 kotlin-compiler-testing = { id = "io.github.hfhbd.kotlin-compiler-testing", version = "0.0.4" }
