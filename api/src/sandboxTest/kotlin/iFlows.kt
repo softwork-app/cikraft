@@ -231,7 +231,7 @@ val apiClient = HttpClient(CIO) {
 val consumerClient = HttpClient(CIO) {
     setupRuntimeAuth(
         "https://5f44b7f9trial.authentication.ap21.hana.ondemand.com/oauth/token",
-        clientId = "sb-282b7b28-ad37-42f8-9363-d2bdc3ea3749!b137126|it-rt-5f44b7f9trial!b19",
+        clientId = "sb-282b7b28-ad37-42f8-9363-d2bdc3ea3749!b137126|it-rt-5f44b7f9trial!b196",
         clientSecret = System.getenv("SBX_RT_CLIENT_SECRET"),
     )
     install(Logging) {
