@@ -31,8 +31,8 @@ class FunctionalTest {
 
     val consumerClient = HttpClient(CIO) {
         setupRuntimeAuth(
-            tokenUrl = "https://8c5e4266trial.authentication.ap21.hana.ondemand.com/oauth/token",
-            clientId = "sb-cd8c42c8-1525-4225-8ce2-5fcd70fac8fd!b131200|it-rt-8c5e4266trial!b196",
+            tokenUrl = "https://5f44b7f9trial.authentication.ap21.hana.ondemand.com/oauth/token",
+            clientId = "sb-282b7b28-ad37-42f8-9363-d2bdc3ea3749!b137126|it-rt-5f44b7f9trial!b196",
             clientSecret = System.getenv("SBX_RT_CLIENT_SECRET")
         )
         install(Logging) {
@@ -43,7 +43,7 @@ class FunctionalTest {
             jsonIo(Json)
         }
         defaultRequest {
-            url("https://8c5e4266trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com")
+            url("https://5f44b7f9trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com")
         }
         install(HttpCookies)
     }
@@ -122,7 +122,7 @@ class FunctionalTest {
             "-PKDGPUsername=${System.getenv("KDGP_USERNAME")}",
             "-PKDGPPassword=${System.getenv("KDGP_PASSWORD")}",
             "-Pversion=1.0.0",
-            "-PcikraftSbxUsername=sb-08b6afaa-f349-4ad3-ba76-28dbcfdd62e3!b131200|it!b196",
+            "-PcikraftSbxUsername=sb-f6dc3487-2d3d-4b79-b6d9-a0eacc3b295a!b137126|it!b196",
             "-PcikraftSbxPassword=${System.getenv("SBX_API_CLIENT_SECRET")}",
             "-Psuffix=/$id",
             "-Dorg.gradle.jvmargs=-Xmx4096m",

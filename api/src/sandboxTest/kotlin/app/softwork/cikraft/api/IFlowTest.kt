@@ -138,10 +138,10 @@ class IFlowTest {
                         assertNotNull(location)
                         assertEquals(
                             Url(
-                                "https://8c5e4266trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http/Foo/get/$uuid",
+                                "https://5f44b7f9trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http/Foo/get/$uuid",
                             ),
                             URLBuilder(
-                                "https://8c5e4266trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http/Foo/write/$uuid",
+                                "https://5f44b7f9trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http/Foo/write/$uuid",
                             )
                                 .takeFrom(location)
                                 .build(),
@@ -179,7 +179,7 @@ class IFlowTest {
                         }
                         assertEquals(201, writeAgain.status.value)
                         assertEquals(
-                            "https://8c5e4266trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http/Foo/get/$uuid",
+                            "https://5f44b7f9trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http/Foo/get/$uuid",
                             writeAgain.headers["Location"],
                         )
                         assertEquals("", writeAgain.bodyAsText())

@@ -13,7 +13,6 @@ dokka {
             sourceLink {
                 localDirectory.set(file("src/$sourceSetName/kotlin"))
                 remoteUrl.set(uri("https://github.com/softwork-app/cikraft/tree/main/$module/src/$sourceSetName/kotlin"))
-                remoteLineSuffix.set("#L")
             }
         }
         externalDocumentationLinks {
@@ -32,7 +31,7 @@ dokka {
 
 detekt {
     parallel = true
-    autoCorrect = true
+    autoCorrect = providers.gradleProperty("autoCorrectDetekt").map { it.toBoolean() }.orElse(true)
     buildUponDefaultConfig = true
     ignoreFailures = providers.gradleProperty("ignoreDetektFailures").map { it.toBoolean() }.orElse(false)
 

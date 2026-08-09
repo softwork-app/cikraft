@@ -221,17 +221,17 @@ val apiClient = HttpClient(CIO) {
         logger = Logger.SIMPLE
     }
     setupSapCIApiClient(
-        clientId = "sb-08b6afaa-f349-4ad3-ba76-28dbcfdd62e3!b131200|it!b196",
+        clientId = "sb-f6dc3487-2d3d-4b79-b6d9-a0eacc3b295a!b137126|it!b196",
         clientSecret = System.getenv("SBX_API_CLIENT_SECRET"),
-        apiServer = "https://8c5e4266trial.it-cpitrial03.cfapps.ap21.hana.ondemand.com",
-        authServer = "https://8c5e4266trial.authentication.ap21.hana.ondemand.com",
+        apiServer = "https://5f44b7f9trial.it-cpitrial03.cfapps.ap21.hana.ondemand.com",
+        authServer = "https://5f44b7f9trial.authentication.ap21.hana.ondemand.com",
     )
 }
 
 val consumerClient = HttpClient(CIO) {
     setupRuntimeAuth(
-        "https://8c5e4266trial.authentication.ap21.hana.ondemand.com/oauth/token",
-        clientId = "sb-cd8c42c8-1525-4225-8ce2-5fcd70fac8fd!b131200|it-rt-8c5e4266trial!b196",
+        "https://5f44b7f9trial.authentication.ap21.hana.ondemand.com/oauth/token",
+        clientId = "sb-282b7b28-ad37-42f8-9363-d2bdc3ea3749!b137126|it-rt-5f44b7f9trial!b196",
         clientSecret = System.getenv("SBX_RT_CLIENT_SECRET"),
     )
     install(Logging) {
@@ -243,6 +243,6 @@ val consumerClient = HttpClient(CIO) {
         serialization(ContentType.Application.Xml, XML)
     }
     defaultRequest {
-        url("https://8c5e4266trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com")
+        url("https://5f44b7f9trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com")
     }
 }
