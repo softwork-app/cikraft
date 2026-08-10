@@ -83,7 +83,14 @@ abstract class GeneratePropertiesFeature :
             val task = tasks.register("generateProperties" + stage, GeneratePropertiesTask::class.java) {
                 createdFlows.fileProvider(sapCICreatedFlows)
                 propertiesFiles.fileProvider(propertiesConfiguration)
-                propertiesFolder.convention(layout.contextBuildDirectory.map { it.dir("cikraft/properties$stage") })
+                propertiesFolder.convention(
+                    layout.contextBuildDirectory.map {
+                        val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
+                        it.dir(
+                            "generated/cikraft/$sourceSetName/$stage/kotlin/properties",
+                        )
+                    },
+                )
                 workerClasspath.from(functionsWorkerClasspath)
             }
 

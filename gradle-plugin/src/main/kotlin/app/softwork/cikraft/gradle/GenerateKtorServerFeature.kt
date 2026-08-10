@@ -74,7 +74,12 @@ abstract class GenerateKtorServerFeature :
             val task = tasks.register("generateKtorServer$buildModelName", GenerateKtorServerAPI::class.java) {
                 createdFlows.fileProvider(sapCICreatedFlows)
                 ktorApi.convention(
-                    layout.contextBuildDirectory.map { it.dir("cikraft/api/ktor/server$buildModelName") },
+                    layout.contextBuildDirectory.map {
+                        val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
+                        it.dir(
+                            "generated/cikraft/$sourceSetName/kotlin/ktor/server/routes",
+                        )
+                    },
                 )
                 workerClasspath.from(functionsWorkerClasspath)
             }

@@ -74,7 +74,12 @@ abstract class GenerateKtorResourcesFeature :
             val task = tasks.register("generateKtorResources" + buildModelName, GenerateKtorResources::class.java) {
                 createdFlows.fileProvider(sapCICreatedFlows)
                 ktorApi.convention(
-                    layout.contextBuildDirectory.map { it.dir("cikraft/ktor/api/resources" + buildModelName) },
+                    layout.contextBuildDirectory.map {
+                        val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
+                        it.dir(
+                            "generated/cikraft/$sourceSetName/kotlin/ktor/resources",
+                        )
+                    },
                 )
                 workerClasspath.from(functionsWorkerClasspath)
             }
