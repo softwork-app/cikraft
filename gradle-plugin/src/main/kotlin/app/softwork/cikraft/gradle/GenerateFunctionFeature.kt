@@ -77,7 +77,7 @@ abstract class GenerateFunctionsFeature :
                     layout.contextBuildDirectory.map {
                         val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
                         it.dir(
-                            "generated/cikraft/$sourceSetName/functions",
+                            "generated/cikraft/$sourceSetName/kotlin/functions",
                         )
                     },
                 )

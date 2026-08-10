@@ -87,7 +87,7 @@ abstract class GeneratePropertiesFeature :
                     layout.contextBuildDirectory.map {
                         val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
                         it.dir(
-                            "generated/cikraft/$sourceSetName/$stage/properties",
+                            "generated/cikraft/$sourceSetName/$stage/kotlin/properties",
                         )
                     },
                 )

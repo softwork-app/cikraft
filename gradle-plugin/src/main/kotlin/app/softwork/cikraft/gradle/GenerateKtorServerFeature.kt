@@ -77,7 +77,7 @@ abstract class GenerateKtorServerFeature :
                     layout.contextBuildDirectory.map {
                         val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
                         it.dir(
-                            "generated/cikraft/$sourceSetName/ktor/server/routes",
+                            "generated/cikraft/$sourceSetName/kotlin/ktor/server/routes",
                         )
                     },
                 )

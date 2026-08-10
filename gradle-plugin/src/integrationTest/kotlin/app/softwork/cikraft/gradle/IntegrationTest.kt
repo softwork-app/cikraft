@@ -391,7 +391,7 @@ import io.ktor.resources.Resource
 @Resource(path = "foo/bar/baz")
 public data object IFBa
 """,
-            (projectDir / "client/build/cikraft/main/ktor/api/resources/ip/foo/IFBa.kt").readText(),
+            (projectDir / "client/build/generated/cikraft/main/ktor/resources/ip/foo/IFBa.kt").readText(),
         )
     }
 
