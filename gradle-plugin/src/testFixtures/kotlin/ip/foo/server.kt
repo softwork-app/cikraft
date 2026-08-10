@@ -23,13 +23,13 @@ import kotlin.Int
 import kotlin.String
 import kotlin.uuid.Uuid
 import kotlinx.serialization.builtins.serializer
-import app.softwork.cikraft.ktor.server.runtime.contentType as runtimeContentType
 import io.ktor.server.request.`header` as requestHeader
 import io.ktor.server.request.accept as requestAccept
 import io.ktor.server.request.contentType as requestContentType
 import io.ktor.server.response.`header` as responseHeader
 import io.ktor.server.routing.`header` as routingHeader
 import io.ktor.server.routing.accept as routingAccept
+import io.ktor.server.routing.contentType as routingContentType
 
 public fun Route.IFBa(
   a: String = IFBaConfig.a,
@@ -51,7 +51,7 @@ public fun Route.IFBa(
     }
   }
   routingHeader("X-CSRF-Token", csrfToken) {
-    runtimeContentType(Json) {
+    routingContentType(Json) {
       routingAccept(Json) {
         post<IFBa> {
           val csrfRequestSessionCookie = call.request.cookies["JSESSIONID"]
