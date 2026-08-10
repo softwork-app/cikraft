@@ -75,8 +75,9 @@ abstract class GenerateKtorResourcesFeature :
                 createdFlows.fileProvider(sapCICreatedFlows)
                 ktorApi.convention(
                     layout.contextBuildDirectory.map {
+                        val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
                         it.dir(
-                            "generated/cikraft/${parentBuildModel.sourceDirectorySet.name}/ktor/resources",
+                            "generated/cikraft/$sourceSetName/ktor/resources",
                         )
                     },
                 )

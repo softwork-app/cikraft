@@ -77,8 +77,9 @@ abstract class GenerateClientSetupFeature :
                 createdFlows.fileProvider(sapCICreatedFlows)
                 ktorApi.convention(
                     layout.contextBuildDirectory.map {
+                        val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
                         it.dir(
-                            "generated/cikraft/${parentBuildModel.sourceDirectorySet.name}/ktor/client/setup",
+                            "generated/cikraft/$sourceSetName/kotlin/ktor/client/setup",
                         )
                     },
                 )

@@ -85,8 +85,9 @@ abstract class GeneratePropertiesFeature :
                 propertiesFiles.fileProvider(propertiesConfiguration)
                 propertiesFolder.convention(
                     layout.contextBuildDirectory.map {
+                        val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
                         it.dir(
-                            "generated/cikraft/${parentBuildModel.sourceDirectorySet.name}/$stage/properties",
+                            "generated/cikraft/$sourceSetName/$stage/properties",
                         )
                     },
                 )

@@ -75,8 +75,9 @@ abstract class GenerateFunctionsFeature :
                 createdFlows.fileProvider(sapCICreatedFlows)
                 functionsFolder.convention(
                     layout.contextBuildDirectory.map {
+                        val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
                         it.dir(
-                            "generated/cikraft/${parentBuildModel.sourceDirectorySet.name}/functions",
+                            "generated/cikraft/$sourceSetName/functions",
                         )
                     },
                 )
