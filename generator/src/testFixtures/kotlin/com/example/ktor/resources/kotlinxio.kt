@@ -19,15 +19,15 @@ import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import kotlin.uuid.Uuid
-import app.softwork.cikraft.ktor.server.runtime.contentType as runtimeContentType
 import io.ktor.server.request.`header` as requestHeader
 import io.ktor.server.request.accept as requestAccept
 import io.ktor.server.request.contentType as requestContentType
 import io.ktor.server.response.`header` as responseHeader
 import io.ktor.server.routing.accept as routingAccept
+import io.ktor.server.routing.contentType as routingContentType
 
 public fun Route.BazKotlinxIO(rawNullableMessageLog: MessageLog?) {
-  runtimeContentType(OctetStream) {
+  routingContentType(OctetStream) {
     routingAccept(OctetStream) {
       post<BazKotlinxIO> {
         call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())

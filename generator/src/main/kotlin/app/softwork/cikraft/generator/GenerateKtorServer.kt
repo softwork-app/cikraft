@@ -120,7 +120,7 @@ private fun FunSpec.Builder.addContentType(
     return if (firstInputBody != null) {
         beginControlFlow(
             "%M(%L)",
-            MemberName("app.softwork.cikraft.ktor.server.runtime", "contentType", isExtension = true),
+            MemberName("io.ktor.server.routing", "contentType", isExtension = true),
             firstInputBody.contentNegotiations.map {
                 it.contentTypeKtor(includeParams = false)
             }.joinToCode(),

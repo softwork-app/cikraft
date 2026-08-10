@@ -10,7 +10,6 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import kotlin.test.*
-import kotlin.uuid.*
 
 class GeneratedKtorServerTest {
 

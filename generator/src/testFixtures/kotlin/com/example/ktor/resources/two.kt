@@ -25,13 +25,13 @@ import kotlin.Boolean
 import kotlin.String
 import kotlin.uuid.Uuid
 import kotlinx.serialization.builtins.serializer
-import app.softwork.cikraft.ktor.server.runtime.contentType as runtimeContentType
 import io.ktor.server.request.`header` as requestHeader
 import io.ktor.server.request.accept as requestAccept
 import io.ktor.server.request.contentType as requestContentType
 import io.ktor.server.response.`header` as responseHeader
 import io.ktor.server.routing.`header` as routingHeader
 import io.ktor.server.routing.accept as routingAccept
+import io.ktor.server.routing.contentType as routingContentType
 
 public fun Route.BazTwo(
   ignored: String?,
@@ -51,7 +51,7 @@ public fun Route.BazTwo(
     }
   }
   routingHeader("X-CSRF-Token", csrfToken) {
-    runtimeContentType(Json) {
+    routingContentType(Json) {
       routingAccept(Json) {
         post<BazTwo> {
           val csrfRequestSessionCookie = call.request.cookies["JSESSIONID"]
