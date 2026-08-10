@@ -3,6 +3,7 @@ package app.softwork.cikraft.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyFactory
+import org.gradle.api.attributes.Usage
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
@@ -14,6 +15,7 @@ import org.gradle.features.dsl.bindProjectFeature
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
+import org.gradle.kotlin.dsl.named
 import javax.inject.Inject
 
 @BindsProjectFeature(GenerateClientSetupFeature::class)
@@ -62,8 +64,16 @@ abstract class GenerateClientSetupFeature :
                 extendsFrom(sapciKtorClientSetupWorker)
             }
 
+            val sapCICreatedFlows = configurations.resolvable("cikraftClientSetupCreatedFlow$buildModelName") {
+                fromDependencyCollector(definition.dependencies.infrastructure)
+                attributes {
+                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
+                    attribute(SAPCI.attribute, named(SAPCI.API))
+                }
+            }.flatMap { it.elements }.map { it.single().asFile }
+
             val task = tasks.register("generateKtorClientSetup$buildModelName", GenerateKtorClientSetup::class.java) {
-                createdFlows.set(parentBuildModel.sapCICreatedFlows)
+                createdFlows.fileProvider(sapCICreatedFlows)
                 ktorApi.convention(
                     layout.contextBuildDirectory.map { it.dir("cikraft/ktor/client/setup$buildModelName") },
                 )
@@ -74,4 +84,7 @@ abstract class GenerateClientSetupFeature :
     }
 }
 
-interface GenerateClientSetupDefinition : Definition<BuildModel.None>
+interface GenerateClientSetupDefinition : Definition<BuildModel.None> {
+    @get:Inject
+    val dependencies: IFlowDependencies
+}
