@@ -68,7 +68,7 @@ abstract class OpenApiFeature :
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
                     attribute(SAPCI.attribute, named(SAPCI.API))
                 }
-            }.flatMap { it.elements }.map { it.single().asFile }
+            }
 
             val sapCIWorkerGenerator = configurations.dependencyScope("cikraftOpenApiWorkerGenerator") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
@@ -85,7 +85,7 @@ abstract class OpenApiFeature :
 
             val generateOpenApi = tasks.register("generateOpenApi", GenerateOpenApi::class.java) {
                 workerClasspath.from(sapCIWorkerGeneratorClasspath)
-                createdFlows.fileProvider(flowsFolder)
+                createdFlows.setFrom(flowsFolder)
                 transformers.from(generateOpenApiToolsClasspath)
                 this.title.convention(definition.title)
                 this.apiDescription.convention(definition.description)
