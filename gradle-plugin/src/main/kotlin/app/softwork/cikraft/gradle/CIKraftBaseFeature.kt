@@ -9,8 +9,6 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.PluginManager
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.features.annotations.BindsProjectFeature
-import org.gradle.features.binding.BuildModel
-import org.gradle.features.binding.Definition
 import org.gradle.features.binding.ProjectFeatureApplicationContext
 import org.gradle.features.binding.ProjectFeatureApplyAction
 import org.gradle.features.binding.ProjectFeatureBinding
@@ -32,10 +30,11 @@ abstract class CIKraftBaseFeature :
     override fun bind(builder: ProjectFeatureBindingBuilder) {
         builder.bindProjectFeature("cikraft", ApplyAction::class)
             .withUnsafeApplyAction()
+            .withBuildModelImplementationType(DefaultSAPCIGeneratorBuildModel::class.java)
     }
 
     abstract class ApplyAction :
-        ProjectFeatureApplyAction<CiKraftBaseDefinition, BuildModel.None, JvmApplicationProjectType> {
+        ProjectFeatureApplyAction<CiKraftBaseDefinition, SAPCIGeneratorBuildModel, JvmApplicationProjectType> {
         @get:Inject
         abstract val pluginManager: PluginManager
 
@@ -58,9 +57,11 @@ abstract class CIKraftBaseFeature :
         override fun apply(
             context: ProjectFeatureApplicationContext,
             definition: CiKraftBaseDefinition,
-            buildModel: BuildModel.None,
+            buildModel: SAPCIGeneratorBuildModel,
             parentDefinition: JvmApplicationProjectType,
         ) {
+            val parentBuildModel = context.getBuildModel(parentDefinition)
+
             pluginManager.apply(SapCIKotlinPlugin::class.java) // Needed because KGP uses afterEvaluate to setup compiler plugins
 
             pluginManager.apply("com.google.devtools.ksp")
@@ -96,8 +97,12 @@ abstract class CIKraftBaseFeature :
             tasks.named("processResources", ProcessResources::class) {
                 exclude("cikraft/entrypoint.json")
             }
+
+            buildModel as DefaultSAPCIGeneratorBuildModel
+            buildModel.internalName = ""
+            buildModel.sourceDirectorySet = parentBuildModel.compilationUnits.getByName("main").sources
         }
     }
 }
 
-interface CiKraftBaseDefinition : Definition<BuildModel.None>
+interface CiKraftBaseDefinition : SAPCIGeneratorDefinition

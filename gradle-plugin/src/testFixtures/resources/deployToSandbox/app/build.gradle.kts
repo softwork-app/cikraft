@@ -44,7 +44,7 @@ jvmApplication {
                                 description = "API Test - Automatic PR"
 
                                 dependencies {
-                                    implementation(projects.app)
+                                    implementation(project())
                                 }
                                 r8 {
 

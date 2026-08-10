@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.attributes.Usage
+import org.gradle.api.tasks.Nested
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
@@ -27,6 +28,7 @@ abstract class GenerateClientSetupFeature :
     override fun bind(builder: ProjectFeatureBindingBuilder) {
         builder.bindProjectFeature("generateKtorClientSetup", ApplyAction::class)
             .withUnsafeApplyAction()
+            .withUnsafeDefinition()
     }
 
     abstract class ApplyAction :
@@ -52,16 +54,15 @@ abstract class GenerateClientSetupFeature :
             val parentBuildModel = context.getBuildModel(parentDefinition)
             val buildModelName = parentBuildModel.name
 
-            val sapciKtorClientSetupWorker = configurations.dependencyScope(
+            val workerDeps = configurations.dependencyScope(
                 "cikraftKtorClientSetupWorker$buildModelName",
             ) {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
             }
-
             val functionsWorkerClasspath = configurations.resolvable(
                 "cikraftKtorClientSetupWorkerClasspath$buildModelName",
             ) {
-                extendsFrom(sapciKtorClientSetupWorker)
+                extendsFrom(workerDeps)
             }
 
             val sapCICreatedFlows = configurations.resolvable("cikraftClientSetupCreatedFlow$buildModelName") {
@@ -85,6 +86,6 @@ abstract class GenerateClientSetupFeature :
 }
 
 interface GenerateClientSetupDefinition : Definition<BuildModel.None> {
-    @get:Inject
+    @get:Nested
     val dependencies: IFlowDependencies
 }

@@ -7,7 +7,7 @@ jvmApplication {
     }
   }
 
-  iflow {
+  cikraft {
 
   }
 

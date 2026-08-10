@@ -4,7 +4,7 @@ jvmApplication {
     implementation(projects.fault)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.resources)
-    implementation(ciKraftLibs.ktorServerRuntime)
+    implementation(cikraftLibs.ktorServerRuntime)
   }
 
   cikraft {

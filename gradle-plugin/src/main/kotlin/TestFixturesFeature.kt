@@ -15,7 +15,9 @@ import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmAp
 import javax.inject.Inject
 
 @BindsProjectFeature(TestFixturesFeature::class)
-abstract class TestFixturesFeature : Plugin<Project>, ProjectFeatureBinding {
+abstract class TestFixturesFeature :
+    Plugin<Project>,
+    ProjectFeatureBinding {
     override fun apply(target: Project) {}
     override fun bind(builder: ProjectFeatureBindingBuilder) {
         builder.bindProjectFeature("testFixtures", ApplyAction::class)
@@ -28,8 +30,6 @@ abstract class TestFixturesFeature : Plugin<Project>, ProjectFeatureBinding {
         private val pluginManager: PluginManager,
         private val configurations: ConfigurationContainer,
     ) : ProjectFeatureApplyAction<TestFixturesDefinition, BuildModel.None, JvmApplicationProjectType> {
-
-
         override fun apply(
             context: ProjectFeatureApplicationContext,
             definition: TestFixturesDefinition,

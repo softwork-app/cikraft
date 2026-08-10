@@ -13,7 +13,6 @@ import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
 import org.gradle.kotlin.dsl.named
-import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationProjectType
 import javax.inject.Inject
 
 @BindsProjectFeature(InfrastructureFeature::class)

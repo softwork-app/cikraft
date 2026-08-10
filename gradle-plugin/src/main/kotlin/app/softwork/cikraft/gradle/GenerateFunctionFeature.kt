@@ -28,6 +28,7 @@ abstract class GenerateFunctionsFeature :
     override fun bind(builder: ProjectFeatureBindingBuilder) {
         builder.bindProjectFeature("generateFunctions", ApplyAction::class)
             .withUnsafeApplyAction()
+            .withUnsafeDefinition()
     }
 
     abstract class ApplyAction :
@@ -53,13 +54,13 @@ abstract class GenerateFunctionsFeature :
             val parentBuildModel = context.getBuildModel(parentDefinition)
             val buildModelName = parentBuildModel.name
 
-            val functionsWorker = configurations.dependencyScope("cikraftFunctionsWorker$buildModelName") {
+            val workerDeps = configurations.dependencyScope("cikraftFunctionsWorker$buildModelName") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
             }
             val functionsWorkerClasspath = configurations.resolvable(
                 "cikraftFunctionsWorkerClasspath$buildModelName",
             ) {
-                extendsFrom(functionsWorker)
+                extendsFrom(workerDeps)
             }
 
             val sapCICreatedFlows = configurations.resolvable("cikraftFunctionsCreatedFlow$buildModelName") {
@@ -71,7 +72,7 @@ abstract class GenerateFunctionsFeature :
             }.flatMap { it.elements }.map { it.single().asFile }
 
             val task = tasks.register("generateFunctions$buildModelName", GenerateFunctionsTask::class.java) {
-                this.createdFlows.fileProvider(sapCICreatedFlows)
+                createdFlows.fileProvider(sapCICreatedFlows)
                 functionsFolder.convention(
                     layout.contextBuildDirectory.map { it.dir("cikraft/functions$buildModelName") },
                 )

@@ -5,6 +5,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.attributes.Usage
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Nested
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
@@ -28,6 +29,7 @@ abstract class GeneratePropertiesFeature :
     override fun bind(builder: ProjectFeatureBindingBuilder) {
         builder.bindProjectFeature("generateProperties", ApplyAction::class)
             .withUnsafeApplyAction()
+            .withUnsafeDefinition()
     }
 
     abstract class ApplyAction :
@@ -53,26 +55,34 @@ abstract class GeneratePropertiesFeature :
             val parentBuildModel = context.getBuildModel(parentDefinition)
             val stage = definition.stage.get()
 
-            val propertiesConfiguration = configurations.resolvable("cikraftInfrastructureProperties" + stage) {
-                fromDependencyCollector(parentDefinition.dependencies.infrastructure)
+            val propertiesConfiguration = configurations.resolvable("cikraftInfrastructureProperties$stage") {
+                fromDependencyCollector(definition.dependencies.infrastructure)
                 attributes {
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
                     attribute(SAPCI.attribute, named(SAPCI.STAGE_PROPERTIES))
                     attribute(SAPCIStage.attribute, named(stage))
                 }
-            }
+            }.flatMap { it.elements.map { it.single().asFile } }
 
-            val functionsWorker = configurations.dependencyScope("cikraftPropertiesWorker" + stage) {
+            val functionsWorker = configurations.dependencyScope("cikraftPropertiesWorker$stage") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:flow-dsl:$VERSION"))
             }
-            val functionsWorkerClasspath = configurations.resolvable("cikraftPropertiesWorkerClasspath" + stage) {
+            val functionsWorkerClasspath = configurations.resolvable("cikraftPropertiesWorkerClasspath$stage") {
                 extendsFrom(functionsWorker)
             }
 
+            val sapCICreatedFlows = configurations.resolvable("cikraftGeneratePropertiesCreatedFlow$stage") {
+                fromDependencyCollector(definition.dependencies.infrastructure)
+                attributes {
+                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
+                    attribute(SAPCI.attribute, named(SAPCI.API))
+                }
+            }.flatMap { it.elements }.map { it.single().asFile }
+
             val task = tasks.register("generateProperties" + stage, GeneratePropertiesTask::class.java) {
-                createdFlows.set(parentBuildModel.sapCICreatedFlows)
-                propertiesFiles.fileProvider(propertiesConfiguration.flatMap { it.elements.map { it.single().asFile } })
+                createdFlows.fileProvider(sapCICreatedFlows)
+                propertiesFiles.fileProvider(propertiesConfiguration)
                 propertiesFolder.convention(layout.contextBuildDirectory.map { it.dir("cikraft/properties$stage") })
                 workerClasspath.from(functionsWorkerClasspath)
             }
@@ -83,5 +93,8 @@ abstract class GeneratePropertiesFeature :
 }
 
 interface GeneratePropertiesDefinition : Definition<BuildModel.None> {
+    @get:Nested
+    val dependencies: IFlowDependencies
+
     val stage: Property<String>
 }
