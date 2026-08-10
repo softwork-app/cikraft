@@ -1,36 +1,38 @@
 jvmApplication {
-    ciKraftInfrastructure {
-        apiStages {
-            apiStage("Dev") {
-                apiServer = "foo"
-                authServer = "bar"
-                httpServer = "localhost"
-                web = "localhost"
+    cikraft {
+        infrastructure {
+            apiStages {
+                apiStage("Dev") {
+                    apiServer = "foo"
+                    authServer = "bar"
+                    httpServer = "localhost"
+                    web = "localhost"
+                }
             }
-        }
-        transportStages {
-            transportStage("Prd") {
-                httpServer = "prodHost"
-                web = "localhost"
+            transportStages {
+                transportStage("Prd") {
+                    httpServer = "prodHost"
+                    web = "localhost"
+                }
             }
-        }
 
-        httpNamespace = "foo"
-        suffix = providers.gradleProperty("suffix")
+            httpNamespace = "foo"
+            suffix = providers.gradleProperty("suffix")
 
-        integrationArtifacts {
-            integrationPackages {
-                integrationPackage("IP_Foo") {
-                    description = "Foo test"
+            integrationArtifacts {
+                integrationPackages {
+                    integrationPackage("IP_Foo") {
+                        description = "Foo test"
 
 
-                    integrationFlows {
-                        integrationFlow("IF_Ba") {
+                        integrationFlows {
+                            integrationFlow("IF_Ba") {
 
-                            description = "Ba test"
+                                description = "Ba test"
 
-                            dependencies {
-                                implementation(projects.app)
+                                dependencies {
+                                    implementation(projects.app)
+                                }
                             }
                         }
                     }

@@ -1,19 +1,14 @@
 package app.softwork.cikraft.gradle
 
-import org.gradle.api.NamedDomainObjectProvider
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ConfigurationContainer
-import org.gradle.api.artifacts.ResolvableConfiguration
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.attributes.Usage
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.PluginManager
-import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.features.annotations.BindsProjectFeature
-import org.gradle.features.binding.BuildModel
-import org.gradle.features.binding.Definition
 import org.gradle.features.binding.ProjectFeatureApplicationContext
 import org.gradle.features.binding.ProjectFeatureApplyAction
 import org.gradle.features.binding.ProjectFeatureBinding
@@ -27,20 +22,19 @@ import org.gradle.language.jvm.tasks.ProcessResources
 import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationProjectType
 import javax.inject.Inject
 
-@BindsProjectFeature(KotlinJvmIFlowFeature::class)
-abstract class KotlinJvmIFlowFeature :
+@BindsProjectFeature(CIKraftBaseFeature::class)
+abstract class CIKraftBaseFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(project: Project) {}
     override fun bind(builder: ProjectFeatureBindingBuilder) {
-        builder.bindProjectFeature("iflow", ApplyAction::class)
+        builder.bindProjectFeature("cikraft", ApplyAction::class)
             .withUnsafeApplyAction()
-            .withUnsafeDefinition()
-            .withBuildModelImplementationType(DefaultIFlowBuildModel::class.java)
+            .withBuildModelImplementationType(DefaultSAPCIGeneratorBuildModel::class.java)
     }
 
     abstract class ApplyAction :
-        ProjectFeatureApplyAction<IFlowDefinition, IFlowBuildModel, JvmApplicationProjectType> {
+        ProjectFeatureApplyAction<CiKraftBaseDefinition, SAPCIGeneratorBuildModel, JvmApplicationProjectType> {
         @get:Inject
         abstract val pluginManager: PluginManager
 
@@ -62,19 +56,11 @@ abstract class KotlinJvmIFlowFeature :
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
-            definition: IFlowDefinition,
-            buildModel: IFlowBuildModel,
+            definition: CiKraftBaseDefinition,
+            buildModel: SAPCIGeneratorBuildModel,
             parentDefinition: JvmApplicationProjectType,
         ) {
-            buildModel as DefaultIFlowBuildModel
-
-            buildModel.sapCIInfrastructureApi = configurations.resolvable("cikraftInfrastructureApi") {
-                fromDependencyCollector(definition.dependencies.infrastructure)
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                    attribute(SAPCI.attribute, named(SAPCI.API))
-                }
-            }
+            val parentBuildModel = context.getBuildModel(parentDefinition)
 
             pluginManager.apply(SapCIKotlinPlugin::class.java) // Needed because KGP uses afterEvaluate to setup compiler plugins
 
@@ -111,19 +97,12 @@ abstract class KotlinJvmIFlowFeature :
             tasks.named("processResources", ProcessResources::class) {
                 exclude("cikraft/entrypoint.json")
             }
+
+            buildModel as DefaultSAPCIGeneratorBuildModel
+            buildModel.internalName = ""
+            buildModel.sourceDirectorySet = parentBuildModel.compilationUnits.getByName("main").sources
         }
     }
 }
 
-interface IFlowDefinition : Definition<IFlowBuildModel> {
-    @get:Nested
-    val dependencies: IFlowDependencies
-}
-
-interface IFlowBuildModel : BuildModel {
-    val sapCIInfrastructureApi: NamedDomainObjectProvider<ResolvableConfiguration>
-}
-
-abstract class DefaultIFlowBuildModel : IFlowBuildModel {
-    override lateinit var sapCIInfrastructureApi: NamedDomainObjectProvider<ResolvableConfiguration>
-}
+interface CiKraftBaseDefinition : SAPCIGeneratorDefinition

@@ -284,6 +284,18 @@ class IntegrationTest {
     }
 
     @Test
+    fun createOpenApiPerModule() {
+        val projectDir = fixtureDir / "resources" / "createOpenApiPerModule"
+
+        createRunner(projectDir, ":consumer:myCustomTask", ":app:generateOpenApi", "--stacktrace").build()
+
+        assertEquals(
+            IntegrationTest::class.java.getResourceAsStream("/openapi-app.json")!!.bufferedReader().readText(),
+            (projectDir / "app/build/cikraft/openapi.json").readText(),
+        )
+    }
+
+    @Test
     fun createOpenApiWithMap() {
         val projectDir = fixtureDir / "resources" / "createOpenApiWithMap"
 

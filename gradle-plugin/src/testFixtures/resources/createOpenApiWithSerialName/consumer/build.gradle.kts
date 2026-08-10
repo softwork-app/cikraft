@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    ciKraftInfrastructure(projects.infra)
+    cikraftInfrastructure(projects.infra)
 }
 
 abstract class MyCustomTask: DefaultTask() {
@@ -15,6 +15,6 @@ abstract class MyCustomTask: DefaultTask() {
     fun run() {}
 }
 
-val myCustomTask by tasks.registering(MyCustomTask::class) {
-    openAPIFiles.from(configurations.ciKraftOpenAPI)
+val myCustomTask = tasks.register("myCustomTask", MyCustomTask::class) {
+    openAPIFiles.from(configurations.cikraftOpenAPI)
 }

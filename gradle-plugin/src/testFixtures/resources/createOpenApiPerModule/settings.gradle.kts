@@ -1,0 +1,86 @@
+pluginManagement {
+    includeBuild("../../../../../gradle/build-logic")
+    includeBuild("../../../../../")
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        exclusiveContent {
+            forRepository {
+                maven {
+                    setUrl(
+                        "https://maven.pkg.github.com/Kotlin/declarative-gradle-jetbrains-ecosystem-plugin"
+                    )
+                    name = "KDGP"
+                    credentials(org.gradle.api.credentials.PasswordCredentials::class)
+                }
+            }
+            filter {
+                includeGroupAndSubgroups("org.jetbrains.ecosystem")
+            }
+        }
+    }
+}
+
+plugins {
+    id("myRepos")
+    id("org.jetbrains.ecosystem").version("0.97.0")
+    id("app.softwork.cikraft.ecosystem")
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+    }
+    versionCatalogs.register("libs") {
+        from(files("../../../../../gradle/libs.versions.toml"))
+    }
+}
+
+rootProject.name = "createOpenApi"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+
+includeBuild("../../../../../")
+
+include(":core")
+include(":api")
+
+include(":app")
+include(":bar")
+
+include(":consumer")
+
+defaults {
+    jvmApplication {
+        cikraft {
+            infrastructure {
+                apiStages {
+                    apiStage("Dev") {
+                        apiServer = "foo"
+                        authServer = "bar"
+                        httpServer = "https://localhost"
+                        web = "localhost"
+                    }
+                }
+                httpNamespace = "/foo"
+
+                integrationArtifacts {
+                    integrationPackages {
+                        integrationPackage("Com_Example_Ktor_Resources") {
+                            description = "A Description"
+                        }
+                        integrationPackage("Bar") {
+                            description = "Bar Description"
+                        }
+                    }
+
+                    openApi {
+                        title = "New IP"
+                        description = "IP Description"
+                    }
+                }
+            }
+        }
+    }
+}

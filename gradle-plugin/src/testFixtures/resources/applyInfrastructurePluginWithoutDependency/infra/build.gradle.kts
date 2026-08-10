@@ -1,28 +1,30 @@
 jvmApplication {
-    ciKraftInfrastructure {
-        suffix = providers.gradleProperty("suffix")
+    cikraft {
+        infrastructure {
+            suffix = providers.gradleProperty("suffix")
 
-        apiStages {
-            apiStage("Dev") {
-                apiServer = "foo"
-                authServer = "bar"
-                httpServer = "localhost"
-                web = "localhost"
+            apiStages {
+                apiStage("Dev") {
+                    apiServer = "foo"
+                    authServer = "bar"
+                    httpServer = "localhost"
+                    web = "localhost"
+                }
             }
-        }
 
-        httpNamespace = "foo"
+            httpNamespace = "foo"
 
-        integrationArtifacts {
-            integrationPackages {
-                integrationPackage("IP_Foo") {
-                    description = "Foo test"
+            integrationArtifacts {
+                integrationPackages {
+                    integrationPackage("IP_Foo") {
+                        description = "Foo test"
 
 
-                    integrationFlows {
-                        integrationFlow("IF_Bar") {
+                        integrationFlows {
+                            integrationFlow("IF_Bar") {
 
-                            description = "Bar test"
+                                description = "Bar test"
+                            }
                         }
                     }
                 }

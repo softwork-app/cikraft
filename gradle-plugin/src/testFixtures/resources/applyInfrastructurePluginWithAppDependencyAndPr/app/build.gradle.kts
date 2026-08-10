@@ -11,35 +11,33 @@ jvmApplication {
         implementation(libs.serialization.json)
     }
 
-    iflow {
+    cikraft {
+        infrastructure {
+            suffix = providers.gradleProperty("suffix")
 
-    }
-
-    ciKraftInfrastructure {
-        suffix = providers.gradleProperty("suffix")
-
-        apiStages {
-            apiStage("Dev") {
-                apiServer = "foo"
-                authServer = "bar"
-                httpServer = "localhost"
-                web = "localhost/shell/home"
+            apiStages {
+                apiStage("Dev") {
+                    apiServer = "foo"
+                    authServer = "bar"
+                    httpServer = "localhost"
+                    web = "localhost/shell/home"
+                }
             }
-        }
 
-        httpNamespace = "foo"
+            httpNamespace = "foo"
 
-        integrationArtifacts {
-            integrationPackages {
-                integrationPackage("IP_Foo") {
-                    description = "Foo test"
+            integrationArtifacts {
+                integrationPackages {
+                    integrationPackage("IP_Foo") {
+                        description = "Foo test"
 
-                    integrationFlows {
-                        integrationFlow("IF_Ba") {
-                            description = "Ba test"
+                        integrationFlows {
+                            integrationFlow("IF_Ba") {
+                                description = "Ba test"
 
-                            dependencies {
-                                implementation(projects.app)
+                                dependencies {
+                                    implementation(projects.app)
+                                }
                             }
                         }
                     }

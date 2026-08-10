@@ -3,7 +3,8 @@ package app.softwork.cikraft.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyFactory
-import org.gradle.api.provider.ListProperty
+import org.gradle.api.attributes.Usage
+import org.gradle.api.tasks.Nested
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
@@ -15,6 +16,7 @@ import org.gradle.features.dsl.bindProjectFeature
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
+import org.gradle.kotlin.dsl.named
 import javax.inject.Inject
 
 @BindsProjectFeature(GenerateFunctionsFeature::class)
@@ -26,6 +28,7 @@ abstract class GenerateFunctionsFeature :
     override fun bind(builder: ProjectFeatureBindingBuilder) {
         builder.bindProjectFeature("generateFunctions", ApplyAction::class)
             .withUnsafeApplyAction()
+            .withUnsafeDefinition()
     }
 
     abstract class ApplyAction :
@@ -51,20 +54,27 @@ abstract class GenerateFunctionsFeature :
             val parentBuildModel = context.getBuildModel(parentDefinition)
             val buildModelName = parentBuildModel.name
 
-            val functionsWorker = configurations.dependencyScope("cikraftFunctionsWorker" + buildModelName) {
+            val workerDeps = configurations.dependencyScope("cikraftFunctionsWorker$buildModelName") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
             }
             val functionsWorkerClasspath = configurations.resolvable(
-                "cikraftFunctionsWorkerClasspath" + buildModelName,
+                "cikraftFunctionsWorkerClasspath$buildModelName",
             ) {
-                extendsFrom(functionsWorker)
+                extendsFrom(workerDeps)
             }
 
-            val task = tasks.register("generateFunctions" + buildModelName, GenerateFunctionsTask::class.java) {
-                createdFlows.set(parentBuildModel.sapCICreatedFlows)
-                this.functions.set(definition.functions)
+            val sapCICreatedFlows = configurations.resolvable("cikraftFunctionsCreatedFlow$buildModelName") {
+                fromDependencyCollector(definition.dependencies.infrastructure)
+                attributes {
+                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
+                    attribute(SAPCI.attribute, named(SAPCI.API))
+                }
+            }.flatMap { it.elements }.map { it.single().asFile }
+
+            val task = tasks.register("generateFunctions$buildModelName", GenerateFunctionsTask::class.java) {
+                createdFlows.fileProvider(sapCICreatedFlows)
                 functionsFolder.convention(
-                    layout.contextBuildDirectory.map { it.dir("cikraft/functions" + buildModelName) },
+                    layout.contextBuildDirectory.map { it.dir("cikraft/functions$buildModelName") },
                 )
                 workerClasspath.from(functionsWorkerClasspath)
             }
@@ -74,5 +84,6 @@ abstract class GenerateFunctionsFeature :
 }
 
 interface GenerateFunctionsDefinition : Definition<BuildModel.None> {
-    val functions: ListProperty<String>
+    @get:Nested
+    val dependencies: IFlowDependencies
 }

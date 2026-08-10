@@ -7,7 +7,6 @@ import app.softwork.cikraft.generator.*
 import kotlinx.serialization.json.Json
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
@@ -16,7 +15,7 @@ import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
@@ -52,9 +51,9 @@ abstract class GenerateOpenApi : DefaultTask() {
         openApiFile.convention(project.layout.buildDirectory.file("cikraft/openapi.json"))
     }
 
-    @get:InputDirectory
+    @get:InputFiles
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val createdFlows: DirectoryProperty
+    abstract val createdFlows: ConfigurableFileCollection
 
     @get:Input
     abstract val title: Property<String>
@@ -89,7 +88,7 @@ abstract class GenerateOpenApi : DefaultTask() {
         workerExecutor.classLoaderIsolation {
             classpath.from(workerClasspath, transformers)
         }.submit(GenerateOpenApiWorker::class) {
-            this.createdFlows.set(this@GenerateOpenApi.createdFlows)
+            this.createdFlows.setFrom(this@GenerateOpenApi.createdFlows.asFileTree)
             this.openApiFile.set(this@GenerateOpenApi.openApiFile)
             this.name.set(this@GenerateOpenApi.title)
             this.description.set(this@GenerateOpenApi.apiDescription)
@@ -108,7 +107,7 @@ abstract class GenerateOpenApi : DefaultTask() {
 
     internal abstract class GenerateOpenApiWorker : WorkAction<GenerateOpenApiWorker.Parameters> {
         interface Parameters : WorkParameters {
-            val createdFlows: DirectoryProperty
+            val createdFlows: ConfigurableFileCollection
             val openApiFile: RegularFileProperty
             val name: Property<String>
             val description: Property<String>
@@ -127,7 +126,7 @@ abstract class GenerateOpenApi : DefaultTask() {
 
             val openApi = generateOpenApi(
                 infrastructure = OpenApiInfrastructure(
-                    apis = parameters.createdFlows.get().asFile.listFiles().map {
+                    apis = parameters.createdFlows.map {
                         json.decodeFromString(
                             CreatedFlow.serializer(),
                             it.readText(),

@@ -32,5 +32,4 @@ interface SAPCIInfrastructureBuildModel : BuildModel {
 internal abstract class DefaultSAPCIInfrastructureBuildModel : SAPCIInfrastructureBuildModel {
     abstract override val suffix: Property<String>
     abstract override val httpSuffix: Property<String>
-    override lateinit var compilationUnits: NamedDomainObjectContainer<JvmCompilationUnit>
 }

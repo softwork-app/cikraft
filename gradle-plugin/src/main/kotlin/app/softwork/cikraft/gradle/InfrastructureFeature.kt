@@ -13,7 +13,6 @@ import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
 import org.gradle.kotlin.dsl.named
-import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationProjectType
 import javax.inject.Inject
 
 @BindsProjectFeature(InfrastructureFeature::class)
@@ -22,12 +21,12 @@ abstract class InfrastructureFeature :
     ProjectFeatureBinding {
     override fun apply(project: Project) {}
     override fun bind(builder: ProjectFeatureBindingBuilder) {
-        builder.bindProjectFeature("ciKraftInfrastructure", ApplyAction::class)
+        builder.bindProjectFeature("infrastructure", ApplyAction::class)
             .withBuildModelImplementationType(DefaultSAPCIInfrastructureBuildModel::class.java)
     }
 
     abstract class ApplyAction :
-        ProjectFeatureApplyAction<SAPCIInfrastructureDefinition, SAPCIInfrastructureBuildModel, JvmApplicationProjectType> {
+        ProjectFeatureApplyAction<SAPCIInfrastructureDefinition, SAPCIInfrastructureBuildModel, CiKraftBaseDefinition> {
         @get:Inject
         abstract val configurations: ConfigurationRegistrar
 
@@ -39,7 +38,7 @@ abstract class InfrastructureFeature :
             context: ProjectFeatureApplicationContext,
             definition: SAPCIInfrastructureDefinition,
             buildModel: SAPCIInfrastructureBuildModel,
-            parentDefinition: JvmApplicationProjectType,
+            parentDefinition: CiKraftBaseDefinition,
         ) {
             buildModel as DefaultSAPCIInfrastructureBuildModel
             buildModel.suffix.set(definition.suffix)
@@ -47,9 +46,6 @@ abstract class InfrastructureFeature :
 
             buildModel.apiStages.addAll(definition.apiStages)
             buildModel.transportStages.addAll(definition.transportStages)
-
-            val parentBuildModel = context.getBuildModel(parentDefinition)
-            buildModel.compilationUnits = parentBuildModel.compilationUnits
 
             // workaround until Gradle provider migration for Test.environment
             val writeStages = tasks.register("writeStages", WriteStages::class.java) {
