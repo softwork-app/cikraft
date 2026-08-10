@@ -415,6 +415,7 @@ public data object IFBa
         createRunner(
             projectDir,
             "assemble",
+            ":server:testClasses",
             "-Psuffix=/pr/42",
             "--stacktrace",
         ).build()
@@ -436,12 +437,12 @@ import io.ktor.resources.Resource
 @Resource(path = "foo/bar/baz")
 public data object IFBa
 """,
-            (projectDir / "server/build/cikraft/ktor/api/resources/ip/foo/IFBa.kt").readText(),
+            (projectDir / "server/build/generated/cikraft/testFixtures kotlin/ktor/resources/ip/foo/IFBa.kt").readText(),
         )
 
         assertEquals(
             (fixtureDir / "kotlin/ip/foo/server.kt").readText(),
-            (projectDir / "server/build/cikraft/api/ktor/server/ip/foo/IFBa.kt").readText(),
+            (projectDir / "server/build/generated/cikraft/test kotlin/ktor/server/routes/ip/foo/IFBa.kt").readText(),
         )
     }
 

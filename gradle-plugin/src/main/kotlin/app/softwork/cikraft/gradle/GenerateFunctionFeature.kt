@@ -74,7 +74,11 @@ abstract class GenerateFunctionsFeature :
             val task = tasks.register("generateFunctions$buildModelName", GenerateFunctionsTask::class.java) {
                 createdFlows.fileProvider(sapCICreatedFlows)
                 functionsFolder.convention(
-                    layout.contextBuildDirectory.map { it.dir("cikraft/functions$buildModelName") },
+                    layout.contextBuildDirectory.map {
+                        it.dir(
+                            "generated/cikraft/${parentBuildModel.sourceDirectorySet.name}/functions",
+                        )
+                    },
                 )
                 workerClasspath.from(functionsWorkerClasspath)
             }

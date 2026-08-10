@@ -76,7 +76,11 @@ abstract class GenerateClientSetupFeature :
             val task = tasks.register("generateKtorClientSetup$buildModelName", GenerateKtorClientSetup::class.java) {
                 createdFlows.fileProvider(sapCICreatedFlows)
                 ktorApi.convention(
-                    layout.contextBuildDirectory.map { it.dir("cikraft/ktor/client/setup$buildModelName") },
+                    layout.contextBuildDirectory.map {
+                        it.dir(
+                            "generated/cikraft/${parentBuildModel.sourceDirectorySet.name}/ktor/client/setup",
+                        )
+                    },
                 )
                 workerClasspath.from(functionsWorkerClasspath)
             }
