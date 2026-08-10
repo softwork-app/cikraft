@@ -1,7 +1,6 @@
 package app.softwork.cikraft.gradle
 
 import JvmDclTestSuite
-import JvmDclTestSuiteBuildModel
 import org.gradle.api.Named
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -14,8 +13,6 @@ import org.gradle.features.binding.ProjectFeatureApplyAction
 import org.gradle.features.binding.ProjectFeatureBinding
 import org.gradle.features.binding.ProjectFeatureBindingBuilder
 import org.gradle.features.dsl.bindProjectFeature
-import org.gradle.features.registration.ConfigurationRegistrar
-import javax.inject.Inject
 
 @BindsProjectFeature(SAPCIGeneratorTestSuiteWrapper::class)
 abstract class SAPCIGeneratorTestSuiteWrapper :
@@ -26,7 +23,8 @@ abstract class SAPCIGeneratorTestSuiteWrapper :
         builder.bindProjectFeature("cikraft", JvmDclTestSuiteApplyAction::class)
     }
 
-    abstract class JvmDclTestSuiteApplyAction : ProjectFeatureApplyAction<SAPCIGeneratorDefinition, SAPCIGeneratorBuildModel, JvmDclTestSuite> {
+    abstract class JvmDclTestSuiteApplyAction :
+        ProjectFeatureApplyAction<SAPCIGeneratorDefinition, SAPCIGeneratorBuildModel, JvmDclTestSuite> {
         override fun apply(
             context: ProjectFeatureApplicationContext,
             definition: SAPCIGeneratorDefinition,
