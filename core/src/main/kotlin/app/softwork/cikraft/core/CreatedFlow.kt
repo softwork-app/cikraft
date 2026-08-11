@@ -30,8 +30,5 @@ public data class CreatedFlow(
     }
 
     @Serializable
-    public data class ExceptionHandler(
-        val scripts: List<Script>,
-        val injectedScripts: List<Script>,
-    )
+    public data class ExceptionHandler(val scripts: List<Script>, val injectedScripts: List<Script>)
 }

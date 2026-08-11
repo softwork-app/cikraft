@@ -152,7 +152,7 @@ private fun paths(
             csrfOperation(
                 api = api,
                 sender = sender,
-                errorBody = lastScript?.error?.bodyOutput  ?: api.exceptionHandler?.scripts?.firstOrNull {
+                errorBody = lastScript?.error?.bodyOutput ?: api.exceptionHandler?.scripts?.firstOrNull {
                     it.error != null
                 }?.error?.bodyOutput,
             )

@@ -94,7 +94,7 @@ public class IntegrationFlowBuilder(
                         scripts.singleOrNull { it.name == userInjectedScript }
                     },
                 )
-            }
+            },
         )
 
         if (outputFolder != null) {
