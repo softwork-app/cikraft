@@ -7,6 +7,7 @@ import createdTypedEnumFlow
 import createdTypedFlow
 import createdTypedListFlow
 import createdTypedMapFlow
+import fooExceptionFlow
 import fooFlow
 import io.github.hfhbd.kfx.codegen.CodeGenTree.NormalClass
 import kotlinx.serialization.json.*
@@ -40,6 +41,30 @@ class GenerateOpenApiKtTest {
                     OpenApiInfrastructure(
                         apis = listOf(
                             fooFlow,
+                        ),
+                        name = "New IP",
+                        description = "IP Description",
+                        version = "1.0.0",
+                        servers = mapOf(
+                            "https://localhost/foo" to null,
+                        ),
+                        tags = mapOf("Com_Example_Ktor_Resources" to "A Description"),
+                        packages = emptySet(),
+                    ),
+                ),
+            ) + "\n",
+        )
+    }
+
+    @Test
+    fun exceptionHandler() {
+        assertEquals(
+            GenerateOpenApiKtTest::class.java.getResourceAsStream("/exception.json")!!.bufferedReader().readText(),
+            json.encodeToString(
+                generateOpenApi(
+                    OpenApiInfrastructure(
+                        apis = listOf(
+                            fooExceptionFlow,
                         ),
                         name = "New IP",
                         description = "IP Description",

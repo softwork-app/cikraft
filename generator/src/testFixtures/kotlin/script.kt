@@ -190,6 +190,141 @@ public val fooScript = Script(
     error = fault,
 )
 
+public val fooExceptionScript = Script(
+    name = "foo",
+    jvmFunction = "com.example.FooKt.foo",
+    isSuspend = false,
+    inputs = listOf(
+        Body(
+            propertyName = "body",
+            klass = NormalClass(
+                "com.example",
+                listOf("FooInput"),
+                members = listOf(
+                    Member(
+                        name = "s",
+                        type = Builtin.STRING,
+                        documentation = "asdf",
+                    ),
+                ),
+                documentation = "Foo input sample",
+                annotations = listOf(
+                    CodeGenTree.Annotation(
+                        packageName = "kotlinx.serialization",
+                        names = listOf("Serializable"),
+                        values = mapOf(
+                            "with" to ClassLiteral(
+                                ClassName(
+                                    "kotlinx.serialization", listOf("KSerializer"),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            sealedSubClasses = setOf(),
+            contentNegotiations = listOf(
+                Body.ContentNegotiation(
+                    factoryKlass = NormalClass("com.example", listOf("JsonFactory"), isStatic = true),
+                    contentType = "application/json",
+                    parameters = mapOf("charset" to "utf-8"),
+                ),
+            ),
+            documentation = null,
+            nullable = false,
+        ),
+        Header(name = "B", propertyName = "b", klass = Builtin.STRING, nullable = true, documentation = "some Header"),
+        Password(propertyName = "c", documentation = "Foo", nullable = false),
+        Password(
+            propertyName = "d",
+            documentation = null,
+            nullable = false,
+        ),
+        Parameter(
+            propertyName = "e",
+            klass = Builtin.INT,
+            nullable = true,
+            documentation = null,
+        ),
+        None(
+            propertyName = "km",
+            documentation = null,
+            klass = NormalClass("javax.net.ssl", listOf("KeyManager")),
+            nullable = false,
+            hasDefault = false,
+        ),
+        Property(
+            propertyName = "ds",
+            name = "ds",
+            klass = NormalClass("javax.sql", listOf("DataSource")),
+            nullable = true,
+            documentation = null,
+        ),
+        None("injected", Builtin.BOOLEAN, nullable = false, documentation = null, hasDefault = false),
+        None(propertyName = "ignored", Builtin.STRING, nullable = true, documentation = null, hasDefault = true),
+    ),
+    outputJvmName = "com.example.FooOutput",
+    outputIsNullable = false,
+    outputs = setOf(
+        Body(
+            propertyName = "body",
+            klass = Builtin.STRING,
+            sealedSubClasses = setOf(),
+            contentNegotiations = listOf(
+                Body.ContentNegotiation(
+                    factoryKlass = NormalClass("com.example", listOf("JsonFactory"), isStatic = true),
+                    contentType = "application/json",
+                    parameters = mapOf("charset" to "utf-8"),
+                ),
+            ),
+            documentation = null,
+            nullable = false,
+        ),
+        Property(propertyName = "foo", name = "FOO", nullable = false, klass = Builtin.STRING, documentation = null),
+        Header(
+            name = "CamelHttpResponseCode",
+            propertyName = "fooHeader",
+            Builtin.INT,
+            nullable = false,
+            documentation = null,
+        ),
+        Header(
+            name = "X-FOO",
+            propertyName = "optionalHeader",
+            Builtin.STRING,
+            nullable = true,
+            documentation = null,
+        ),
+        DynamicHeaders(propertyName = "headers", documentation = null),
+    ),
+    error = null,
+)
+
+public val exceptionScript = Script(
+    name = "handleException",
+    jvmFunction = "com.example.HandleExceptionKt.handleException",
+    isSuspend = false,
+    inputs = listOf(
+        Property(
+            name = "CamelExceptionCaught",
+            propertyName = "exception",
+            klass = NormalClass(
+                "kotlin",
+                listOf("Exception"),
+                members = listOf(),
+                documentation = null,
+                annotations = listOf(),
+            ),
+            documentation = null,
+            nullable = false,
+        ),
+        ),
+    outputJvmName = "kotlin.Nothing",
+    outputIsNullable = false,
+    outputs = setOf(),
+    error = fault,
+)
+
 public val dataStoreScript = Script(
     name = "fooDataStore",
     jvmFunction = "com.example.FooKt.fooDataStore",

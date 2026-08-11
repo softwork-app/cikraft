@@ -21,30 +21,41 @@ public fun generateOpenApi(
     transformers: List<SAPOpenAPITransformer> = emptyList(),
 ): OpenApi {
     val components = buildMap {
-        for (script in infrastructure.apis.flatMap { it.scripts }) {
-            val bodyInput = script.bodyInput
-            if (bodyInput != null && bodyInput.contentNegotiations.isNotEmpty()) {
-                val isNotOctetStream =
-                    bodyInput.contentNegotiations.singleOrNull()?.contentType != "application/octet-stream"
-                if (isNotOctetStream) {
-                    addType(bodyInput.klass, bodyInput.sealedSubClasses)
-                    for (sealedSubclass in bodyInput.sealedSubClasses) {
+        for (createdFlow in infrastructure.apis) {
+            for (script in createdFlow.scripts) {
+                val bodyInput = script.bodyInput
+                if (bodyInput != null && bodyInput.contentNegotiations.isNotEmpty()) {
+                    val isNotOctetStream =
+                        bodyInput.contentNegotiations.singleOrNull()?.contentType != "application/octet-stream"
+                    if (isNotOctetStream) {
+                        addType(bodyInput.klass, bodyInput.sealedSubClasses)
+                        for (sealedSubclass in bodyInput.sealedSubClasses) {
+                            addType(sealedSubclass.klass, sealedSubclass.parent.toRef())
+                        }
+                    }
+                }
+                val bodyOutput = script.bodyOutput
+                if (bodyOutput != null && bodyOutput.contentNegotiations.isNotEmpty()) {
+                    val isNotOctetStream =
+                        bodyOutput.contentNegotiations.singleOrNull()?.contentType != "application/octet-stream"
+                    if (isNotOctetStream) {
+                        addType(bodyOutput.klass, bodyOutput.sealedSubClasses)
+                        for (sealedSubclass in bodyOutput.sealedSubClasses) {
+                            addType(sealedSubclass.klass, sealedSubclass.parent.toRef())
+                        }
+                    }
+                }
+                val errorBody = script.error?.bodyOutput
+                if (errorBody != null) {
+                    addType(errorBody.klass, errorBody.sealedSubClasses)
+                    for (sealedSubclass in errorBody.sealedSubClasses) {
                         addType(sealedSubclass.klass, sealedSubclass.parent.toRef())
                     }
                 }
             }
-            val bodyOutput = script.bodyOutput
-            if (bodyOutput != null && bodyOutput.contentNegotiations.isNotEmpty()) {
-                val isNotOctetStream =
-                    bodyOutput.contentNegotiations.singleOrNull()?.contentType != "application/octet-stream"
-                if (isNotOctetStream) {
-                    addType(bodyOutput.klass, bodyOutput.sealedSubClasses)
-                    for (sealedSubclass in bodyOutput.sealedSubClasses) {
-                        addType(sealedSubclass.klass, sealedSubclass.parent.toRef())
-                    }
-                }
-            }
-            val errorBody = script.error?.bodyOutput
+            val errorBody = createdFlow.exceptionHandler?.scripts?.firstOrNull {
+                it.error != null
+            }?.error?.bodyOutput
             if (errorBody != null) {
                 addType(errorBody.klass, errorBody.sealedSubClasses)
                 for (sealedSubclass in errorBody.sealedSubClasses) {
@@ -141,7 +152,9 @@ private fun paths(
             csrfOperation(
                 api = api,
                 sender = sender,
-                errorBody = lastScript?.error?.bodyOutput,
+                errorBody = lastScript?.error?.bodyOutput ?: api.exceptionHandler?.scripts?.firstOrNull {
+                    it.error != null
+                }?.error?.bodyOutput,
             )
         } else {
             null
@@ -153,7 +166,9 @@ private fun paths(
             headersInput = headers,
             bodyOutput = lastScript?.bodyOutput,
             headersOutput = headersOutput,
-            errorBody = lastScript?.error?.bodyOutput,
+            errorBody = lastScript?.error?.bodyOutput ?: api.exceptionHandler?.scripts?.firstOrNull {
+                it.error != null
+            }?.error?.bodyOutput,
         ),
     )
     sender.url to path

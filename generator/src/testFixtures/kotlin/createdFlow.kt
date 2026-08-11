@@ -26,6 +26,28 @@ val fooFlow = CreatedFlow(
     injectedScripts = listOf(),
 )
 
+val fooExceptionFlow = CreatedFlow(
+    id = "ExceptionSubprocess",
+    rawId = "ExceptionSubprocess",
+    name = "ExceptionSubprocess",
+    rawName = "ExceptionSubprocess",
+    packageID = "ComExampleKtorResources",
+    packageName = "Com_Example_Ktor_Resources",
+    packageDescription = "",
+    sender = CreatedFlow.Sender.Https(
+        url = "/foo/bar/baz",
+        role = "Foo",
+        csrfProtection = true,
+    ),
+    description = "Foo Bar API",
+    scripts = listOf(fooExceptionScript),
+    injectedScripts = listOf(),
+    exceptionHandler = CreatedFlow.ExceptionHandler(
+        listOf(exceptionScript),
+        emptyList(),
+    ),
+)
+
 val noOutputsFlow = CreatedFlow(
     id = "BazNoOutputs",
     rawId = "BazNoOutputs",

@@ -73,6 +73,28 @@ public class IntegrationFlowBuilder(
             injectedScripts = injected.mapNotNull { userInjectedScript ->
                 scripts.singleOrNull { it.name == userInjectedScript }
             },
+            exceptionHandler = integrationFlow.process.subProcess?.let { subProcess ->
+                val normalCallActivities = subProcess.callActivities.filter {
+                    it.id.startsWith("GroovyScript_")
+                }
+                val injectedCallActivities = subProcess.callActivities.filter {
+                    it.id.startsWith("Injected_GroovyScript_")
+                }
+                val scriptJvmFunctions = normalCallActivities.map {
+                    it.extensionElements.properties.single { it.key == "scriptFunction" }.value
+                }
+                val injected = injectedCallActivities.map {
+                    it.extensionElements.properties.single { it.key == "scriptFunction" }.value
+                }
+                CreatedFlow.ExceptionHandler(
+                    scripts = scriptJvmFunctions.mapNotNull { userScript ->
+                        scripts.singleOrNull { it.name == userScript }
+                    },
+                    injectedScripts = injected.mapNotNull { userInjectedScript ->
+                        scripts.singleOrNull { it.name == userInjectedScript }
+                    },
+                )
+            },
         )
 
         if (outputFolder != null) {
