@@ -18,6 +18,7 @@ public data class CreatedFlow(
     val target: List<String> = emptyList(),
     val scripts: List<Script>,
     val injectedScripts: List<Script>,
+    val exceptionHandler: ExceptionHandler? = null,
 ) {
     @Serializable
     public sealed interface Sender {
@@ -27,4 +28,10 @@ public data class CreatedFlow(
         @Serializable
         public data class DataStore(val name: String, val pollDelay: Duration) : Sender
     }
+
+    @Serializable
+    public data class ExceptionHandler(
+        val scripts: List<Script>,
+        val injectedScripts: List<Script>,
+    )
 }
