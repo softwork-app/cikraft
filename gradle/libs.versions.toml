@@ -2,7 +2,7 @@
 kotlin = "2.4.10"
 ktor = "3.5.2"
 ksp = "2.3.11"
-kfx = "0.2.11"
+kfx = "0.2.14"
 serialization = "1.11.0"
 
 [libraries]
