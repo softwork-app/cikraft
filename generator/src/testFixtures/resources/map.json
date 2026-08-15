@@ -103,7 +103,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
+                    "2XX": {
                         "description": "",
                         "headers": {
                             "sap_messageprocessinglogid": {

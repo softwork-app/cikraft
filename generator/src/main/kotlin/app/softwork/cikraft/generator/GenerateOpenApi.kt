@@ -292,13 +292,7 @@ private fun iFlowOperation(
         }
     },
     responses = mapOf(
-        (
-            if (bodyOutput == null || bodyOutput.contentNegotiations.isEmpty()) {
-                "204"
-            } else {
-                "200"
-            }
-            ) to Response(
+        "2XX" to Response(
             description = "",
             content = bodyOutput?.contentNegotiations?.associate {
                 val contentType = it.contentType()
