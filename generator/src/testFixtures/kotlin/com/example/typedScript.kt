@@ -368,11 +368,11 @@ public val typedEnumScript = Script(
                     Member(
                         "e",
                         documentation = "Some Enum description at D",
-                        type = CodeGenTree.Enum(
+                        type = CodeGenTree.StringEnum(
                             packageName = "",
                             names = listOf("ENUM"),
                             values = listOf(
-                                CodeGenTree.Enum.Value(
+                                CodeGenTree.StringEnum.Value(
                                     name = "FOO",
                                     annotations = listOf(
                                         CodeGenTree.Annotation(
@@ -384,7 +384,7 @@ public val typedEnumScript = Script(
                                         ),
                                     ),
                                 ),
-                                CodeGenTree.Enum.Value(name = "Bar"),
+                                CodeGenTree.StringEnum.Value(name = "Bar"),
                             ),
                         ),
                         annotations = listOf(

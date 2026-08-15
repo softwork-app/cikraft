@@ -15,6 +15,7 @@ import io.github.hfhbd.kfx.openapi.model.OpenApi.Operation
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Operation.*
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Operation.Header
 import kotlinx.serialization.json.JsonPrimitive
+import java.time.chrono.JapaneseEra.values
 
 public fun generateOpenApi(
     infrastructure: OpenApiInfrastructure,
@@ -624,11 +625,22 @@ private fun Type.toSchema(
     )
 }
 
-private fun CodeGenTree.Enum.toSchema(): STRING = STRING(
+private fun CodeGenTree.Enum.toSchema(): Schema = when (this) {
+    is LongEnum -> toSchema()
+    is StringEnum -> toSchema()
+}
+
+private fun CodeGenTree.StringEnum.toSchema(): STRING = STRING(
     description = documentation,
     format = null,
     enum = values.map {
         it.serialName ?: it.name
+    },
+)
+private fun CodeGenTree.LongEnum.toSchema(): INT = INT(
+    description = documentation,
+    enum = values.map {
+        it.value
     },
 )
 
