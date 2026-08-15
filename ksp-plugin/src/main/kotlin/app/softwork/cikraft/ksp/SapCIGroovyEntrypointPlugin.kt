@@ -440,13 +440,13 @@ private fun KSDeclaration.toType(
             val isObject = (this as? KSClassDeclaration)?.classKind == ClassKind.OBJECT
 
             if (isEnum) {
-                CodeGenTree.Enum(
+                CodeGenTree.StringEnum(
                     packageName = packageName,
                     names = names,
-                    values = this.declarations.filter {
+                    values = declarations.filter {
                         it is KSClassDeclaration && it.classKind == ClassKind.ENUM_ENTRY
                     }.map {
-                        CodeGenTree.Enum.Value(
+                        CodeGenTree.StringEnum.Value(
                             name = it.simpleName.asString(),
                             documentation = docString?.doc(it.simpleName.getShortName()),
                             annotations = it.annotations.asAnnoMap(),

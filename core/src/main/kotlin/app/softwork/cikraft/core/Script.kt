@@ -2,7 +2,6 @@ package app.softwork.cikraft.core
 
 import io.github.hfhbd.kfx.codegen.*
 import io.github.hfhbd.kfx.codegen.CodeGenTree.*
-import io.github.hfhbd.kfx.codegen.CodeGenTree.Enum
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Expression.*
 import kotlinx.serialization.*
 
@@ -146,7 +145,8 @@ public val Member.maxLength: Int?
         )?.value
 
 public val Member.serialName: String? get() = annotations.serialName
-public val Enum.Value.serialName: String? get() = annotations.serialName
+public val StringEnum.Value.serialName: String? get() = annotations.serialName
+public val LongEnum.Value.serialName: String? get() = annotations.serialName
 public val Class.serialName: String? get() = annotations.serialName
 private val List<CodeGenTree.Annotation>.serialName: String?
     get() = (
