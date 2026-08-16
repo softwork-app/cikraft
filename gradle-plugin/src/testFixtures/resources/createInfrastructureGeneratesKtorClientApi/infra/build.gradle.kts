@@ -37,6 +37,10 @@ jvmApplication {
                         }
                     }
                 }
+
+                dependencies {
+                    implementation(integrationFlows(projects.app))
+                }
             }
         }
     }

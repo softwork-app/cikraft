@@ -1,11 +1,12 @@
 import Stage
 import app.softwork.cikraft.integrationflow.builder.IntegrationFlowBuilder
+import userRole
 
 public fun IntegrationFlowBuilder.integrationFlows() {
   IF_Ba {
     https(
       url = "/foo/bar/baz",
-      userRole = "SomeRole.send",
+      userRole = userRole,
     ) {
       startMessage()
       test(
