@@ -1,0 +1,1 @@
+val userRole = "SomeRole.send"

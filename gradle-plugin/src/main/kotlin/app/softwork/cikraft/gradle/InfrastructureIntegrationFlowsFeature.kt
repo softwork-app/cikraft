@@ -10,8 +10,13 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.artifacts.type.ArtifactTypeDefinition
+import org.gradle.api.attributes.Bundling
+import org.gradle.api.attributes.Category
+import org.gradle.api.attributes.LibraryElements
 import org.gradle.api.attributes.Usage
+import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.model.ObjectFactory
+import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
@@ -24,11 +29,13 @@ import org.gradle.features.dsl.bindProjectFeature
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
+import org.gradle.internal.component.external.model.ProjectDerivedCapability
 import org.gradle.jvm.tasks.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.newInstance
+import org.gradle.util.internal.TextUtil
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
@@ -71,7 +78,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
         abstract val dependencyFactory: DependencyFactory
 
         @get:Inject
-        abstract val project: Project
+        abstract val project: ProjectInternal
 
         @get:Inject
         abstract val sourceSets: SourceSetContainer
@@ -127,6 +134,43 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 }
                 configurationContainer.named(annotationProcessorConfigurationName) {
                     fromDependencyCollector(definition.dependencies.annotationProcessor)
+                }
+            }
+
+            val integrationFlowsSourceSetJar = tasks.register(integrationFlowsSourceSet.name + "Jar", Jar::class.java)
+            integrationFlowsSourceSetJar.configure {
+                description = "Assembles a jar archive containing the classes of the 'integration-flow' feature."
+                group = BasePlugin.BUILD_GROUP
+                from(integrationFlowsSourceSet.output)
+                archiveClassifier.set(TextUtil.camelToKebabCase("integrationFlows"))
+            }
+
+            configurations.consumable("integrationFlowsRuntimeElements") {
+                attributes {
+                    attribute(
+                        Usage.USAGE_ATTRIBUTE,
+                        named(Usage::class.java, Usage.JAVA_RUNTIME),
+                    )
+                    attribute(
+                        Category.CATEGORY_ATTRIBUTE,
+                        named(Category::class.java, Category.LIBRARY),
+                    )
+                    attribute(
+                        LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
+                        named(LibraryElements::class.java, LibraryElements.JAR),
+                    )
+                    attribute(
+                        Bundling.BUNDLING_ATTRIBUTE,
+                        named(Bundling::class.java, Bundling.EXTERNAL),
+                    )
+                }
+                outgoing {
+                    capability(ProjectDerivedCapability(project, "integrationFlows"))
+                    artifact(integrationFlowsSourceSetJar)
+                    attributes.attribute(
+                        ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE,
+                        ArtifactTypeDefinition.JAR_TYPE,
+                    )
                 }
             }
 
