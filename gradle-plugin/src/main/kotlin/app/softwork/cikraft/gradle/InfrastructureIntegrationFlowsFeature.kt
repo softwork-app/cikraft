@@ -426,6 +426,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     integrationFlowsSourceSet.kotlin.srcDirs(generatedTypedKotlinFlows)
 
                     createInfrastructureDryRun.configure {
+                        this.expectedRawIFlowsIds.add(iFlowBuildModel.name.replace("_", ""))
                         entryPoints.from(entrypointsJson)
                     }
 

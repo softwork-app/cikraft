@@ -25,20 +25,6 @@ jvmApplication {
                                     implementation(projects.app)
                                 }
                             }
-                            integrationFlow("IF_Ba") {
-                                description = "Ba test"
-
-                                dependencies {
-                                    implementation(projects.app)
-                                }
-                            }
-                            integrationFlow("IF_Foo") {
-                                description = "Ba test"
-
-                                dependencies {
-                                    implementation(projects.app)
-                                }
-                            }
                         }
                     }
                 }
