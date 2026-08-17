@@ -5,7 +5,6 @@ public data class OpenApiInfrastructure(
     val name: String,
     val description: String?,
     val version: String,
-    val packages: Set<String>,
-    val tags: Map<String, String>,
+    val tags: Map<String, String?>,
     val servers: Map<String, String?>,
 )

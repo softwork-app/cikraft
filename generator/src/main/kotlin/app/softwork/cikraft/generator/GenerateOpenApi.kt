@@ -15,7 +15,6 @@ import io.github.hfhbd.kfx.openapi.model.OpenApi.Operation
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Operation.*
 import io.github.hfhbd.kfx.openapi.model.OpenApi.Operation.Header
 import kotlinx.serialization.json.JsonPrimitive
-import java.time.chrono.JapaneseEra.values
 
 public fun generateOpenApi(
     infrastructure: OpenApiInfrastructure,
