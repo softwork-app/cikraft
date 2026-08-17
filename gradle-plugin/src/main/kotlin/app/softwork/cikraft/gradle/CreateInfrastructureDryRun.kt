@@ -28,6 +28,9 @@ abstract class CreateInfrastructureDryRun : DefaultTask() {
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val entryPoints: ConfigurableFileCollection
 
+    @get:Input
+    abstract val expectedRawIFlowsIds: SetProperty<String>
+
     @get:OutputDirectory
     abstract val outputFolder: DirectoryProperty
 
@@ -64,6 +67,7 @@ abstract class CreateInfrastructureDryRun : DefaultTask() {
             classpath.from(ss)
             forkOptions.setExecutable(s)
         }.submit(CreateInfrastructureDryRunWorker::class) {
+            expectedRawIFlowsIds.set(this@CreateInfrastructureDryRun.expectedRawIFlowsIds)
             entryPoints.from(this@CreateInfrastructureDryRun.entryPoints)
             outputFolder.set(this@CreateInfrastructureDryRun.outputFolder)
             stageNames.set(this@CreateInfrastructureDryRun.stageNames)
