@@ -62,7 +62,7 @@ abstract class GeneratePropertiesFeature :
                     attribute(SAPCI.attribute, named(SAPCI.STAGE_PROPERTIES))
                     attribute(SAPCIStage.attribute, named(stage))
                 }
-            }.flatMap { it.elements.map { it.single().asFile } }
+            }
 
             val functionsWorker = configurations.dependencyScope("cikraftPropertiesWorker$stage") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
@@ -78,11 +78,11 @@ abstract class GeneratePropertiesFeature :
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
                     attribute(SAPCI.attribute, named(SAPCI.API))
                 }
-            }.flatMap { it.elements }.map { it.single().asFile }
+            }
 
             val task = tasks.register("generateProperties" + stage, GeneratePropertiesTask::class.java) {
-                createdFlows.fileProvider(sapCICreatedFlows)
-                propertiesFiles.fileProvider(propertiesConfiguration)
+                createdFlows.from(sapCICreatedFlows)
+                propertiesFiles.from(propertiesConfiguration)
                 propertiesFolder.convention(
                     layout.contextBuildDirectory.map {
                         val sourceSetName = parentBuildModel.name.ifEmpty { "main" }

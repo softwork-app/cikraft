@@ -69,10 +69,10 @@ abstract class GenerateKtorServerFeature :
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
                     attribute(SAPCI.attribute, named(SAPCI.API))
                 }
-            }.flatMap { it.elements }.map { it.single().asFile }
+            }
 
             val task = tasks.register("generateKtorServer$buildModelName", GenerateKtorServerAPI::class.java) {
-                createdFlows.fileProvider(sapCICreatedFlows)
+                createdFlows.from(sapCICreatedFlows)
                 ktorApi.convention(
                     layout.contextBuildDirectory.map {
                         val sourceSetName = parentBuildModel.name.ifEmpty { "main" }

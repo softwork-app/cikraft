@@ -24,14 +24,14 @@ abstract class GeneratePropertiesTask : DefaultTask() {
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val createdFlows: DirectoryProperty
+    abstract val createdFlows: ConfigurableFileCollection
 
     @get:InputDirectory
     @get:SkipWhenEmpty
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val propertiesFiles: DirectoryProperty
+    abstract val propertiesFiles: ConfigurableFileCollection
 
     @get:OutputDirectory
     abstract val propertiesFolder: DirectoryProperty
@@ -47,8 +47,8 @@ abstract class GeneratePropertiesTask : DefaultTask() {
         val worker = workerExecutor.classLoaderIsolation {
             classpath.from(workerClasspath)
         }
-        val propertiesFiles = propertiesFiles.get().asFile.listFiles()
-        for (createdFlow in createdFlows.get().asFile.listFiles()) {
+        val propertiesFiles = propertiesFiles.asFileTree
+        for (createdFlow in createdFlows.asFileTree) {
             worker.submit(GenerateProperties::class) {
                 this.createdFlow.set(createdFlow)
                 this.propertyFile.set(
