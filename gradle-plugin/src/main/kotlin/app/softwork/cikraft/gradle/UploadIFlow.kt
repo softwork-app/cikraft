@@ -56,15 +56,15 @@ internal abstract class UploadIFlow @Inject constructor(
     abstract val lockService: Property<TransportLockBuildService>
 
     @get:InputFiles
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val libs: ConfigurableFileCollection
 
     @get:InputFiles
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val scripts: ConfigurableFileCollection
 
     @get:InputFile
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val flowXmlDefinition: RegularFileProperty
 
     @get:Input
@@ -98,7 +98,7 @@ internal abstract class UploadIFlow @Inject constructor(
     internal abstract val flowTarget: ListProperty<String>
 
     @get:InputFile
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     internal abstract val parametersFile: RegularFileProperty
 
     @get:Input

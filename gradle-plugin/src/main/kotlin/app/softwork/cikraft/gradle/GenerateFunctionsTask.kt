@@ -18,12 +18,12 @@ abstract class GenerateFunctionsTask : DefaultTask() {
         group = "cikraft"
     }
 
-    @get:InputDirectory
+    @get:InputFiles
     @get:SkipWhenEmpty
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val createdFlows: DirectoryProperty
+    @get:PathSensitive(PathSensitivity.NONE)
+    abstract val createdFlows: ConfigurableFileCollection
 
     @get:Input
     abstract val functions: SetProperty<String>
@@ -43,7 +43,7 @@ abstract class GenerateFunctionsTask : DefaultTask() {
             classpath.from(workerClasspath)
         }
         val functions = functions.get()
-        for (createdFlow in createdFlows.get().asFile.listFiles()) {
+        for (createdFlow in createdFlows.asFileTree) {
             if (functions.isEmpty() || createdFlow.nameWithoutExtension in functions) {
                 worker.submit(GenerateFunctions::class) {
                     this.createdFlow.set(createdFlow)

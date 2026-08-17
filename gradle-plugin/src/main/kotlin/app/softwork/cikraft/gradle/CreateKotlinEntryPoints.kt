@@ -22,7 +22,7 @@ public abstract class CreateKotlinEntryPoints : DefaultTask() {
     @get:InputFiles
     @get:SkipWhenEmpty
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     public abstract val scripts: ConfigurableFileCollection
 
     @get:Input

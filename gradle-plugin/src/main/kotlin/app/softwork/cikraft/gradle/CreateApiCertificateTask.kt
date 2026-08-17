@@ -56,7 +56,7 @@ abstract class CreateApiCertificateTask @Inject constructor(stageName: String) :
     }
 
     @get:InputFile
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val apiCertificateP12File: RegularFileProperty
 
     @get:Input

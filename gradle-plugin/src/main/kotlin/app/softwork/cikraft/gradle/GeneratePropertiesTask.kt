@@ -19,19 +19,19 @@ abstract class GeneratePropertiesTask : DefaultTask() {
         group = "cikraft"
     }
 
-    @get:InputDirectory
+    @get:InputFiles
     @get:SkipWhenEmpty
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val createdFlows: DirectoryProperty
+    @get:PathSensitive(PathSensitivity.NONE)
+    abstract val createdFlows: ConfigurableFileCollection
 
-    @get:InputDirectory
+    @get:InputFiles
     @get:SkipWhenEmpty
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val propertiesFiles: DirectoryProperty
+    @get:PathSensitive(PathSensitivity.NONE)
+    abstract val propertiesFiles: ConfigurableFileCollection
 
     @get:OutputDirectory
     abstract val propertiesFolder: DirectoryProperty
@@ -47,8 +47,8 @@ abstract class GeneratePropertiesTask : DefaultTask() {
         val worker = workerExecutor.classLoaderIsolation {
             classpath.from(workerClasspath)
         }
-        val propertiesFiles = propertiesFiles.get().asFile.listFiles()
-        for (createdFlow in createdFlows.get().asFile.listFiles()) {
+        val propertiesFiles = propertiesFiles.asFileTree
+        for (createdFlow in createdFlows.asFileTree) {
             worker.submit(GenerateProperties::class) {
                 this.createdFlow.set(createdFlow)
                 this.propertyFile.set(

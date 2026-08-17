@@ -17,11 +17,11 @@ abstract class GenerateKtorResources : DefaultTask() {
         group = "cikraft"
     }
 
-    @get:InputDirectory
+    @get:InputFiles
     @get:SkipWhenEmpty
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    public abstract val createdFlows: DirectoryProperty
+    @get:PathSensitive(PathSensitivity.NONE)
+    public abstract val createdFlows: ConfigurableFileCollection
 
     @get:OutputDirectory
     abstract val ktorApi: DirectoryProperty
@@ -37,7 +37,7 @@ abstract class GenerateKtorResources : DefaultTask() {
         val worker = workerExecutor.classLoaderIsolation {
             classpath.from(workerClasspath)
         }
-        for (createdFlow in createdFlows.get().asFile.listFiles()) {
+        for (createdFlow in createdFlows.asFileTree) {
             worker.submit(GenerateKtorResourcesWorker::class) {
                 this.createdFlow.set(createdFlow)
                 this.outputDirectory.set(ktorApi)
