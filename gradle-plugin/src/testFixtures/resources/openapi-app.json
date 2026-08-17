@@ -7,10 +7,6 @@
     },
     "tags": [
         {
-            "name": "Bar",
-            "description": "Bar Description"
-        },
-        {
             "name": "Com_Example_Ktor_Resources",
             "description": "A Description"
         }

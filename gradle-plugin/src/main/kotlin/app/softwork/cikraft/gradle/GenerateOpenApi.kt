@@ -9,7 +9,6 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
-import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.CacheableTask
@@ -77,12 +76,6 @@ abstract class GenerateOpenApi : DefaultTask() {
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
-    @get:Input
-    abstract val tags: MapProperty<String, String>
-
-    @get:Input
-    abstract val packages: SetProperty<String>
-
     @TaskAction
     internal fun generate() {
         workerExecutor.classLoaderIsolation {
@@ -100,8 +93,6 @@ abstract class GenerateOpenApi : DefaultTask() {
                     }
                 },
             )
-            this.tags.set(this@GenerateOpenApi.tags)
-            this.packages.set(this@GenerateOpenApi.packages)
         }
     }
 
@@ -113,8 +104,6 @@ abstract class GenerateOpenApi : DefaultTask() {
             val description: Property<String>
             val version: Property<String>
             val servers: SetProperty<Pair<String, String?>>
-            val tags: MapProperty<String, String>
-            val packages: SetProperty<String>
         }
 
         override fun execute() {
@@ -124,22 +113,25 @@ abstract class GenerateOpenApi : DefaultTask() {
 
             val transformers = ServiceLoader.load(SAPOpenAPITransformer::class.java).toList()
 
+            val createdFlows = parameters.createdFlows.map {
+                json.decodeFromString(
+                    CreatedFlow.serializer(),
+                    it.readText(),
+                )
+            }
+
             val openApi = generateOpenApi(
                 infrastructure = OpenApiInfrastructure(
-                    apis = parameters.createdFlows.map {
-                        json.decodeFromString(
-                            CreatedFlow.serializer(),
-                            it.readText(),
-                        )
-                    },
+                    apis = createdFlows,
                     name = parameters.name.get(),
                     description = parameters.description.orNull,
                     version = parameters.version.get(),
                     servers = parameters.servers.get().associate {
                         it.first to it.second
                     },
-                    tags = parameters.tags.get(),
-                    packages = parameters.packages.get(),
+                    tags = createdFlows.associate {
+                        it.packageName to it.packageDescription
+                    },
                 ),
                 transformers,
             )

@@ -102,11 +102,6 @@ abstract class OpenApiFeature :
                 }
 
                 this.servers.addAll(serverUrls)
-                this.tags.putAll(
-                    parentBuildModel.integrationPackages.elements.map { integrationPackage ->
-                        integrationPackage.associate { it.name to it.description.get() }
-                    },
-                )
             }
 
             val sapCIOpenApi = configurations.consumable("cikraftOpenApi") {
