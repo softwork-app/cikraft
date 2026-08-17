@@ -197,6 +197,26 @@ abstract class InfrastructureIntegrationFlowsFeature :
             }
             integrationFlowsSourceSet.kotlin.srcDir(generateStages)
 
+            val entrypointsJsonProjectDeps = configurations.dependencyScope("cikraftEntrypointsDeps") {
+                dependencies.add(dependencyFactory.createProjectDependency())
+            }
+            val entrypointsJsonProject = configurations.resolvable("cikraftEntrypoints") {
+                extendsFrom(entrypointsJsonProjectDeps)
+                attributes {
+                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
+                    attribute(SAPCI.attribute, named(SAPCI.JSON_ENTRYPOINTS))
+                }
+            }
+
+            val generateTypedKotlinScriptAccessors = tasks.register(
+                "generateTypedKotlinFlowAccessor",
+                GenerateTypedKotlinStepBuilderTask::class.java,
+            ) {
+                this.jsonScriptEntry.from(entrypointsJsonProject)
+                this.workerClasspath.from(generatorClasspath)
+            }
+            integrationFlowsSourceSet.kotlin.srcDirs(generateTypedKotlinScriptAccessors)
+
             val createInfrastructureDryRunOutputFolder =
                 layout.contextBuildDirectory.map { it.dir("cikraft/flows/dryrun") }
 
@@ -405,9 +425,9 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                     iFlowBuildModel.libs.from(jar, iFlowBuildModel.dependenciesJars)
 
-                    val generatedTypedKotlinFlows: TaskProvider<GenerateTypedKotlinFlow> = tasks.register(
+                    val generateTypedKotlinIntegrationFlowBuilder = tasks.register(
                         "generateFlowAccessor$name",
-                        GenerateTypedKotlinFlow::class.java,
+                        GenerateTypedKotlinIntegrationFlowBuilderTask::class.java,
                     ) {
                         this.jsonScriptEntry.from(entrypointsJson)
                         this.packageName.set(integrationPackage.name)
@@ -423,12 +443,31 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         this.groovyScripts.from(iFlowBuildModel.scripts)
                     }
 
-                    integrationFlowsSourceSet.kotlin.srcDirs(generatedTypedKotlinFlows)
+                    integrationFlowsSourceSet.kotlin.srcDirs(generateTypedKotlinIntegrationFlowBuilder)
 
                     createInfrastructureDryRun.configure {
                         this.expectedRawIFlowsIds.add(iFlowBuildModel.name.replace("_", ""))
                         entryPoints.from(entrypointsJson)
                     }
+
+                    val generateTypedKotlinScriptAccessors = tasks.register(
+                        "generateTypedKotlinFlowAccessor$name",
+                        GenerateTypedKotlinStepBuilderTask::class.java,
+                    ) {
+                        this.jsonScriptEntry.from(entrypointsJson)
+                        this.workerClasspath.from(generatorClasspath)
+                    }
+                    integrationFlowsSourceSet.kotlin.srcDirs(generateTypedKotlinScriptAccessors)
+
+                    val generateTypeGroovyScriptAccessors = tasks.register(
+                        "generateTypedGroovyFlowAccessor$name",
+                        GenerateTypedGroovyStepBuilderTask::class.java,
+                    ) {
+                        this.groovyScripts.from(iFlowBuildModel.scripts)
+                        this.workerClasspath.from(generatorClasspath)
+                    }
+
+                    integrationFlowsSourceSet.kotlin.srcDirs(generateTypeGroovyScriptAccessors)
 
                     parentBuildModel.apiStages.all {
                         val stage = this
