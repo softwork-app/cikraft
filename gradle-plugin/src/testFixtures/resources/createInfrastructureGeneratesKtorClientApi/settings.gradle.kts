@@ -46,3 +46,31 @@ includeBuild("../../../../../")
 include(":app")
 include(":infra")
 include(":client")
+
+defaults {
+    jvmApplication {
+        cikraft {
+            infrastructure {
+                httpNamespace = "foo"
+                suffix = providers.gradleProperty("suffix")
+
+                apiStages {
+                    apiStage("Dev") {
+                        apiServer = "foo"
+                        authServer = "bar"
+                        httpServer = "localhost"
+                        web = "localhost"
+                    }
+                }
+                transportStages {
+                    transportStage("Prd") {
+                        httpServer = "prodHost"
+                        web = "localhost"
+                    }
+                }
+
+                integrationArtifacts { }
+            }
+        }
+    }
+}

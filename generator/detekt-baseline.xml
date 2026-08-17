@@ -9,7 +9,7 @@
     <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun Type.toSimpleName: String</ID>
     <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun paths: Map&lt;String, Path></ID>
     <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:public fun generateOpenApi: OpenApi</ID>
-    <ID>CyclomaticComplexMethod:GenerateTypedKotlinFlows.kt:@ExperimentalKotlinPoetApi private fun createEntryPointFunction: FunSpec</ID>
+    <ID>CyclomaticComplexMethod:GenerateTypedKotlinStepBuilder.kt:@ExperimentalKotlinPoetApi private fun createEntryPointFunction: FunSpec</ID>
     <ID>CyclomaticComplexMethod:WriteKotlinEntryPoints.kt:private fun CodeGenTree.Type.getSerializerOrFail: CodeBlock</ID>
     <ID>CyclomaticComplexMethod:WriteKotlinEntryPoints.kt:private fun FunSpec.Builder.addOutputs</ID>
     <ID>CyclomaticComplexMethod:WriteKotlinEntryPoints.kt:private fun Script.getInputs: CodeBlock</ID>
@@ -20,8 +20,8 @@
     <ID>LongMethod:GenerateOpenApi.kt:private fun iFlowOperation: Operation</ID>
     <ID>LongMethod:GenerateOpenApi.kt:private fun paths: Map&lt;String, Path></ID>
     <ID>LongMethod:GenerateOpenApi.kt:public fun generateOpenApi: OpenApi</ID>
-    <ID>LongMethod:GenerateTypedKotlinFlows.kt:@ExperimentalKotlinPoetApi private fun createEntryPointFunction: FunSpec</ID>
-    <ID>LongMethod:GenerateTypedKotlinFlows.kt:@ExperimentalKotlinPoetApi public fun generateTypedKotlinFlows: List&lt;FileSpec></ID>
+    <ID>LongMethod:GenerateTypedKotlinIntegrationFlowBuilder.kt:@ExperimentalKotlinPoetApi public fun generateTypedKotlinIntegrationFlowBuilder: FileSpec</ID>
+    <ID>LongMethod:GenerateTypedKotlinStepBuilder.kt:@ExperimentalKotlinPoetApi private fun createEntryPointFunction: FunSpec</ID>
     <ID>LongMethod:WriteKotlinEntryPoints.kt:private fun CodeGenTree.Type.getSerializerOrFail: CodeBlock</ID>
     <ID>LongMethod:WriteKotlinEntryPoints.kt:private fun FunSpec.Builder.addOutputs</ID>
     <ID>LongMethod:WriteKotlinEntryPoints.kt:private fun FunSpec.Builder.callMethod</ID>

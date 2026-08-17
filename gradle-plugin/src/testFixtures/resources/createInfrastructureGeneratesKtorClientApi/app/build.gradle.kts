@@ -6,10 +6,4 @@ jvmApplication {
 
     }
   }
-
-  cikraft {
-    infrastructure {
-      integrationArtifacts {}
-    }
-  }
 }

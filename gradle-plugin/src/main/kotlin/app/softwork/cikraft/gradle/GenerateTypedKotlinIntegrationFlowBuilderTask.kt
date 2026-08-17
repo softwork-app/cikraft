@@ -15,7 +15,7 @@ import org.gradle.workers.*
 import javax.inject.*
 
 @CacheableTask
-public abstract class GenerateTypedKotlinFlow : DefaultTask() {
+public abstract class GenerateTypedKotlinIntegrationFlowBuilderTask : DefaultTask() {
     init {
         group = "cikraft"
     }
@@ -75,17 +75,17 @@ public abstract class GenerateTypedKotlinFlow : DefaultTask() {
         workerExecutor.classLoaderIsolation {
             classpath.from(workerClasspath)
         }.submit(GenerateTypedFlowsWorker::class) {
-            packageName.set(this@GenerateTypedKotlinFlow.packageName)
-            packageDescription.set(this@GenerateTypedKotlinFlow.packageDescription)
-            flowName.set(this@GenerateTypedKotlinFlow.flowName)
-            flowDescription.set(this@GenerateTypedKotlinFlow.flowDescription)
-            flowSource.addAll(this@GenerateTypedKotlinFlow.flowSource)
-            flowTarget.addAll(this@GenerateTypedKotlinFlow.flowTarget)
-            jsonScriptEntry.from(this@GenerateTypedKotlinFlow.jsonScriptEntry)
-            typedKotlinFlows.set(this@GenerateTypedKotlinFlow.typedKotlinFlows)
-            suffix.set(this@GenerateTypedKotlinFlow.suffix)
-            baseUrl.set(this@GenerateTypedKotlinFlow.baseUrl)
-            groovyScripts.from(this@GenerateTypedKotlinFlow.groovyScripts)
+            packageName.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.packageName)
+            packageDescription.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.packageDescription)
+            flowName.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.flowName)
+            flowDescription.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.flowDescription)
+            flowSource.addAll(this@GenerateTypedKotlinIntegrationFlowBuilderTask.flowSource)
+            flowTarget.addAll(this@GenerateTypedKotlinIntegrationFlowBuilderTask.flowTarget)
+            jsonScriptEntry.from(this@GenerateTypedKotlinIntegrationFlowBuilderTask.jsonScriptEntry)
+            typedKotlinFlows.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.typedKotlinFlows)
+            suffix.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.suffix)
+            baseUrl.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.baseUrl)
+            groovyScripts.from(this@GenerateTypedKotlinIntegrationFlowBuilderTask.groovyScripts)
         }
     }
 }
@@ -121,7 +121,7 @@ abstract class GenerateTypedFlowsWorker : WorkAction<GenerateTypedFlowsWorker.Wo
             }
         }
 
-        for (file in generateTypedKotlinFlows(
+        generateTypedKotlinIntegrationFlowBuilder(
             packageName = parameters.packageName.get(),
             packageDescription = parameters.packageDescription.orNull,
             flowName = parameters.flowName.get(),
@@ -132,8 +132,6 @@ abstract class GenerateTypedFlowsWorker : WorkAction<GenerateTypedFlowsWorker.Wo
             suffixID = parameters.suffix.orNull?.takeIf { it.isNotBlank() }?.replace("/", "")?.uppercase(),
             baseUrl = parameters.baseUrl.get(),
             groovyScripts = parameters.groovyScripts.map { it.nameWithoutExtension },
-        )) {
-            file.writeTo(typedKotlinFlows)
-        }
+        ).writeTo(typedKotlinFlows)
     }
 }
