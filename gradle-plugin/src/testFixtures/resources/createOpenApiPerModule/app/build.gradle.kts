@@ -18,15 +18,9 @@ jvmApplication {
             integrationArtifacts {
                 integrationPackages {
                     integrationPackage("Com_Example_Ktor_Resources") {
+                        description = "A Description"
                         integrationFlows {
                             integrationFlow("IF_Ba") {
-                                description = "Ba test"
-
-                                dependencies {
-                                    implementation(project())
-                                }
-                            }
-                            integrationFlow("IF_Foo") {
                                 description = "Ba test"
 
                                 dependencies {
