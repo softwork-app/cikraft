@@ -17,10 +17,10 @@ abstract class GenerateKtorResources : DefaultTask() {
         group = "cikraft"
     }
 
-    @get:InputDirectory
+    @get:InputFiles
     @get:SkipWhenEmpty
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     public abstract val createdFlows: ConfigurableFileCollection
 
     @get:OutputDirectory

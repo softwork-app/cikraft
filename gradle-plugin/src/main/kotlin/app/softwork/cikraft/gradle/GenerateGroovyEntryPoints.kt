@@ -21,7 +21,7 @@ abstract class GenerateGroovyEntryPoints : DefaultTask() {
     @get:InputFiles
     @get:SkipWhenEmpty
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val scripts: ConfigurableFileCollection
 
     @get:OutputFile

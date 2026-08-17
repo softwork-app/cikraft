@@ -17,11 +17,11 @@ abstract class GenerateKtorServerAPI : DefaultTask() {
         group = "cikraft"
     }
 
-    @get:InputDirectory
+    @get:InputFiles
     @get:SkipWhenEmpty
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val createdFlows: ConfigurableFileCollection
 
     @get:OutputDirectory

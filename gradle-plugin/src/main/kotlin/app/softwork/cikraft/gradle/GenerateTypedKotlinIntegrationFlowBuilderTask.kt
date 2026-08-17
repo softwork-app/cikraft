@@ -22,7 +22,7 @@ public abstract class GenerateTypedKotlinIntegrationFlowBuilderTask : DefaultTas
 
     @get:InputFiles
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     public abstract val jsonScriptEntry: ConfigurableFileCollection
 
     @get:OutputDirectory

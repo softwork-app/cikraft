@@ -25,7 +25,7 @@ import javax.inject.Inject
 @CacheableTask
 abstract class CreateInfrastructureDryRun : DefaultTask() {
     @get:InputFiles
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val entryPoints: ConfigurableFileCollection
 
     @get:Input
