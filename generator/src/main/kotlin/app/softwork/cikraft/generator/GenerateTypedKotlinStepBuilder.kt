@@ -2,7 +2,6 @@ package app.softwork.cikraft.generator
 
 import app.softwork.cikraft.core.*
 import com.squareup.kotlinpoet.*
-import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 
 @ExperimentalKotlinPoetApi
 public fun generateTypedKotlinStepBuilder(

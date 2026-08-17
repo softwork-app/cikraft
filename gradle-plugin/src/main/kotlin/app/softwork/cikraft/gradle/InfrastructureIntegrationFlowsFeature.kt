@@ -19,7 +19,6 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
-import org.gradle.api.tasks.TaskProvider
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.ProjectFeatureApplicationContext
 import org.gradle.features.binding.ProjectFeatureApplyAction

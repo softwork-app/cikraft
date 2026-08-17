@@ -53,7 +53,9 @@ abstract class GenerateTypedGroovyStepBuilderWorker : WorkAction<GenerateTypedGr
     override fun execute() {
         val typedKotlinFlows = parameters.typedKotlinFlows.asFile.get()
 
-        for (file in generateTypedGroovyStepBuilder(groovyScripts = parameters.groovyScripts.map { it.nameWithoutExtension }) ) {
+        for (file in generateTypedGroovyStepBuilder(
+            groovyScripts = parameters.groovyScripts.map { it.nameWithoutExtension },
+        )) {
             file.writeTo(typedKotlinFlows)
         }
     }
