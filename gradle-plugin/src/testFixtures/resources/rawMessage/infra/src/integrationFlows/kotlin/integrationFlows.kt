@@ -8,6 +8,7 @@ public fun IntegrationFlowBuilder.integrationFlows() {
         ) {
             startMessage()
             raw()
+            test()
             endMessage()
         }
     }

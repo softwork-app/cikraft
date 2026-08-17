@@ -467,7 +467,7 @@ public data object IFBa
             "--stacktrace",
         ).build()
 
-        val testGroovyAccessor = fixtureDir / "resources/rawMessage/infra/build/cikraft/typedFlows/kotlin/test.kt"
+        val testGroovyAccessor = fixtureDir / "resources/rawMessage/infra/build/cikraft/typedSteps/groovy/test.kt"
         assertEquals(
             """
                 import app.softwork.cikraft.integrationflow.StepBuilder

@@ -1,29 +1,14 @@
 jvmApplication {
     cikraft {
         infrastructure {
-            apiStages {
-                apiStage("Dev") {
-                    apiServer = "foo"
-                    authServer = "bar"
-                    httpServer = "localhost"
-                    web = "localhost"
-                }
-            }
-            transportStages {
-                transportStage("Prd") {
-                    httpServer = "prodHost"
-                    web = "localhost"
-                }
-            }
-
-            httpNamespace = "foo"
-            suffix = providers.gradleProperty("suffix")
-
             integrationArtifacts {
+                dependencies {
+                    implementation(integrationFlows(projects.app))
+                }
+
                 integrationPackages {
                     integrationPackage("IP_Foo") {
                         description = "Foo test"
-
 
                         integrationFlows {
                             integrationFlow("IF_Ba") {
@@ -36,10 +21,6 @@ jvmApplication {
                             }
                         }
                     }
-                }
-
-                dependencies {
-                    implementation(integrationFlows(projects.app))
                 }
             }
         }

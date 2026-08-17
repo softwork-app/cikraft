@@ -1,5 +1,5 @@
-import Stage
 import app.softwork.cikraft.integrationflow.builder.IntegrationFlowBuilder
+import testWithDefaults
 import userRole
 
 public fun IntegrationFlowBuilder.integrationFlows() {
@@ -9,15 +9,7 @@ public fun IntegrationFlowBuilder.integrationFlows() {
       userRole = userRole,
     ) {
       startMessage()
-      test(
-        a = { when (it)  {
-          Stage.Dev -> "a"
-          Stage.Prd -> "b"
-        }},
-        b = { 42 },
-        d = { "foo" },
-        e = { "foo" },
-      )
+      testWithDefaults()
       endMessage()
     }
   }
