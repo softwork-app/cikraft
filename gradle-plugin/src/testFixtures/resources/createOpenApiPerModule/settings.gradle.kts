@@ -66,15 +66,6 @@ defaults {
                 httpNamespace = "/foo"
 
                 integrationArtifacts {
-                    integrationPackages {
-                        integrationPackage("Com_Example_Ktor_Resources") {
-                            description = "A Description"
-                        }
-                        integrationPackage("Bar") {
-                            description = "Bar Description"
-                        }
-                    }
-
                     openApi {
                         title = "New IP"
                         description = "IP Description"

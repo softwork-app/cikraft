@@ -18,6 +18,7 @@ jvmApplication {
             integrationArtifacts {
                 integrationPackages {
                     integrationPackage("Bar") {
+                        description = "Bar Description"
                         integrationFlows {
                             integrationFlow("IF_Bar") {
                                 description = "Bar test"
