@@ -4,6 +4,7 @@ import dataStoreFlow
 import fooFlow
 import javaStreamFlow
 import kotlinxIoFlow
+import noBodyScript
 import noOutputsFlow
 import nullableFlow
 import scriptWithoutBodyAfterScriptWithBodyFlow
@@ -96,6 +97,17 @@ class GenerateFunctionKtTest {
         )
         assertEquals(
             (Path("src/testFixtures") / "kotlin/com/example/ktor/resources/nullable.kt").readText(),
+            generated.toString(),
+        )
+    }
+
+    @Test
+    fun noBody() {
+        val generated = generateFunction(
+            createdFlow = noBodyScript,
+        )
+        assertEquals(
+            Path("src/testFixtures/kotlin/com/example/ktor/resources/noBodyFunction.kt").readText(),
             generated.toString(),
         )
     }

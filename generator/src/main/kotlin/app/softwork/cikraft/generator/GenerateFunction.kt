@@ -177,6 +177,13 @@ private fun FunSpec.Builder.returnResultClass(createdFlow: CreatedFlow) {
                     bodyIsSet = true
                 }
 
+                is Body if output.klass.isNothing() -> {
+                    returnParameters.add(
+                        CodeBlock.of("${output.propertyName} = ${script.resultName}.${output.propertyName}"),
+                    )
+                    bodyIsSet = true
+                }
+
                 is Body -> {}
 
                 is DynamicHeaders -> {

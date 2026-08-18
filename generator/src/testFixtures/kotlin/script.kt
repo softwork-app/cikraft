@@ -925,7 +925,7 @@ public val noBodyOutputScript = Script(
     inputs = listOf(),
     outputs = setOf(
         Body(
-            propertyName = "body",
+            propertyName = "nothing",
             klass = NormalClass("kotlin", listOf("Nothing")),
             contentNegotiations = listOf(),
             documentation = null,
