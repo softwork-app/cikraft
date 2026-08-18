@@ -916,6 +916,26 @@ public val binaryRedirectScript = Script(
     error = fault,
 )
 
+public val noBodyOutputScript = Script(
+    name = "binaryRedirect",
+    jvmFunction = "com.example.FooKt.binaryRedirect",
+    isSuspend = false,
+    outputJvmName = "com.example.StreamOutput",
+    outputIsNullable = false,
+    inputs = listOf(),
+    outputs = setOf(
+        Body(
+            propertyName = "nothing",
+            klass = NormalClass("kotlin", listOf("Nothing")),
+            contentNegotiations = listOf(),
+            documentation = null,
+            nullable = true,
+            sealedSubClasses = setOf(),
+        ),
+    ),
+    error = fault,
+)
+
 public val kotlinxIoScript = Script(
     name = "kotlinxIO",
     jvmFunction = "com.example.FooKt.kotlinxIO",
