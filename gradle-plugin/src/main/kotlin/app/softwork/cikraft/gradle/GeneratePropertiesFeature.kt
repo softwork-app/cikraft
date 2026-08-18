@@ -53,9 +53,12 @@ abstract class GeneratePropertiesFeature :
             parentDefinition: SAPCIGeneratorDefinition,
         ) {
             val parentBuildModel = context.getBuildModel(parentDefinition)
+            val buildModelName = parentBuildModel.name
             val stage = definition.stage.get()
 
-            val propertiesConfiguration = configurations.resolvable("cikraftInfrastructureProperties$stage") {
+            val propertiesConfiguration = configurations.resolvable(
+                "cikraftInfrastructureProperties$stage$buildModelName",
+            ) {
                 fromDependencyCollector(definition.dependencies.infrastructure)
                 attributes {
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
@@ -64,15 +67,19 @@ abstract class GeneratePropertiesFeature :
                 }
             }
 
-            val functionsWorker = configurations.dependencyScope("cikraftPropertiesWorker$stage") {
+            val functionsWorker = configurations.dependencyScope("cikraftPropertiesWorker$stage$buildModelName") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:flow-dsl:$VERSION"))
             }
-            val functionsWorkerClasspath = configurations.resolvable("cikraftPropertiesWorkerClasspath$stage") {
+            val functionsWorkerClasspath = configurations.resolvable(
+                "cikraftPropertiesWorkerClasspath$stage$buildModelName",
+            ) {
                 extendsFrom(functionsWorker)
             }
 
-            val sapCICreatedFlows = configurations.resolvable("cikraftGeneratePropertiesCreatedFlow$stage") {
+            val sapCICreatedFlows = configurations.resolvable(
+                "cikraftGeneratePropertiesCreatedFlow$stage$buildModelName",
+            ) {
                 fromDependencyCollector(definition.dependencies.infrastructure)
                 attributes {
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
@@ -80,12 +87,12 @@ abstract class GeneratePropertiesFeature :
                 }
             }
 
-            val task = tasks.register("generateProperties" + stage, GeneratePropertiesTask::class.java) {
+            val task = tasks.register("generateProperties$stage$buildModelName", GeneratePropertiesTask::class.java) {
                 createdFlows.from(sapCICreatedFlows)
                 propertiesFiles.from(propertiesConfiguration)
                 propertiesFolder.convention(
                     layout.contextBuildDirectory.map {
-                        val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
+                        val sourceSetName = buildModelName.ifEmpty { "main" }
                         it.dir(
                             "generated/cikraft/$sourceSetName/$stage/kotlin/properties",
                         )
