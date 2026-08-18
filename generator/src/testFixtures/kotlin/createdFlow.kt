@@ -277,6 +277,6 @@ val noBodyScript = CreatedFlow(
         csrfProtection = false,
     ),
     description = "Returns No Body",
-    scripts = listOf(binaryRedirectScript),
+    scripts = listOf(noBodyOutputScript),
     injectedScripts = listOf(),
 )

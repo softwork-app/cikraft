@@ -375,7 +375,7 @@ private fun FunSpec.Builder.getRequestFactory(
 
 private fun FunSpec.Builder.returnResultClass(createdFlow: CreatedFlow) {
     val lastEntrypoint = createdFlow.scripts.lastOrNull {
-        it.bodyOutput != null && it.bodyOutput!!.contentNegotiations.isNotEmpty()
+        it.bodyOutput != null
     }
 
     val lastOutputBody = lastEntrypoint?.bodyOutput
@@ -430,15 +430,7 @@ private fun FunSpec.Builder.returnResultClass(createdFlow: CreatedFlow) {
     } as Header?
 
     when {
-        lastOutputBody != null && lastOutputBody.klass.isNothing() -> {
-            addStatement(
-                "call.%M(%T.OK)",
-                MemberName("io.ktor.server.response", "respond", isExtension = true),
-                HTTP_STATUS_CODE,
-            )
-        }
-
-        lastOutputBody != null -> {
+        lastOutputBody != null && lastOutputBody.contentNegotiations.isNotEmpty() -> {
             respondBody("result", lastOutputBody, isError = false)
         }
 
