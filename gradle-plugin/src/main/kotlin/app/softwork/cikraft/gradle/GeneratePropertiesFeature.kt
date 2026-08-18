@@ -56,7 +56,9 @@ abstract class GeneratePropertiesFeature :
             val buildModelName = parentBuildModel.name
             val stage = definition.stage.get()
 
-            val propertiesConfiguration = configurations.resolvable("cikraftInfrastructureProperties$stage$buildModelName") {
+            val propertiesConfiguration = configurations.resolvable(
+                "cikraftInfrastructureProperties$stage$buildModelName",
+            ) {
                 fromDependencyCollector(definition.dependencies.infrastructure)
                 attributes {
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
@@ -69,11 +71,15 @@ abstract class GeneratePropertiesFeature :
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:flow-dsl:$VERSION"))
             }
-            val functionsWorkerClasspath = configurations.resolvable("cikraftPropertiesWorkerClasspath$stage$buildModelName") {
+            val functionsWorkerClasspath = configurations.resolvable(
+                "cikraftPropertiesWorkerClasspath$stage$buildModelName",
+            ) {
                 extendsFrom(functionsWorker)
             }
 
-            val sapCICreatedFlows = configurations.resolvable("cikraftGeneratePropertiesCreatedFlow$stage$buildModelName") {
+            val sapCICreatedFlows = configurations.resolvable(
+                "cikraftGeneratePropertiesCreatedFlow$stage$buildModelName",
+            ) {
                 fromDependencyCollector(definition.dependencies.infrastructure)
                 attributes {
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
