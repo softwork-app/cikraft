@@ -136,7 +136,7 @@ private fun FunSpec.Builder.addAccept(
 ): Boolean {
     val lastEntrypoint = entryPoints.lastOrNull()
     val lastOutputBody = lastEntrypoint?.bodyOutput
-    return if (lastOutputBody != null) {
+    return if (lastOutputBody != null && lastOutputBody.contentNegotiations.isNotEmpty()) {
         beginControlFlow(
             "%M(%L)",
             MemberName("io.ktor.server.routing", "accept", isExtension = true),
@@ -394,7 +394,7 @@ private fun FunSpec.Builder.returnResultClass(createdFlow: CreatedFlow) {
         )
     }
 
-    if (lastOutputBody != null) {
+    if (lastOutputBody != null && lastOutputBody.contentNegotiations.isNotEmpty()) {
         getResponseFactory(lastOutputBody, isError = false)
     }
     if (error != null) {
@@ -430,6 +430,14 @@ private fun FunSpec.Builder.returnResultClass(createdFlow: CreatedFlow) {
     } as Header?
 
     when {
+        lastOutputBody != null && lastOutputBody.klass.isNothing() -> {
+            addStatement(
+                "call.%M(%T.OK)",
+                MemberName("io.ktor.server.response", "respond", isExtension = true),
+                HTTP_STATUS_CODE,
+            )
+        }
+
         lastOutputBody != null -> {
             respondBody("result", lastOutputBody, isError = false)
         }

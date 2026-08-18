@@ -30,7 +30,7 @@ public fun generateFunction(
     if (createdFlow.scripts.any { it.isSuspend }) {
         function.addModifiers(KModifier.SUSPEND)
     }
-    val outputs = getBodyAndHeader((createdFlow.scripts))
+    val outputs = getBodyAndHeaderOutputs((createdFlow.scripts))
     if (outputs.isNotEmpty()) {
         val isNullable = createdFlow.scripts.any {
             it.outputIsNullable
@@ -136,7 +136,7 @@ internal data class BodyAndHeaders(
     fun isNotEmpty() = body != null || headers.isNotEmpty() || dynamicHeaders.isNotEmpty()
 }
 
-private fun getBodyAndHeader(scripts: List<Script>): BodyAndHeaders {
+private fun getBodyAndHeaderOutputs(scripts: List<Script>): BodyAndHeaders {
     var body: Body? = null
     val headers = mutableListOf<Header>()
     val dynamicHeaders = mutableListOf<DynamicHeaders>()
@@ -144,6 +144,7 @@ private fun getBodyAndHeader(scripts: List<Script>): BodyAndHeaders {
     for (script in scripts) {
         for (output in script.outputs) {
             when (output) {
+                is Body if output.klass.isNothing() -> body = output
                 is Body if output.contentNegotiations.isNotEmpty() -> body = output
                 is Body -> continue
                 is DynamicHeaders -> dynamicHeaders.add(output)

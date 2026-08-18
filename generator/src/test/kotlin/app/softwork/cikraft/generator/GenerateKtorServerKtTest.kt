@@ -4,6 +4,7 @@ import dataStoreFlow
 import fooFlow
 import javaStreamFlow
 import kotlinxIoFlow
+import noBodyScript
 import noOutputsFlow
 import twoFlow
 import kotlin.io.path.*
@@ -72,6 +73,17 @@ class GenerateKtorServerKtTest {
         )
         assertEquals(
             (Path("src/testFixtures") / "kotlin/com/example/ktor/resources/dataStoreKotlin.kt").readText().drop(63),
+            generated?.toString(),
+        )
+    }
+
+    @Test
+    fun noBodyResponse() {
+        val generated = generateKtorServer(
+            createdFlow = noBodyScript,
+        )
+        assertEquals(
+            (Path("src/testFixtures") / "kotlin/com/example/ktor/resources/noBodyResponse.kt").readText().drop(63),
             generated?.toString(),
         )
     }

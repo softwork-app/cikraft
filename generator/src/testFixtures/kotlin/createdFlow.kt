@@ -262,3 +262,21 @@ val nullableFlow = CreatedFlow(
     scripts = listOf(nullableReturnScript),
     injectedScripts = listOf(),
 )
+
+val noBodyScript = CreatedFlow(
+    id = "BazNoBody",
+    rawId = "BazNoBody",
+    name = "Baz_NoBody",
+    rawName = "Baz_NoBody",
+    packageID = "ComExampleKtorResources",
+    packageName = "Com_Example_Ktor_Resources",
+    packageDescription = "",
+    sender = CreatedFlow.Sender.Https(
+        url = "/foo",
+        role = "Baz",
+        csrfProtection = false,
+    ),
+    description = "Returns No Body",
+    scripts = listOf(binaryRedirectScript),
+    injectedScripts = listOf(),
+)
