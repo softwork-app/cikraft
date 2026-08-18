@@ -1,6 +1,9 @@
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention")
+    id("org.jetbrains.kotlinx.kover.aggregation")
 }
+
+pluginManager.apply(KoverCoberturaSettingsPlugin::class)
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -37,5 +40,13 @@ dependencyResolutionManagement {
             }
             filter { includeGroup("org.nodejs") }
         }
+    }
+}
+
+kover {
+    enableCoverage()
+
+    reports {
+        includedClasses.add("app.softwork.cikraft.*")
     }
 }
