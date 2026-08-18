@@ -14,7 +14,7 @@ import javax.activation.DataHandler
  *
  * @see <a href="https://help.sap.com/docs/cloud-integration/sap-cloud-integration/headers-and-exchange-properties-provided-by-integration-framework" a>Available Properties</a>
  */
-class MessageImpl(
+class MockMessage(
     private var body: Any?,
     properties: Map<String, Any> = emptyMap(),
     attachments: Map<String, DataHandler> = emptyMap(),

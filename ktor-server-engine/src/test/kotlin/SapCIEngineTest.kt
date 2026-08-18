@@ -72,7 +72,7 @@ class SapCIEngineTest {
 
         runBlocking {
             val response = sapCIServer(
-                MessageImpl(
+                MockMessage(
                     body = s,
                     properties = mapOf(
                         "CamelHttpUrl" to "http://foo:443/foo",
@@ -88,7 +88,7 @@ class SapCIEngineTest {
             assertEquals(201, response.getHeader("CamelHttpResponseCode", Int::class.java))
 
             val jsonResponse = sapCIServer(
-                MessageImpl(
+                MockMessage(
                     // language=json
                     body = """{"bar": "bar"}""".byteInputStream(),
                     properties = mapOf(

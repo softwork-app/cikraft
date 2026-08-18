@@ -1,3 +1,4 @@
+import app.softwork.cikraft.MockMessageLog
 import com.sap.gateway.ip.core.customdev.util.Message
 import com.sap.it.api.msglog.MessageLog
 import com.sap.it.api.msglog.MessageLogFactory
