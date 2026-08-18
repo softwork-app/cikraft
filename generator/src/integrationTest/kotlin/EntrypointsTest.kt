@@ -4,7 +4,7 @@ import kotlin.test.*
 class EntrypointsTest {
     @Test
     fun acceptHeaderWithoutProperties() {
-        val message = MessageImpl(
+        val message = MockMessage(
             body = """{"x": "42"}""",
             headers = mapOf(
                 "Content-Type" to "application/json",
@@ -34,7 +34,7 @@ class EntrypointsTest {
 
     @Test
     fun noAcceptHeader() {
-        val message = MessageImpl(
+        val message = MockMessage(
             body = """{"x": "42"}""",
             headers = mapOf(
                 "Content-Type" to "application/json",
@@ -62,7 +62,7 @@ class EntrypointsTest {
 
     @Test
     fun acceptHeaderWithProperties() {
-        val message = MessageImpl(
+        val message = MockMessage(
             body = """{"x": "42"}""",
             headers = mapOf(
                 "Content-Type" to "application/json",
@@ -92,7 +92,7 @@ class EntrypointsTest {
 
     @Test
     fun acceptHeaderWithMultiProperties() {
-        val message = MessageImpl(
+        val message = MockMessage(
             body = """{"x": "42"}""",
             headers = mapOf(
                 "Content-Type" to "application/json",
@@ -122,7 +122,7 @@ class EntrypointsTest {
 
     @Test
     fun multipleAcceptHeaderWithMultiProperties() {
-        val message = MessageImpl(
+        val message = MockMessage(
             body = """{"x": "42"}""",
             headers = mapOf(
                 "Content-Type" to "application/json",
@@ -152,7 +152,7 @@ class EntrypointsTest {
 
     @Test
     fun acceptStar() {
-        val message = MessageImpl(
+        val message = MockMessage(
             body = """{"x": "42"}""",
             headers = mapOf(
                 "Content-Type" to "application/json",
@@ -182,7 +182,7 @@ class EntrypointsTest {
 
     @Test
     fun wrongAccept() {
-        val message = MessageImpl(
+        val message = MockMessage(
             body = """{"x": "42"}""",
             headers = mapOf(
                 "Content-Type" to "application/json",
@@ -204,5 +204,26 @@ class EntrypointsTest {
             ),
             message.headers,
         )
+    }
+
+    @Test
+    fun messageLogTest() {
+        val message = MockMessage(
+            body = """{"x": "42"}""",
+            headers = mapOf(
+                "B" to "some request header",
+            ),
+        )
+        val messageLog = MockMessageLog()
+        message.raw(messageLog = messageLog)
+        assertEquals("""{"x": "42"}""", message.body)
+        assertEquals(mapOf(), message.properties)
+        assertEquals(
+            mapOf(
+                "B" to "some request header",
+            ),
+            message.headers,
+        )
+        assertEquals(mapOf("FOO" to "BAR"), messageLog.customHeaderProperties)
     }
 }

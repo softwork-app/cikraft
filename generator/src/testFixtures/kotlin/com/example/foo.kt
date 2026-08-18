@@ -69,7 +69,9 @@ fun noOutputs(
 ): Unit = error("")
 
 @ScriptEntry
-fun raw(rawMessage: Message, rawMessageLog: MessageLog, rawNullableMessageLog: MessageLog? = null) {}
+fun raw(rawMessage: Message, rawMessageLog: MessageLog, rawNullableMessageLog: MessageLog? = null) {
+    rawMessageLog.addCustomHeaderProperty("FOO", "BAR")
+}
 
 @ScriptEntry
 suspend fun rawSuspend(rawMessage: Message, rawMessageLog: MessageLog) {}
