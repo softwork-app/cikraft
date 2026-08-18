@@ -9,7 +9,7 @@ class MockMessageLog : MessageLog {
     data class Attachment(val text: String, val mediaType: String)
     val attachments: Map<String, Attachment> field = mutableMapOf<String, Attachment>()
 
-    val headers: Map<String, String> field = mutableMapOf<String, String>()
+    val customHeaderProperties: Map<String, String> field = mutableMapOf<String, String>()
 
     override fun setStringProperty(name: String, value: String) {
         properties[name] = value
@@ -44,6 +44,6 @@ class MockMessageLog : MessageLog {
     }
 
     override fun addCustomHeaderProperty(name: String, value: String) {
-        headers[name] = value
+        customHeaderProperties[name] = value
     }
 }
