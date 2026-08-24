@@ -5,12 +5,9 @@ import com.sap.it.api.msglog.MessageLog
 import kotlin.String
 import kotlinx.io.Source
 
-public fun BazKotlinxIOFunction(
-  body: Source,
-  b: String? = null,
-  rawNullableMessageLog: MessageLog? = null,
-): BazKotlinxIOResult {
-  val resultKotlinxIO = kotlinxIO(body = body,b = b,rawNullableMessageLog = rawNullableMessageLog,)
+context(messageLog: MessageLog)
+public fun BazKotlinxIOFunction(body: Source, b: String? = null): BazKotlinxIOResult {
+  val resultKotlinxIO = kotlinxIO(body = body,b = b,)
   return BazKotlinxIOResult(body = resultKotlinxIO.body)
 }
 

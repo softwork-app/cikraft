@@ -1,3 +1,4 @@
+import app.softwork.cikraft.MockMessageLog
 import com.example.ktor.resources.BazTwo
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.cookies.*
@@ -22,7 +23,9 @@ class GeneratedKtorServerTest {
                     ignored = "",
                     ignored2 = null,
                     injected = false,
-                )
+                ) {
+                    MockMessageLog()
+                }
             }
         }
 
@@ -57,7 +60,9 @@ class GeneratedKtorServerTest {
                     ignored = "",
                     ignored2 = null,
                     injected = false,
-                )
+                ) {
+                    MockMessageLog()
+                }
             }
         }
 
@@ -95,7 +100,9 @@ class GeneratedKtorServerTest {
                     ignored = "",
                     ignored2 = null,
                     injected = false,
-                )
+                ) {
+                    MockMessageLog()
+                }
             }
         }
 

@@ -33,6 +33,13 @@ private fun generateDataStorePolling(createdFlow: CreatedFlow): FileSpec {
     )
 
     function.addParameters(createdFlow, configObject)
+    function.addParameter(
+        "getMessageLog",
+        LambdaTypeName.get(
+            parameters = listOf(),
+            returnType = MESSAGE_LOG,
+        ),
+    )
     val sender = createdFlow.sender as CreatedFlow.Sender.DataStore
 
     function.beginControlFlow("invoke(%S).collect", sender.name)
@@ -63,6 +70,13 @@ private fun generateKtorServerRoute(createdFlow: CreatedFlow): FileSpec {
     function.receiver(ClassName("io.ktor.server.routing", "Route"))
 
     function.addParameters(createdFlow, configObject)
+    function.addParameter(
+        "getMessageLog",
+        LambdaTypeName.get(
+            parameters = listOf(),
+            returnType = MESSAGE_LOG,
+        ),
+    )
 
     val sender = createdFlow.sender as CreatedFlow.Sender.Https
     if (sender.csrfProtection) {
@@ -83,7 +97,12 @@ private fun generateKtorServerRoute(createdFlow: CreatedFlow): FileSpec {
 
     function.beginControlFlow(
         "%M<%T>",
-        MemberName("io.ktor.server.resources", "post", isExtension = true),
+        MemberName("io.ktor.server.resources", "resource", isExtension = true),
+        resourcesClassName,
+    )
+    function.beginControlFlow(
+        "%M<%T>",
+        MemberName("io.ktor.server.resources", "handle", isExtension = true),
         resourcesClassName,
     )
     if (sender.csrfProtection) {
@@ -106,6 +125,7 @@ private fun generateKtorServerRoute(createdFlow: CreatedFlow): FileSpec {
     if (sender.csrfProtection) {
         function.endControlFlow()
     }
+    function.endControlFlow()
     function.endControlFlow()
 
     file.addFunction(function.build())
@@ -225,7 +245,7 @@ private fun FunSpec.Builder.addCSRFCheck() {
         MemberName("io.ktor.server.response", "respond", isExtension = true),
         HTTP_STATUS_CODE.nestedClass("Companion").member("Forbidden"),
     )
-    addStatement("""return@post""")
+    addStatement("""return@handle""")
     endControlFlow()
 }
 
@@ -328,7 +348,7 @@ private fun FunSpec.Builder.getResponseFactory(
         MemberName("io.ktor.server.response", "respond", isExtension = true),
         HTTP_STATUS_CODE.nestedClass("Companion").member("NotAcceptable"),
     )
-    addStatement("return@post")
+    addStatement("return@handle")
     endControlFlow()
 
     endControlFlow()
@@ -367,7 +387,7 @@ private fun FunSpec.Builder.getRequestFactory(
         MemberName("io.ktor.server.response", "respond", isExtension = true),
         HTTP_STATUS_CODE.nestedClass("Companion").member("UnsupportedMediaType"),
     )
-    addStatement("return@post")
+    addStatement("return@handle")
     endControlFlow()
 
     endControlFlow()
@@ -417,7 +437,9 @@ private fun FunSpec.Builder.returnResultClass(createdFlow: CreatedFlow) {
         beginControlFlow("try")
     }
 
+    beginControlFlow("val result = context(getMessageLog())")
     callFunction(createdFlow)
+    endControlFlow()
 
     for (entryPoint in createdFlow.scripts) {
         for (output in entryPoint.outputs) {
@@ -502,7 +524,7 @@ private fun FunSpec.Builder.addOutput(
 
 private fun FunSpec.Builder.callFunction(createdFlow: CreatedFlow) {
     addStatement(
-        "val result = %M(%L)",
+        "%M(%L)",
         MemberName(createdFlow.packageName.toPackageName(), createdFlow.rawId + "Function", isExtension = true),
         CodeBlock.builder().apply {
             for (input in createdFlow.scripts.flatMap { it.inputs }.distinctBy { it.propertyName }) {
@@ -546,8 +568,9 @@ private fun FunSpec.Builder.callFunction(createdFlow: CreatedFlow) {
     )
 }
 private fun FunSpec.Builder.callFunctionFromDataStore(createdFlow: CreatedFlow) {
+    beginControlFlow("val result = context(getMessageLog())")
     addStatement(
-        "val result = %M(%L)",
+        "%M(%L)",
         MemberName(createdFlow.packageName.toPackageName(), createdFlow.rawId + "Function", isExtension = true),
         CodeBlock.builder().apply {
             for (input in createdFlow.scripts.flatMap { it.inputs }.distinctBy { it.propertyName }) {
@@ -578,6 +601,7 @@ private fun FunSpec.Builder.callFunctionFromDataStore(createdFlow: CreatedFlow) 
             }
         }.build(),
     )
+    endControlFlow()
 }
 
 private fun FunSpec.Builder.respondBody(

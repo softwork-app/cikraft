@@ -1,10 +1,12 @@
 package com.example.ktor.resources
 
 import com.example.noOutputs
+import com.sap.it.api.msglog.MessageLog
 import kotlin.CharArray
 import kotlin.Int
 import kotlin.String
 
+context(messageLog: MessageLog)
 public fun BazNoOutputsFunction(
   bb: String? = null,
   cc: CharArray,

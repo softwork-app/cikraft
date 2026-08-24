@@ -17,6 +17,7 @@ kotlinTesting {
 
     dependencies {
         annotation(projects.runtime)
+        annotation(libs.sapci.generic.api)
         annotation(libs.serialization.json)
     }
 }

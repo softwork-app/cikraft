@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.psi.KtElement
 internal data object SapCIErrors : KtDiagnosticsContainer() {
     val CIKRAFT_ENTRYPOINT_NOT_STATIC by error1<KtElement, FirNamedFunctionSymbol>()
     val CIKRAFT_ENTRYPOINT_HAS_RECEIVER by error1<KtElement, FirNamedFunctionSymbol>()
+    val CIKRAFT_ENTRYPOINT_HAS_UNSUPPORTED_CONTEXT_PARAMETER by error1<KtElement, FirValueParameterSymbol>()
     val CIKRAFT_ENTRYPOINT_HAS_TYPE_PARAMETERS by error1<KtElement, FirNamedFunctionSymbol>()
     val CIKRAFT_ENTRYPOINT_HAS_MULTIPLE_THROWS by error1<KtElement, FirNamedFunctionSymbol>()
     val CIKRAFT_CONTENT_TYPE_NOT_OBJECT_OR_CLASS by error1<KtElement, FirRegularClassSymbol>()
@@ -19,6 +20,7 @@ internal data object SapCIErrors : KtDiagnosticsContainer() {
     val CIKRAFT_CONTENT_TYPE_NOT_PUBLIC by error1<KtElement, FirRegularClassSymbol>()
     val CIKRAFT_PASSWORD_IS_NOT_CHARARRAY by error1<KtElement, FirValueParameterSymbol>()
     val CIKRAFT_ENTRYPOINT_HEADER_IS_NOT_NULLABLE_STRING by error1<KtElement, FirValueParameterSymbol>()
+    val CIKRAFT_MESSAGELOG_MUST_BE_CONTEXT_PARAMETER by error1<KtElement, FirValueParameterSymbol>()
     val CIKRAFT_DYNAMIC_HEADER_IS_NOT_MAP_STRING by error1<KtElement, FirPropertySymbol>()
     val CIKRAFT_HEADER_IS_NOT_PRIMITIVE by error1<KtElement, FirVariableSymbol<*>>()
 

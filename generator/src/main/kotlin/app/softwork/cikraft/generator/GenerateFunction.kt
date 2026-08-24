@@ -11,6 +11,7 @@ import app.softwork.cikraft.core.Script.Password
 import app.softwork.cikraft.core.Script.Property
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
@@ -20,6 +21,7 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.joinToCode
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 public fun generateFunction(
     createdFlow: CreatedFlow,
 ): FileSpec {
@@ -41,6 +43,8 @@ public fun generateFunction(
             ),
         )
     }
+
+    function.contextParameter("messageLog", MESSAGE_LOG)
 
     val parameters = function.callScripts(createdFlow.scripts, hasOutputs = outputs.isNotEmpty())
     function.addParameters(parameters.distinctBy { it.propertyName })

@@ -1,11 +1,13 @@
 package ip.foo
 
+import com.sap.it.api.msglog.MessageLog
 import test
 import kotlin.CharArray
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.Map
 
+context(messageLog: MessageLog)
 public fun IFBaFunction(
     input: String,
     a: String,

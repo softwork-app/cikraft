@@ -11,7 +11,7 @@ public fun writeGroovyEntryPoints(
     for (script in scripts) {
         appendLine("Message ${script.name}(Message message) {")
         appendLine(
-            "  return CiKraftEntrypointsKt.${script.name}(message, messageLogFactory.getMessageLog(message))",
+            "  return CiKraftEntrypointsKt.${script.name}(messageLogFactory.getMessageLog(message), message)",
         )
         appendLine("}")
     }
