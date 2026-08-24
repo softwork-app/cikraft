@@ -43,11 +43,11 @@ internal data object ScriptEntryChecker : FirSimpleFunctionChecker(MppCheckerKin
         }
         if (contextParameters.isNotEmpty()) {
             for (contextParameter in contextParameters) {
-                if (!contextParameter.isMessageLog()) {
+                if (!contextParameter.isMessageLog(checkNull = true)) {
                     reporter.reportOn(
                         source,
                         SapCIErrors.CIKRAFT_ENTRYPOINT_HAS_UNSUPPORTED_CONTEXT_PARAMETER,
-                        symbol,
+                        contextParameter.symbol,
                     )
                 }
             }
@@ -101,7 +101,7 @@ internal data object ScriptEntryChecker : FirSimpleFunctionChecker(MppCheckerKin
                 )
             }
 
-            if (parameter.isMessageLog()) {
+            if (parameter.isMessageLog(checkNull = false)) {
                 reporter.reportOn(
                     parameter.source,
                     SapCIErrors.CIKRAFT_MESSAGELOG_MUST_BE_CONTEXT_PARAMETER,
@@ -112,9 +112,15 @@ internal data object ScriptEntryChecker : FirSimpleFunctionChecker(MppCheckerKin
     }
 
     context(context: CheckerContext)
-    private fun FirValueParameter.isMessageLog(): Boolean {
-        val classId = returnTypeRef.coneTypeOrNull?.fullyExpandedClassId(context.session) ?: return false
-        return classId == messageLogClass
+    private fun FirValueParameter.isMessageLog(checkNull: Boolean): Boolean {
+        val coneType = returnTypeRef.coneTypeOrNull
+        val classId = coneType?.fullyExpandedClassId(context.session) ?: return false
+
+        return if (checkNull) {
+            classId == messageLogClass && !coneType.canBeNull(context.session)
+        } else {
+            classId == messageLogClass
+        }
     }
 
     context(context: CheckerContext)

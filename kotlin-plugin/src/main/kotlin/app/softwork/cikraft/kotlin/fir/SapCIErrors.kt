@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtElement
 internal data object SapCIErrors : KtDiagnosticsContainer() {
     val CIKRAFT_ENTRYPOINT_NOT_STATIC by error1<KtElement, FirNamedFunctionSymbol>()
     val CIKRAFT_ENTRYPOINT_HAS_RECEIVER by error1<KtElement, FirNamedFunctionSymbol>()
-    val CIKRAFT_ENTRYPOINT_HAS_UNSUPPORTED_CONTEXT_PARAMETER by error1<KtElement, FirNamedFunctionSymbol>()
+    val CIKRAFT_ENTRYPOINT_HAS_UNSUPPORTED_CONTEXT_PARAMETER by error1<KtElement, FirValueParameterSymbol>()
     val CIKRAFT_ENTRYPOINT_HAS_TYPE_PARAMETERS by error1<KtElement, FirNamedFunctionSymbol>()
     val CIKRAFT_ENTRYPOINT_HAS_MULTIPLE_THROWS by error1<KtElement, FirNamedFunctionSymbol>()
     val CIKRAFT_CONTENT_TYPE_NOT_OBJECT_OR_CLASS by error1<KtElement, FirRegularClassSymbol>()

@@ -38,7 +38,7 @@ private fun generateDataStorePolling(createdFlow: CreatedFlow): FileSpec {
         LambdaTypeName.get(
             parameters = listOf(),
             returnType = MESSAGE_LOG,
-        )
+        ),
     )
     val sender = createdFlow.sender as CreatedFlow.Sender.DataStore
 
@@ -75,7 +75,7 @@ private fun generateKtorServerRoute(createdFlow: CreatedFlow): FileSpec {
         LambdaTypeName.get(
             parameters = listOf(),
             returnType = MESSAGE_LOG,
-        )
+        ),
     )
 
     val sender = createdFlow.sender as CreatedFlow.Sender.Https
