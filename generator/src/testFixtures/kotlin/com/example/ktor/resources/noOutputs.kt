@@ -58,12 +58,10 @@ public fun Route.BazNoOutputs(
           return@handle
         }
         call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
-        val acceptContentTypes =
-          call.request.accept()?.let { it.split(",").map { ContentType.parse(it.trim()) } } ?: listOf(Any)
+        val acceptContentTypes = call.request.accept()?.let { it.split(",").map { ContentType.parse(it.trim()) }} ?: listOf(Any)
         val (errorResponseFactory, errorContentType) = when {
           acceptContentTypes.any { it == Any } ||
-                  acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
-
+          acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
           else -> {
             call.respond(NotAcceptable)
             return@handle
@@ -71,7 +69,7 @@ public fun Route.BazNoOutputs(
         }
         try {
           val result = context(getMessageLog()) {
-            BazNoOutputsFunction(bb = call.request.requestHeader("B"), cc = cc, dd = dd, ee = ee, ignored = ignored,)
+            BazNoOutputsFunction(bb = call.request.requestHeader("B"),cc = cc,dd = dd,ee = ee,ignored = ignored,)
           }
           call.respond(NoContent)
         } catch (exception: Fault) {

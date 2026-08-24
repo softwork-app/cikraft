@@ -65,14 +65,10 @@ public fun Route.BazTwo(
               return@handle
             }
             call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
-            val acceptContentTypes =
-              call.request.requestAccept()?.let { it.split(",").map { ContentType.parse(it.trim()) } } ?: listOf(Any)
+            val acceptContentTypes = call.request.requestAccept()?.let { it.split(",").map { ContentType.parse(it.trim()) }} ?: listOf(Any)
             val (responseFactory, responseContentType) = when {
               acceptContentTypes.any { it == Any } ||
-                      acceptContentTypes.any {
-                        Json.withParameter("charset", "utf-8").match(it)
-                      } -> JsonFactory to "application/json; charset=utf-8"
-
+              acceptContentTypes.any { Json.withParameter("charset", "utf-8").match(it) } -> JsonFactory to "application/json; charset=utf-8"
               else -> {
                 call.respond(NotAcceptable)
                 return@handle
@@ -80,8 +76,7 @@ public fun Route.BazTwo(
             }
             val (errorResponseFactory, errorContentType) = when {
               acceptContentTypes.any { it == Any } ||
-                      acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
-
+              acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
               else -> {
                 call.respond(NotAcceptable)
                 return@handle
@@ -90,8 +85,7 @@ public fun Route.BazTwo(
             val requestContentType = call.request.requestContentType()
             val requestFactory = when {
               requestContentType.match(Any) ||
-                      Json.withParameter("charset", "utf-8").match(requestContentType) -> JsonFactory
-
+              Json.withParameter("charset", "utf-8").match(requestContentType) -> JsonFactory
               else -> {
                 call.response.responseHeader("Accept-Post", "application/json")
                 call.respond(UnsupportedMediaType)
@@ -100,13 +94,7 @@ public fun Route.BazTwo(
             }
             try {
               val result = context(getMessageLog()) {
-                BazTwoFunction(
-                  body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),
-                  b = call.request.requestHeader("B"),
-                  ignored = ignored,
-                  injected = injected,
-                  ignored2 = ignored2,
-                )
+                BazTwoFunction(body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),b = call.request.requestHeader("B"),ignored = ignored,injected = injected,ignored2 = ignored2,)
               }
               call.response.responseHeader("D", result.d)
               call.response.status(HttpStatusCode.fromValue(result.fooHeader))

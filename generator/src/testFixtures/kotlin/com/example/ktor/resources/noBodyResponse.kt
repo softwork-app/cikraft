@@ -22,29 +22,27 @@ import kotlin.uuid.Uuid
 
 public fun Route.BazNoBody(getMessageLog: () -> MessageLog) {
   resource<BazNoBody> {
-  handle<BazNoBody> {
-    call.response.`header`(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
-    val acceptContentTypes =
-      call.request.accept()?.let { it.split(",").map { ContentType.parse(it.trim()) } } ?: listOf(Any)
-    val (errorResponseFactory, errorContentType) = when {
-      acceptContentTypes.any { it == Any } ||
-              acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
-
-      else -> {
-        call.respond(NotAcceptable)
-        return@handle
+    handle<BazNoBody> {
+      call.response.`header`(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
+      val acceptContentTypes = call.request.accept()?.let { it.split(",").map { ContentType.parse(it.trim()) }} ?: listOf(Any)
+      val (errorResponseFactory, errorContentType) = when {
+        acceptContentTypes.any { it == Any } ||
+        acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
+        else -> {
+          call.respond(NotAcceptable)
+          return@handle
+        }
+      }
+      try {
+        val result = context(getMessageLog()) {
+          BazNoBodyFunction()
+        }
+        call.respond(NoContent)
+      } catch (exception: Fault) {
+        call.response.status(HttpStatusCode.fromValue(exception.httpReturnCode))
+        call.response.`header`(name = io.ktor.http.HttpHeaders.ContentType, value = errorContentType)
+        call.respondText(text = errorResponseFactory.encodeToString(Fault.serializer(), exception.jsonError))
       }
     }
-    try {
-      val result = context(getMessageLog()) {
-        BazNoBodyFunction()
-      }
-      call.respond(NoContent)
-    } catch (exception: Fault) {
-      call.response.status(HttpStatusCode.fromValue(exception.httpReturnCode))
-      call.response.`header`(name = io.ktor.http.HttpHeaders.ContentType, value = errorContentType)
-      call.respondText(text = errorResponseFactory.encodeToString(Fault.serializer(), exception.jsonError))
-    }
-  }
   }
 }
