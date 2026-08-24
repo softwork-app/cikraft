@@ -5,11 +5,13 @@ import com.example.dummy
 import com.example.dummyWithOutput
 import com.example.twoPart1
 import com.example.twoPart2
+import com.sap.it.api.msglog.MessageLog
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.collections.Map
 
+context(messageLog: MessageLog)
 public suspend fun BazTwoFunction(
   body: FooInput,
   b: String? = null,

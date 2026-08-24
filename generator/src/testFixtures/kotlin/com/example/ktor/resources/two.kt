@@ -6,6 +6,7 @@ import app.softwork.cikraft.SAP_MESSAGE_PROCESSING_LOG_ID_HEADER
 import com.example.FooInput
 import com.example.JsonFactory
 import com.example.core.Fault
+import com.sap.it.api.msglog.MessageLog
 import io.ktor.http.ContentType
 import io.ktor.http.ContentType.Application.Json
 import io.ktor.http.ContentType.Companion.Any
@@ -16,8 +17,8 @@ import io.ktor.http.HttpStatusCode.Companion.NotAcceptable
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.http.HttpStatusCode.Companion.UnsupportedMediaType
 import io.ktor.server.request.receiveText
+import io.ktor.server.resources.handle
 import io.ktor.server.resources.head
-import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
@@ -37,6 +38,7 @@ public fun Route.BazTwo(
   ignored: String?,
   injected: Boolean,
   ignored2: String?,
+  getMessageLog: () -> MessageLog,
 ) {
   val csrfToken = "csrfTokenBazTwo" + Uuid.random()
   val csrfServerSessionCookie = "csrfSessionCookieBazTwo" + Uuid.random()
@@ -53,12 +55,12 @@ public fun Route.BazTwo(
   routingHeader("X-CSRF-Token", csrfToken) {
     routingContentType(Json) {
       routingAccept(Json) {
-        post<BazTwo> {
+        handle<BazTwo> {
           val csrfRequestSessionCookie = call.request.cookies["JSESSIONID"]
           val csrfRequestVCAPCookie = call.request.cookies["__VCAP_ID__"]
           if (csrfRequestSessionCookie != csrfServerSessionCookie || csrfRequestVCAPCookie != csrfServerVCAPCookie) {
             call.respond(Forbidden)
-            return@post
+            return@handle
           }
           call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
           val acceptContentTypes = call.request.requestAccept()?.let { it.split(",").map { ContentType.parse(it.trim()) }} ?: listOf(Any)
@@ -67,7 +69,7 @@ public fun Route.BazTwo(
             acceptContentTypes.any { Json.withParameter("charset", "utf-8").match(it) } -> JsonFactory to "application/json; charset=utf-8"
             else -> {
               call.respond(NotAcceptable)
-              return@post
+              return@handle
             }
           }
           val (errorResponseFactory, errorContentType) = when {
@@ -75,7 +77,7 @@ public fun Route.BazTwo(
             acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
             else -> {
               call.respond(NotAcceptable)
-              return@post
+              return@handle
             }
           }
           val requestContentType = call.request.requestContentType()
@@ -85,11 +87,13 @@ public fun Route.BazTwo(
             else -> {
               call.response.responseHeader("Accept-Post", "application/json")
               call.respond(UnsupportedMediaType)
-              return@post
+              return@handle
             }
           }
           try {
-            val result = BazTwoFunction(body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),b = call.request.requestHeader("B"),ignored = ignored,injected = injected,ignored2 = ignored2,)
+            val result = context(getMessageLog()) {
+              BazTwoFunction(body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),b = call.request.requestHeader("B"),ignored = ignored,injected = injected,ignored2 = ignored2,)
+            }
             call.response.responseHeader("D", result.d)
             call.response.status(HttpStatusCode.fromValue(result.fooHeader))
             for ((key, value) in result.headers) {

@@ -1,0 +1,6 @@
+FILE: messageLog.kt
+    context(log: R|com/sap/it/api/msglog/MessageLog|)
+    @R|app/softwork/cikraft/ScriptEntry|() public final fun ok(): R|kotlin/Unit| {
+    }
+    @R|app/softwork/cikraft/ScriptEntry|() public final fun wrong(log: R|com/sap/it/api/msglog/MessageLog|): R|kotlin/Unit| {
+    }

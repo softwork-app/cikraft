@@ -8,6 +8,7 @@ import com.squareup.kotlinpoet.CHAR
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.DOUBLE
+import com.squareup.kotlinpoet.ExperimentalKotlinPoetApi
 import com.squareup.kotlinpoet.FLOAT
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
@@ -27,6 +28,7 @@ import io.github.hfhbd.kfx.codegen.CodeGenTree.NormalClass
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Type
 import io.github.hfhbd.kfx.kotlin.toPoetType
 
+@OptIn(ExperimentalKotlinPoetApi::class)
 public fun writeKotlinEntryPoints(
     scripts: List<Script>,
 ): FileSpec = FileSpec.builder("", "CiKraftEntrypoints").apply {
@@ -34,8 +36,8 @@ public fun writeKotlinEntryPoints(
         with(entryPoint) {
             addFunction(
                 FunSpec.builder(name).apply {
+                    contextParameter("messageLog", MESSAGE_LOG)
                     receiver(MESSAGE)
-                    addParameter("messageLog", MESSAGE_LOG)
                     returns(MESSAGE)
 
                     val bodyOutput = entryPoint.bodyOutput?.takeUnless {

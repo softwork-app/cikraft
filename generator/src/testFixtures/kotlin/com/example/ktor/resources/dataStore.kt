@@ -2,6 +2,7 @@ package com.example.ktor.resources
 
 import app.softwork.cikraft.DataStoreMessages
 import com.example.fooDataStore
+import com.sap.it.api.msglog.MessageLog
 import javax.net.ssl.KeyManager
 import javax.sql.DataSource
 import kotlin.Boolean
@@ -10,6 +11,7 @@ import kotlin.Int
 import kotlin.String
 import kotlin.collections.Map
 
+context(messageLog: MessageLog)
 public fun BazDataStoreFunction(
   entries: DataStoreMessages<String>,
   c: CharArray,

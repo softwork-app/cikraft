@@ -4,6 +4,7 @@ package com.example.ktor.resources
 
 import app.softwork.cikraft.DataStoreMessages
 import com.example.XmlFactory
+import com.sap.it.api.msglog.MessageLog
 import javax.net.ssl.KeyManager
 import javax.sql.DataSource
 import kotlin.Boolean
@@ -23,9 +24,12 @@ public suspend fun ((String) -> Flow<String>).BazDataStore(
   ds: DataSource?,
   injected: Boolean,
   ignored: String?,
+  getMessageLog: () -> MessageLog,
 ) {
   invoke("FOO").collect {
     delay(60.seconds)
-    val result = BazDataStoreFunction(entries = XmlFactory.decodeFromString(DataStoreMessages.serializer(String.serializer(), ), it),c = c,d = d,e = e,km = km,ds = ds,injected = injected,ignored = ignored,)
+    val result = context(getMessageLog()) {
+      BazDataStoreFunction(entries = XmlFactory.decodeFromString(DataStoreMessages.serializer(String.serializer(), ), it),c = c,d = d,e = e,km = km,ds = ds,injected = injected,ignored = ignored,)
+    }
   }
 }

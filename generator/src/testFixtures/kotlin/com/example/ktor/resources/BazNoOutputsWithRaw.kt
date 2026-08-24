@@ -3,9 +3,11 @@ package com.example.ktor.resources
 import com.example.FooInput
 import com.example.dummyWithOutput
 import com.example.twoPart1
+import com.sap.it.api.msglog.MessageLog
 import kotlin.Boolean
 import kotlin.String
 
+context(messageLog: MessageLog)
 public suspend fun BazNoOutputsFunction(
   body: FooInput,
   b: String? = null,

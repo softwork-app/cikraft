@@ -26,3 +26,6 @@ internal val passwordFq = FqName("app.softwork.cikraft.Password")
 internal val passwordClass = ClassId.topLevel(passwordFq)
 
 internal val throwsClass = ClassId.topLevel(JVM_THROWS_ANNOTATION_FQ_NAME)
+
+internal val messageLogFq = FqName("com.sap.it.api.msglog.MessageLog")
+internal val messageLogClass = ClassId.topLevel(messageLogFq)

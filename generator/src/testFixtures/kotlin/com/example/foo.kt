@@ -69,12 +69,14 @@ fun noOutputs(
 ): Unit = error("")
 
 @ScriptEntry
-fun raw(rawMessage: Message, rawMessageLog: MessageLog, rawNullableMessageLog: MessageLog? = null) {
+context(rawMessageLog: MessageLog)
+fun raw(rawMessage: Message) {
     rawMessageLog.addCustomHeaderProperty("FOO", "BAR")
 }
 
 @ScriptEntry
-suspend fun rawSuspend(rawMessage: Message, rawMessageLog: MessageLog) {}
+context(rawMessageLog: MessageLog)
+suspend fun rawSuspend(rawMessage: Message,) {}
 
 @ScriptEntry
 fun setup(): Boolean = true
@@ -132,10 +134,10 @@ class StreamOutput(
 
 @ScriptEntry
 @Throws(Fault::class)
+context(messageLog: MessageLog)
 fun kotlinxIO(
     @Body(JsonFactory::class) body: Source,
     @Header("B") b: String?,
-    rawNullableMessageLog: MessageLog? = null,
 ): SourceOutput = error("")
 
 class SourceOutput(

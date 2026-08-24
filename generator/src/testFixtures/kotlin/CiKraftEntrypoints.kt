@@ -43,7 +43,8 @@ import kotlinx.serialization.StringFormat
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 
-public fun Message.foo(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.foo(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -143,7 +144,8 @@ public fun Message.foo(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.fooSuspend(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.fooSuspend(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -251,7 +253,8 @@ public fun Message.fooSuspend(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.serialized(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.serialized(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -339,7 +342,8 @@ public fun Message.serialized(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.typed(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.typed(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -429,7 +433,8 @@ public fun Message.typed(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.noError(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.noError(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -476,22 +481,21 @@ public fun Message.noError(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.raw(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.raw(): Message {
   raw(rawMessage = this@raw,
-      rawMessageLog = messageLog,
-      rawNullableMessageLog = messageLog,
       )
   return this
 }
 
-public fun Message.rawSuspend(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.rawSuspend(): Message {
   val executor = Executors.newCachedThreadPool()
   val executorCoroutineDispatcher = executor.asCoroutineDispatcher()
   try {
     val scope = CoroutineScope(executorCoroutineDispatcher)
     val deferred = scope.async {
       rawSuspend(rawMessage = this@rawSuspend,
-          rawMessageLog = messageLog,
           )
     }
     deferred.asCompletableFuture().get()
@@ -503,7 +507,8 @@ public fun Message.rawSuspend(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.noOutputs(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.noOutputs(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -549,13 +554,15 @@ public fun Message.noOutputs(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.setup(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.setup(): Message {
   val output = setup()
   setProperty("_RESULT_", output)
   return this
 }
 
-public fun Message.twoPart1(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.twoPart1(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -634,7 +641,8 @@ public fun Message.twoPart1(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.twoPart2(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.twoPart2(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -719,7 +727,8 @@ public fun Message.twoPart2(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.javaStreams(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.javaStreams(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -807,7 +816,8 @@ public fun Message.javaStreams(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.binaryRedirect(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.binaryRedirect(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -873,7 +883,8 @@ public fun Message.binaryRedirect(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.kotlinxIO(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.kotlinxIO(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -948,7 +959,6 @@ public fun Message.kotlinxIO(messageLog: MessageLog): Message {
   try {
     val output = kotlinxIO(body = getBody(InputStream::class.java).asSource().buffered(),
         b = getHeader("B", String::class.java),
-        rawNullableMessageLog = messageLog,
         )
     setProperty("_RESULT_", output)
     body = output.body.asInputStream()
@@ -962,13 +972,15 @@ public fun Message.kotlinxIO(messageLog: MessageLog): Message {
   return this
 }
 
-public fun Message.injectedBoolean(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.injectedBoolean(): Message {
   val output = injectedBoolean()
   setProperty("_RESULT_", output)
   return this
 }
 
-public fun Message.nullableReturn(messageLog: MessageLog): Message {
+context(messageLog: MessageLog)
+public fun Message.nullableReturn(): Message {
   val output = nullableReturn() ?: return this
   setProperty("_RESULT_", output)
   return this

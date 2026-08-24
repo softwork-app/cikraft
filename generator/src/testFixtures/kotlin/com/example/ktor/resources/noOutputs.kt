@@ -4,6 +4,7 @@ package com.example.ktor.resources
 
 import app.softwork.cikraft.SAP_MESSAGE_PROCESSING_LOG_ID_HEADER
 import com.example.core.Fault
+import com.sap.it.api.msglog.MessageLog
 import io.ktor.http.ContentType
 import io.ktor.http.ContentType.Application.Json
 import io.ktor.http.ContentType.Companion.Any
@@ -14,8 +15,8 @@ import io.ktor.http.HttpStatusCode.Companion.NoContent
 import io.ktor.http.HttpStatusCode.Companion.NotAcceptable
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.request.accept
+import io.ktor.server.resources.handle
 import io.ktor.server.resources.head
-import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
@@ -32,6 +33,7 @@ public fun Route.BazNoOutputs(
   dd: CharArray,
   ee: Int? = BazNoOutputsConfig.ee,
   ignored: String?,
+  getMessageLog: () -> MessageLog,
 ) {
   val csrfToken = "csrfTokenBazNoOutputs" + Uuid.random()
   val csrfServerSessionCookie = "csrfSessionCookieBazNoOutputs" + Uuid.random()
@@ -46,12 +48,12 @@ public fun Route.BazNoOutputs(
     }
   }
   routingHeader("X-CSRF-Token", csrfToken) {
-    post<BazNoOutputs> {
+    handle<BazNoOutputs> {
       val csrfRequestSessionCookie = call.request.cookies["JSESSIONID"]
       val csrfRequestVCAPCookie = call.request.cookies["__VCAP_ID__"]
       if (csrfRequestSessionCookie != csrfServerSessionCookie || csrfRequestVCAPCookie != csrfServerVCAPCookie) {
         call.respond(Forbidden)
-        return@post
+        return@handle
       }
       call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
       val acceptContentTypes = call.request.accept()?.let { it.split(",").map { ContentType.parse(it.trim()) }} ?: listOf(Any)
@@ -60,11 +62,13 @@ public fun Route.BazNoOutputs(
         acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
         else -> {
           call.respond(NotAcceptable)
-          return@post
+          return@handle
         }
       }
       try {
-        val result = BazNoOutputsFunction(bb = call.request.requestHeader("B"),cc = cc,dd = dd,ee = ee,ignored = ignored,)
+        val result = context(getMessageLog()) {
+          BazNoOutputsFunction(bb = call.request.requestHeader("B"),cc = cc,dd = dd,ee = ee,ignored = ignored,)
+        }
         call.respond(NoContent)
       } catch (exception: Fault) {
         call.response.status(HttpStatusCode.fromValue(exception.httpReturnCode))

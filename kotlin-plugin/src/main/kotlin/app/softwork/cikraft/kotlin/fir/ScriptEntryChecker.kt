@@ -1,9 +1,9 @@
 package app.softwork.cikraft.kotlin.fir
 
 import app.softwork.cikraft.kotlin.fir.SapCIPredicateMatchingService.Companion.sapCIPredicateMatchingService
+import app.softwork.cikraft.kotlin.messageLogClass
 import app.softwork.cikraft.kotlin.throwsClass
 import org.jetbrains.kotlin.diagnostics.*
-import org.jetbrains.kotlin.fir.*
 import org.jetbrains.kotlin.fir.analysis.checkers.*
 import org.jetbrains.kotlin.fir.analysis.checkers.context.*
 import org.jetbrains.kotlin.fir.analysis.checkers.declaration.*
@@ -41,6 +41,17 @@ internal data object ScriptEntryChecker : FirSimpleFunctionChecker(MppCheckerKin
                 symbol,
             )
         }
+        if (contextParameters.isNotEmpty()) {
+            for (contextParameter in contextParameters) {
+                if (!contextParameter.isMessageLog()) {
+                    reporter.reportOn(
+                        source,
+                        SapCIErrors.CIKRAFT_ENTRYPOINT_HAS_UNSUPPORTED_CONTEXT_PARAMETER,
+                        symbol,
+                    )
+                }
+            }
+        }
 
         if (typeParameters.isNotEmpty()) {
             reporter.reportOn(
@@ -74,29 +85,41 @@ internal data object ScriptEntryChecker : FirSimpleFunctionChecker(MppCheckerKin
         matcher: SapCIPredicateMatchingService,
     ) {
         for (parameter in valueParameters) {
-            if (matcher.isAnnotatedWithPassword(parameter.symbol) &&
-                !parameter.isCharArray(context.session)
-            ) {
+            if (matcher.isAnnotatedWithPassword(parameter.symbol) && !parameter.isCharArray()) {
                 reporter.reportOn(
                     parameter.source,
                     SapCIErrors.CIKRAFT_PASSWORD_IS_NOT_CHARARRAY,
                     parameter.symbol,
                 )
             }
-            if (matcher.isAnnotatedWithHeader(parameter.symbol) &&
-                !parameter.isNullableHeader()
-            ) {
+
+            if (matcher.isAnnotatedWithHeader(parameter.symbol) && !parameter.isNullableHeader()) {
                 reporter.reportOn(
                     parameter.source,
                     SapCIErrors.CIKRAFT_ENTRYPOINT_HEADER_IS_NOT_NULLABLE_STRING,
                     parameter.symbol,
                 )
             }
+
+            if (parameter.isMessageLog()) {
+                reporter.reportOn(
+                    parameter.source,
+                    SapCIErrors.CIKRAFT_MESSAGELOG_MUST_BE_CONTEXT_PARAMETER,
+                    parameter.symbol,
+                )
+            }
         }
     }
 
-    private fun FirValueParameter.isCharArray(session: FirSession): Boolean {
-        val classId = returnTypeRef.coneTypeOrNull?.fullyExpandedClassId(session) ?: return false
+    context(context: CheckerContext)
+    private fun FirValueParameter.isMessageLog(): Boolean {
+        val classId = returnTypeRef.coneTypeOrNull?.fullyExpandedClassId(context.session) ?: return false
+        return classId == messageLogClass
+    }
+
+    context(context: CheckerContext)
+    private fun FirValueParameter.isCharArray(): Boolean {
+        val classId = returnTypeRef.coneTypeOrNull?.fullyExpandedClassId(context.session) ?: return false
         return classId == CHAR_ARRAY
     }
 
