@@ -65,12 +65,10 @@ public fun Route.IFBa(
               return@handle
             }
             call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
-            val acceptContentTypes =
-              call.request.requestAccept()?.let { it.split(",").map { ContentType.parse(it.trim()) } } ?: listOf(Any)
+            val acceptContentTypes = call.request.requestAccept()?.let { it.split(",").map { ContentType.parse(it.trim()) }} ?: listOf(Any)
             val (responseFactory, responseContentType) = when {
               acceptContentTypes.any { it == Any } ||
-                      acceptContentTypes.any { Json.match(it) } -> JsonFactory to "application/json"
-
+              acceptContentTypes.any { Json.match(it) } -> JsonFactory to "application/json"
               else -> {
                 call.respond(NotAcceptable)
                 return@handle
@@ -78,8 +76,7 @@ public fun Route.IFBa(
             }
             val (errorResponseFactory, errorContentType) = when {
               acceptContentTypes.any { it == Any } ||
-                      acceptContentTypes.any { Json.match(it) } -> Fault.FaultFactory to "application/json"
-
+              acceptContentTypes.any { Json.match(it) } -> Fault.FaultFactory to "application/json"
               else -> {
                 call.respond(NotAcceptable)
                 return@handle
@@ -88,8 +85,7 @@ public fun Route.IFBa(
             val requestContentType = call.request.requestContentType()
             val requestFactory = when {
               requestContentType.match(Any) ||
-                      Json.match(requestContentType) -> JsonFactory
-
+              Json.match(requestContentType) -> JsonFactory
               else -> {
                 call.response.responseHeader("Accept-Post", "application/json")
                 call.respond(UnsupportedMediaType)
@@ -98,15 +94,7 @@ public fun Route.IFBa(
             }
             try {
               val result = context(getMessageLog()) {
-                IFBaFunction(
-                  input = requestFactory.decodeFromString(String.serializer(), call.receiveText()),
-                  a = a,
-                  b = b,
-                  c = call.request.requestHeader("CCC"),
-                  d = d,
-                  e = e,
-                  other = other,
-                )
+                IFBaFunction(input = requestFactory.decodeFromString(String.serializer(), call.receiveText()),a = a,b = b,c = call.request.requestHeader("CCC"),d = d,e = e,other = other,)
               }
               call.response.responseHeader("bar", result.bar)
               call.response.responseHeader("ASDF", result.baz)
