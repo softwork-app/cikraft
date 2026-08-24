@@ -15,6 +15,7 @@
     <ID>CyclomaticComplexMethod:WriteKotlinEntryPoints.kt:private fun Script.getInputs: CodeBlock</ID>
     <ID>LongMethod:GenerateFunction.kt:private fun FunSpec.Builder.callScripts: List&lt;Input></ID>
     <ID>LongMethod:GenerateKtorServer.kt:private fun FunSpec.Builder.returnResultClass</ID>
+    <ID>LongMethod:GenerateKtorServer.kt:private fun generateKtorServerRoute: FileSpec</ID>
     <ID>LongMethod:GenerateOpenApi.kt:private fun NormalClass.toNormalSchema: OBJECT</ID>
     <ID>LongMethod:GenerateOpenApi.kt:private fun Type.toSchema: Schema</ID>
     <ID>LongMethod:GenerateOpenApi.kt:private fun iFlowOperation: Operation</ID>
