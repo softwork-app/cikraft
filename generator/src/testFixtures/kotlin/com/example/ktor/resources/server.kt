@@ -19,6 +19,7 @@ import io.ktor.http.HttpStatusCode.Companion.UnsupportedMediaType
 import io.ktor.server.request.receiveText
 import io.ktor.server.resources.handle
 import io.ktor.server.resources.head
+import io.ktor.server.resources.resource
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
@@ -63,58 +64,76 @@ public fun Route.BazA(
   routingHeader("X-CSRF-Token", csrfToken) {
     routingContentType(Json) {
       routingAccept(Json) {
-        handle<BazA> {
-          val csrfRequestSessionCookie = call.request.cookies["JSESSIONID"]
-          val csrfRequestVCAPCookie = call.request.cookies["__VCAP_ID__"]
-          if (csrfRequestSessionCookie != csrfServerSessionCookie || csrfRequestVCAPCookie != csrfServerVCAPCookie) {
-            call.respond(Forbidden)
-            return@handle
-          }
-          call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
-          val acceptContentTypes = call.request.requestAccept()?.let { it.split(",").map { ContentType.parse(it.trim()) }} ?: listOf(Any)
-          val (responseFactory, responseContentType) = when {
-            acceptContentTypes.any { it == Any } ||
-            acceptContentTypes.any { Json.withParameter("charset", "utf-8").match(it) } -> JsonFactory to "application/json; charset=utf-8"
-            else -> {
-              call.respond(NotAcceptable)
+        resource<BazA> {
+          handle<BazA> {
+            val csrfRequestSessionCookie = call.request.cookies["JSESSIONID"]
+            val csrfRequestVCAPCookie = call.request.cookies["__VCAP_ID__"]
+            if (csrfRequestSessionCookie != csrfServerSessionCookie || csrfRequestVCAPCookie != csrfServerVCAPCookie) {
+              call.respond(Forbidden)
               return@handle
             }
-          }
-          val (errorResponseFactory, errorContentType) = when {
-            acceptContentTypes.any { it == Any } ||
-            acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
-            else -> {
-              call.respond(NotAcceptable)
-              return@handle
+            call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
+            val acceptContentTypes =
+              call.request.requestAccept()?.let { it.split(",").map { ContentType.parse(it.trim()) } } ?: listOf(Any)
+            val (responseFactory, responseContentType) = when {
+              acceptContentTypes.any { it == Any } ||
+                      acceptContentTypes.any {
+                        Json.withParameter("charset", "utf-8").match(it)
+                      } -> JsonFactory to "application/json; charset=utf-8"
+
+              else -> {
+                call.respond(NotAcceptable)
+                return@handle
+              }
             }
-          }
-          val requestContentType = call.request.requestContentType()
-          val requestFactory = when {
-            requestContentType.match(Any) ||
-            Json.withParameter("charset", "utf-8").match(requestContentType) -> JsonFactory
-            else -> {
-              call.response.responseHeader("Accept-Post", "application/json")
-              call.respond(UnsupportedMediaType)
-              return@handle
+            val (errorResponseFactory, errorContentType) = when {
+              acceptContentTypes.any { it == Any } ||
+                      acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
+
+              else -> {
+                call.respond(NotAcceptable)
+                return@handle
+              }
             }
-          }
-          try {
-            val result = context(getMessageLog()) {
-              BazAFunction(body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),b = call.request.requestHeader("B"),c = c,d = d,e = e,km = km,ds = ds,injected = injected,ignored = ignored,)
+            val requestContentType = call.request.requestContentType()
+            val requestFactory = when {
+              requestContentType.match(Any) ||
+                      Json.withParameter("charset", "utf-8").match(requestContentType) -> JsonFactory
+
+              else -> {
+                call.response.responseHeader("Accept-Post", "application/json")
+                call.respond(UnsupportedMediaType)
+                return@handle
+              }
             }
-            call.response.status(HttpStatusCode.fromValue(result.fooHeader))
-            if (result.optionalHeader != null) {
-              call.response.responseHeader("X-FOO", result.optionalHeader)
+            try {
+              val result = context(getMessageLog()) {
+                BazAFunction(
+                  body = requestFactory.decodeFromString(FooInput.serializer(), call.receiveText()),
+                  b = call.request.requestHeader("B"),
+                  c = c,
+                  d = d,
+                  e = e,
+                  km = km,
+                  ds = ds,
+                  injected = injected,
+                  ignored = ignored,
+                )
+              }
+              call.response.status(HttpStatusCode.fromValue(result.fooHeader))
+              if (result.optionalHeader != null) {
+                call.response.responseHeader("X-FOO", result.optionalHeader)
+              }
+              for ((key, value) in result.headers) {
+                call.response.responseHeader(key, value)
+              }
+              call.response.responseHeader(name = io.ktor.http.HttpHeaders.ContentType, value = responseContentType)
+              call.respondText(text = responseFactory.encodeToString(String.serializer(), result.body))
+            } catch (exception: Fault) {
+              call.response.status(HttpStatusCode.fromValue(exception.httpReturnCode))
+              call.response.responseHeader(name = io.ktor.http.HttpHeaders.ContentType, value = errorContentType)
+              call.respondText(text = errorResponseFactory.encodeToString(Fault.serializer(), exception.jsonError))
             }
-            for ((key, value) in result.headers) {
-              call.response.responseHeader(key, value)
-            }
-            call.response.responseHeader(name = io.ktor.http.HttpHeaders.ContentType, value = responseContentType)
-            call.respondText(text = responseFactory.encodeToString(String.serializer(), result.body))
-          } catch (exception: Fault) {
-            call.response.status(HttpStatusCode.fromValue(exception.httpReturnCode))
-            call.response.responseHeader(name = io.ktor.http.HttpHeaders.ContentType, value = errorContentType)
-            call.respondText(text = errorResponseFactory.encodeToString(Fault.serializer(), exception.jsonError))
           }
         }
       }

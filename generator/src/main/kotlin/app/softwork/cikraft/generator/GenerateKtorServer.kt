@@ -97,6 +97,11 @@ private fun generateKtorServerRoute(createdFlow: CreatedFlow): FileSpec {
 
     function.beginControlFlow(
         "%M<%T>",
+        MemberName("io.ktor.server.resources", "resource", isExtension = true),
+        resourcesClassName,
+    )
+    function.beginControlFlow(
+        "%M<%T>",
         MemberName("io.ktor.server.resources", "handle", isExtension = true),
         resourcesClassName,
     )
@@ -120,6 +125,7 @@ private fun generateKtorServerRoute(createdFlow: CreatedFlow): FileSpec {
     if (sender.csrfProtection) {
         function.endControlFlow()
     }
+    function.endControlFlow()
     function.endControlFlow()
 
     file.addFunction(function.build())

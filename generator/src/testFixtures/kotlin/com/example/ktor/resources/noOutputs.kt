@@ -17,6 +17,7 @@ import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.server.request.accept
 import io.ktor.server.resources.handle
 import io.ktor.server.resources.head
+import io.ktor.server.resources.resource
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
@@ -48,32 +49,36 @@ public fun Route.BazNoOutputs(
     }
   }
   routingHeader("X-CSRF-Token", csrfToken) {
-    handle<BazNoOutputs> {
-      val csrfRequestSessionCookie = call.request.cookies["JSESSIONID"]
-      val csrfRequestVCAPCookie = call.request.cookies["__VCAP_ID__"]
-      if (csrfRequestSessionCookie != csrfServerSessionCookie || csrfRequestVCAPCookie != csrfServerVCAPCookie) {
-        call.respond(Forbidden)
-        return@handle
-      }
-      call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
-      val acceptContentTypes = call.request.accept()?.let { it.split(",").map { ContentType.parse(it.trim()) }} ?: listOf(Any)
-      val (errorResponseFactory, errorContentType) = when {
-        acceptContentTypes.any { it == Any } ||
-        acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
-        else -> {
-          call.respond(NotAcceptable)
+    resource<BazNoOutputs> {
+      handle<BazNoOutputs> {
+        val csrfRequestSessionCookie = call.request.cookies["JSESSIONID"]
+        val csrfRequestVCAPCookie = call.request.cookies["__VCAP_ID__"]
+        if (csrfRequestSessionCookie != csrfServerSessionCookie || csrfRequestVCAPCookie != csrfServerVCAPCookie) {
+          call.respond(Forbidden)
           return@handle
         }
-      }
-      try {
-        val result = context(getMessageLog()) {
-          BazNoOutputsFunction(bb = call.request.requestHeader("B"),cc = cc,dd = dd,ee = ee,ignored = ignored,)
+        call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
+        val acceptContentTypes =
+          call.request.accept()?.let { it.split(",").map { ContentType.parse(it.trim()) } } ?: listOf(Any)
+        val (errorResponseFactory, errorContentType) = when {
+          acceptContentTypes.any { it == Any } ||
+                  acceptContentTypes.any { Json.match(it) } -> Fault.ErrorJsonFactory to "application/json"
+
+          else -> {
+            call.respond(NotAcceptable)
+            return@handle
+          }
         }
-        call.respond(NoContent)
-      } catch (exception: Fault) {
-        call.response.status(HttpStatusCode.fromValue(exception.httpReturnCode))
-        call.response.responseHeader(name = io.ktor.http.HttpHeaders.ContentType, value = errorContentType)
-        call.respondText(text = errorResponseFactory.encodeToString(Fault.serializer(), exception.jsonError))
+        try {
+          val result = context(getMessageLog()) {
+            BazNoOutputsFunction(bb = call.request.requestHeader("B"), cc = cc, dd = dd, ee = ee, ignored = ignored,)
+          }
+          call.respond(NoContent)
+        } catch (exception: Fault) {
+          call.response.status(HttpStatusCode.fromValue(exception.httpReturnCode))
+          call.response.responseHeader(name = io.ktor.http.HttpHeaders.ContentType, value = errorContentType)
+          call.respondText(text = errorResponseFactory.encodeToString(Fault.serializer(), exception.jsonError))
+        }
       }
     }
   }
