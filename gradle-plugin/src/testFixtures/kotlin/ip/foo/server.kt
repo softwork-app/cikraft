@@ -3,6 +3,7 @@ package ip.foo
 import app.softwork.cikraft.SAP_MESSAGE_PROCESSING_LOG_ID_HEADER
 import com.example.JsonFactory
 import com.example.core.Fault
+import com.sap.it.api.msglog.MessageLog
 import io.ktor.http.ContentType
 import io.ktor.http.ContentType.Application.Json
 import io.ktor.http.ContentType.Companion.Any
@@ -13,8 +14,8 @@ import io.ktor.http.HttpStatusCode.Companion.NotAcceptable
 import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.http.HttpStatusCode.Companion.UnsupportedMediaType
 import io.ktor.server.request.receiveText
+import io.ktor.server.resources.handle
 import io.ktor.server.resources.head
-import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
@@ -37,6 +38,7 @@ public fun Route.IFBa(
   d: CharArray,
   e: CharArray,
   other: String,
+  getMessageLog: () -> MessageLog,
 ) {
   val csrfToken = "csrfTokenIFBa" + Uuid.random()
   val csrfServerSessionCookie = "csrfSessionCookieIFBa" + Uuid.random()
@@ -53,12 +55,12 @@ public fun Route.IFBa(
   routingHeader("X-CSRF-Token", csrfToken) {
     routingContentType(Json) {
       routingAccept(Json) {
-        post<IFBa> {
+        handle<IFBa> {
           val csrfRequestSessionCookie = call.request.cookies["JSESSIONID"]
           val csrfRequestVCAPCookie = call.request.cookies["__VCAP_ID__"]
           if (csrfRequestSessionCookie != csrfServerSessionCookie || csrfRequestVCAPCookie != csrfServerVCAPCookie) {
             call.respond(Forbidden)
-            return@post
+            return@handle
           }
           call.response.responseHeader(SAP_MESSAGE_PROCESSING_LOG_ID_HEADER, Uuid.random().toString())
           val acceptContentTypes = call.request.requestAccept()?.let { it.split(",").map { ContentType.parse(it.trim()) }} ?: listOf(Any)
@@ -67,7 +69,7 @@ public fun Route.IFBa(
             acceptContentTypes.any { Json.match(it) } -> JsonFactory to "application/json"
             else -> {
               call.respond(NotAcceptable)
-              return@post
+              return@handle
             }
           }
           val (errorResponseFactory, errorContentType) = when {
@@ -75,7 +77,7 @@ public fun Route.IFBa(
             acceptContentTypes.any { Json.match(it) } -> Fault.FaultFactory to "application/json"
             else -> {
               call.respond(NotAcceptable)
-              return@post
+              return@handle
             }
           }
           val requestContentType = call.request.requestContentType()
@@ -85,11 +87,13 @@ public fun Route.IFBa(
             else -> {
               call.response.responseHeader("Accept-Post", "application/json")
               call.respond(UnsupportedMediaType)
-              return@post
+              return@handle
             }
           }
           try {
-            val result = IFBaFunction(input = requestFactory.decodeFromString(String.serializer(), call.receiveText()),a = a,b = b,c = call.request.requestHeader("CCC"),d = d,e = e,other = other,)
+            val result = context(getMessageLog()) {
+              IFBaFunction(input = requestFactory.decodeFromString(String.serializer(), call.receiveText()),a = a,b = b,c = call.request.requestHeader("CCC"),d = d,e = e,other = other,)
+            }
             call.response.responseHeader("bar", result.bar)
             call.response.responseHeader("ASDF", result.baz)
             call.response.responseHeader("DEFAULT", result.default)
