@@ -7,12 +7,14 @@ import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_DYNAMIC_HEADER_IS_NOT
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_HAS_MULTIPLE_THROWS
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_HAS_RECEIVER
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_HAS_TYPE_PARAMETERS
+import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_HAS_UNSUPPORTED_CONTEXT_PARAMETER
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_HEADER_IS_NOT_NULLABLE_STRING
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_ENTRYPOINT_NOT_STATIC
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_HEADER_IS_NOT_PRIMITIVE
+import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_MESSAGELOG_MUST_BE_CONTEXT_PARAMETER
 import app.softwork.cikraft.kotlin.fir.SapCIErrors.CIKRAFT_PASSWORD_IS_NOT_CHARARRAY
-import org.jetbrains.kotlin.diagnostics.*
-import org.jetbrains.kotlin.diagnostics.rendering.*
+import org.jetbrains.kotlin.diagnostics.KtDiagnosticFactoryToRendererMap
+import org.jetbrains.kotlin.diagnostics.rendering.BaseDiagnosticRendererFactory
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirDiagnosticRenderers.DECLARATION_NAME
 
 internal data object SapCIErrorMessages : BaseDiagnosticRendererFactory() {
@@ -41,18 +43,18 @@ internal data object SapCIErrorMessages : BaseDiagnosticRendererFactory() {
 
         it.put(
             CIKRAFT_ENTRYPOINT_HAS_RECEIVER,
-            "{0} has a receiver that is not callable from Groovy by SAP Cloud Integration Suite.",
+            "{0} has a receiver that is not callable from Groovy by SAP Cloud Integration Suite",
             DECLARATION_NAME,
         )
         it.put(
             CIKRAFT_ENTRYPOINT_HAS_TYPE_PARAMETERS,
-            "{0} has a type parameter that is not callable from Groovy by SAP Cloud Integration Suite.",
+            "{0} has a type parameter that is not callable from Groovy by SAP Cloud Integration Suite",
             DECLARATION_NAME,
         )
 
         it.put(
             CIKRAFT_ENTRYPOINT_HAS_MULTIPLE_THROWS,
-            "{0} is annotated with multiple exceptions that is not compatible with SAP Cloud Integration Suite.",
+            "{0} is annotated with multiple exceptions that is not compatible with SAP Cloud Integration Suite",
             DECLARATION_NAME,
         )
         it.put(
@@ -73,6 +75,16 @@ internal data object SapCIErrorMessages : BaseDiagnosticRendererFactory() {
         it.put(
             CIKRAFT_HEADER_IS_NOT_PRIMITIVE,
             "The type of {0} is not a primitive like kotlin.String or kotlin.Int",
+            DECLARATION_NAME,
+        )
+        it.put(
+            CIKRAFT_ENTRYPOINT_HAS_UNSUPPORTED_CONTEXT_PARAMETER,
+            "{0} is annotated with a context parameter that is not compatible with SAP Cloud Integration Suite",
+            DECLARATION_NAME,
+        )
+        it.put(
+            CIKRAFT_MESSAGELOG_MUST_BE_CONTEXT_PARAMETER,
+            "{0} must be declared as a context parameter ",
             DECLARATION_NAME,
         )
     }
