@@ -229,7 +229,7 @@ public class SapCIGroovyEntrypointPlugin(private val codeGenerator: CodeGenerato
         }
         val resolvedType = if (contentNegotiations.isEmpty()) {
             paramType.resolveJvmType(properties = false) {
-                error("Not supported")
+                sealedSubclasses.add(it)
             }
         } else {
             paramType.resolveJvmType(properties = true) {
@@ -377,6 +377,7 @@ private fun KSDeclaration.toType(
         "kotlin.Long" -> Type.Builtin.LONG
 
         "kotlin.Double" -> Type.Builtin.DOUBLE
+        "java.math.BigDecimal" -> Type.Builtin.DOUBLE
 
         "kotlin.Float" -> Type.Builtin.FLOAT
 
