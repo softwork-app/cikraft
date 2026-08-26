@@ -4,10 +4,9 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.attributes.Usage
-import org.gradle.api.component.SoftwareComponentFactory
+import org.gradle.api.component.AdhocComponentWithVariants
+import org.gradle.api.component.SoftwareComponentContainer
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.ProjectFeatureApplicationContext
@@ -20,7 +19,6 @@ import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.newInstance
-import org.gradle.kotlin.dsl.register
 import javax.inject.Inject
 
 @BindsProjectFeature(OpenApiFeature::class)
@@ -36,21 +34,15 @@ abstract class OpenApiFeature :
     }
 
     abstract class ApplyAction : ProjectFeatureApplyAction<OpenApiDefinition, BuildModel.None, SAPCIIFlowsDefinition> {
-        @get:Inject
-        abstract val configurations: ConfigurationRegistrar
+        @get:Inject abstract val configurations: ConfigurationRegistrar
 
-        @get:Inject
-        abstract val tasks: TaskRegistrar
+        @get:Inject abstract val tasks: TaskRegistrar
 
-        @get:Inject
-        abstract val layout: ProjectFeatureLayout
-
-        @get:Inject
-        abstract val project: Project
+        @get:Inject abstract val layout: ProjectFeatureLayout
 
         @get:Inject abstract val dependencyFactory: DependencyFactory
 
-        @get:Inject abstract val softwareComponentFactory: SoftwareComponentFactory
+        @get:Inject abstract val components: SoftwareComponentContainer
 
         @get:Inject abstract val objectFactory: ObjectFactory
 
@@ -114,20 +106,8 @@ abstract class OpenApiFeature :
                 }
             }
 
-            val component = softwareComponentFactory.adhoc("cikraft")
+            val component = components.getByName("java") as AdhocComponentWithVariants
             component.addVariantsFromConfiguration(sapCIOpenApi) {}
-
-            project.pluginManager.apply("maven-publish")
-
-            val publishing = project.extensions.getByName("publishing") as PublishingExtension
-            publishing.apply {
-                publications.register<MavenPublication>("cikraft") {
-                    groupId = project.group.toString()
-                    artifactId = project.name
-                    version = project.version.toString()
-                    from(component)
-                }
-            }
         }
     }
 }
