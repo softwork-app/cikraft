@@ -61,37 +61,39 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
             }
         }.apiProxies(parameters.url.get(), parameters.httpSuffix.get())
 
-        runBlocking {
-            val transportClient = HttpClient(CIO) {
-                Logging {
-                    setupGradleLogging(gradleLogger)
-                }
-                install(HttpTimeout) {
-                    requestTimeoutMillis = INFINITE_TIMEOUT_MS
-                }
+        if (all.isNotEmpty()) {
+            runBlocking {
+                val transportClient = HttpClient(CIO) {
+                    Logging {
+                        setupGradleLogging(gradleLogger)
+                    }
+                    install(HttpTimeout) {
+                        requestTimeoutMillis = INFINITE_TIMEOUT_MS
+                    }
 
-                sapciAuth(
-                    clientId = parameters.apiPortalClientId.get(),
-                    clientSecret = parameters.apiPortalClientSecret.get(),
-                    authServer = parameters.authServer.get(),
-                )
-                defaultRequest {
-                    url("${parameters.apiPortalServer.get()}/apiportal/api/1.0/Transport.svc/")
+                    sapciAuth(
+                        clientId = parameters.apiPortalClientId.get(),
+                        clientSecret = parameters.apiPortalClientSecret.get(),
+                        authServer = parameters.authServer.get(),
+                    )
+                    defaultRequest {
+                        url("${parameters.apiPortalServer.get()}/apiportal/api/1.0/Transport.svc/")
+                    }
+                    install(ContentNegotiation) {
+                        jsonIo(
+                            Json {
+                                useAlternativeNames = false
+                            },
+                        )
+                    }
+                    expectSuccess = true
                 }
-                install(ContentNegotiation) {
-                    jsonIo(
-                        Json {
-                            useAlternativeNames = false
-                        },
+                for (transport in all) {
+                    transportClient.transportProxy(
+                        virtualHost = parameters.virtualHostId.get(),
+                        apiProxyAsBase64 = transport.toBase64(),
                     )
                 }
-                expectSuccess = true
-            }
-            for (transport in all) {
-                transportClient.transportProxy(
-                    virtualHost = parameters.virtualHostId.get(),
-                    apiProxyAsBase64 = transport.toBase64(),
-                )
             }
         }
     }

@@ -377,6 +377,7 @@ private fun KSDeclaration.toType(
         "kotlin.Long" -> Type.Builtin.LONG
 
         "kotlin.Double" -> Type.Builtin.DOUBLE
+
         "java.math.BigDecimal" -> Type.Builtin.DOUBLE
 
         "kotlin.Float" -> Type.Builtin.FLOAT
