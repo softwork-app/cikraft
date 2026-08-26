@@ -3,6 +3,7 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:IntegrationFlowBuilder.kt:IntegrationFlowBuilder$public fun createPackageAndFlow</ID>
+    <ID>EmptyFunctionBlock:ApiProxies.kt:{ }</ID>
     <ID>EmptyFunctionBlock:IntegrationFlows.kt:{}</ID>
     <ID>LongMethod:IntegrationFlowBuilder.kt:IntegrationFlowBuilder$public fun createPackageAndFlow</ID>
     <ID>UnusedParameter:ApiProxies.kt:baseUrl: String</ID>
