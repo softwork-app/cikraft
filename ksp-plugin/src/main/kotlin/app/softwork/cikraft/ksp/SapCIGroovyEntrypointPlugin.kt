@@ -229,7 +229,7 @@ public class SapCIGroovyEntrypointPlugin(private val codeGenerator: CodeGenerato
         }
         val resolvedType = if (contentNegotiations.isEmpty()) {
             paramType.resolveJvmType(properties = false) {
-                error("Not supported")
+                sealedSubclasses.add(it)
             }
         } else {
             paramType.resolveJvmType(properties = true) {
