@@ -2,6 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>LongMethod:GenerateDockerComposeFile.kt:GenerateDockerComposeFileWorker$override fun execute</ID>
+    <ID>LongMethod:GenerateDockerComposeFileTask.kt:GenerateDockerComposeFileWorker$override fun execute</ID>
   </CurrentIssues>
 </SmellBaseline>
