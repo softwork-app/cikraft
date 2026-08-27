@@ -1,6 +1,8 @@
 plugins {
     `kotlin-dsl`
     id("setup")
+    id("java-test-fixtures")
+    id("jvm-test-suite")
 }
 
 kotlin {
