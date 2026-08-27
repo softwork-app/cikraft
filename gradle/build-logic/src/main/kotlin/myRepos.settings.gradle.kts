@@ -37,5 +37,7 @@ dependencyResolutionManagement {
             }
             filter { includeGroup("org.nodejs") }
         }
+
+        gradlePluginPortal()
     }
 }

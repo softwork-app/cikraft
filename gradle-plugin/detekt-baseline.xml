@@ -4,7 +4,6 @@
   <CurrentIssues>
     <ID>LongMethod:APIProxyFeature.kt:APIProxyFeature.ApplyAction$override fun apply</ID>
     <ID>LongMethod:InfrastructureIntegrationFlowsFeature.kt:InfrastructureIntegrationFlowsFeature.ApplyAction$override fun apply</ID>
-    <ID>LongMethod:OpenApiFeature.kt:OpenApiFeature.ApplyAction$override fun apply</ID>
     <ID>MaxLineLength:CIKraftBaseFeature.kt:CIKraftBaseFeature.ApplyAction$pluginManager.apply(SapCIKotlinPlugin::class.java)</ID>
     <ID>MaxLineLength:InfrastructureIntegrationFlowsFeature.kt:InfrastructureIntegrationFlowsFeature.ApplyAction$"upload${iFlowBuildModel.name}On${apiSourceStage.name}ForTransportTo$transportStageName"</ID>
     <ID>MaxLineLength:JvmLibraryDependencies.kt:JvmLibraryDependencies$*</ID>

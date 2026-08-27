@@ -20,7 +20,7 @@ public fun generateKtorServer(
 
 private fun generateDataStorePolling(createdFlow: CreatedFlow): FileSpec {
     val packageName = createdFlow.packageName.toPackageName()
-    val file = FileSpec.builder(packageName, createdFlow.rawId)
+    val file = FileSpec.builder(packageName, createdFlow.rawId + "Route")
     val configObject = ClassName(packageName, createdFlow.rawId + "Config")
 
     val function = FunSpec.builder(createdFlow.rawId)
@@ -62,7 +62,7 @@ private fun generateKtorServerRoute(createdFlow: CreatedFlow): FileSpec {
     val packageName = createdFlow.packageName.toPackageName()
     val resourcesClassName = ClassName(createdFlow.packageName.toPackageName(), createdFlow.rawId)
 
-    val file = FileSpec.builder(packageName, createdFlow.rawId)
+    val file = FileSpec.builder(packageName, createdFlow.rawId + "Route")
 
     val configObject = ClassName(packageName, createdFlow.rawId + "Config")
 

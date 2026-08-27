@@ -10,7 +10,7 @@ public fun generateProperties(
 ): FileSpec {
     val packageName = createdFlow.packageName.toPackageName()
 
-    val file = FileSpec.builder(packageName, createdFlow.rawId)
+    val file = FileSpec.builder(packageName, createdFlow.rawId + "Config")
 
     val configObject = TypeSpec.objectBuilder(createdFlow.rawId + "Config")
     configObject.addModifiers(KModifier.DATA)

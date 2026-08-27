@@ -391,7 +391,7 @@ import io.ktor.resources.Resource
 @Resource(path = "foo/bar/baz")
 public data object IFBa
 """,
-            (projectDir / "client/build/generated/cikraft/main/kotlin/ktor/resources/ip/foo/IFBa.kt").readText(),
+            (projectDir / "client/build/generated/cikraft/main/kotlin/ktor/resources/ip/foo/IFBaResources.kt").readText(),
         )
     }
 
@@ -437,12 +437,12 @@ import io.ktor.resources.Resource
 @Resource(path = "foo/bar/baz")
 public data object IFBa
 """,
-            (projectDir / "server/build/generated/cikraft/testFixtures/kotlin/ktor/resources/ip/foo/IFBa.kt").readText(),
+            (projectDir / "server/build/generated/cikraft/testFixtures/kotlin/ktor/resources/ip/foo/IFBaResources.kt").readText(),
         )
 
         assertEquals(
             (fixtureDir / "kotlin/ip/foo/server.kt").readText(),
-            (projectDir / "server/build/generated/cikraft/test/kotlin/ktor/server/routes/ip/foo/IFBa.kt").readText(),
+            (projectDir / "server/build/generated/cikraft/test/kotlin/ktor/server/routes/ip/foo/IFBaRoute.kt").readText(),
         )
     }
 
