@@ -242,4 +242,16 @@ class EntrypointsTest {
         )
         assertEquals(mapOf("FOO" to "BAR"), messageLog.customHeaderProperties)
     }
+
+    @Test
+    fun setupTest() {
+        val message = MockMessage(
+            body = """{"x": "42"}""",
+        )
+        val messageLog = MockMessageLog()
+        context(messageLog) {
+            message.setupCiKraftEntrypoint()
+        }
+        assertEquals(true, message.properties["_RESULT_"])
+    }
 }
