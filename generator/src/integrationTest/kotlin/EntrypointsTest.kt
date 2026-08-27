@@ -14,7 +14,7 @@ class EntrypointsTest {
         )
         val messageLog = MockMessageLog()
         context(messageLog) {
-            message.serialized()
+            message.serializedCiKraftEntrypoint()
         }
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
@@ -45,7 +45,7 @@ class EntrypointsTest {
         )
         val messageLog = MockMessageLog()
         context(messageLog) {
-            message.serialized()
+            message.serializedCiKraftEntrypoint()
         }
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
@@ -76,7 +76,7 @@ class EntrypointsTest {
         )
         val messageLog = MockMessageLog()
         context(messageLog) {
-            message.serialized()
+            message.serializedCiKraftEntrypoint()
         }
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
@@ -108,7 +108,7 @@ class EntrypointsTest {
         )
         val messageLog = MockMessageLog()
         context(messageLog) {
-            message.serialized()
+            message.serializedCiKraftEntrypoint()
         }
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
@@ -140,7 +140,7 @@ class EntrypointsTest {
         )
         val messageLog = MockMessageLog()
         context(messageLog) {
-            message.serialized()
+            message.serializedCiKraftEntrypoint()
         }
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
@@ -172,7 +172,7 @@ class EntrypointsTest {
         )
         val messageLog = MockMessageLog()
         context(messageLog) {
-            message.serialized()
+            message.serializedCiKraftEntrypoint()
         }
         assertEquals(null, message.headers[STATUS_CODE_HEADER])
         assertEquals(
@@ -204,7 +204,7 @@ class EntrypointsTest {
         )
         val messageLog = MockMessageLog()
         context(messageLog) {
-            message.serialized()
+            message.serializedCiKraftEntrypoint()
         }
         assertEquals(406, message.headers[STATUS_CODE_HEADER])
         assertEquals(null, message.body)
@@ -230,7 +230,7 @@ class EntrypointsTest {
         )
         val messageLog = MockMessageLog()
         context(messageLog) {
-            message.raw()
+            message.rawCiKraftEntrypoint()
         }
         assertEquals("""{"x": "42"}""", message.body)
         assertEquals(mapOf(), message.properties)
@@ -241,5 +241,17 @@ class EntrypointsTest {
             message.headers,
         )
         assertEquals(mapOf("FOO" to "BAR"), messageLog.customHeaderProperties)
+    }
+
+    @Test
+    fun setupTest() {
+        val message = MockMessage(
+            body = """{"x": "42"}""",
+        )
+        val messageLog = MockMessageLog()
+        context(messageLog) {
+            message.setupCiKraftEntrypoint()
+        }
+        assertEquals(true, message.properties["_RESULT_"])
     }
 }
