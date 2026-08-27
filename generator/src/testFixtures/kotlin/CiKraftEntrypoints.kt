@@ -31,6 +31,7 @@ import kotlin.Pair
 import kotlin.String
 import kotlin.collections.List
 import kotlin.collections.Map
+import kotlin.jvm.JvmName
 import kotlin.text.toInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -44,7 +45,8 @@ import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 
 context(messageLog: MessageLog)
-public fun Message.foo(): Message {
+@JvmName("foo")
+public fun Message.fooCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -145,7 +147,8 @@ public fun Message.foo(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.fooSuspend(): Message {
+@JvmName("fooSuspend")
+public fun Message.fooSuspendCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -254,7 +257,8 @@ public fun Message.fooSuspend(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.serialized(): Message {
+@JvmName("serialized")
+public fun Message.serializedCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -343,7 +347,8 @@ public fun Message.serialized(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.typed(): Message {
+@JvmName("typed")
+public fun Message.typedCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -434,7 +439,8 @@ public fun Message.typed(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.noError(): Message {
+@JvmName("noError")
+public fun Message.noErrorCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -482,20 +488,22 @@ public fun Message.noError(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.raw(): Message {
-  raw(rawMessage = this@raw,
+@JvmName("raw")
+public fun Message.rawCiKraftEntrypoint(): Message {
+  raw(rawMessage = this@rawCiKraftEntrypoint,
       )
   return this
 }
 
 context(messageLog: MessageLog)
-public fun Message.rawSuspend(): Message {
+@JvmName("rawSuspend")
+public fun Message.rawSuspendCiKraftEntrypoint(): Message {
   val executor = Executors.newCachedThreadPool()
   val executorCoroutineDispatcher = executor.asCoroutineDispatcher()
   try {
     val scope = CoroutineScope(executorCoroutineDispatcher)
     val deferred = scope.async {
-      rawSuspend(rawMessage = this@rawSuspend,
+      rawSuspend(rawMessage = this@rawSuspendCiKraftEntrypoint,
           )
     }
     deferred.asCompletableFuture().get()
@@ -508,7 +516,8 @@ public fun Message.rawSuspend(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.noOutputs(): Message {
+@JvmName("noOutputs")
+public fun Message.noOutputsCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -555,14 +564,16 @@ public fun Message.noOutputs(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.setup(): Message {
+@JvmName("setup")
+public fun Message.setupCiKraftEntrypoint(): Message {
   val output = setup()
   setProperty("_RESULT_", output)
   return this
 }
 
 context(messageLog: MessageLog)
-public fun Message.twoPart1(): Message {
+@JvmName("twoPart1")
+public fun Message.twoPart1CiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -642,7 +653,8 @@ public fun Message.twoPart1(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.twoPart2(): Message {
+@JvmName("twoPart2")
+public fun Message.twoPart2CiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -728,7 +740,8 @@ public fun Message.twoPart2(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.javaStreams(): Message {
+@JvmName("javaStreams")
+public fun Message.javaStreamsCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -817,7 +830,8 @@ public fun Message.javaStreams(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.binaryRedirect(): Message {
+@JvmName("binaryRedirect")
+public fun Message.binaryRedirectCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -884,7 +898,8 @@ public fun Message.binaryRedirect(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.kotlinxIO(): Message {
+@JvmName("kotlinxIO")
+public fun Message.kotlinxIOCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
     val parameters = split.drop(1).associate {
@@ -973,14 +988,16 @@ public fun Message.kotlinxIO(): Message {
 }
 
 context(messageLog: MessageLog)
-public fun Message.injectedBoolean(): Message {
+@JvmName("injectedBoolean")
+public fun Message.injectedBooleanCiKraftEntrypoint(): Message {
   val output = injectedBoolean()
   setProperty("_RESULT_", output)
   return this
 }
 
 context(messageLog: MessageLog)
-public fun Message.nullableReturn(): Message {
+@JvmName("nullableReturn")
+public fun Message.nullableReturnCiKraftEntrypoint(): Message {
   val output = nullableReturn() ?: return this
   setProperty("_RESULT_", output)
   return this

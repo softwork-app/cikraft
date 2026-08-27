@@ -1,6 +1,7 @@
 package app.softwork.cikraft.generator
 
 import app.softwork.cikraft.core.Script
+import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.BOOLEAN
 import com.squareup.kotlinpoet.BYTE
 import com.squareup.kotlinpoet.BYTE_ARRAY
@@ -35,7 +36,8 @@ public fun writeKotlinEntryPoints(
     for (entryPoint in scripts) {
         with(entryPoint) {
             addFunction(
-                FunSpec.builder(name).apply {
+                FunSpec.builder(name + "CiKraftEntrypoint").apply {
+                    addAnnotation(AnnotationSpec.builder(JvmName::class).addMember("%S", entryPoint.name).build())
                     contextParameter("messageLog", MESSAGE_LOG)
                     receiver(MESSAGE)
                     returns(MESSAGE)
@@ -309,7 +311,7 @@ private fun FunSpec.Builder.callMethod(
         )
         addStatement(
             "%M(%L)%L",
-            MemberName(entryPoint.packageName, entryPoint.name, isExtension = true),
+            MemberName(entryPoint.packageName, entryPoint.name),
             entryPoint.getInputs(),
             if (entryPoint.outputIsNullable) {
                 CodeBlock.of(" ?: return this")
@@ -336,7 +338,7 @@ private fun FunSpec.Builder.callMethod(
         if (hasOutput) {
             addStatement(
                 "val output = %M(%L)%L",
-                MemberName(entryPoint.packageName, entryPoint.name, isExtension = true),
+                MemberName(entryPoint.packageName, entryPoint.name),
                 entryPoint.getInputs(),
                 if (entryPoint.outputIsNullable) {
                     CodeBlock.of(" ?: return this")
@@ -347,7 +349,7 @@ private fun FunSpec.Builder.callMethod(
         } else {
             addStatement(
                 "%M(%L)%L",
-                MemberName(entryPoint.packageName, entryPoint.name, isExtension = true),
+                MemberName(entryPoint.packageName, entryPoint.name),
                 entryPoint.getInputs(),
                 if (entryPoint.outputIsNullable) {
                     CodeBlock.of(" ?: return this")
@@ -534,7 +536,7 @@ private fun Script.getInputs(): CodeBlock = CodeBlock.builder().apply {
             )
 
             is Script.None -> when {
-                input.klass.isMessage() -> add("${input.propertyName} = this@$name,\n")
+                input.klass.isMessage() -> add("${input.propertyName} = this@${name + "CiKraftEntrypoint"},\n")
 
                 input.klass.isMessageLog() -> add("${input.propertyName} = messageLog,\n")
 
