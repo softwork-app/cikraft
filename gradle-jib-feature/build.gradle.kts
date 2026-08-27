@@ -25,9 +25,6 @@ gradlePlugin {
         description = "Gradle plugin to configure ksp for SAPCI entrypoint generation"
     }
 
-    plugins.register("app.softwork.cikraft.ecosystem") {
-        implementationClass = "app.softwork.cikraft.gradle.SAPCIEcosystemPlugin"
-    }
     plugins.register("app.softwork.cikraft.jib-feature") {
         implementationClass = "app.softwork.cikraft.gradle.JibFeaturePlugin"
     }

@@ -13,7 +13,7 @@ public fun generateKtorResources(
     is CreatedFlow.Sender.Https -> {
         val file = FileSpec.builder(
             packageName = createdFlow.packageName.toPackageName(),
-            fileName = createdFlow.rawId,
+            fileName = createdFlow.rawId + "Resources",
         )
 
         val resource = TypeSpec.objectBuilder(createdFlow.rawId)
