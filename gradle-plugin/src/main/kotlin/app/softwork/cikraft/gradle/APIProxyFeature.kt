@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.artifacts.dsl.DependencyFactory
+import org.gradle.api.invocation.Gradle
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.ProjectFeatureApplicationContext
@@ -30,13 +31,20 @@ abstract class APIProxyFeature :
         @get:Inject
         abstract val tasks: TaskRegistrar
 
-        @get:Inject abstract val configurations: ConfigurationRegistrar
+        @get:Inject
+        abstract val configurations: ConfigurationRegistrar
 
-        @get:Inject abstract val configurationContainer: ConfigurationContainer
+        @get:Inject
+        abstract val configurationContainer: ConfigurationContainer
 
-        @get:Inject abstract val dependencyFactory: DependencyFactory
+        @get:Inject
+        abstract val dependencyFactory: DependencyFactory
 
-        @get:Inject abstract val sourceSets: SourceSetContainer
+        @get:Inject
+        abstract val sourceSets: SourceSetContainer
+
+        @get:Inject
+        abstract val gradle: Gradle
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -114,6 +122,13 @@ abstract class APIProxyFeature :
                 val deployApiTask = tasks.register("deploy${taskName}Api")
 
                 stage.apiVirtualHosts.all {
+                    gradle.sharedServices.registerIfAbsent(
+                        "apiTransportParallelService",
+                        ApiTransportParallelBuildService::class.java,
+                    ) {
+                        maxParallelUsages.set(1)
+                    }
+
                     val virtualHost = this
                     val deployApiToHostTask = tasks.register(
                         "deploy${taskName}ApiTo${virtualHost.name}ApiHost",

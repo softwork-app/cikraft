@@ -5,6 +5,7 @@ import org.gradle.api.credentials.*
 import org.gradle.api.file.*
 import org.gradle.api.provider.*
 import org.gradle.api.provider.Provider
+import org.gradle.api.services.ServiceReference
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.*
 import org.gradle.workers.*
@@ -50,6 +51,9 @@ abstract class DeployApiProxiesTask @Inject constructor(stageName: String) : Api
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }
     }
+
+    @get:ServiceReference("apiTransportParallelService")
+    abstract val apiTransportParallelBuildService: Property<ApiTransportParallelBuildService>
 
     @get:Input
     internal abstract val virtualHostId: Property<String>
