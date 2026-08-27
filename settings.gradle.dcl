@@ -22,7 +22,7 @@ include(":proxy")
 include(":proxy-dsl")
 
 include(":gradle-plugin")
-include(":gradle-jib-feature")
+include(":gradle-docker-compose-feature")
 include(":ksp-plugin")
 include(":kotlin-plugin")
 

@@ -11,10 +11,10 @@ class OpenApiPlugin : Plugin<Project> {
             attribute(SAPCI.attribute)
         }
 
-        val sapCIInfrastructure = target.configurations.dependencyScope("cikraftInfrastructure")
+        val sapCIInfrastructure = target.configurations.dependencyScope("cikraftOpenAPI")
 
-        target.configurations.resolvable("cikraftOpenAPI") {
-            extendsFrom(sapCIInfrastructure.get())
+        target.configurations.resolvable("cikraftOpenAPIFiles") {
+            extendsFrom(sapCIInfrastructure)
             attributes {
                 attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
                 attribute(SAPCI.attribute, named(SAPCI.OPENAPI))

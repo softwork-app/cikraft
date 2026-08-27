@@ -5,12 +5,10 @@ import org.gradle.api.Named
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.initialization.Settings
 import org.gradle.api.plugins.PluginManager
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Nested
 import org.gradle.features.annotations.BindsProjectFeature
-import org.gradle.features.annotations.RegistersProjectFeatures
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 import org.gradle.features.binding.ProjectFeatureApplicationContext
@@ -20,14 +18,6 @@ import org.gradle.features.binding.ProjectFeatureBindingBuilder
 import org.gradle.features.dsl.bindProjectFeature
 import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationProjectType
 import javax.inject.Inject
-
-@RegistersProjectFeatures(
-    JibFeature::class,
-    DockerComposeFeature::class,
-)
-abstract class JibFeaturePlugin : Plugin<Settings> {
-    override fun apply(settings: Settings) {}
-}
 
 @BindsProjectFeature(JibFeature::class)
 abstract class JibFeature :

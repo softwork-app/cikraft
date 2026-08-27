@@ -24,7 +24,7 @@ import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
 
 @CacheableTask
-abstract class GenerateDockerComposeFile : DefaultTask() {
+abstract class GenerateDockerComposeFileTask : DefaultTask() {
     init {
         group = "cikraft"
     }
@@ -59,12 +59,12 @@ abstract class GenerateDockerComposeFile : DefaultTask() {
         workerExecutor.classLoaderIsolation {
             classpath.from(workerClasspath)
         }.submit(GenerateDockerComposeFileWorker::class) {
-            output.set(this@GenerateDockerComposeFile.output)
-            projectName.set(this@GenerateDockerComposeFile.projectName)
-            serviceName.set(this@GenerateDockerComposeFile.serviceName)
-            image.set(this@GenerateDockerComposeFile.image)
-            volumes.set(this@GenerateDockerComposeFile.volumes)
-            propertyFiles.from(this@GenerateDockerComposeFile.propertyFiles.asFileTree)
+            output.set(this@GenerateDockerComposeFileTask.output)
+            projectName.set(this@GenerateDockerComposeFileTask.projectName)
+            serviceName.set(this@GenerateDockerComposeFileTask.serviceName)
+            image.set(this@GenerateDockerComposeFileTask.image)
+            volumes.set(this@GenerateDockerComposeFileTask.volumes)
+            propertyFiles.from(this@GenerateDockerComposeFileTask.propertyFiles.asFileTree)
         }
     }
 }

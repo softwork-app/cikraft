@@ -55,7 +55,7 @@ abstract class DockerComposeFeature :
 
             // https://github.com/gradle/gradle/issues/37376 to get the task via BuildModel of DockerCompose feature
             val generateDockerComposeFile =
-                tasks.named("generateDockerComposeFile", GenerateDockerComposeFile::class.java)
+                tasks.named("generateDockerComposeFile", GenerateDockerComposeFileTask::class.java)
 
             parentBuildModel.target.testTask.configure {
                 inputs.files(generateDockerComposeFile.map { it.output })
@@ -111,7 +111,7 @@ abstract class DockerComposeFeature :
             }
 
             val generateDockerComposeFile =
-                tasks.register("generateDockerComposeFile", GenerateDockerComposeFile::class.java) {
+                tasks.register("generateDockerComposeFile", GenerateDockerComposeFileTask::class.java) {
                     projectName.set(definition.projectName)
                     serviceName.set(definition.serviceName)
                     propertyFiles.from(propertiesConfiguration)
