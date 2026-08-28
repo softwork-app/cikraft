@@ -117,6 +117,10 @@ abstract class DockerComposeFeature :
                     propertyFiles.from(propertiesConfiguration)
                     image.set(parentDefinition.image)
                     volumes.set(definition.volumes)
+                    healthCheckTest.set(definition.healthCheck.test)
+                    healthCheckInterval.set(definition.healthCheck.interval)
+                    healthCheckTimeout.set(definition.healthCheck.timeout)
+                    healthCheckRetries.set(definition.healthCheck.retries)
                     output.convention(layout.contextBuildDirectory.map { it.file("cikraft/compose.yaml") })
                     workerClasspath.from(containerWorkerClasspath)
                 }
@@ -145,6 +149,16 @@ interface DockerComposeDefinition : Definition<BuildModel.None> {
     val serviceName: Property<String>
     val stage: Property<String>
     val volumes: ListProperty<String>
+
+    @get:Nested
+    val healthCheck: HealthCheck
+}
+
+interface HealthCheck {
+    val test: ListProperty<String>
+    val interval: Property<String>
+    val timeout: Property<String>
+    val retries: Property<Int>
 }
 
 interface DockerComposeDependencies : Dependencies {

@@ -1,6 +1,7 @@
 plugins {
     `kotlin-dsl`
     id("setup")
+    kotlin("plugin.serialization")
     id("java-test-fixtures")
     id("jvm-test-suite")
 }
