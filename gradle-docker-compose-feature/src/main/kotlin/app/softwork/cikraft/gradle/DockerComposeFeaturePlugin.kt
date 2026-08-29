@@ -6,7 +6,7 @@ import org.gradle.features.annotations.RegistersProjectFeatures
 
 @RegistersProjectFeatures(
     JibFeature::class,
-    DockerComposeFeature::class,
+    DockerEnvironmentFeature::class,
 )
 abstract class DockerComposeFeaturePlugin : Plugin<Settings> {
     override fun apply(settings: Settings) {}

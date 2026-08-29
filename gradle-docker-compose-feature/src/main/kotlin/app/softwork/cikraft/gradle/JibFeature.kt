@@ -1,7 +1,5 @@
 package app.softwork.cikraft.gradle
 
-import com.google.cloud.tools.jib.gradle.JibExtension
-import org.gradle.api.Named
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -17,15 +15,18 @@ import org.gradle.features.binding.ProjectFeatureBinding
 import org.gradle.features.binding.ProjectFeatureBindingBuilder
 import org.gradle.features.dsl.bindProjectFeature
 import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationProjectType
+import tel.schich.tinyjib.TinyJibExtension
+import tel.schich.tinyjib.params.PlatformParameters
 import javax.inject.Inject
 
+// ideally, it lives in the Google jib repo, but it needs a full rework...
 @BindsProjectFeature(JibFeature::class)
 abstract class JibFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(target: Project) {}
     override fun bind(builder: ProjectFeatureBindingBuilder) {
-        builder.bindProjectFeature("jib", ApplyAction::class)
+        builder.bindProjectFeature("tinyjib", ApplyAction::class)
             .withUnsafeApplyAction()
     }
 
@@ -44,23 +45,16 @@ abstract class JibFeature :
         ) {
             val parentBuildModel = context.getBuildModel(parentDefinition)
 
-            pluginManager.apply("com.google.cloud.tools.jib")
+            pluginManager.apply("tel.schich.tinyjib")
 
-            val jib = project.extensions.getByName("jib") as JibExtension
+            val jib = project.extensions.getByName("tinyjib") as TinyJibExtension
             jib.apply {
                 from {
-                    setImage(definition.from.image)
-                    platforms {
-                        for (platform in definition.from.platforms) {
-                            platform {
-                                architecture = platform.architecture.get()
-                                os = platform.os.get()
-                            }
-                        }
-                    }
+                    image.set(definition.from.image)
+                    platforms.set(definition.from.platforms)
                 }
-                to.setImage(definition.image)
-                container.setMainClass(parentBuildModel.applications.getByName("main").mainClassName)
+                to.image.set(definition.image)
+                container.mainClass.set(parentBuildModel.applications.getByName("main").mainClassName)
             }
         }
     }
@@ -76,10 +70,5 @@ interface From {
     val image: Property<String>
 
     @get:Nested
-    val platforms: NamedDomainObjectContainer<Platform>
-}
-
-interface Platform : Named {
-    val architecture: Property<String>
-    val os: Property<String>
+    val platforms: NamedDomainObjectContainer<PlatformParameters>
 }
