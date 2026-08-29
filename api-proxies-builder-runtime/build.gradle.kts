@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(projects.flowDsl)
+    api(projects.proxyDsl)
 
     implementation(projects.core)
 
