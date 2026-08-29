@@ -83,7 +83,9 @@ abstract class DockerEnvironmentFeature :
             val writePropertiesToFile =
                 tasks.register("writePropertiesToFile", WritePropertiesToFile::class.java) {
                     propertyFiles.from(propertiesConfiguration)
-                    output.convention(layout.contextBuildDirectory.map { it.file("cikraft/docker/properties.properties") })
+                    output.convention(
+                        layout.contextBuildDirectory.map { it.file("cikraft/docker/properties.properties") },
+                    )
                     workerClasspath.from(containerWorkerClasspath)
                 }
             jib.container.environment.putAll(
@@ -93,7 +95,7 @@ abstract class DockerEnvironmentFeature :
                         @Suppress("UNCHECKED_CAST")
                         s as Map<String, String>
                     }
-                }
+                },
             )
         }
     }
