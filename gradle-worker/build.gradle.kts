@@ -6,6 +6,7 @@ dependencies {
     compileOnly(gradleApi())
     compileOnly(projects.core)
     compileOnly(projects.integrationFlowBuilderRuntime)
+    compileOnly(projects.apiProxiesBuilderRuntime)
 
     compileOnly(projects.api)
     compileOnly(libs.ktor.client.cio)

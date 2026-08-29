@@ -31,6 +31,7 @@ include(":gradle-worker")
 include(":core")
 include(":generator")
 include(":integration-flow-builder-runtime")
+include(":api-proxies-builder-runtime")
 
 include(":runtime")
 
