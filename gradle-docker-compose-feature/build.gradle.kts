@@ -30,9 +30,6 @@ gradlePlugin {
     plugins.register("app.softwork.cikraft.docker-compose-feature") {
         implementationClass = "app.softwork.cikraft.gradle.DockerComposeFeaturePlugin"
     }
-    plugins.register("app.softwork.cikraft.docker-compose") {
-        implementationClass = "app.softwork.cikraft.gradle.DockerComposePlugin"
-    }
 }
 
 configurations.apiElements {
