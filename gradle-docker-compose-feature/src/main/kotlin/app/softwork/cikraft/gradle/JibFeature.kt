@@ -56,14 +56,16 @@ abstract class JibFeature :
             jib.apply {
                 from {
                     image.set(definition.from.image)
-                    platforms.set(definition.from.platforms.elements.map {
+                    platforms.set(
+                        definition.from.platforms.elements.map {
                         it.map {
                             objectFactory.newInstance<PlatformParameters>().apply {
                                 architecture.set(it.architecture)
                                 os.set(it.os)
                             }
                         }
-                    })
+                    }
+                    )
                 }
                 to.image.set(definition.image)
                 container.mainClass.set(parentBuildModel.applications.getByName("main").mainClassName)
