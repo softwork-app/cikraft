@@ -58,7 +58,7 @@ abstract class DockerEnvironmentFeature :
             buildModel: BuildModel.None,
             parentDefinition: JibDefinition,
         ) {
-            val jib = project.extensions.getByName("tinyjib") as TinyJibExtension
+            val jib = project.extensions.getByName("tinyJib") as TinyJibExtension
 
             val containerWorkerDeps = configurations.dependencyScope("containerWorkerDeps") {
                 @Suppress("INVISIBLE_REFERENCE")
