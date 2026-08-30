@@ -59,9 +59,10 @@ abstract class JibFeature :
                     platforms.set(
                         definition.from.platforms.elements.map {
                         it.map {
+                            val (architecture, os) = it.name.split("/")
                             objectFactory.newInstance<PlatformParameters>().apply {
-                                architecture.set(it.architecture)
-                                os.set(it.os)
+                                this.architecture.set(architecture)
+                                this.os.set(os)
                             }
                         }
                     }
@@ -87,7 +88,4 @@ interface From {
     val platforms: NamedDomainObjectContainer<Platform>
 }
 
-interface Platform {
-    val os: Property<String>
-    val architecture: Property<String>
-}
+interface Platform : Named
