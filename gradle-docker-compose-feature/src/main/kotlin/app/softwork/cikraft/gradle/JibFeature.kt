@@ -71,8 +71,8 @@ abstract class JibFeature :
                 }
                 to.image.set(definition.image)
                 container.mainClass.set(parentBuildModel.applications.getByName("main").mainClassName)
-                container.ports.set(definition.ports)
-                container.volumes.set(definition.volumes)
+                container.ports.set(definition.container.ports)
+                container.volumes.set(definition.container.volumes)
             }
         }
     }
