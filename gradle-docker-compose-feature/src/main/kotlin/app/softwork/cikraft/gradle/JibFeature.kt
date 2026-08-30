@@ -70,6 +70,8 @@ abstract class JibFeature :
                 }
                 to.image.set(definition.image)
                 container.mainClass.set(parentBuildModel.applications.getByName("main").mainClassName)
+                container.ports.set(definition.ports)
+                container.volumes.set(definition.volumes)
             }
         }
     }
@@ -79,6 +81,9 @@ interface JibDefinition : Definition<BuildModel.None> {
     @get:Nested
     val from: From
     val image: Property<String>
+
+    @get:Nested
+    val container: Container
 }
 
 interface From {
@@ -89,3 +94,8 @@ interface From {
 }
 
 interface Platform : Named
+
+interface Container {
+  val ports: ListProperty<String>
+  val volumes: ListProperty<String>
+}
