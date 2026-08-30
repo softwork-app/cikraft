@@ -54,7 +54,7 @@ abstract class JibFeature :
 
             pluginManager.apply("tel.schich.tinyjib")
 
-            val jib = project.extensions.getByName("tinyjib") as TinyJibExtension
+            val jib = project.extensions.getByName("tinyJib") as TinyJibExtension
             jib.apply {
                 from {
                     image.set(definition.from.image)
