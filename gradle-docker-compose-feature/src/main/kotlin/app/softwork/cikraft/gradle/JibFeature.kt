@@ -1,10 +1,12 @@
 package app.softwork.cikraft.gradle
 
 import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.Named
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.PluginManager
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Nested
 import org.gradle.features.annotations.BindsProjectFeature
@@ -59,9 +61,10 @@ abstract class JibFeature :
                     platforms.set(
                         definition.from.platforms.elements.map {
                         it.map {
+                            val (architecture, os) = it.name.split("/")
                             objectFactory.newInstance<PlatformParameters>().apply {
-                                architecture.set(it.architecture)
-                                os.set(it.os)
+                                this.architecture.set(architecture)
+                                this.os.set(os)
                             }
                         }
                     }
@@ -69,6 +72,8 @@ abstract class JibFeature :
                 }
                 to.image.set(definition.image)
                 container.mainClass.set(parentBuildModel.applications.getByName("main").mainClassName)
+                container.ports.set(definition.container.ports)
+                container.volumes.set(definition.container.volumes)
             }
         }
     }
@@ -78,6 +83,9 @@ interface JibDefinition : Definition<BuildModel.None> {
     @get:Nested
     val from: From
     val image: Property<String>
+
+    @get:Nested
+    val container: Container
 }
 
 interface From {
@@ -87,7 +95,9 @@ interface From {
     val platforms: NamedDomainObjectContainer<Platform>
 }
 
-interface Platform {
-    val os: Property<String>
-    val architecture: Property<String>
+interface Platform : Named
+
+interface Container {
+  val ports: ListProperty<String>
+  val volumes: ListProperty<String>
 }
