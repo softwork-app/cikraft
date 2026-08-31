@@ -7,6 +7,7 @@ import org.gradle.api.artifacts.dsl.DependencyCollector
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.attributes.Usage
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.Nested
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.BuildModel
@@ -52,6 +53,9 @@ abstract class DockerEnvironmentFeature :
         @get:Inject
         abstract val project: Project
 
+        @get:Inject
+        abstract val providers: ProviderFactory
+
         override fun apply(
             context: ProjectFeatureApplicationContext,
             definition: DockerEnvironmentDefinition,
@@ -88,15 +92,16 @@ abstract class DockerEnvironmentFeature :
                     )
                     workerClasspath.from(containerWorkerClasspath)
                 }
-            jib.container.environment.putAll(
-                writePropertiesToFile.flatMap { it.output }.flatMap {
-                    project.provider {
-                        val s = it.asFile.inputStream().use { Properties().apply { load(it) } }
-                        @Suppress("UNCHECKED_CAST")
-                        s as Map<String, String>
-                    }
-                },
-            )
+
+            val propertiesAsMapProvider = providers.fileContents(
+                writePropertiesToFile.flatMap { it.output },
+            ).asText.map {
+                it.byteInputStream().use {
+                    Properties().apply { load(it) } as Map<String, String>
+                }
+            }
+
+            jib.container.environment.putAll(propertiesAsMapProvider)
         }
     }
 }
