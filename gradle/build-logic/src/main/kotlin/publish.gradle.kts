@@ -6,7 +6,7 @@ plugins {
 publishing {
     repositories {
         maven(url = "https://maven.pkg.github.com/softwork-app/cikraft") {
-            name = "GitHubPackages"
+            name = "GitHubPackagesUpload"
             credentials(PasswordCredentials::class)
         }
     }

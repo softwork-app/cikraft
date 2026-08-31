@@ -26,6 +26,8 @@ jobs:
       - name: Run integration tests
         run: ./gradlew :gradle-plugin:integrationTest --rerun
         env:
+          ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
+          ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
           ORG_GRADLE_PROJECT_KDGPUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_KDGPPassword: ${{ github.token }}
       - name: Upload test results
@@ -48,6 +50,8 @@ jobs:
     env:
       ORG_GRADLE_PROJECT_SBX_API_CLIENT_SECRET: ${{ secrets.SBX_API_CLIENT_SECRET }}
       ORG_GRADLE_PROJECT_SBX_RT_CLIENT_SECRET: ${{ secrets.SBX_RT_CLIENT_SECRET }}
+      ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
+      ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
       ORG_GRADLE_PROJECT_KDGPUsername: ${{ github.actor }}
       ORG_GRADLE_PROJECT_KDGPPassword: ${{ github.token }}
 

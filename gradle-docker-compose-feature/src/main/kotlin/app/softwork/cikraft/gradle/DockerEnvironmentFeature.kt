@@ -1,5 +1,6 @@
 package app.softwork.cikraft.gradle
 
+import io.github.hfhbd.jib.JibDefinition
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.Dependencies
@@ -21,7 +22,6 @@ import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
 import org.gradle.kotlin.dsl.named
-import tel.schich.tinyjib.TinyJibExtension
 import java.util.*
 import javax.inject.Inject
 
@@ -51,9 +51,6 @@ abstract class DockerEnvironmentFeature :
         abstract val layout: ProjectFeatureLayout
 
         @get:Inject
-        abstract val project: Project
-
-        @get:Inject
         abstract val providers: ProviderFactory
 
         override fun apply(
@@ -62,7 +59,7 @@ abstract class DockerEnvironmentFeature :
             buildModel: BuildModel.None,
             parentDefinition: JibDefinition,
         ) {
-            val jib = project.extensions.getByName("tinyJib") as TinyJibExtension
+            val parentBuildModel = context.getBuildModel(parentDefinition)
 
             val containerWorkerDeps = configurations.dependencyScope("containerWorkerDeps") {
                 @Suppress("INVISIBLE_REFERENCE")
@@ -101,7 +98,7 @@ abstract class DockerEnvironmentFeature :
                 }
             }
 
-            jib.container.environment.putAll(propertiesAsMapProvider)
+            parentBuildModel.container.environment.putAll(propertiesAsMapProvider)
         }
     }
 }

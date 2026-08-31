@@ -32,6 +32,8 @@ jobs:
       - name: Release maven artifacts
         run: ./gradlew publishAllPublicationsToGitHubPackagesRepository -Pversion=0.0.0-SNAPSHOT
         env:
+          ORG_GRADLE_PROJECT_GitHubPackagesUploadUsername: ${{ github.actor }}
+          ORG_GRADLE_PROJECT_GitHubPackagesUploadPassword: ${{ github.token }}
           ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
