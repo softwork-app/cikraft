@@ -30,6 +30,11 @@ import kotlin.uuid.Uuid
 
 class IFlowTest {
     @Test
+    fun a(): Unit = runBlocking {
+        consumerClient.post("https://5f44b7f9trial-fc24e98494614c549049a7cf4590f76d.a.integration.cloud.sap/foo")
+    }
+
+    @Test
     fun httpPost(): Unit = runBlocking {
         val uuid = Uuid.random()
         val artifactContent = person(uuid)

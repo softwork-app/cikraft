@@ -39,6 +39,8 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
+          ORG_GRADLE_PROJECT_GitHubPackagesUploadUsername: ${{ github.actor }}
+          ORG_GRADLE_PROJECT_GitHubPackagesUploadPassword: ${{ github.token }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
           ORG_GRADLE_PROJECT_KDGPUsername: ${{ github.actor }}
@@ -69,6 +71,8 @@ jobs:
       - name: Create docs
         run: ./gradlew :dokkaGenerate
         env:
+          ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
+          ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
           ORG_GRADLE_PROJECT_KDGPUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_KDGPPassword: ${{ github.token }}
 

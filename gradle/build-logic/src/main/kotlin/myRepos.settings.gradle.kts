@@ -3,9 +3,9 @@ plugins {
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
+    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
 
+    repositories {
         mavenCentral()
 
         exclusiveContent {
@@ -23,6 +23,24 @@ dependencyResolutionManagement {
             }
             filter {
                 includeGroupAndSubgroups("org.jetbrains.ecosystem")
+            }
+        }
+
+        exclusiveContent {
+            forRepository {
+                maven {
+                    setUrl(
+                        "https://maven.pkg.github.com/hfhbd/*"
+                    )
+                    name = "GitHubPackages"
+                    metadataSources {
+                        gradleMetadata()
+                    }
+                    credentials(org.gradle.api.credentials.PasswordCredentials::class)
+                }
+            }
+            filter {
+                includeGroupAndSubgroups("io.github.hfhbd")
             }
         }
 

@@ -11,7 +11,7 @@ kotlin {
 
 dependencies {
     compileOnly(libs.kotlin.ecosystem)
-    implementation(libs.jib.gradle.plugin)
+    implementation(libs.jib.feature)
     implementation(projects.gradlePlugin)
 
     compileOnly(projects.core)
