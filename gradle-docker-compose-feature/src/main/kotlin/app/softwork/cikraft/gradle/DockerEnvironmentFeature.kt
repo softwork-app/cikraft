@@ -93,7 +93,9 @@ abstract class DockerEnvironmentFeature :
                     workerClasspath.from(containerWorkerClasspath)
                 }
 
-            val propertiesAsMapProvider = providers.fileContents(writePropertiesToFile.flatMap { it.output }).asText.map {
+            val propertiesAsMapProvider = providers.fileContents(
+                writePropertiesToFile.flatMap { it.output },
+            ).asText.map {
                 it.byteInputStream().use {
                     Properties().apply { load(it) } as Map<String, String>
                 }

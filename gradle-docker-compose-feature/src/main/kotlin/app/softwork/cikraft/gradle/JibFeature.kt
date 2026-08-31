@@ -1,7 +1,7 @@
 package app.softwork.cikraft.gradle
 
-import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Named
+import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
@@ -60,14 +60,14 @@ abstract class JibFeature :
                     image.set(definition.from.image)
                     platforms.set(
                         definition.from.platforms.elements.map {
-                        it.map {
-                            val (architecture, os) = it.name.split("/")
-                            objectFactory.newInstance<PlatformParameters>().apply {
-                                this.architecture.set(architecture)
-                                this.os.set(os)
+                            it.map {
+                                val (architecture, os) = it.name.split("/")
+                                objectFactory.newInstance<PlatformParameters>().apply {
+                                    this.architecture.set(architecture)
+                                    this.os.set(os)
+                                }
                             }
-                        }
-                    }
+                        },
                     )
                 }
                 to.image.set(definition.image)
@@ -98,6 +98,6 @@ interface From {
 interface Platform : Named
 
 interface Container {
-  val ports: ListProperty<String>
-  val volumes: ListProperty<String>
+    val ports: ListProperty<String>
+    val volumes: ListProperty<String>
 }
