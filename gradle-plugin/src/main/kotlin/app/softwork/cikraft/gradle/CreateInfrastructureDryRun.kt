@@ -27,7 +27,6 @@ import javax.inject.Inject
 abstract class CreateInfrastructureDryRun : DefaultTask() {
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.NONE)
-    @get:SkipWhenEmpty
     abstract val entryPoints: ConfigurableFileCollection
 
     @get:Input
