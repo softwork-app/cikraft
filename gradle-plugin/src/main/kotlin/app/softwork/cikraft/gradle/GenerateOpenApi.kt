@@ -53,7 +53,6 @@ abstract class GenerateOpenApi : DefaultTask() {
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.NONE)
-    @get:SkipWhenEmpty
     abstract val createdFlows: ConfigurableFileCollection
 
     @get:Input
