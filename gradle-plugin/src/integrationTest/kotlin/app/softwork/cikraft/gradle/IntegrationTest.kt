@@ -537,6 +537,8 @@ public data object IFBa
                     add("--info")
                     add("-PKDGPUsername=${System.getenv("KDGP_USERNAME")}")
                     add("-PKDGPPassword=${System.getenv("KDGP_PASSWORD")}")
+                    add("-PGitHubPackagesUsername=${System.getenv("KDGP_USERNAME")}")
+                    add("-PGitHubPackagesPassword=${System.getenv("KDGP_PASSWORD")}")
                 },
             )
     }
