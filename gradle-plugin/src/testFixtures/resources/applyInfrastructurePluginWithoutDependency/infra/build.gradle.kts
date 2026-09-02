@@ -22,6 +22,9 @@ jvmApplication {
 
                         integrationFlows {
                             integrationFlow("IF_Bar") {
+                                dependencies {
+                                    implementation(project())
+                                }
 
                                 description = "Bar test"
                             }
