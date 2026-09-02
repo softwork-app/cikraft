@@ -24,7 +24,11 @@ public abstract class CreateInfrastructureDryRunWorker : WorkAction<CreateInfras
 
         val builder = IntegrationFlowBuilder(
             scripts = parameters.entryPoints.files.flatMap {
-                Json.decodeFromString(ListSerializer(Script.serializer()), it.readText())
+                if (it.exists()) {
+                    Json.decodeFromString(ListSerializer(Script.serializer()), it.readText())
+                } else {
+                    emptyList()
+                }
             },
             outputFolder = outputFolder,
             stageNames = parameters.stageNames.get(),

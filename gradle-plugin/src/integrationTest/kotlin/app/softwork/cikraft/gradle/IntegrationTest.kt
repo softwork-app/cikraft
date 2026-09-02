@@ -98,16 +98,16 @@ class IntegrationTest {
     }
 
     @Test
-    fun applyInfrastructurePluginWithoutDependencyDoesNotGenerateAccessors() {
+    fun applyInfrastructurePluginWithoutScriptEntriesDoesNotGenerateScriptAccessors() {
         val projectDir = fixtureDir / "resources" / "applyInfrastructurePluginWithoutDependency"
-        val s = createRunner(projectDir, "assemble").build()
+        val s = createRunner(projectDir, "assemble", "createInfrastructureDryRun").build()
         assertEquals(null, s.task(":infra:r8JarIF_Bar"))
 
         assertEquals(null, (projectDir / "infra/build/cikraft/IF_Bar/libs").toFile().list())
 
-        assertFalse(
-            (projectDir / "infra/build/cikraft/typedFlows/kotlin/IF_Bar.kt").exists(),
-            "without a configuration of the IFlow there are no accessors",
+        assertTrue(
+            (projectDir / "infra/build/cikraft/typedSteps/kotlin").listDirectoryEntries().isEmpty(),
+            "without src/main/kotlin, there are no typed Script accessors",
         )
     }
 
