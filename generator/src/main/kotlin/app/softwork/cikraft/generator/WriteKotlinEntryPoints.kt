@@ -22,6 +22,7 @@ import com.squareup.kotlinpoet.NOTHING
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.SHORT
 import com.squareup.kotlinpoet.STRING
+import com.squareup.kotlinpoet.THROWABLE
 import com.squareup.kotlinpoet.UNIT
 import com.squareup.kotlinpoet.joinToCode
 import io.github.hfhbd.kfx.codegen.CodeGenTree
@@ -56,9 +57,7 @@ public fun writeKotlinEntryPoints(
                         validateContentType(bodyInput)
                     }
 
-                    if (error != null) {
-                        beginControlFlow("try")
-                    }
+                    beginControlFlow("try")
 
                     callMethod(entryPoint)
 
@@ -73,8 +72,15 @@ public fun writeKotlinEntryPoints(
                         )
                         nextControlFlow("catch (error: %T)", errorClass)
                         addOutputs(error.outputs, "error", isError = true)
-                        endControlFlow()
                     }
+
+                    nextControlFlow("catch (throwable: %T)", THROWABLE)
+                    addStatement(
+                        """messageLog.addAttachmentAsString("caughtThrowable$name", throwable.%M(), "text/plain")""",
+                        MemberName("kotlin", "stackTraceToString", isExtension = true),
+                    )
+                    addStatement("throw throwable")
+                    endControlFlow()
 
                     addStatement("return this")
                 }.build(),

@@ -29,9 +29,11 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.Pair
 import kotlin.String
+import kotlin.Throwable
 import kotlin.collections.List
 import kotlin.collections.Map
 import kotlin.jvm.JvmName
+import kotlin.stackTraceToString
 import kotlin.text.toInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -142,6 +144,9 @@ public fun Message.fooCiKraftEntrypoint(): Message {
     messageLog.addAttachmentAsString("error", error.toString(), "text/plain")
     setHeader("Content-Type", errorContentType)
     setHeader("CamelHttpResponseCode", error.httpReturnCode)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowablefoo", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -252,6 +257,9 @@ public fun Message.fooSuspendCiKraftEntrypoint(): Message {
     messageLog.addAttachmentAsString("error", error.toString(), "text/plain")
     setHeader("Content-Type", errorContentType)
     setHeader("CamelHttpResponseCode", error.httpReturnCode)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowablefooSuspend", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -342,6 +350,9 @@ public fun Message.serializedCiKraftEntrypoint(): Message {
     messageLog.addAttachmentAsString("error", error.toString(), "text/plain")
     setHeader("Content-Type", errorContentType)
     setHeader("CamelHttpResponseCode", error.httpReturnCode)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowableserialized", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -434,6 +445,9 @@ public fun Message.typedCiKraftEntrypoint(): Message {
     messageLog.addAttachmentAsString("error", error.toString(), "text/plain")
     setHeader("Content-Type", errorContentType)
     setHeader("CamelHttpResponseCode", error.httpReturnCode)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowabletyped", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -472,17 +486,22 @@ public fun Message.noErrorCiKraftEntrypoint(): Message {
     body = null
     return this
   }
-  val output = noError(c = ITApiFactory.getService<SecureStoreService>(SecureStoreService::class.java, null).getUserCredential(getProperty("c") as String).password,
-      d = ITApiFactory.getService<SecureStoreService>(SecureStoreService::class.java, null).getUserCredential(getProperty("d") as String).password,
-      e = (getProperty("e") as String?)?.toInt(),
-      )
-  setProperty("_RESULT_", output)
-  body = responseFactory.encodeToString(String.serializer(), output.body)
-  setHeader("Content-Type", responseContentType)
-  setProperty("FOO", output.foo)
-  setHeader("CamelHttpResponseCode", output.fooHeader)
-  for (header in output.headers) {
-    setHeader(header.key, header.value)
+  try {
+    val output = noError(c = ITApiFactory.getService<SecureStoreService>(SecureStoreService::class.java, null).getUserCredential(getProperty("c") as String).password,
+        d = ITApiFactory.getService<SecureStoreService>(SecureStoreService::class.java, null).getUserCredential(getProperty("d") as String).password,
+        e = (getProperty("e") as String?)?.toInt(),
+        )
+    setProperty("_RESULT_", output)
+    body = responseFactory.encodeToString(String.serializer(), output.body)
+    setHeader("Content-Type", responseContentType)
+    setProperty("FOO", output.foo)
+    setHeader("CamelHttpResponseCode", output.fooHeader)
+    for (header in output.headers) {
+      setHeader(header.key, header.value)
+    }
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowablenoError", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -490,27 +509,37 @@ public fun Message.noErrorCiKraftEntrypoint(): Message {
 context(messageLog: MessageLog)
 @JvmName("raw")
 public fun Message.rawCiKraftEntrypoint(): Message {
-  raw(rawMessage = this@rawCiKraftEntrypoint,
-      )
+  try {
+    raw(rawMessage = this@rawCiKraftEntrypoint,
+        )
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowableraw", throwable.stackTraceToString(), "text/plain")
+    throw throwable
+  }
   return this
 }
 
 context(messageLog: MessageLog)
 @JvmName("rawSuspend")
 public fun Message.rawSuspendCiKraftEntrypoint(): Message {
-  val executor = Executors.newCachedThreadPool()
-  val executorCoroutineDispatcher = executor.asCoroutineDispatcher()
   try {
-    val scope = CoroutineScope(executorCoroutineDispatcher)
-    val deferred = scope.async {
-      rawSuspend(rawMessage = this@rawSuspendCiKraftEntrypoint,
-          )
+    val executor = Executors.newCachedThreadPool()
+    val executorCoroutineDispatcher = executor.asCoroutineDispatcher()
+    try {
+      val scope = CoroutineScope(executorCoroutineDispatcher)
+      val deferred = scope.async {
+        rawSuspend(rawMessage = this@rawSuspendCiKraftEntrypoint,
+            )
+      }
+      deferred.asCompletableFuture().get()
+    } catch (suspendUserError: ExecutionException) {
+      throw suspendUserError.cause!!
+    } finally {
+      executorCoroutineDispatcher.close()
     }
-    deferred.asCompletableFuture().get()
-  } catch (suspendUserError: ExecutionException) {
-    throw suspendUserError.cause!!
-  } finally {
-    executorCoroutineDispatcher.close()
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowablerawSuspend", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -559,6 +588,9 @@ public fun Message.noOutputsCiKraftEntrypoint(): Message {
     messageLog.addAttachmentAsString("error", error.toString(), "text/plain")
     setHeader("Content-Type", errorContentType)
     setHeader("CamelHttpResponseCode", error.httpReturnCode)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowablenoOutputs", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -566,8 +598,13 @@ public fun Message.noOutputsCiKraftEntrypoint(): Message {
 context(messageLog: MessageLog)
 @JvmName("setup")
 public fun Message.setupCiKraftEntrypoint(): Message {
-  val output = setup()
-  setProperty("_RESULT_", output)
+  try {
+    val output = setup()
+    setProperty("_RESULT_", output)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowablesetup", throwable.stackTraceToString(), "text/plain")
+    throw throwable
+  }
   return this
 }
 
@@ -648,6 +685,9 @@ public fun Message.twoPart1CiKraftEntrypoint(): Message {
     messageLog.addAttachmentAsString("error", error.toString(), "text/plain")
     setHeader("Content-Type", errorContentType)
     setHeader("CamelHttpResponseCode", error.httpReturnCode)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowabletwoPart1", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -735,6 +775,9 @@ public fun Message.twoPart2CiKraftEntrypoint(): Message {
     messageLog.addAttachmentAsString("error", error.toString(), "text/plain")
     setHeader("Content-Type", errorContentType)
     setHeader("CamelHttpResponseCode", error.httpReturnCode)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowabletwoPart2", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -825,6 +868,9 @@ public fun Message.javaStreamsCiKraftEntrypoint(): Message {
     messageLog.addAttachmentAsString("error", error.toString(), "text/plain")
     setHeader("Content-Type", errorContentType)
     setHeader("CamelHttpResponseCode", error.httpReturnCode)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowablejavaStreams", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -893,6 +939,9 @@ public fun Message.binaryRedirectCiKraftEntrypoint(): Message {
     messageLog.addAttachmentAsString("error", error.toString(), "text/plain")
     setHeader("Content-Type", errorContentType)
     setHeader("CamelHttpResponseCode", error.httpReturnCode)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowablebinaryRedirect", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -983,6 +1032,9 @@ public fun Message.kotlinxIOCiKraftEntrypoint(): Message {
     messageLog.addAttachmentAsString("error", error.toString(), "text/plain")
     setHeader("Content-Type", errorContentType)
     setHeader("CamelHttpResponseCode", error.httpReturnCode)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowablekotlinxIO", throwable.stackTraceToString(), "text/plain")
+    throw throwable
   }
   return this
 }
@@ -990,15 +1042,25 @@ public fun Message.kotlinxIOCiKraftEntrypoint(): Message {
 context(messageLog: MessageLog)
 @JvmName("injectedBoolean")
 public fun Message.injectedBooleanCiKraftEntrypoint(): Message {
-  val output = injectedBoolean()
-  setProperty("_RESULT_", output)
+  try {
+    val output = injectedBoolean()
+    setProperty("_RESULT_", output)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowableinjectedBoolean", throwable.stackTraceToString(), "text/plain")
+    throw throwable
+  }
   return this
 }
 
 context(messageLog: MessageLog)
 @JvmName("nullableReturn")
 public fun Message.nullableReturnCiKraftEntrypoint(): Message {
-  val output = nullableReturn() ?: return this
-  setProperty("_RESULT_", output)
+  try {
+    val output = nullableReturn() ?: return this
+    setProperty("_RESULT_", output)
+  } catch (throwable: Throwable) {
+    messageLog.addAttachmentAsString("caughtThrowablenullableReturn", throwable.stackTraceToString(), "text/plain")
+    throw throwable
+  }
   return this
 }
