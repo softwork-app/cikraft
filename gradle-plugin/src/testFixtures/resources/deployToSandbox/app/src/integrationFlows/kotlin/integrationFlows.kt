@@ -7,7 +7,6 @@ fun IntegrationFlowBuilder.integrationFlows() {
       userRole = "ESBMessaging.send",
       xsrfProtection = true,
       clientCertificates = true,
-      returnExceptionsToSender = true,
     ) {
       startMessage()
         typed(
@@ -27,7 +26,6 @@ fun IntegrationFlowBuilder.integrationFlows() {
       userRole = "ESBMessaging.send",
       xsrfProtection = true,
       clientCertificates = true,
-      returnExceptionsToSender = true,
     ) {
       startMessage()
         typed(
@@ -41,10 +39,7 @@ fun IntegrationFlowBuilder.integrationFlows() {
 
       exceptionSubprocess {
         startErrorEvent("Error Start")
-        contentModifier {
-          setBody("adsfasdf")
-          addHeader("CamelHttpResponseCode", "444")
-        }
+        handleFault()
         endMessage("Error End")
       }
     }
