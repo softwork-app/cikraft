@@ -179,7 +179,7 @@ class IFlowTest {
                         }
                         assertEquals(201, writeAgain.status.value)
                         assertEquals(
-                            "${System.getenv("TRIAL_HTTP_SERVER")}/Foo/get/$uuid",
+                            "${System.getenv("TRIAL_HTTP_SERVER")}/http/Foo/get/$uuid",
                             writeAgain.headers["Location"],
                         )
                         assertEquals("", writeAgain.bodyAsText())
