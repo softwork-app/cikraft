@@ -30,11 +30,6 @@ import kotlin.uuid.Uuid
 
 class IFlowTest {
     @Test
-    fun a(): Unit = runBlocking {
-        consumerClient.post("https://5f44b7f9trial-fc24e98494614c549049a7cf4590f76d.a.integration.cloud.sap/foo")
-    }
-
-    @Test
     fun httpPost(): Unit = runBlocking {
         val uuid = Uuid.random()
         val artifactContent = person(uuid)
@@ -143,10 +138,10 @@ class IFlowTest {
                         assertNotNull(location)
                         assertEquals(
                             Url(
-                                "https://5f44b7f9trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http/Foo/get/$uuid",
+                                "${System.getenv("TRIAL_HTTP_SERVER")}/http/Foo/get/$uuid",
                             ),
                             URLBuilder(
-                                "https://5f44b7f9trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http/Foo/write/$uuid",
+                                "${System.getenv("TRIAL_HTTP_SERVER")}/http/Foo/write/$uuid",
                             )
                                 .takeFrom(location)
                                 .build(),
@@ -184,7 +179,7 @@ class IFlowTest {
                         }
                         assertEquals(201, writeAgain.status.value)
                         assertEquals(
-                            "https://5f44b7f9trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http/Foo/get/$uuid",
+                            "${System.getenv("TRIAL_HTTP_SERVER")}/http/Foo/get/$uuid",
                             writeAgain.headers["Location"],
                         )
                         assertEquals("", writeAgain.bodyAsText())

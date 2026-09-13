@@ -142,8 +142,15 @@ testing.suites {
             testTask {
                 environment("fixtureDir", project.file("src/testFixtures").path)
 
-                environment("SBX_API_CLIENT_SECRET", providers.gradleProperty("SBX_API_CLIENT_SECRET").get())
-                environment("SBX_RT_CLIENT_SECRET", providers.gradleProperty("SBX_RT_CLIENT_SECRET").get())
+                environment("TRIAL_API_CLIENT_ID", providers.gradleProperty("TRIAL_API_CLIENT_ID").get())
+                environment("TRIAL_API_CLIENT_SECRET", providers.gradleProperty("TRIAL_API_CLIENT_SECRET").get())
+                environment("TRIAL_RT_CLIENT_ID", providers.gradleProperty("TRIAL_RT_CLIENT_ID").get())
+                environment("TRIAL_RT_CLIENT_SECRET", providers.gradleProperty("TRIAL_RT_CLIENT_SECRET").get())
+                environment("TRIAL_HTTP_SERVER", providers.gradleProperty("TRIAL_HTTP_SERVER").get())
+                environment("TRIAL_API_SERVER", providers.gradleProperty("TRIAL_API_SERVER").get())
+                environment("TRIAL_AUTH_SERVER", providers.gradleProperty("TRIAL_AUTH_SERVER").get())
+                environment("TRIAL_WEB", providers.gradleProperty("TRIAL_WEB").get())
+
                 environment("KDGP_USERNAME", providers.gradleProperty("KDGPUsername").get())
                 environment("KDGP_PASSWORD", providers.gradleProperty("KDGPPassword").get())
             }
