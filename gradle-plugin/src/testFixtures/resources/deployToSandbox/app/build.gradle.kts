@@ -16,11 +16,10 @@ jvmApplication {
             apiStages {
                 apiStage("Sbx") {
                     description = "Sandbox Stage for unit tests"
-                    web =
-                        "https://5f44b7f9trial.integrationsuite-trial.cfapps.ap21.hana.ondemand.com/shell/home"
-                    apiServer = "https://5f44b7f9trial.it-cpitrial03.cfapps.ap21.hana.ondemand.com"
-                    authServer = "https://5f44b7f9trial.authentication.ap21.hana.ondemand.com"
-                    httpServer = "https://5f44b7f9trial.it-cpitrial03-rt.cfapps.ap21.hana.ondemand.com/http"
+                    web = providers.gradleProperty("trialWeb")
+                    apiServer = providers.gradleProperty("trialApiServer")
+                    authServer = providers.gradleProperty("trialAuthServer")
+                    httpServer = providers.gradleProperty("trialHttpServer").map { "$it/http" }
                 }
             }
 

@@ -45,8 +45,13 @@ testing {
             targets.configureEach {
                 testTask {
                     javaLauncher.set(javaToolchains.launcherFor {})
-                    environment("SBX_API_CLIENT_SECRET", providers.gradleProperty("SBX_API_CLIENT_SECRET").get())
-                    environment("SBX_RT_CLIENT_SECRET", providers.gradleProperty("SBX_RT_CLIENT_SECRET").get())
+                    environment("TRIAL_API_CLIENT_ID", providers.gradleProperty("TRIAL_API_CLIENT_ID").get())
+                    environment("TRIAL_API_CLIENT_SECRET", providers.gradleProperty("TRIAL_API_CLIENT_SECRET").get())
+                    environment("TRIAL_RT_CLIENT_ID", providers.gradleProperty("TRIAL_RT_CLIENT_ID").get())
+                    environment("TRIAL_RT_CLIENT_SECRET", providers.gradleProperty("TRIAL_RT_CLIENT_SECRET").get())
+                    environment("TRIAL_HTTP_SERVER", providers.gradleProperty("TRIAL_HTTP_SERVER").get())
+                    environment("TRIAL_API_SERVER", providers.gradleProperty("TRIAL_API_SERVER").get())
+                    environment("TRIAL_AUTH_SERVER", providers.gradleProperty("TRIAL_AUTH_SERVER").get())
                 }
             }
         }
