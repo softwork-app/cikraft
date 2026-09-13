@@ -8,7 +8,6 @@ import org.gradle.api.artifacts.dsl.DependencyCollector
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.attributes.Usage
 import org.gradle.api.provider.Property
-import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.Nested
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.BuildModel
@@ -25,8 +24,8 @@ import org.gradle.kotlin.dsl.named
 import java.util.*
 import javax.inject.Inject
 
-@BindsProjectFeature(DockerEnvironmentFeature::class)
-abstract class DockerEnvironmentFeature :
+@BindsProjectFeature(JibDockerEnvironmentFeature::class)
+abstract class JibDockerEnvironmentFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(project: Project) {}
@@ -50,9 +49,6 @@ abstract class DockerEnvironmentFeature :
         @get:Inject
         abstract val layout: ProjectFeatureLayout
 
-        @get:Inject
-        abstract val providers: ProviderFactory
-
         override fun apply(
             context: ProjectFeatureApplicationContext,
             definition: DockerEnvironmentDefinition,
@@ -62,7 +58,6 @@ abstract class DockerEnvironmentFeature :
             val parentBuildModel = context.getBuildModel(parentDefinition)
 
             val containerWorkerDeps = configurations.dependencyScope("containerWorkerDeps") {
-                @Suppress("INVISIBLE_REFERENCE")
                 dependencies.add(
                     dependencyFactory.create("app.softwork.cikraft:core:${app.softwork.cikraft.gradle.VERSION}"),
                 )
@@ -72,7 +67,7 @@ abstract class DockerEnvironmentFeature :
                 extendsFrom(containerWorkerDeps)
             }
 
-            val propertiesConfiguration = configurations.resolvable("dockerComposeProperties") {
+            val propertiesConfiguration = configurations.resolvable("dockerProperties") {
                 fromDependencyCollector(definition.dependencies.infrastructure)
                 attributes {
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
@@ -103,11 +98,11 @@ abstract class DockerEnvironmentFeature :
 
 interface DockerEnvironmentDefinition : Definition<BuildModel.None> {
     @get:Nested
-    val dependencies: DockerEnvironmenDependencies
+    val dependencies: DockerEnvironmentDependencies
 
     val stage: Property<String>
 }
 
-interface DockerEnvironmenDependencies : Dependencies {
+interface DockerEnvironmentDependencies : Dependencies {
     val infrastructure: DependencyCollector
 }
