@@ -16,7 +16,7 @@ kfx-core = { module = "io.github.hfhbd.kfx:core", version.ref = "kfx" }
 kfx-openapi-model = { module = "io.github.hfhbd.kfx:openapi-model", version.ref = "kfx" }
 kfx-kotlin = { module = "io.github.hfhbd.kfx:kotlin", version.ref = "kfx" }
 
-kotlinpoet = { module = "com.squareup:kotlinpoet", version = "2.3.0" }
+kotlinpoet = { module = "com.squareup:kotlinpoet", version = "2.4.0" }
 
 ktor-resources = { module = "io.ktor:ktor-resources", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }

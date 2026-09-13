@@ -46,8 +46,8 @@ import kotlinx.serialization.StringFormat
 import kotlinx.serialization.builtins.nullable
 import kotlinx.serialization.builtins.serializer
 
-context(messageLog: MessageLog)
 @JvmName("foo")
+context(messageLog: MessageLog)
 public fun Message.fooCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -151,8 +151,8 @@ public fun Message.fooCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("fooSuspend")
+context(messageLog: MessageLog)
 public fun Message.fooSuspendCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -264,8 +264,8 @@ public fun Message.fooSuspendCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("serialized")
+context(messageLog: MessageLog)
 public fun Message.serializedCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -357,8 +357,8 @@ public fun Message.serializedCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("typed")
+context(messageLog: MessageLog)
 public fun Message.typedCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -452,8 +452,8 @@ public fun Message.typedCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("noError")
+context(messageLog: MessageLog)
 public fun Message.noErrorCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -506,8 +506,8 @@ public fun Message.noErrorCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("raw")
+context(messageLog: MessageLog)
 public fun Message.rawCiKraftEntrypoint(): Message {
   try {
     raw(rawMessage = this@rawCiKraftEntrypoint,
@@ -519,8 +519,8 @@ public fun Message.rawCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("rawSuspend")
+context(messageLog: MessageLog)
 public fun Message.rawSuspendCiKraftEntrypoint(): Message {
   try {
     val executor = Executors.newCachedThreadPool()
@@ -544,8 +544,8 @@ public fun Message.rawSuspendCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("noOutputs")
+context(messageLog: MessageLog)
 public fun Message.noOutputsCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -595,8 +595,8 @@ public fun Message.noOutputsCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("setup")
+context(messageLog: MessageLog)
 public fun Message.setupCiKraftEntrypoint(): Message {
   try {
     val output = setup()
@@ -608,8 +608,8 @@ public fun Message.setupCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("twoPart1")
+context(messageLog: MessageLog)
 public fun Message.twoPart1CiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -692,8 +692,8 @@ public fun Message.twoPart1CiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("twoPart2")
+context(messageLog: MessageLog)
 public fun Message.twoPart2CiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -782,8 +782,8 @@ public fun Message.twoPart2CiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("javaStreams")
+context(messageLog: MessageLog)
 public fun Message.javaStreamsCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -875,8 +875,8 @@ public fun Message.javaStreamsCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("binaryRedirect")
+context(messageLog: MessageLog)
 public fun Message.binaryRedirectCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -946,8 +946,8 @@ public fun Message.binaryRedirectCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("kotlinxIO")
+context(messageLog: MessageLog)
 public fun Message.kotlinxIOCiKraftEntrypoint(): Message {
   val acceptHeader: List<Pair<String, Map<String, String>>> = getHeader("Accept", String::class.java)?.split(",")?.map {
     val split = it.trim().split(";")
@@ -1039,8 +1039,8 @@ public fun Message.kotlinxIOCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("injectedBoolean")
+context(messageLog: MessageLog)
 public fun Message.injectedBooleanCiKraftEntrypoint(): Message {
   try {
     val output = injectedBoolean()
@@ -1052,8 +1052,8 @@ public fun Message.injectedBooleanCiKraftEntrypoint(): Message {
   return this
 }
 
-context(messageLog: MessageLog)
 @JvmName("nullableReturn")
+context(messageLog: MessageLog)
 public fun Message.nullableReturnCiKraftEntrypoint(): Message {
   try {
     val output = nullableReturn() ?: return this
