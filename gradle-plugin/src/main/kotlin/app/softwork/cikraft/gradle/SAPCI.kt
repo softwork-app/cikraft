@@ -11,7 +11,6 @@ interface SAPCI : Named {
         const val API = "api"
         const val STAGES = "stages"
         const val OPENAPI = "openApi"
-        const val DOCKER_COMPOSE = "docker-compose"
         const val STAGE_PROPERTIES = "stageProperties"
     }
 }

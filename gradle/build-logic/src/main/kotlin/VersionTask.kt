@@ -50,7 +50,7 @@ abstract class VersionTask : DefaultTask() {
             """
             |package  app.softwork.cikraft.gradle
             |
-            |internal val VERSION: String = "${version.get()}"
+            |public val VERSION: String = "${version.get()}"
             |
             |internal val KTOR_CIO: String = "${ktorCio.get()}"
             |
