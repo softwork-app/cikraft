@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.4.20"
 ktor = "3.5.2"
-ksp = "2.3.11"
+ksp = "2.3.12"
 kfx = "0.2.16"
 serialization = "1.11.0"
 
