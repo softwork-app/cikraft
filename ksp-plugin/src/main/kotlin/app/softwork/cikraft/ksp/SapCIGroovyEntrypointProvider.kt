@@ -1,8 +1,8 @@
 package app.softwork.cikraft.ksp
 
-import app.softwork.serviceloader.ServiceLoader
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.processing.*
+import io.github.hfhbd.serviceloader.ServiceLoader
 
 @KspExperimental
 @ServiceLoader(SymbolProcessorProvider::class)

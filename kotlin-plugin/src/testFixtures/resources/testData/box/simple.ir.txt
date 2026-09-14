@@ -643,7 +643,7 @@ FILE fqName:<root> fileName:/simple.kt
     FUN GENERATED[app.softwork.cikraft.kotlin.SapCIFir] name:contentType visibility:public modality:FINAL returnType:kotlin.String
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.JsonFactory
       EXPRESSION_BODY
-        CONST String type=kotlin.String value="application/json; foo=value; bar=value"
+        CONST String type=kotlin.String value="application/json"
     FUN GENERATED_DATA_CLASS_MEMBER name:equals visibility:public modality:OPEN returnType:kotlin.Boolean [operator]
       VALUE_PARAMETER kind:DispatchReceiver name:<this> index:0 type:<root>.JsonFactory
       VALUE_PARAMETER kind:Regular name:other index:1 type:kotlin.Any?

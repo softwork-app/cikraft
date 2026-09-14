@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.fir.analysis.extensions.FirAdditionalCheckersExtensi
 
 internal class SapCICheckerExtension(session: FirSession) : FirAdditionalCheckersExtension(session) {
     override val declarationCheckers: DeclarationCheckers = object : DeclarationCheckers() {
-        override val simpleFunctionCheckers = setOf(ScriptEntryChecker)
+        override val namedFunctionCheckers = setOf(ScriptEntryChecker)
         override val regularClassCheckers = setOf(ContentTypeChecker)
         override val propertyCheckers = setOf(DynamicHeaderChecker, PrimitiveHeaderPropertyChecker)
         override val valueParameterCheckers = setOf(PrimitiveHeaderParameterChecker)

@@ -1,6 +1,6 @@
 plugins {
     id("kotlinSetup")
-    id("app.softwork.serviceloader-compiler")
+    id("io.github.hfhbd.serviceloader")
 }
 
 kotlin.jvmToolchain(21)

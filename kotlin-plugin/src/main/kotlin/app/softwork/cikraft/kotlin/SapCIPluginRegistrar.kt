@@ -2,7 +2,7 @@ package app.softwork.cikraft.kotlin
 
 import app.softwork.cikraft.kotlin.fir.*
 import app.softwork.cikraft.kotlin.fir.SapContentTypeGenerator.Companion.contentTypeFunctionName
-import app.softwork.serviceloader.*
+import io.github.hfhbd.serviceloader.ServiceLoader
 import org.jetbrains.kotlin.backend.common.extensions.*
 import org.jetbrains.kotlin.compiler.plugin.*
 import org.jetbrains.kotlin.config.*
@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.ir.expressions.*
 import org.jetbrains.kotlin.ir.expressions.impl.IrConstImpl
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.ir.visitors.*
-import org.jetbrains.kotlin.name.*
 
 @ServiceLoader(CompilerPluginRegistrar::class)
 public class SapCIPluginRegistrar : CompilerPluginRegistrar() {
@@ -56,17 +55,13 @@ internal class SapCIContentTypeVisitor(private val pluginContext: IrPluginContex
             (origin is IrDeclarationOrigin.GeneratedByPlugin && origin.pluginKey == SapCIFir)
         ) {
             val contentTypeConstructor = declaration.parentAsClass.getAnnotation(contentTypeFq)!!
-            val contentTypeValue = (
-                contentTypeConstructor.getValueArgument(
-                    Name.identifier("value"),
-                )!! as IrConst
-                ).value as String
+            val contentTypeValue = contentTypeConstructor.getConstArgument<String>("value")!!
 
-            val contentTypeParameters = contentTypeConstructor.getValueArgument(Name.identifier("parameters"))
+            val contentTypeParameters = contentTypeConstructor.getConstArgument<IrVararg>("parameters")
             val computedValue = if (contentTypeParameters == null) {
                 contentTypeValue
             } else {
-                (contentTypeParameters as IrVararg).elements.joinToString(
+                contentTypeParameters.elements.joinToString(
                     separator = "; ",
                     prefix = "$contentTypeValue; ",
                 ) { (it as IrConst).value as String }
