@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.name.*
 
-internal data object ScriptEntryChecker : FirSimpleFunctionChecker(MppCheckerKind.Common) {
+internal data object ScriptEntryChecker : FirNamedFunctionChecker(MppCheckerKind.Common) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun check(declaration: FirNamedFunction) {
         val matcher = context.session.sapCIPredicateMatchingService

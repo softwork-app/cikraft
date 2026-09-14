@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.4.10"
+kotlin = "2.4.20"
 ktor = "3.5.2"
 ksp = "2.3.11"
 kfx = "0.2.16"
@@ -63,6 +63,6 @@ dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
 licensee = { id = "app.cash.licensee", version = "1.14.1" }
 detekt = { id = "dev.detekt", version = "2.0.0-alpha.6" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-serviceloader = { id = "app.softwork.serviceloader-compiler", version = "0.0.24" }
+serviceloader = { id = "io.github.hfhbd.serviceloader", version = "0.0.27" }
 kotlin-compiler-testing = { id = "io.github.hfhbd.kotlin-compiler-testing", version = "0.0.4" }
 foojay = { id = "org.gradle.toolchains.foojay-resolver-convention", version = "1.0.0" }
