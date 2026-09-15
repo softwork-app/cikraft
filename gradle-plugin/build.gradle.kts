@@ -31,7 +31,6 @@ dependencies {
     testFixturesCompileOnly(projects.runtime)
     testFixturesCompileOnly(projects.core)
     testFixturesCompileOnly(projects.integrationFlowBuilderRuntime)
-    testFixturesCompileOnly(projects.ktorServerRuntime)
     testFixturesCompileOnly(libs.sapci.generic.api)
     testFixturesCompileOnly(libs.ktor.server.core)
     testFixturesCompileOnly(libs.ktor.server.resources)

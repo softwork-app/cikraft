@@ -3,6 +3,7 @@ package app.softwork.cikraft.generator
 import app.softwork.cikraft.core.*
 import app.softwork.cikraft.core.Script.*
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.MemberName.Companion.member
 
 public fun generateProperties(
     createdFlow: CreatedFlow,
@@ -82,7 +83,7 @@ private fun ktorProperty(input: Input, iFlowRawName: String, type: ClassName, de
     property.getter(
         FunSpec.getterBuilder().addStatement(
             """return %M(%S)%L%L%L""",
-            MemberName("app.softwork.cikraft.ktor.server.runtime", "env", isExtension = true),
+            ClassName("java.lang", "System").member("getenv"),
             "${iFlowRawName}_${input.propertyName}".uppercase(),
             if (defaultValue != null) "" else "!!",
             convertType.convertFromString(nullable = defaultValue != null),

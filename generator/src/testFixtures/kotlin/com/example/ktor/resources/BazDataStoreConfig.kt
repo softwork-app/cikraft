@@ -1,16 +1,16 @@
 package com.example.ktor.resources
 
-import app.softwork.cikraft.ktor.server.runtime.env
+import java.lang.System.getenv
 import kotlin.CharArray
 import kotlin.Int
 
 public data object BazDataStoreConfig {
   public val c: CharArray
-    get() = env("BAZ_A_C")!!.toCharArray()
+    get() = getenv("BAZ_A_C")!!.toCharArray()
 
   public val d: CharArray
-    get() = env("BAZ_A_D")!!.toCharArray()
+    get() = getenv("BAZ_A_D")!!.toCharArray()
 
   public val e: Int
-    get() = env("BAZ_A_E")?.toInt() ?: 0
+    get() = getenv("BAZ_A_E")?.toInt() ?: 0
 }
