@@ -11,7 +11,6 @@ val transport = apiProxy(
     name = "Test_API_FOO_URL2",
     title = "Test API FOO URL2",
     description = null,
-    isVersioned = false,
 ) {
     val MMM by policies.assignMessage {
         set {

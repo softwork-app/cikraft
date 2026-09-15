@@ -16,7 +16,6 @@ public fun ApiProxiesBuilder.apiProxies(baseUrl: String, suffix: String): Unit {
         name = "Test_API_FOO_URL_$uuid",
         title = "Test API FOO URL_$uuid",
         description = "Test API Created for $uuid",
-        isVersioned = false,
     ) {
         val getCloudIDPParameters by policies.keyValueMapOperations("KVM_FOO") {
             get("CacheName", "idp.cache_name")
@@ -84,7 +83,7 @@ public fun ApiProxiesBuilder.apiProxies(baseUrl: String, suffix: String): Unit {
         }
 
         proxyEndPoint {
-            this.basePath = basePath
+            this.basePath = "/http/foo/bar/baz"
             preFlow {
                 step(getCloudIDPParameters)
                 step(readCachedKeys)
@@ -99,7 +98,8 @@ public fun ApiProxiesBuilder.apiProxies(baseUrl: String, suffix: String): Unit {
             }
         }
         targetEndPoint {
-            this.url = ""
+            relativePath = "/http/foo/bar/baz"
+            providerId = "PRO_FOO"
             preFlow {
                 step(getCredentials)
                 step(addCredentialsAsBasic)

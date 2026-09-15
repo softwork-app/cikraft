@@ -45,7 +45,11 @@ jvmApplication {
                 }
             }
             apiProxies {
-
+                apiRuntimeProviders {
+                    apiRuntimeProvider("PRO_FOO") {
+                        title = "My runtime provider"
+                    }
+                }
             }
         }
     }
