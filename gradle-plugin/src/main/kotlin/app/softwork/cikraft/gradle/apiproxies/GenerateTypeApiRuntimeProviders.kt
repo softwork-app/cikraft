@@ -3,7 +3,7 @@ package app.softwork.cikraft.gradle.apiproxies
 import app.softwork.cikraft.generator.generateRuntimeProviders
 import org.gradle.api.DefaultTask
 import org.gradle.api.Named
-import org.gradle.api.NamedDomainObjectCollection
+import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @CacheableTask
 abstract class GenerateTypeApiRuntimeProviders : DefaultTask() {
     @get:Nested
-    abstract val apiRuntimeProviders: NamedDomainObjectCollection<ApiRuntimeProvider>
+    abstract val apiRuntimeProviders: NamedDomainObjectContainer<ApiRuntimeProvider>
 
     @get:OutputDirectory
     abstract val outputDirectory: DirectoryProperty
@@ -34,13 +34,13 @@ abstract class GenerateTypeApiRuntimeProviders : DefaultTask() {
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
-    interface ApiRuntimeProvider : Named {
+    abstract class ApiRuntimeProvider @Inject constructor(private val name: String) : Named {
         @Input
-        override fun getName(): String
+        override fun getName(): String = name
 
         @get:Input
         @get:Optional
-        val description: Property<String>
+        abstract val description: Property<String>
     }
 
     @TaskAction
@@ -48,7 +48,9 @@ abstract class GenerateTypeApiRuntimeProviders : DefaultTask() {
         workerExecutor.classLoaderIsolation {
             classpath.from(workerClasspath)
         }.submit(GenerateTypeApiRuntimeProvidersWorker::class.java) {
-            apiRuntimeProviders.addAll(this@GenerateTypeApiRuntimeProviders.apiRuntimeProviders)
+            apiRuntimeProviders.addAll(this@GenerateTypeApiRuntimeProviders.apiRuntimeProviders.map {
+                it.name to it.description.orNull
+            })
             outputDirectory.set(this@GenerateTypeApiRuntimeProviders.outputDirectory)
         }
     }
@@ -57,13 +59,13 @@ abstract class GenerateTypeApiRuntimeProviders : DefaultTask() {
 internal abstract class GenerateTypeApiRuntimeProvidersWorker :
     WorkAction<GenerateTypeApiRuntimeProvidersWorker.Parameters> {
     interface Parameters : WorkParameters {
-        val apiRuntimeProviders: SetProperty<GenerateTypeApiRuntimeProviders.ApiRuntimeProvider>
+        val apiRuntimeProviders: SetProperty<Pair<String, String?>>
         val outputDirectory: DirectoryProperty
     }
 
     override fun execute() {
         generateRuntimeProviders(
-            parameters.apiRuntimeProviders.get().associate { it.name to it.description.orNull },
+            parameters.apiRuntimeProviders.get().toMap(),
         ).writeTo(parameters.outputDirectory.get().asFile)
     }
 }
