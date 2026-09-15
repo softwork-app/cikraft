@@ -41,12 +41,11 @@ abstract class SAPCIEcosystemPlugin : Plugin<Settings> {
         }
         settings.dependencyResolutionManagement {
             versionCatalogs.register("cikraftLibs") {
-                library("script-api", SAPCI_SCRIPT_API)
-                library("generic-api", SAPCI_GENERIC_API)
-                library("adapter-api", SAPCI_ADAPTER)
-                library("groovy", SAPCI_GROOVY)
+                library("sapci-script-api", SAPCI_SCRIPT_API)
+                library("sapci-generic-api", SAPCI_GENERIC_API)
+                library("sapci-adapter-api", SAPCI_ADAPTER)
+                library("sapci-groovy", SAPCI_GROOVY)
 
-                library("ktor-server-runtime", "app.softwork.cikraft:ktor-server-runtime:$VERSION")
                 library("runtime", "app.softwork.cikraft:runtime:$VERSION")
                 library("core", "app.softwork.cikraft:core:$VERSION")
             }

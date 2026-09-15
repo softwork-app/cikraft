@@ -35,5 +35,4 @@ include(":api-proxies-builder-runtime")
 
 include(":runtime")
 
-include(":ktor-server-runtime")
 include(":ktor-server-engine")

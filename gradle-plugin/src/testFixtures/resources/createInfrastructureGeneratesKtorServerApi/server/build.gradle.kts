@@ -2,7 +2,6 @@ jvmApplication {
   dependencies {
     implementation(projects.app)
     implementation(projects.fault)
-    implementation(cikraftLibs.ktor.server.runtime)
   }
 
   cikraft {
@@ -18,7 +17,7 @@ jvmApplication {
       api(projects.app)
       api(projects.fault)
       api(libs.ktor.server.resources)
-      api(cikraftLibs.generic.api)
+      api(cikraftLibs.sapci.generic.api)
     }
 
     cikraft {
@@ -33,9 +32,6 @@ jvmApplication {
   testSuites {
     suites {
       jvmTestSuite("test") {
-        dependencies {
-          implementation(cikraftLibs.ktor.server.runtime)
-        }
         cikraft {
           generateKtorServerApi {
             dependencies {

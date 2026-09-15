@@ -14,7 +14,6 @@ dependencies {
     testFixturesApi(projects.runtime)
     testFixturesApi(libs.ktor.server.core)
     testFixturesApi(libs.ktor.server.resources)
-    testFixturesApi(projects.ktorServerRuntime)
     testFixturesApi(libs.ktor.client.core)
     testFixturesApi(libs.ktor.client.resources)
     testFixturesApi(libs.ktor.client.content.negotiation)
