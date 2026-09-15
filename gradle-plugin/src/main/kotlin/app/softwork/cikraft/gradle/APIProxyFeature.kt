@@ -1,10 +1,12 @@
 package app.softwork.cikraft.gradle
 
+import app.softwork.cikraft.gradle.apiproxies.GenerateTypeApiRuntimeProviders
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.artifacts.dsl.DependencyFactory
 import org.gradle.api.invocation.Gradle
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.features.annotations.BindsProjectFeature
 import org.gradle.features.binding.ProjectFeatureApplicationContext
@@ -12,6 +14,7 @@ import org.gradle.features.binding.ProjectFeatureApplyAction
 import org.gradle.features.binding.ProjectFeatureBinding
 import org.gradle.features.binding.ProjectFeatureBindingBuilder
 import org.gradle.features.dsl.bindProjectFeature
+import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
 import javax.inject.Inject
@@ -33,6 +36,12 @@ abstract class APIProxyFeature :
 
         @get:Inject
         abstract val configurations: ConfigurationRegistrar
+
+        @get:Inject
+        abstract val layout: ProjectFeatureLayout
+
+        @get:Inject
+        abstract val objectFactory: ObjectFactory
 
         @get:Inject
         abstract val configurationContainer: ConfigurationContainer
@@ -86,6 +95,37 @@ abstract class APIProxyFeature :
                     fromDependencyCollector(definition.dependencies.annotationProcessor)
                 }
             }
+
+            val workerDeps = configurations.dependencyScope("cikraftGenerateTypesafeWorker") {
+                dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
+            }
+            val workerClasspath = configurations.resolvable("cikraftGenerateTypesafeWorkerClasspath") {
+                extendsFrom(workerDeps)
+            }
+
+            val generateTypesafeApiRuntimeProviders =
+                tasks.register("generateTypesafeApiRuntimeProviders", GenerateTypeApiRuntimeProviders::class.java) {
+                    apiRuntimeProviders.addAllLater(
+                        buildModel.apiRuntimeProviders.elements.map {
+                            it.map {
+                                objectFactory.newInstance(
+                                    GenerateTypeApiRuntimeProviders.ApiRuntimeProvider::class.java,
+                                    it.name,
+                                )
+                                    .apply {
+                                        description.set(it.title)
+                                    }
+                            }
+                        },
+                    )
+                    outputDirectory.set(
+                        layout.contextBuildDirectory.map {
+                            it.dir("generated/cikraft/apiProxies/kotlin/apiruntimeproviders")
+                        },
+                    )
+                    this.workerClasspath.from(workerClasspath)
+                }
+            apiProxySourceSet.kotlin.srcDir(generateTypesafeApiRuntimeProviders)
 
             parentBuildModel.apiStages.all {
                 val stage = this
@@ -142,7 +182,7 @@ abstract class APIProxyFeature :
                         this.authServer.set(stage.authServer)
                         this.virtualHostId.set(virtualHost.id)
 
-                        workerClasspath.from(
+                        this.workerClasspath.from(
                             apiProxySourceSet.kotlin.classesDirectory,
                             apiProxySourceSet.runtimeClasspath,
                             apiWorkerClasspath,
@@ -162,7 +202,7 @@ abstract class APIProxyFeature :
                     this.apiPortalServer.set(stage.apiPortalServer)
                     this.authServer.set(stage.authServer)
 
-                    workerClasspath.from(
+                    this.workerClasspath.from(
                         apiProxySourceSet.kotlin.classesDirectory,
                         apiProxySourceSet.runtimeClasspath,
                         apiWorkerClasspath,
@@ -185,7 +225,7 @@ abstract class APIProxyFeature :
                         this.providerCredentialName.set(apiRuntimeProvider.credentialName)
                         this.providerCredentialStoreName.set(apiRuntimeProvider.credentialStoreName)
 
-                        workerClasspath.from(apiWorkerClasspath)
+                        this.workerClasspath.from(apiWorkerClasspath)
                     }
                 }
 
@@ -200,7 +240,7 @@ abstract class APIProxyFeature :
                         this.authServer.set(stage.authServer)
                         this.apiKeyStoreName.set(apiKeyStore.name)
 
-                        workerClasspath.from(apiWorkerClasspath)
+                        this.workerClasspath.from(apiWorkerClasspath)
                     }
                 }
             }
