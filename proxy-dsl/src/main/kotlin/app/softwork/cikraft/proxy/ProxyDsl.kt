@@ -1,7 +1,5 @@
 package app.softwork.cikraft.proxy
 
-import app.softwork.cikraft.proxy.CacheScope.*
-import app.softwork.cikraft.proxy.VerifyJWT.Algorithm.*
 import kotlinx.io.bytestring.ByteString
 import org.intellij.lang.annotations.Language
 import kotlin.properties.*
@@ -16,18 +14,12 @@ public fun apiProxy(
     name: String,
     title: String,
     description: String? = null,
-    isVersioned: Boolean = false,
-    serviceCode: ServiceCode = REST,
-    apiState: ApiState = ApiState.Active,
     builder: ApiProxyBuilder.() -> Unit,
 ): ApiProxyTransport {
     val builder = ApiProxyBuilder(
         name = name,
         title = title,
         description = description,
-        isVersioned = isVersioned,
-        serviceCode = serviceCode,
-        apiState = apiState,
     ).apply(builder)
 
     return builder.toTransport()
@@ -38,10 +30,11 @@ public class ApiProxyBuilder internal constructor(
     private val name: String,
     private val title: String,
     private val description: String?,
-    private val isVersioned: Boolean,
-    private val serviceCode: ServiceCode,
-    private val apiState: ApiState,
 ) {
+    public var isVersioned: Boolean = false
+    public var serviceCode: ServiceCode = REST
+    public var apiState: ApiState = ApiState.Active
+
     private val resources: MutableMap<String, ByteString> = mutableMapOf()
 
     public fun resource(name: String, content: ByteString) {

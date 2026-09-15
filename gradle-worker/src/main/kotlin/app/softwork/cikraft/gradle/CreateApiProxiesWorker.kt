@@ -5,8 +5,6 @@ import app.softwork.cikraft.api.*
 import app.softwork.cikraft.api.proxy.*
 import app.softwork.cikraft.proxy.ApiProxyBuilder
 import app.softwork.cikraft.proxy.ApiProxyTransport
-import app.softwork.cikraft.proxy.ApiState
-import app.softwork.cikraft.proxy.ServiceCode
 import app.softwork.cikraft.proxy.builder.ApiProxiesBuilder
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -43,18 +41,12 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
                 name: String,
                 title: String,
                 description: String?,
-                isVersioned: Boolean,
-                serviceCode: ServiceCode,
-                apiState: ApiState,
                 builder: ApiProxyBuilder.() -> Unit,
             ) {
                 val created = apiProxyOrigin(
                     name = name,
                     title = title,
                     description = description,
-                    isVersioned = isVersioned,
-                    serviceCode = serviceCode,
-                    apiState = apiState,
                     builder = builder,
                 )
                 all.add(created)
@@ -119,18 +111,12 @@ public abstract class DeleteApiProxiesWorker : WorkAction<DeleteApiProxiesWorker
                 name: String,
                 title: String,
                 description: String?,
-                isVersioned: Boolean,
-                serviceCode: ServiceCode,
-                apiState: ApiState,
                 builder: ApiProxyBuilder.() -> Unit,
             ) {
                 val created = apiProxyOrigin(
                     name = name,
                     title = title,
                     description = description,
-                    isVersioned = isVersioned,
-                    serviceCode = serviceCode,
-                    apiState = apiState,
                     builder = builder,
                 )
                 all.add(created)
