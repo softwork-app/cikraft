@@ -48,7 +48,6 @@ jvmApplication {
                 apiRuntimeProviders {
                     apiRuntimeProvider("PRO_FOO") {
                         title = "My runtime provider"
-                        roles = listOf("SomeRole.send")
                     }
                 }
             }
