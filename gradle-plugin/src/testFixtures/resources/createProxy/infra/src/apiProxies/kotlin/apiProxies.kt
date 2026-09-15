@@ -83,7 +83,7 @@ public fun ApiProxiesBuilder.apiProxies(baseUrl: String, suffix: String): Unit {
         }
 
         proxyEndPoint {
-            this.basePath = basePath
+            this.basePath = "/http/foo/bar/baz"
             preFlow {
                 step(getCloudIDPParameters)
                 step(readCachedKeys)
@@ -98,7 +98,8 @@ public fun ApiProxiesBuilder.apiProxies(baseUrl: String, suffix: String): Unit {
             }
         }
         targetEndPoint {
-            this.url = ""
+            relativePath = "/http/foo/bar/baz"
+            providerId = PRO_FOO
             preFlow {
                 step(getCredentials)
                 step(addCredentialsAsBasic)
