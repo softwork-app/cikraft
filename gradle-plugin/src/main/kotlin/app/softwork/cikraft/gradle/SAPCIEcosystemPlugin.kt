@@ -46,7 +46,6 @@ abstract class SAPCIEcosystemPlugin : Plugin<Settings> {
                 library("adapter-api", SAPCI_ADAPTER)
                 library("groovy", SAPCI_GROOVY)
 
-                library("ktor-server-runtime", "app.softwork.cikraft:ktor-server-runtime:$VERSION")
                 library("runtime", "app.softwork.cikraft:runtime:$VERSION")
                 library("core", "app.softwork.cikraft:core:$VERSION")
             }

@@ -25,8 +25,6 @@ interface SAPCIInfrastructureBuildModel : BuildModel {
     val transportStages: NamedDomainObjectContainer<TransportStage>
     val suffix: Provider<String>
     val httpSuffix: Provider<String>
-
-    val compilationUnits: NamedDomainObjectContainer<JvmCompilationUnit>
 }
 
 internal abstract class DefaultSAPCIInfrastructureBuildModel : SAPCIInfrastructureBuildModel {
