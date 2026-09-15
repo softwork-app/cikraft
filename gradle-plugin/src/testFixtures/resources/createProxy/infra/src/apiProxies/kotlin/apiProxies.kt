@@ -99,7 +99,7 @@ public fun ApiProxiesBuilder.apiProxies(baseUrl: String, suffix: String): Unit {
         }
         targetEndPoint {
             relativePath = "/http/foo/bar/baz"
-            providerId = PRO_FOO
+            providerId = "PRO_FOO"
             preFlow {
                 step(getCredentials)
                 step(addCredentialsAsBasic)
