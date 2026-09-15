@@ -34,13 +34,13 @@ abstract class GenerateTypeApiRuntimeProviders : DefaultTask() {
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
-    abstract class ApiRuntimeProvider @Inject constructor(private val name: String) : Named {
+    interface ApiRuntimeProvider : Named {
         @Input
-        override fun getName(): String = name
+        override fun getName(): String
 
         @get:Input
         @get:Optional
-        abstract val description: Property<String>
+        val description: Property<String>
     }
 
     @TaskAction

@@ -108,7 +108,10 @@ abstract class APIProxyFeature :
                     apiRuntimeProviders.addAllLater(
                         buildModel.apiRuntimeProviders.elements.map {
                             it.map {
-                                objectFactory.named(GenerateTypeApiRuntimeProviders.ApiRuntimeProvider::class.java, it.name)
+                                objectFactory.named(
+                                    GenerateTypeApiRuntimeProviders.ApiRuntimeProvider::class.java,
+                                    it.name,
+                                )
                                     .apply {
                                         description.set(it.title)
                                     }
