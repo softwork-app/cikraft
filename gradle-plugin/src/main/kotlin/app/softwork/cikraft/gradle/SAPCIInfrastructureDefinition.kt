@@ -6,7 +6,6 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Nested
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
-import org.jetbrains.kotlin.gradle.declarative.common.buildtypes.JvmCompilationUnit
 
 interface SAPCIInfrastructureDefinition : Definition<SAPCIInfrastructureBuildModel> {
     @get:Nested
