@@ -9,7 +9,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalTime::class)
-public fun ApiProxiesBuilder.apiProxies(baseUrl: String, suffix: String): Unit {
+public fun ApiProxiesBuilder.apiProxies(suffix: String): Unit {
     val uuid = Uuid.random()
 
     apiProxy(

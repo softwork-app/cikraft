@@ -21,9 +21,6 @@ abstract class ApiProxiesTask(stageName: String) : DefaultTask() {
     }
 
     @get:Input
-    internal abstract val url: Property<String>
-
-    @get:Input
     internal abstract val httpSuffix: Property<String>
 
     @get:Input
@@ -63,7 +60,6 @@ abstract class DeployApiProxiesTask @Inject constructor(stageName: String) : Api
         workerExecutor.processIsolation {
             classpath.from(workerClasspath)
         }.submit(CreateApiProxiesWorker::class) {
-            this.url.set(this@DeployApiProxiesTask.url)
             this.httpSuffix.set(this@DeployApiProxiesTask.httpSuffix)
             this.apiPortalServer.set(this@DeployApiProxiesTask.apiPortalServer)
             this.apiPortalClientId.set(this@DeployApiProxiesTask.credentials.map { it.username })
@@ -86,7 +82,6 @@ abstract class UnDeployApiProxiesTask @Inject constructor(stageName: String) : A
         workerExecutor.processIsolation {
             classpath.from(workerClasspath)
         }.submit(DeleteApiProxiesWorker::class) {
-            this.url.set(this@UnDeployApiProxiesTask.url)
             this.httpSuffix.set(this@UnDeployApiProxiesTask.httpSuffix)
             this.apiPortalServer.set(this@UnDeployApiProxiesTask.apiPortalServer)
             this.apiPortalClientId.set(this@UnDeployApiProxiesTask.credentials.map { it.username })

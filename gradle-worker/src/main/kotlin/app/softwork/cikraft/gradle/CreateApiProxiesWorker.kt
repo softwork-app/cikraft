@@ -22,7 +22,6 @@ import org.gradle.api.logging.Logging as GradleLogger
 
 public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker.Params> {
     public interface Params : WorkParameters {
-        public val url: Property<String>
         public val httpSuffix: Property<String>
         public val apiPortalServer: Property<String>
         public val apiPortalClientId: Property<String>
@@ -51,7 +50,7 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
                 )
                 all.add(created)
             }
-        }.apiProxies(parameters.url.get(), parameters.httpSuffix.get())
+        }.apiProxies(parameters.httpSuffix.get())
 
         if (all.isNotEmpty()) {
             runBlocking {
@@ -93,7 +92,6 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
 
 public abstract class DeleteApiProxiesWorker : WorkAction<DeleteApiProxiesWorker.Params> {
     public interface Params : WorkParameters {
-        public val url: Property<String>
         public val httpSuffix: Property<String>
         public val apiPortalServer: Property<String>
         public val apiPortalClientId: Property<String>
@@ -121,7 +119,7 @@ public abstract class DeleteApiProxiesWorker : WorkAction<DeleteApiProxiesWorker
                 )
                 all.add(created)
             }
-        }.apiProxies(parameters.url.get(), parameters.httpSuffix.get())
+        }.apiProxies(parameters.httpSuffix.get())
 
         val apiManagementClient = HttpClient(CIO) {
             Logging {

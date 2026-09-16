@@ -176,7 +176,6 @@ abstract class APIProxyFeature :
                         stage.name,
                     )
                     deployApiToHostTask.configure {
-                        this.url.set(stage.httpServer)
                         this.httpSuffix.set(parentBuildModel.httpSuffix)
                         this.apiPortalServer.set(stage.apiPortalServer)
                         this.authServer.set(stage.authServer)
@@ -197,7 +196,6 @@ abstract class APIProxyFeature :
                     UnDeployApiProxiesTask::class.java,
                     stage.name,
                 ).configure {
-                    this.url.set(stage.httpServer)
                     this.httpSuffix.set(parentBuildModel.httpSuffix)
                     this.apiPortalServer.set(stage.apiPortalServer)
                     this.authServer.set(stage.authServer)
