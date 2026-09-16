@@ -7,6 +7,7 @@ dependencies {
     compileOnly(projects.core)
     compileOnly(projects.integrationFlowBuilderRuntime)
     compileOnly(projects.apiProxiesBuilderRuntime)
+    compileOnly(projects.generator)
 
     compileOnly(projects.api)
     compileOnly(libs.ktor.client.cio)

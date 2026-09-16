@@ -50,8 +50,8 @@ abstract class GenerateTypeApiRuntimeProviders : DefaultTask() {
         }.submit(GenerateTypeApiRuntimeProvidersWorker::class.java) {
             apiRuntimeProviders.addAll(
                 this@GenerateTypeApiRuntimeProviders.apiRuntimeProviders.map {
-                    it.name to it.description.orNull
-                },
+                it.name to it.description.orNull
+            }
             )
             outputDirectory.set(this@GenerateTypeApiRuntimeProviders.outputDirectory)
         }

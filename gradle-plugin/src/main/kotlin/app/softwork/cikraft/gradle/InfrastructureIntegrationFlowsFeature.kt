@@ -95,8 +95,8 @@ abstract class InfrastructureIntegrationFlowsFeature :
             val parentBuildModel = context.getBuildModel(parentDefinition)
             buildModel.suffix.set(parentBuildModel.suffix)
             buildModel.httpSuffix.set(parentBuildModel.httpSuffix)
-            buildModel.openApiStages.addAll(parentDefinition.apiStages)
-            buildModel.openApiStages.addAll(parentDefinition.transportStages)
+            buildModel.stages.addAllLater(parentBuildModel.apiStages.elements)
+            buildModel.stages.addAllLater(parentBuildModel.transportStages.elements)
             buildModel.integrationPackages.addAll(definition.integrationPackages)
 
             val projectVersion = project.version.toString().takeUnless { it == Project.DEFAULT_VERSION }

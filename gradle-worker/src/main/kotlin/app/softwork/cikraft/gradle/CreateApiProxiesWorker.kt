@@ -1,8 +1,9 @@
 package app.softwork.cikraft.gradle
 
 import apiProxies
-import app.softwork.cikraft.api.*
-import app.softwork.cikraft.api.proxy.*
+import app.softwork.cikraft.api.proxy.deleteApiProxy
+import app.softwork.cikraft.api.proxy.transportProxy
+import app.softwork.cikraft.api.sapciAuth
 import app.softwork.cikraft.proxy.ApiProxyBuilder
 import app.softwork.cikraft.proxy.ApiProxyTransport
 import app.softwork.cikraft.proxy.builder.ApiProxiesBuilder
@@ -10,18 +11,20 @@ import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.HttpTimeoutConfig.Companion.INFINITE_TIMEOUT_MS
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.serialization.kotlinx.json.jsonIo
-import kotlinx.coroutines.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import org.gradle.api.provider.Property
-import org.gradle.workers.*
+import org.gradle.workers.WorkAction
+import org.gradle.workers.WorkParameters
 import app.softwork.cikraft.proxy.apiProxy as apiProxyOrigin
 import org.gradle.api.logging.Logging as GradleLogger
 
 public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker.Params> {
     public interface Params : WorkParameters {
+        public val apiName: Property<String>
         public val httpSuffix: Property<String>
         public val apiPortalServer: Property<String>
         public val apiPortalClientId: Property<String>
@@ -33,7 +36,7 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
     private val gradleLogger = GradleLogger.getLogger(CreateApiProxiesWorker::class.qualifiedName)
 
     override fun execute() {
-        val all = mutableListOf<ApiProxyTransport>()
+        var found: ApiProxyTransport? = null
 
         object : ApiProxiesBuilder {
             override fun apiProxy(
@@ -48,11 +51,13 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
                     description = description,
                     builder = builder,
                 )
-                all.add(created)
+                if (created.name == parameters.apiName.get()) {
+                    found = created
+                }
             }
         }.apiProxies(parameters.httpSuffix.get())
 
-        if (all.isNotEmpty()) {
+        if (found != null) {
             runBlocking {
                 val transportClient = HttpClient(CIO) {
                     Logging {
@@ -79,12 +84,10 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
                     }
                     expectSuccess = true
                 }
-                for (transport in all) {
-                    transportClient.transportProxy(
-                        virtualHost = parameters.virtualHostId.get(),
-                        apiProxyAsBase64 = transport.toBase64(),
-                    )
-                }
+                transportClient.transportProxy(
+                    virtualHost = parameters.virtualHostId.get(),
+                    apiProxyAsBase64 = found.toBase64(),
+                )
             }
         }
     }

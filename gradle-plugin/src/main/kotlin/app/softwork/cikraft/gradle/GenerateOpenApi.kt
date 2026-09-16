@@ -46,10 +46,6 @@ abstract class GenerateOpenApi : DefaultTask() {
     @get:OutputFile
     abstract val openApiFile: RegularFileProperty
 
-    init {
-        openApiFile.convention(project.layout.buildDirectory.file("cikraft/openapi.json"))
-    }
-
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.NONE)
     abstract val createdFlows: ConfigurableFileCollection
