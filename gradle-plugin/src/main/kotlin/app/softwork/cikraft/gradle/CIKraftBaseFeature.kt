@@ -93,7 +93,9 @@ abstract class CIKraftBaseFeature :
             val mainCompilationUnit = parentBuildModel.compilationUnits.getByName("main")
 
             val mainJvmEcosystem = mainCompilationUnit.jvmEcosystem
-            mainJvmEcosystem.implementationConfiguration.dependencies.add(dependencyFactory.create("app.softwork.cikraft:runtime:$VERSION"))
+            mainJvmEcosystem.implementationConfiguration.dependencies.add(
+                dependencyFactory.create("app.softwork.cikraft:runtime:$VERSION"),
+            )
             mainJvmEcosystem.compileOnlyConfiguration.dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
             mainJvmEcosystem.compileOnlyConfiguration.dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
 
