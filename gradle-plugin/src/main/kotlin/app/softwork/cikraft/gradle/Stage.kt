@@ -3,7 +3,6 @@ package app.softwork.cikraft.gradle
 import org.gradle.api.Named
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Nested
 
 interface Stage : Named {
     val httpServer: Property<String>
@@ -12,11 +11,14 @@ interface Stage : Named {
 
     val web: Property<String>
 
-    @get:Nested
     val apiVirtualHosts: NamedDomainObjectContainer<ApiVirtualHost>
 }
 
+/**
+ * The name must be the same across stages
+ */
 interface ApiVirtualHost : Named {
     val id: Property<String>
     val apiHttpServer: Property<String>
+    val clientAuthEnabled: Property<Boolean>
 }

@@ -32,13 +32,10 @@ interface SAPCIIFlowsBuildModel : BuildModel {
     val integrationPackages: NamedDomainObjectContainer<IntegrationPackage>
     val suffix: Provider<String>
     val httpSuffix: Provider<String>
+    val stages: NamedDomainObjectContainer<Stage>
 }
 
 abstract class DefaultSAPCIIFlowsBuildModel : SAPCIIFlowsBuildModel {
     abstract override val httpSuffix: Property<String>
     abstract override val suffix: Property<String>
-
-    // Workaround:
-    // only used for the OpenApi Feature until a feature can access the parents parentBuildModel
-    abstract val openApiStages: NamedDomainObjectContainer<Stage>
 }

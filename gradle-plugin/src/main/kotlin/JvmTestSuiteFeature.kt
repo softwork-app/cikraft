@@ -135,7 +135,6 @@ interface DclTestingExtension : Definition<BuildModel.None> {
 interface JvmDclTestSuite :
     Definition<JvmDclTestSuiteBuildModel>,
     Named {
-    @get:Nested
     val targets: NamedDomainObjectContainer<JvmDclTestSuiteTarget>
 
     @get:Nested

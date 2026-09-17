@@ -27,6 +27,7 @@ abstract class APIProxyFeature :
     override fun bind(builder: ProjectFeatureBindingBuilder) {
         builder.bindProjectFeature("apiProxies", ApplyAction::class)
             .withUnsafeApplyAction()
+            .withBuildModelImplementationType(DefaultAPIProxiesBuildModel::class.java)
     }
 
     abstract class ApplyAction :
@@ -61,11 +62,16 @@ abstract class APIProxyFeature :
             buildModel: APIProxiesBuildModel,
             parentDefinition: SAPCIInfrastructureDefinition,
         ) {
+            val parentBuildModel = context.getBuildModel(parentDefinition)
+
+            buildModel as DefaultAPIProxiesBuildModel
             buildModel.apiCertificates.addAll(definition.apiCertificates)
             buildModel.apiKeyStores.addAll(definition.apiKeyStores)
             buildModel.apiRuntimeProviders.addAll(definition.apiRuntimeProviders)
-
-            val parentBuildModel = context.getBuildModel(parentDefinition)
+            buildModel.apiProxies.addAll(definition.apiProxies)
+            buildModel.httpSuffix.set(parentBuildModel.httpSuffix)
+            buildModel.stages.addAllLater(parentBuildModel.apiStages.elements)
+            buildModel.stages.addAllLater(parentBuildModel.transportStages.elements)
 
             val deps = configurations.dependencyScope("apiProxyWorker") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:api:$VERSION"))
@@ -95,6 +101,9 @@ abstract class APIProxyFeature :
                     fromDependencyCollector(definition.dependencies.annotationProcessor)
                 }
             }
+
+            buildModel.classes.from(apiProxySourceSet.kotlin.classesDirectory)
+            buildModel.runtimeClasspath.from(apiProxySourceSet.runtimeClasspath)
 
             val workerDeps = configurations.dependencyScope("cikraftGenerateTypesafeWorker") {
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
@@ -129,12 +138,12 @@ abstract class APIProxyFeature :
 
             parentBuildModel.apiStages.all {
                 val stage = this
-                val taskName = stage.name.replaceFirstChar { it.uppercase() }
+                val stageTaskName = stage.name.replaceFirstChar { it.uppercase() }
 
                 buildModel.apiCertificates.all {
                     val apiCertificate = this
                     tasks.register(
-                        "createApiCertificate${name}On${stage.name}",
+                        "createApiCertificate${name}On$stageTaskName",
                         CreateApiCertificateTask::class.java,
                         stage.name,
                     ).configure {
@@ -159,31 +168,34 @@ abstract class APIProxyFeature :
                     }
                 }
 
-                val deployApiTask = tasks.register("deploy${taskName}Api")
+                val deployApiTask = tasks.register("deploy${stageTaskName}Api")
 
-                stage.apiVirtualHosts.all {
-                    gradle.sharedServices.registerIfAbsent(
-                        "apiTransportParallelService",
-                        ApiTransportParallelBuildService::class.java,
-                    ) {
-                        maxParallelUsages.set(1)
-                    }
+                gradle.sharedServices.registerIfAbsent(
+                    "apiTransportParallelService",
+                    ApiTransportParallelBuildService::class.java,
+                ) {
+                    maxParallelUsages.set(1)
+                }
 
-                    val virtualHost = this
+                buildModel.apiProxies.all {
                     val deployApiToHostTask = tasks.register(
-                        "deploy${taskName}ApiTo${virtualHost.name}ApiHost",
+                        "deploy${name}To$stageTaskName",
                         DeployApiProxiesTask::class.java,
+                        name,
                         stage.name,
                     )
                     deployApiToHostTask.configure {
                         this.httpSuffix.set(parentBuildModel.httpSuffix)
                         this.apiPortalServer.set(stage.apiPortalServer)
                         this.authServer.set(stage.authServer)
-                        this.virtualHostId.set(virtualHost.id)
+                        this.virtualHostId.set(
+                            virtualHostName.flatMap { stage.apiVirtualHosts.named(it) }
+                                .flatMap { it.id },
+                        )
 
                         this.workerClasspath.from(
-                            apiProxySourceSet.kotlin.classesDirectory,
-                            apiProxySourceSet.runtimeClasspath,
+                            buildModel.classes,
+                            buildModel.runtimeClasspath,
                             apiWorkerClasspath,
                         )
                     }
@@ -191,8 +203,9 @@ abstract class APIProxyFeature :
                         dependsOn(deployApiToHostTask)
                     }
                 }
+
                 tasks.register(
-                    "undeploy${taskName}Api",
+                    "undeploy${stageTaskName}Api",
                     UnDeployApiProxiesTask::class.java,
                     stage.name,
                 ).configure {

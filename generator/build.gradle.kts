@@ -10,7 +10,10 @@ dependencies {
     api(projects.core)
     api(libs.kfx.openapi.model)
 
+    compileOnly(projects.apiProxiesBuilderRuntime)
+
     testFixturesApi(libs.groovy.all)
+    testFixturesApi(projects.apiProxiesBuilderRuntime)
     testFixturesApi(projects.runtime)
     testFixturesApi(libs.ktor.server.core)
     testFixturesApi(libs.ktor.server.resources)

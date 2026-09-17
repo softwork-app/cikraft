@@ -311,7 +311,7 @@ class IntegrationTest {
     fun createProxy() {
         val projectDir = fixtureDir / "resources" / "createProxy"
 
-        val result = createRunner(projectDir, ":infra:compileApiProxiesKotlin", "--stacktrace").build()
+        val result = createRunner(projectDir, ":infra:generateOpenApiApiProxy", "--stacktrace").build()
         assertEquals(TaskOutcome.SUCCESS, result.task(":infra:compileApiProxiesKotlin")?.outcome)
     }
 

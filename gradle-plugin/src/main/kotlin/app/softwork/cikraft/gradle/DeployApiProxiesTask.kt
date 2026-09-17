@@ -43,7 +43,10 @@ abstract class ApiProxiesTask(stageName: String) : DefaultTask() {
 }
 
 @UntrackedTask(because = "Create infrastructure is a remote operation")
-abstract class DeployApiProxiesTask @Inject constructor(stageName: String) : ApiProxiesTask(stageName) {
+abstract class DeployApiProxiesTask @Inject constructor(private val apiName: String, stageName: String) :
+    ApiProxiesTask(
+        stageName,
+    ) {
     init {
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }
@@ -60,6 +63,7 @@ abstract class DeployApiProxiesTask @Inject constructor(stageName: String) : Api
         workerExecutor.processIsolation {
             classpath.from(workerClasspath)
         }.submit(CreateApiProxiesWorker::class) {
+            this.apiName.set(this@DeployApiProxiesTask.apiName)
             this.httpSuffix.set(this@DeployApiProxiesTask.httpSuffix)
             this.apiPortalServer.set(this@DeployApiProxiesTask.apiPortalServer)
             this.apiPortalClientId.set(this@DeployApiProxiesTask.credentials.map { it.username })
