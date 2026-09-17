@@ -65,8 +65,8 @@ abstract class OpenApiFeature :
                 this.servers.addAll(servers)
                 openApiFile.convention(
                     layout.contextBuildDirectory.map {
-                    it.file("cikraft/openapi.json")
-                }
+                        it.file("cikraft/openapi.json")
+                    },
                 )
             }
         }
@@ -97,7 +97,11 @@ abstract class OpenApiFeature :
             val generateTransformer =
                 tasks.register("generateOpenAPIProxyTransformer", GenerateOpenAPIProxyTransformer::class.java) {
                     this.httpSuffix.set(parentBuildModel.httpSuffix)
-                    workerClasspath.from(parentBuildModel.classes, parentBuildModel.runtimeClasspath, sapCIWorkerGeneratorClasspath)
+                    workerClasspath.from(
+                        parentBuildModel.classes,
+                        parentBuildModel.runtimeClasspath,
+                        sapCIWorkerGeneratorClasspath,
+                    )
                     outputDirectory.set(
                         layout.contextBuildDirectory.map {
                             it.dir(
@@ -113,8 +117,8 @@ abstract class OpenApiFeature :
             generateOpenAPITask.configure {
                 openApiFile.convention(
                     layout.contextBuildDirectory.map {
-                    it.file("cikraft/openapi-apiproxy.json")
-                }
+                        it.file("cikraft/openapi-apiproxy.json")
+                    },
                 )
                 this.transformers.from(apiProxiesOpenApiSourceSet.kotlin.classesDirectory)
             }

@@ -31,7 +31,7 @@ class GenerateOpenAPIProxyTransformerTest {
                     apiProxy(
                         "Foo",
                         "Foo",
-                        "Foo"
+                        "Foo",
                     ) {
                         val verifyMyIdp by policies.verifyJWT {
                             publicKeyJWKS = RefValue.Ref("jwks")
@@ -47,13 +47,12 @@ class GenerateOpenAPIProxyTransformerTest {
                             relativePath = "/iflow"
                             providerId = "Provider"
                             loadBalancerConfigurations {
-
                             }
                         }
                     },
                     "https://api.example.com/v1/",
-                    false
-                )
+                    false,
+                ),
             ),
         )
 
@@ -72,7 +71,7 @@ class GenerateOpenAPIProxyTransformerTest {
                     apiProxy(
                         "Foo",
                         "Foo",
-                        "Foo"
+                        "Foo",
                     ) {
                         val verifyMyIdp by policies.verifyJWT {
                             publicKeyJWKS = RefValue.Ref("jwks")
@@ -88,18 +87,17 @@ class GenerateOpenAPIProxyTransformerTest {
                             relativePath = "/iflow"
                             providerId = "Provider"
                             loadBalancerConfigurations {
-
                             }
                         }
                     },
                     "https://api.example.com/v1/",
-                    false
+                    false,
                 ),
                 Triple(
                     apiProxy(
                         "Foo",
                         "Foo",
-                        "Foo"
+                        "Foo",
                     ) {
                         val verifyMyIdp by policies.verifyJWT {
                             publicKeyJWKS = RefValue.Ref("jwks")
@@ -115,18 +113,17 @@ class GenerateOpenAPIProxyTransformerTest {
                             relativePath = "/iflow"
                             providerId = "Provider"
                             loadBalancerConfigurations {
-
                             }
                         }
                     },
                     "https://api.example.com/v1/",
-                    false
+                    false,
                 ),
                 Triple(
                     apiProxy(
                         "Foo2",
                         "Foo2",
-                        "Foo2"
+                        "Foo2",
                     ) {
                         val verifyMyIdp2 by policies.verifyJWT {
                             publicKeyJWKS = RefValue.Ref("jwks")
@@ -142,12 +139,11 @@ class GenerateOpenAPIProxyTransformerTest {
                             relativePath = "/iflow2"
                             providerId = "Provider"
                             loadBalancerConfigurations {
-
                             }
                         }
                     },
                     "https://api.example.com/v2/",
-                    false
+                    false,
                 ),
                 Triple(
                     apiProxy(
@@ -170,12 +166,11 @@ class GenerateOpenAPIProxyTransformerTest {
                             relativePath = "/iflow"
                             providerId = "Provider"
                             loadBalancerConfigurations {
-
                             }
                         }
                     },
                     "https://api.example.com/v1/",
-                    false
+                    false,
                 ),
             ),
         )

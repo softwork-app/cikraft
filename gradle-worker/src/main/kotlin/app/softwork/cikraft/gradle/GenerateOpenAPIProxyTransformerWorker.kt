@@ -4,7 +4,6 @@ import apiProxies
 import app.softwork.cikraft.generator.generateOpenAPIProxyTransformer
 import app.softwork.cikraft.proxy.ApiProxyBuilder
 import app.softwork.cikraft.proxy.ApiProxyTransport
-import app.softwork.cikraft.proxy.apiProxy
 import app.softwork.cikraft.proxy.builder.ApiProxiesBuilder
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
@@ -39,9 +38,9 @@ public abstract class GenerateOpenAPIProxyTransformerWorker :
             }
         }
         apiProxyBuilder.apiProxies(parameters.httpSuffix.get())
-        
+
         generateOpenAPIProxyTransformer(
-            all
+            all,
         ).writeTo(parameters.outputDirectory.asFile.get())
     }
 }
