@@ -2,15 +2,18 @@ package app.softwork.cikraft.kotlin.runners
 
 import app.softwork.cikraft.kotlin.services.ExtensionRegistrarConfigurator
 import app.softwork.cikraft.kotlin.services.PluginAnnotationsProvider
-import org.jetbrains.kotlin.test.*
-import org.jetbrains.kotlin.test.builders.*
-import org.jetbrains.kotlin.test.directives.*
-import org.jetbrains.kotlin.test.runners.*
-import org.jetbrains.kotlin.test.services.*
+import org.jetbrains.kotlin.test.builders.TestConfigurationBuilder
+import org.jetbrains.kotlin.test.directives.CodegenTestDirectives
+import org.jetbrains.kotlin.test.directives.FirDiagnosticsDirectives
+import org.jetbrains.kotlin.test.directives.JvmEnvironmentConfigurationDirectives
+import org.jetbrains.kotlin.test.runners.AbstractPhasedJvmDiagnosticLightTreeTest
+import org.jetbrains.kotlin.test.services.EnvironmentBasedStandardLibrariesPathProvider
+import org.jetbrains.kotlin.test.services.KotlinStandardLibrariesPathProvider
 
-open class AbstractJvmDiagnosticTest : AbstractFirPhasedDiagnosticTest(FirParser.LightTree) {
+open class AbstractJvmDiagnosticTest : AbstractPhasedJvmDiagnosticLightTreeTest() {
     override fun configure(builder: TestConfigurationBuilder) {
         super.configure(builder)
+
         with(builder) {
             /*
              * Containers of different directives, which can be used in tests:
@@ -26,6 +29,7 @@ open class AbstractJvmDiagnosticTest : AbstractFirPhasedDiagnosticTest(FirParser
                 +JvmEnvironmentConfigurationDirectives.FULL_JDK
                 +CodegenTestDirectives.IGNORE_DEXING // Avoids loading R8 from the classpath.
             }
+
             useConfigurators(
                 ::PluginAnnotationsProvider,
                 ::ExtensionRegistrarConfigurator,
