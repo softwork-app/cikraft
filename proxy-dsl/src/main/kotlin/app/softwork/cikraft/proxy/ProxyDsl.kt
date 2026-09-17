@@ -334,7 +334,7 @@ public class TargetEndpointBuilder internal constructor() {
         preFlow = preFlow ?: Flow("PreFlow"),
         postFlow = postFlow ?: Flow("PostFlow"),
         conditionalFlows = emptyList(),
-        loadBalancerConfigurations = requireNotNull(loadBalancerConfigurations),
+        loadBalancerConfigurations = loadBalancerConfigurations,
     )
 
     private val properties = mutableListOf<TargetEndPoint.Property>()
@@ -346,7 +346,7 @@ public class TargetEndpointBuilder internal constructor() {
     public var url: String = ""
     public var relativePath: String? = null
     public var providerId: String = "NONE"
-    private var loadBalancerConfigurations: TargetEndPoint.LoadBalancerConfigurations? = null
+    private lateinit var loadBalancerConfigurations: TargetEndPoint.LoadBalancerConfigurations
 
     public fun loadBalancerConfigurations(builder: LoadBalancerConfigurationsBuilder.() -> Unit) {
         loadBalancerConfigurations = LoadBalancerConfigurationsBuilder().apply(builder).build()
@@ -666,9 +666,9 @@ public class PopulateCacheBuilder internal constructor(public override val name:
     override var continueOnError: Boolean = false
     override var async: Boolean = false
 
-    public var cacheKey: String? = null
+    public lateinit var cacheKey: String
     public var scope: CacheScope = Exclusive
-    public var source: String? = null
+    public lateinit var source: String
 
     public var expiry: Duration? = null
 
@@ -677,8 +677,8 @@ public class PopulateCacheBuilder internal constructor(public override val name:
         continueOnError = continueOnError,
         async = async,
         scope = scope,
-        cacheKey = CacheKey(keyFragment = requireNotNull(cacheKey)),
-        source = requireNotNull(source),
+        cacheKey = CacheKey(keyFragment = cacheKey),
+        source = source,
         expirySettings = PopulateCache.ExpirySettings(timeoutInSeconds = requireNotNull(expiry).inWholeSeconds),
     )
 }
@@ -691,9 +691,9 @@ public class LookupCacheBuilder internal constructor(public override val name: S
     override var continueOnError: Boolean = false
     override var async: Boolean = false
 
-    public var cacheKey: String? = null
+    public lateinit var cacheKey: String
     public var scope: CacheScope = Exclusive
-    private var assignTo: String? = null
+    private lateinit var assignTo: String
 
     public fun assignTo(value: String) {
         this.assignTo = value
@@ -704,8 +704,8 @@ public class LookupCacheBuilder internal constructor(public override val name: S
         continueOnError = continueOnError,
         async = async,
         scope = scope,
-        cacheKey = CacheKey(keyFragment = requireNotNull(cacheKey)),
-        assignTo = requireNotNull(assignTo),
+        cacheKey = CacheKey(keyFragment = cacheKey),
+        assignTo = assignTo,
     )
 
     public val cachehit: String get() = "${this@LookupCacheBuilder.prefix}.${this@LookupCacheBuilder.name}.cachehit"
@@ -784,7 +784,7 @@ public class ServiceCalloutBuilder internal constructor(public override val name
 
     public var response: String? = null
     public var timeout: Duration = 55.seconds
-    public var url: String? = null
+    public lateinit var url: String
     private var sslInfo: ServiceCallout.HTTPTargetConnection.SSLInfo? = null
 
     public fun sslInfo(builder: SslInfoBuilder.() -> Unit) {
@@ -804,7 +804,7 @@ public class ServiceCalloutBuilder internal constructor(public override val name
         response = response,
         timeout = timeout.inWholeMilliseconds,
         httpTargetConnection = ServiceCallout.HTTPTargetConnection(
-            url = requireNotNull(url),
+            url = url,
             sslInfo = sslInfo,
         ),
         request = request,
@@ -881,7 +881,7 @@ public class BasicAuthenticationBuilder internal constructor(public override val
 
     public lateinit var user: RefValue.Ref
     public lateinit var password: RefValue.Ref
-    public var operation: BasicAuthentication.Operation? = null
+    public lateinit var operation: BasicAuthentication.Operation
 
     private var createNew: Boolean = false
     private var assignTo: String? = null
@@ -897,7 +897,7 @@ public class BasicAuthenticationBuilder internal constructor(public override val
         enabled = enabled,
         continueOnError = continueOnError,
         async = async,
-        operation = requireNotNull(operation),
+        operation = operation,
         ignoreUnresolvedVariables = ignoreUnresolvedVariables,
         user = user.build(),
         password = password.build(),
