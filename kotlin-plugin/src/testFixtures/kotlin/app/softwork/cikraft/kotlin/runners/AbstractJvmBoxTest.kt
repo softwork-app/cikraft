@@ -11,10 +11,6 @@ import org.jetbrains.kotlin.test.services.EnvironmentBasedStandardLibrariesPathP
 import org.jetbrains.kotlin.test.services.KotlinStandardLibrariesPathProvider
 
 open class AbstractJvmBoxTest : AbstractFirBlackBoxCodegenTestSpec() {
-    override fun createKotlinStandardLibrariesPathProvider(): KotlinStandardLibrariesPathProvider {
-        return EnvironmentBasedStandardLibrariesPathProvider
-    }
-
     override fun configure(builder: TestConfigurationBuilder) {
         super.configure(builder)
 
@@ -42,5 +38,9 @@ open class AbstractJvmBoxTest : AbstractFirBlackBoxCodegenTestSpec() {
                 ::ExtensionRegistrarConfigurator,
             )
         }
+    }
+
+    override fun createKotlinStandardLibrariesPathProvider(): KotlinStandardLibrariesPathProvider {
+        return EnvironmentBasedStandardLibrariesPathProvider
     }
 }
