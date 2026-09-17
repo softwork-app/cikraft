@@ -44,6 +44,7 @@ public abstract class GenerateOpenAPIProxyTransformerWorker :
 
         generateOpenAPIProxyTransformer(
             all,
+            parameters.httpSuffix.get(),
         ).writeTo(parameters.outputDirectory.asFile.get())
     }
 }

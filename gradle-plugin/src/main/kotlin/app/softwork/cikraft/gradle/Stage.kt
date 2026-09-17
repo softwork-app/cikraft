@@ -20,5 +20,5 @@ interface Stage : Named {
 interface ApiVirtualHost : Named {
     val id: Property<String>
     val apiHttpServer: Property<String>
-    val isClientAuthEnabled: Property<Boolean>
+    val clientAuthEnabled: Property<Boolean>
 }

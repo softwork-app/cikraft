@@ -136,3 +136,4 @@ abstract class GenerateOpenApi : DefaultTask() {
         }
     }
 }
+// /Users/philipwedemann/GitHub/sapci/gradle-plugin/src/testFixtures/resources/createProxy/infra/build/resources/apiProxiesOpenApi

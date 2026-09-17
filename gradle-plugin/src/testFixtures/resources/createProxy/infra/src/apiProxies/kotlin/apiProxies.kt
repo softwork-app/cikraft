@@ -10,12 +10,10 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalTime::class)
 public fun ApiProxiesBuilder.apiProxies(suffix: String): Unit {
-    val uuid = Uuid.random()
-
     apiProxy(
-        name = "Test_API_FOO_URL_$uuid",
-        title = "Test API FOO URL_$uuid",
-        description = "Test API Created for $uuid",
+        name = "Test_API_FOO_URL",
+        title = "Test API FOO URL",
+        description = "Test API Created",
     ) {
         val getCloudIDPParameters by policies.keyValueMapOperations("KVM_FOO") {
             get("CacheName", "idp.cache_name")
@@ -83,7 +81,7 @@ public fun ApiProxiesBuilder.apiProxies(suffix: String): Unit {
         }
 
         proxyEndPoint {
-            this.basePath = "/http/foo/bar/baz"
+            this.basePath = "/http$suffix/proxy"
             preFlow {
                 step(getCloudIDPParameters)
                 step(readCachedKeys)
@@ -98,7 +96,7 @@ public fun ApiProxiesBuilder.apiProxies(suffix: String): Unit {
             }
         }
         targetEndPoint {
-            relativePath = "/http/foo/bar/baz"
+            relativePath = "/http$suffix/bar/baz"
             providerId = PRO_FOO
             preFlow {
                 step(getCredentials)

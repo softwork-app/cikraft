@@ -14,6 +14,7 @@ class GenerateOpenAPIProxyTransformerTest {
     fun noApis() {
         val generated = generateOpenAPIProxyTransformer(
             emptyList(),
+            "/foo",
         )
 
         assertEquals(
@@ -38,25 +39,26 @@ class GenerateOpenAPIProxyTransformerTest {
                             issuer = RefValue.Value("https://idp.example.com")
                         }
                         proxyEndPoint {
-                            basePath = "/proxy"
+                            basePath = "/http/foo/proxy"
                             preFlow {
                                 step(verifyMyIdp)
                             }
                         }
                         targetEndPoint {
-                            relativePath = "/iflow"
+                            relativePath = "/http/foo/iflow"
                             providerId = "Provider"
                             loadBalancerConfigurations {
                             }
                         }
                     },
                     setOf(
-                        "https://api.example.com/v1/",
-                        "https://api-qs.example.com/v1/",
+                        "https://api.example.com/http",
+                        "https://api-qs.example.com/http",
                     ),
                     false,
                 ),
             ),
+            "/foo",
         )
 
         assertEquals(
@@ -81,21 +83,21 @@ class GenerateOpenAPIProxyTransformerTest {
                             issuer = RefValue.Value("https://idp.example.com")
                         }
                         proxyEndPoint {
-                            basePath = "/proxy"
+                            basePath = "/http/foo/proxy"
                             preFlow {
                                 step(verifyMyIdp)
                             }
                         }
                         targetEndPoint {
-                            relativePath = "/iflow"
+                            relativePath = "/http/foo/iflow"
                             providerId = "Provider"
                             loadBalancerConfigurations {
                             }
                         }
                     },
                     setOf(
-                        "https://api.example.com/v1/",
-                        "https://api-qs.example.com/v1/",
+                        "https://api.example.com/http",
+                        "https://api-qs.example.com/http",
                     ),
                     false,
                 ),
@@ -110,21 +112,21 @@ class GenerateOpenAPIProxyTransformerTest {
                             issuer = RefValue.Value("https://idp.example.com")
                         }
                         proxyEndPoint {
-                            basePath = "/bar"
+                            basePath = "/http/foo/bar"
                             preFlow {
                                 step(verifyMyIdp)
                             }
                         }
                         targetEndPoint {
-                            relativePath = "/iflow"
+                            relativePath = "/http/foo/iflow"
                             providerId = "Provider"
                             loadBalancerConfigurations {
                             }
                         }
                     },
                     setOf(
-                        "https://api.example.com/v1/",
-                        "https://api-qs.example.com/v1/",
+                        "https://api.example.com/http",
+                        "https://api-qs.example.com/http",
                     ),
                     false,
                 ),
@@ -139,21 +141,21 @@ class GenerateOpenAPIProxyTransformerTest {
                             issuer = RefValue.Value("https://idp.example.com")
                         }
                         proxyEndPoint {
-                            basePath = "/proxy2"
+                            basePath = "/http/foo/proxy2"
                             preFlow {
                                 step(verifyMyIdp2)
                             }
                         }
                         targetEndPoint {
-                            relativePath = "/iflow2"
+                            relativePath = "/http/foo/iflow2"
                             providerId = "Provider"
                             loadBalancerConfigurations {
                             }
                         }
                     },
                     setOf(
-                        "https://api.example.com/v2/",
-                        "https://api-qs.example.com/v2/",
+                        "https://api.bar.com/http",
+                        "https://api-qs.bar.com/http",
                     ),
                     false,
                 ),
@@ -169,25 +171,26 @@ class GenerateOpenAPIProxyTransformerTest {
                             password = RefValue.Ref("private.password")
                         }
                         proxyEndPoint {
-                            basePath = "/basic"
+                            basePath = "/http/foo/basic"
                             preFlow {
                                 step(checkBasicAuth)
                             }
                         }
                         targetEndPoint {
-                            relativePath = "/iflow"
+                            relativePath = "/http/foo/iflow"
                             providerId = "Provider"
                             loadBalancerConfigurations {
                             }
                         }
                     },
                     setOf(
-                        "https://api.example.com/v1/",
-                        "https://api-qs.example.com/v1/",
+                        "https://api.example.com/http",
+                        "https://api-qs.example.com/http",
                     ),
                     false,
                 ),
             ),
+            "/foo",
         )
 
         assertEquals(

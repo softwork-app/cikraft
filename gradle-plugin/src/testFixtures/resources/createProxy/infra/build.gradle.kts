@@ -7,10 +7,18 @@ jvmApplication {
                     authServer = "bar"
                     httpServer = "localhost"
                     web = "localhost"
+
+                    apiVirtualHosts {
+                        apiVirtualHost("default") {
+                            id = "foo"
+                            apiHttpServer = "https://api.example.com/http"
+                            clientAuthEnabled = false
+                        }
+                    }
                 }
             }
 
-            httpNamespace = "foo"
+            httpNamespace = "/foo"
 
             integrationArtifacts {
                 integrationPackages {
@@ -19,13 +27,6 @@ jvmApplication {
 
                         integrationFlows {
                             integrationFlow("IF_Ba") {
-                                description = "Ba test"
-
-                                dependencies {
-                                    implementation(projects.app)
-                                }
-                            }
-                            integrationFlow("IF_Foo") {
                                 description = "Ba test"
 
                                 dependencies {
@@ -48,6 +49,18 @@ jvmApplication {
                 apiRuntimeProviders {
                     apiRuntimeProvider("PRO_FOO") {
                         title = "My runtime provider"
+                    }
+                }
+                this.apiProxies {
+                    apiProxy("Test_API_FOO_URL") {
+                        virtualHostName = "default"
+                    }
+                }
+                openApi {
+                    title = "New IP"
+                    description = "IP Description"
+                    dependencies {
+                        infrastructure(project())
                     }
                 }
             }
