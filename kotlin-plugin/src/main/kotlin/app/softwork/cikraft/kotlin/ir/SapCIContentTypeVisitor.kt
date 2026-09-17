@@ -34,7 +34,11 @@ internal class SapCIContentTypeVisitor(private val pluginContext: IrPluginContex
             val contentTypeConstructor = declaration.parentAsClass.getAnnotation(contentTypeFq)!!
             val contentTypeValue = contentTypeConstructor.getConstArgument<String>("value")!!
 
-            val contentTypeParameters = contentTypeConstructor.argumentMapping[Name.identifier("parameters")] as IrVararg?
+            val contentTypeParameters = contentTypeConstructor.argumentMapping[
+                Name.identifier(
+                    "parameters",
+                ),
+            ] as IrVararg?
             val computedValue = if (contentTypeParameters == null) {
                 contentTypeValue
             } else {
