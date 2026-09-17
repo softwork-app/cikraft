@@ -19,6 +19,7 @@ jvmApplication {
             }
 
             httpNamespace = "/foo"
+            suffix = "/pr"
 
             integrationArtifacts {
                 integrationPackages {
@@ -51,11 +52,12 @@ jvmApplication {
                         title = "My runtime provider"
                     }
                 }
-                this.apiProxies {
-                    apiProxy("Test_API_FOO_URL") {
+                this.apiProxies.addLater(suffix.map {
+                    objects.newInstance(app.softwork.cikraft.gradle.ApiProxy::class, "Test_API_FOO_URL${it.replace("/", "_")}").apply {
                         virtualHostName = "default"
                     }
-                }
+                })
+
                 openApi {
                     title = "New IP"
                     description = "IP Description"
