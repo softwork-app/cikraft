@@ -90,9 +90,12 @@ abstract class CIKraftBaseFeature :
                 }
             }
 
-            parentDefinition.dependencies.implementation.add("app.softwork.cikraft:runtime:$VERSION")
-            parentDefinition.dependencies.compileOnly.add(SAPCI_SCRIPT_API)
-            parentDefinition.dependencies.compileOnly.add(SAPCI_GENERIC_API)
+            val mainCompilationUnit = parentBuildModel.compilationUnits.getByName("main")
+
+            val implementation = mainCompilationUnit.jvmEcosystem.implementationConfiguration
+            implementation.dependencies.add(dependencyFactory.create("app.softwork.cikraft:runtime:$VERSION"))
+            implementation.dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
+            implementation.dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
 
             tasks.named("processResources", ProcessResources::class) {
                 exclude("cikraft/entrypoint.json")
@@ -100,7 +103,7 @@ abstract class CIKraftBaseFeature :
 
             buildModel as DefaultSAPCIGeneratorBuildModel
             buildModel.internalName = ""
-            buildModel.sourceDirectorySet = parentBuildModel.compilationUnits.getByName("main").sources
+            buildModel.sourceDirectorySet = mainCompilationUnit.sources
         }
     }
 }
