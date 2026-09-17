@@ -52,7 +52,7 @@ jvmApplication {
                         title = "My runtime provider"
                     }
                 }
-                this.apiProxies.addLater(suffix.map {
+                this.apiProxies.addLater(suffix.orElse("").map {
                     objects.newInstance(app.softwork.cikraft.gradle.ApiProxy::class, "Test_API_FOO_URL${it.replace("/", "_")}").apply {
                         virtualHostName = "default"
                     }
