@@ -92,10 +92,12 @@ abstract class CIKraftBaseFeature :
 
             val mainCompilationUnit = parentBuildModel.compilationUnits.getByName("main")
 
-            val implementation = mainCompilationUnit.jvmEcosystem.implementationConfiguration
-            implementation.dependencies.add(dependencyFactory.create("app.softwork.cikraft:runtime:$VERSION"))
-            implementation.dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
-            implementation.dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
+            val mainJvmEcosystem = mainCompilationUnit.jvmEcosystem
+            mainJvmEcosystem.implementationConfiguration.dependencies.add(
+                dependencyFactory.create("app.softwork.cikraft:runtime:$VERSION"),
+            )
+            mainJvmEcosystem.compileOnlyConfiguration.dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
+            mainJvmEcosystem.compileOnlyConfiguration.dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
 
             tasks.named("processResources", ProcessResources::class) {
                 exclude("cikraft/entrypoint.json")
