@@ -36,9 +36,7 @@ public abstract class GenerateOpenAPIProxyTransformerWorker :
                     description = description,
                     builder = builder,
                 )
-                val (apiHosts, isClientAuthEnabled) = requireNotNull(parameters.apiProxies.get()[name]) {
-                    "API proxies for $name not found, got: ${parameters.apiProxies.get().keys}"
-                }
+                val (apiHosts, isClientAuthEnabled) = parameters.apiProxies.get()[name] ?: return
                 all.add(Triple(created, apiHosts, isClientAuthEnabled))
             }
         }
