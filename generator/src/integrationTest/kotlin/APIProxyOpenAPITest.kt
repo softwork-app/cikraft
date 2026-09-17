@@ -1,6 +1,7 @@
 import app.softwork.cikraft.core.OpenApiInfrastructure
 import io.github.hfhbd.kfx.openapi.model.OpenApi
 import io.github.hfhbd.kfx.openapi.model.json
+import openapitransformers.empty.APIProxyOpenAPITransformer
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -11,7 +12,7 @@ class APIProxyOpenAPITest {
             OpenApi.serializer(),
             APIProxyOpenAPITest::class.java.getResource("/a.json")!!.readText()
         )
-        val proxyOpenApi = openapitransformers.empty.APIProxyOpenAPITransformer().convert(
+        val proxyOpenApi = APIProxyOpenAPITransformer().convert(
             openapi,
             OpenApiInfrastructure(
                 apis = emptyList(),
@@ -25,7 +26,7 @@ class APIProxyOpenAPITest {
         assertEquals(
             json.decodeFromString(
                 OpenApi.serializer(),
-                APIProxyOpenAPITest::class.java.getResource("/proxy-a.json")!!.readText()
+                APIProxyOpenAPITest::class.java.getResource("/a-proxy.json")!!.readText()
             ),
             proxyOpenApi,
         )
