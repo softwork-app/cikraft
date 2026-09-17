@@ -64,7 +64,7 @@ abstract class OpenApiFeature :
                 }
             }
 
-            apply(definition, "", SAPCI.OPENAPI).configure {
+            apply(definition, "", null, SAPCI.OPENAPI).configure {
                 this.servers.addAll(servers)
                 openApiFile.convention(
                     layout.contextBuildDirectory.map {
@@ -171,7 +171,7 @@ abstract class OpenApiFeature :
 
             apiProxiesOpenApiSourceSet.kotlin.srcDir(generateTransformer)
 
-            val generateOpenAPITask = apply(definition, "apiProxy", SAPCI.OPENAPI_PROXY)
+            val generateOpenAPITask = apply(definition, "apiProxy", "api-proxy", SAPCI.OPENAPI_PROXY)
             generateOpenAPITask.configure {
                 openApiFile.convention(
                     layout.contextBuildDirectory.map {
@@ -206,6 +206,7 @@ abstract class OpenApiFeature :
         fun apply(
             definition: OpenApiDefinition,
             suffix: String,
+            classifier: String?,
             sapciAttribute: String,
         ): TaskProvider<GenerateOpenApi> {
             val flowsFolder = configurations.resolvable("cikraftOpenApiCreatedFlows$suffix") {
@@ -244,7 +245,9 @@ abstract class OpenApiFeature :
                     attribute(SAPCI.attribute, named(sapciAttribute))
                 }
                 outgoing {
-                    artifact(generateOpenApi)
+                    artifact(generateOpenApi) {
+                        this.classifier = classifier
+                    }
                 }
             }
 

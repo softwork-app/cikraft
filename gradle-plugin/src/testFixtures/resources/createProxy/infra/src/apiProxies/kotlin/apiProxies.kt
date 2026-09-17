@@ -10,8 +10,9 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalTime::class)
 public fun ApiProxiesBuilder.apiProxies(suffix: String): Unit {
+    val suffixAsName = suffix.removePrefix("/foo").replace("/", "_")
     apiProxy(
-        name = "Test_API_FOO_URL",
+        name = "Test_API_FOO_URL$suffixAsName",
         title = "Test API FOO URL",
         description = "Test API Created",
     ) {
