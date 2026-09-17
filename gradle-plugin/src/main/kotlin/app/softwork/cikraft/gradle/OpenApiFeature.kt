@@ -171,7 +171,7 @@ abstract class OpenApiFeature :
 
             apiProxiesOpenApiSourceSet.kotlin.srcDir(generateTransformer)
 
-            val generateOpenAPITask = apply(definition, "apiProxy", "api-proxy",  SAPCI.OPENAPI_PROXY)
+            val generateOpenAPITask = apply(definition, "apiProxy", "api-proxy", SAPCI.OPENAPI_PROXY)
             generateOpenAPITask.configure {
                 openApiFile.convention(
                     layout.contextBuildDirectory.map {
