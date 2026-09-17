@@ -11,7 +11,6 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.MemberName.Companion.member
 import com.squareup.kotlinpoet.ParameterSpec
-import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.STRING
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.joinToCode
@@ -56,7 +55,9 @@ public fun generateOpenAPIProxyTransformer(
 
                 for ((proxy, apiHosts, usesMutualTLS) in proxies) {
                     val apiPath = proxy.proxyEndpoints.single().basePath.removePrefix("/$apiHostSuffix$httpSuffix")
-                    val iFlowPath = proxy.targetEndPoint.single().relativePath?.removePrefix("/http$httpSuffix") ?: continue
+                    val iFlowPath = proxy.targetEndPoint.single().relativePath?.removePrefix(
+                        "/http$httpSuffix",
+                    ) ?: continue
 
                     var scopes = setOf<String>()
 
@@ -64,32 +65,34 @@ public fun generateOpenAPIProxyTransformer(
                         scopes = it
                     }
 
-                    val copyBlock = CodeBlock.of("copy(security = %L, servers = %L)", if (auth == null) {
-                        CodeBlock.of(
-                            "%M(%M())",
-                            MemberName("kotlin.collections", "listOf", isExtension = true),
-                            MemberName("kotlin.collections", "emptyMap", isExtension = true),
-                        )
-                    } else {
-                        CodeBlock.of(
-                            "%M(%M(%S to %L))",
-                            MemberName("kotlin.collections", "listOf", isExtension = true),
-                            MemberName("kotlin.collections", "mapOf", isExtension = true),
-                            auth.name,
-                            if (scopes.isEmpty()) {
-                                CodeBlock.of("%M()", emptyList)
-                            } else {
-                                CodeBlock.of(
-                                    "%M(%L)",
-                                    MemberName("kotlin.collections", "listOf", isExtension = true),
+                    val copyBlock = CodeBlock.of(
+                        "copy(security = %L, servers = %L)",
+                        if (auth == null) {
+                            CodeBlock.of(
+                                "%M(%M())",
+                                MemberName("kotlin.collections", "listOf", isExtension = true),
+                                MemberName("kotlin.collections", "emptyMap", isExtension = true),
+                            )
+                        } else {
+                            CodeBlock.of(
+                                "%M(%M(%S to %L))",
+                                MemberName("kotlin.collections", "listOf", isExtension = true),
+                                MemberName("kotlin.collections", "mapOf", isExtension = true),
+                                auth.name,
+                                if (scopes.isEmpty()) {
+                                    CodeBlock.of("%M()", emptyList)
+                                } else {
+                                    CodeBlock.of(
+                                        "%M(%L)",
+                                        MemberName("kotlin.collections", "listOf", isExtension = true),
 
-                                    scopes.map {
-                                        CodeBlock.of("%S", it)
-                                    }.joinToCode(),
-                                )
-                            },
-                        )
-                    },
+                                        scopes.map {
+                                            CodeBlock.of("%S", it)
+                                        }.joinToCode(),
+                                    )
+                                },
+                            )
+                        },
                         if (allApiHosts == apiHosts) {
                             CodeBlock.of("%M()", emptyList)
                         } else {
@@ -104,7 +107,8 @@ public fun generateOpenAPIProxyTransformer(
                                     )
                                 }.joinToCode(),
                             )
-                        })
+                        },
+                    )
 
                     addStatement(
                         "this[%S] = paths[%L]!!.let { it.copy(head = it.head?.%L, post = it.post!!.%L) }",

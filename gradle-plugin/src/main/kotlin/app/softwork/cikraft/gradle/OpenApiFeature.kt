@@ -94,10 +94,15 @@ abstract class OpenApiFeature :
                 dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
             }
 
-            val s = tasks.register("generateOpenAPITransformerServiceLoader", GenerateOpenAPITransformerServiceLoader::class.java) {
-                outputDirectory.set(layout.contextBuildDirectory.map {
-                    it.dir("generated/cikraft/apiProxies/resources")
-                })
+            val s = tasks.register(
+                "generateOpenAPITransformerServiceLoader",
+                GenerateOpenAPITransformerServiceLoader::class.java,
+            ) {
+                outputDirectory.set(
+                    layout.contextBuildDirectory.map {
+                        it.dir("generated/cikraft/apiProxies/resources")
+                    },
+                )
             }
 
             apiProxiesOpenApiSourceSet.resources.srcDir(s)
