@@ -16,7 +16,7 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.joinToCode
 
 public fun generateOpenAPIProxyTransformer(
-    proxies: List<Triple<ApiProxyTransport, String, Boolean>>,
+    proxies: List<Triple<ApiProxyTransport, Set<String>, Boolean>>,
 ): FileSpec = FileSpec.builder("", "APIProxyOpenAPITransformer").apply {
     val transformerClass = TypeSpec.classBuilder("APIProxyOpenAPITransformer").apply {
         addSuperinterface(ClassName("app.softwork.cikraft.core", "SAPOpenAPITransformer"))
@@ -47,9 +47,9 @@ public fun generateOpenAPIProxyTransformer(
                     proxy.getAuth(usesMutualTLS) {}
                 }
 
-                val allApiHosts = proxies.mapTo(mutableSetOf()) { it.second }
+                val allApiHosts = proxies.flatMapTo(mutableSetOf()) { it.second }
 
-                for ((proxy, apiHost, usesMutualTLS) in proxies) {
+                for ((proxy, apiHosts, usesMutualTLS) in proxies) {
                     val apiPath = proxy.proxyEndpoints.single().basePath
                     val iFlowPath = proxy.targetEndPoint.single().relativePath ?: continue
 
@@ -89,14 +89,19 @@ public fun generateOpenAPIProxyTransformer(
                                 },
                             )
                         },
-                        if (allApiHosts.size == 1) {
+                        if (allApiHosts == apiHosts) {
                             CodeBlock.of("%M()", emptyList)
                         } else {
                             CodeBlock.of(
-                                "%M(%T(url = %S))",
+                                "%M(%L)",
                                 MemberName("kotlin.collections", "listOf", isExtension = true),
-                                ClassName("io.github.hfhbd.kfx.openapi.model", "OpenApi", "Server"),
-                                apiHost,
+                                apiHosts.map {
+                                    CodeBlock.of(
+                                        "%T(url = %S)",
+                                        ClassName("io.github.hfhbd.kfx.openapi.model", "OpenApi", "Server"),
+                                        it,
+                                    )
+                                }.joinToCode(),
                             )
                         },
                     )
@@ -105,16 +110,17 @@ public fun generateOpenAPIProxyTransformer(
 
                 addStatement(
                     "return openApi.copy(servers = %L, paths = apiPaths, components = openApi.components.copy(securitySchemes = %L))",
-                    if (allApiHosts.size == 1) {
-                        CodeBlock.of(
-                            "%M(%T(url = %S))",
-                            MemberName("kotlin.collections", "listOf", isExtension = true),
-                            ClassName("io.github.hfhbd.kfx.openapi.model", "OpenApi", "Server"),
-                            allApiHosts.single(),
-                        )
-                    } else {
-                        CodeBlock.of("%M()", emptyList)
-                    },
+                    CodeBlock.of(
+                        "%M(%L)",
+                        MemberName("kotlin.collections", "listOf", isExtension = true),
+                        allApiHosts.map {
+                            CodeBlock.of(
+                                "%T(url = %S)",
+                                ClassName("io.github.hfhbd.kfx.openapi.model", "OpenApi", "Server"),
+                                it,
+                            )
+                        }.joinToCode(),
+                    ),
                     if (allSecurity.isEmpty()) {
                         CodeBlock.of("%M()", MemberName("kotlin.collections", "emptyMap", isExtension = true))
                     } else {

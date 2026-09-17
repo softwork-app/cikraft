@@ -50,7 +50,10 @@ class GenerateOpenAPIProxyTransformerTest {
                             }
                         }
                     },
-                    "https://api.example.com/v1/",
+                    setOf(
+                        "https://api.example.com/v1/",
+                        "https://api-qs.example.com/v1/",
+                    ),
                     false,
                 ),
             ),
@@ -90,7 +93,10 @@ class GenerateOpenAPIProxyTransformerTest {
                             }
                         }
                     },
-                    "https://api.example.com/v1/",
+                    setOf(
+                        "https://api.example.com/v1/",
+                        "https://api-qs.example.com/v1/",
+                    ),
                     false,
                 ),
                 Triple(
@@ -116,7 +122,10 @@ class GenerateOpenAPIProxyTransformerTest {
                             }
                         }
                     },
-                    "https://api.example.com/v1/",
+                    setOf(
+                        "https://api.example.com/v1/",
+                        "https://api-qs.example.com/v1/",
+                    ),
                     false,
                 ),
                 Triple(
@@ -142,7 +151,10 @@ class GenerateOpenAPIProxyTransformerTest {
                             }
                         }
                     },
-                    "https://api.example.com/v2/",
+                    setOf(
+                        "https://api.example.com/v2/",
+                        "https://api-qs.example.com/v2/",
+                    ),
                     false,
                 ),
                 Triple(
@@ -169,7 +181,10 @@ class GenerateOpenAPIProxyTransformerTest {
                             }
                         }
                     },
-                    "https://api.example.com/v1/",
+                    setOf(
+                        "https://api.example.com/v1/",
+                        "https://api-qs.example.com/v1/",
+                    ),
                     false,
                 ),
             ),

@@ -4,7 +4,6 @@
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:GenerateFunction.kt:private fun FunSpec.Builder.callScripts: List&lt;Input></ID>
     <ID>CyclomaticComplexMethod:GenerateKtorServer.kt:private fun FunSpec.Builder.returnResultClass</ID>
-    <ID>CyclomaticComplexMethod:GenerateOpenAPIProxyTransformer.kt:public fun generateOpenAPIProxyTransformer: FileSpec</ID>
     <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun NormalClass.toNormalSchema: OBJECT</ID>
     <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun Type.toSchema: Schema</ID>
     <ID>CyclomaticComplexMethod:GenerateOpenApi.kt:private fun Type.toSimpleName: String</ID>

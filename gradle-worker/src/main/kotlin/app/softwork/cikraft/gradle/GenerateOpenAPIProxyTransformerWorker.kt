@@ -6,6 +6,7 @@ import app.softwork.cikraft.proxy.ApiProxyBuilder
 import app.softwork.cikraft.proxy.ApiProxyTransport
 import app.softwork.cikraft.proxy.builder.ApiProxiesBuilder
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
@@ -14,12 +15,13 @@ import app.softwork.cikraft.proxy.apiProxy as apiProxyOrigin
 public abstract class GenerateOpenAPIProxyTransformerWorker :
     WorkAction<GenerateOpenAPIProxyTransformerWorker.Parameters> {
     public interface Parameters : WorkParameters {
+        public val apiProxies: MapProperty<String, Pair<Set<String>, Boolean>>
         public val httpSuffix: Property<String>
         public val outputDirectory: DirectoryProperty
     }
 
     override fun execute() {
-        val all = mutableListOf<ApiProxyTransport>()
+        val all = mutableListOf<Triple<ApiProxyTransport, Set<String>, Boolean>>()
 
         val apiProxyBuilder = object : ApiProxiesBuilder {
             override fun apiProxy(
@@ -34,7 +36,8 @@ public abstract class GenerateOpenAPIProxyTransformerWorker :
                     description = description,
                     builder = builder,
                 )
-                all.add(created)
+                val (apiHosts, isClientAuthEnabled) = parameters.apiProxies.get()[name]!!
+                all.add(Triple(created, apiHosts, isClientAuthEnabled))
             }
         }
         apiProxyBuilder.apiProxies(parameters.httpSuffix.get())

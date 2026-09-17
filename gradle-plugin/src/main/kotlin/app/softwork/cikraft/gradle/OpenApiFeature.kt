@@ -1,6 +1,7 @@
 package app.softwork.cikraft.gradle
 
 import app.softwork.cikraft.gradle.apiproxies.GenerateOpenAPIProxyTransformer
+import app.softwork.cikraft.gradle.apiproxies.Proxies
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyFactory
@@ -96,6 +97,43 @@ abstract class OpenApiFeature :
 
             val generateTransformer =
                 tasks.register("generateOpenAPIProxyTransformer", GenerateOpenAPIProxyTransformer::class.java) {
+                    this.apiProxies.addAllLater(
+                        parentBuildModel.apiProxies.elements.map {
+                            it.map { apiProxy ->
+                                objectFactory.newInstance(Proxies::class.java, apiProxy.name).apply {
+                                    val apiHosts = parentBuildModel.stages.elements.zip(
+                                        apiProxy.virtualHostName,
+                                    ) { stages, virtualHostName ->
+                                        val s = objectFactory.setProperty(String::class.java)
+                                        for (stage in stages) {
+                                            s.add(
+                                                stage.apiVirtualHosts.named(
+                                                    virtualHostName,
+                                                ).flatMap { it.apiHttpServer },
+                                            )
+                                        }
+                                        s
+                                    }.flatMap { it }
+                                    this.apiHosts.addAll(apiHosts)
+
+                                    val s = parentBuildModel.stages.elements.zip(
+                                        apiProxy.virtualHostName,
+                                    ) { stages, virtualHostName ->
+                                        val s = objectFactory.property(Boolean::class.java)
+                                        for (stage in stages) {
+                                            s.set(
+                                                stage.apiVirtualHosts.named(
+                                                    virtualHostName,
+                                                ).flatMap { it.isClientAuthEnabled },
+                                            )
+                                        }
+                                        s
+                                    }.flatMap { it }
+                                    this.clientAuthEnabled.set(s)
+                                }
+                            }
+                        },
+                    )
                     this.httpSuffix.set(parentBuildModel.httpSuffix)
                     workerClasspath.from(
                         parentBuildModel.classes,

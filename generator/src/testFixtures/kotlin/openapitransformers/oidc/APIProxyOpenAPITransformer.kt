@@ -15,6 +15,6 @@ public class APIProxyOpenAPITransformer : SAPOpenAPITransformer {
     val apiPaths = buildMap<String, OpenApi.Path> {
       this["/proxy"] = paths["/iflow"]!!.let { it.copy(post = it.post!!.copy(security = listOf(mapOf("MyIdp" to emptyList())), servers = emptyList())) }
     }
-    return openApi.copy(servers = listOf(OpenApi.Server(url = "https://api.example.com/v1/")), paths = apiPaths, components = openApi.components.copy(securitySchemes = mapOf("MyIdp" to OpenApi.SecurityScheme.OpenIdConnect(openIdConnectUrl = "https://idp.example.com/.well-known/openid-configuration"))))
+    return openApi.copy(servers = listOf(OpenApi.Server(url = "https://api.example.com/v1/"), OpenApi.Server(url = "https://api-qs.example.com/v1/")), paths = apiPaths, components = openApi.components.copy(securitySchemes = mapOf("MyIdp" to OpenApi.SecurityScheme.OpenIdConnect(openIdConnectUrl = "https://idp.example.com/.well-known/openid-configuration"))))
   }
 }
