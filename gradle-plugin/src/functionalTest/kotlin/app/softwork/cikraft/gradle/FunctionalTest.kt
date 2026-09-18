@@ -49,7 +49,7 @@ class FunctionalTest {
     }
 
     @Test
-    fun createOpenApi() {
+    fun deployToSandbox() {
         val id = Uuid.random()
         val projectDir = fixtureDir / "resources" / "deployToSandbox"
 
