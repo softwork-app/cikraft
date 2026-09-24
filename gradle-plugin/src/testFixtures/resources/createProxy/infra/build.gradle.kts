@@ -14,6 +14,11 @@ jvmApplication {
                             apiHttpServer = "https://api.example.com/http"
                             clientAuthEnabled = false
                         }
+                        apiVirtualHost("mTLS") {
+                            id = "foo-mtls"
+                            apiHttpServer = "https://api-mtls.example.com/http"
+                            clientAuthEnabled = true
+                        }
                     }
                 }
             }

@@ -12,7 +12,10 @@ import org.gradle.api.tasks.TaskAction
 @CacheableTask
 abstract class WriteStages : DefaultTask() {
     @get:Input
-    abstract val stagesUrls: MapProperty<String, String>
+    abstract val runtimeStages: MapProperty<String, String>
+
+    @get:Input
+    abstract val virtualApiHosts: MapProperty<String, Map<String, String>>
 
     @get:Input
     abstract val httpSuffix: Property<String>
@@ -23,10 +26,19 @@ abstract class WriteStages : DefaultTask() {
     @TaskAction
     internal fun writeStage() {
         val httpSuffix = httpSuffix.get()
+
+        val runtimeStages = runtimeStages.get().map { (stage, httpUrl) ->
+            "${stage}_HTTP=$httpUrl" + httpSuffix
+        }.joinToString(separator = "\n", postfix = "\n")
+
+        val virtualApiHosts = virtualApiHosts.get().map { (stage, httpUrl) ->
+            httpUrl.map { (apiVirtualHostName, httpUrl) ->
+                "${stage}_API_$apiVirtualHostName=$httpUrl" + httpSuffix
+            }.joinToString(separator = "\n")
+        }.joinToString(separator = "\n", postfix = "\n")
+
         output.get().asFile.writeText(
-            stagesUrls.get().toList().joinToString(separator = "\n", postfix = "\n") { (stage, httpUrl) ->
-                "$stage=${httpUrl + httpSuffix}"
-            },
+            runtimeStages + virtualApiHosts,
         )
     }
 }

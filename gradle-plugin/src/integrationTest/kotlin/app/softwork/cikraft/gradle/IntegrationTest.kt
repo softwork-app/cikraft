@@ -311,8 +311,12 @@ class IntegrationTest {
     fun createProxy() {
         val projectDir = fixtureDir / "resources" / "createProxy"
 
-        val result = createRunner(projectDir, ":infra:generateOpenApiApiProxy", "--stacktrace").build()
+        val result = createRunner(projectDir, ":infra:generateOpenApiApiProxy", "writeStages", "--stacktrace").build()
         assertEquals(TaskOutcome.SUCCESS, result.task(":infra:compileApiProxiesKotlin")?.outcome)
+        assertEquals("""Dev_HTTP=localhost/foo/pr
+Dev_API_default=https://api.example.com/http/foo/pr
+Dev_API_mTLS=https://api-mtls.example.com/http/foo/pr
+""", (projectDir / "infra/build/cikraft/stages.properties").readText())
     }
 
     @Test

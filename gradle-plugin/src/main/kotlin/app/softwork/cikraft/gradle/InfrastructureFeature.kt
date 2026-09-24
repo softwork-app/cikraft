@@ -30,9 +30,11 @@ abstract class InfrastructureFeature :
         @get:Inject
         abstract val configurations: ConfigurationRegistrar
 
-        @get:Inject abstract val tasks: TaskRegistrar
+        @get:Inject
+        abstract val tasks: TaskRegistrar
 
-        @get:Inject abstract val layout: ProjectFeatureLayout
+        @get:Inject
+        abstract val layout: ProjectFeatureLayout
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -49,15 +51,32 @@ abstract class InfrastructureFeature :
 
             // workaround until Gradle provider migration for Test.environment
             val writeStages = tasks.register("writeStages", WriteStages::class.java) {
-                this.stagesUrls.set(
-                    buildModel.apiStages.associate {
-                        it.name + "_HTTP" to it.httpServer.get()
-                    } + buildModel.apiStages.associate {
-                        it.name + "_API" to it.apiVirtualHosts.joinToString { it.apiHttpServer.get() }
-                    } + buildModel.transportStages.associate {
-                        it.name + "_HTTP" to it.httpServer.get()
-                    } + buildModel.transportStages.associate {
-                        it.name + "_API" to it.apiVirtualHosts.joinToString { it.apiHttpServer.get() }
+                this.runtimeStages.putAll(
+                    buildModel.apiStages.elements.map {
+                        it.associate {
+                            it.name to it.httpServer.get()
+                        }
+                    },
+                )
+                this.runtimeStages.putAll(
+                    buildModel.transportStages.elements.map {
+                        it.associate {
+                            it.name to it.httpServer.get()
+                        }
+                    },
+                )
+                this.virtualApiHosts.putAll(
+                    buildModel.apiStages.elements.map {
+                        it.associate {
+                            it.name to it.apiVirtualHosts.associate { it.name to it.apiHttpServer.get() }
+                        }
+                    },
+                )
+                this.virtualApiHosts.putAll(
+                    buildModel.transportStages.elements.map {
+                        it.associate {
+                            it.name to it.apiVirtualHosts.associate { it.name to it.apiHttpServer.get() }
+                        }
                     },
                 )
                 this.httpSuffix.set(buildModel.httpSuffix)
