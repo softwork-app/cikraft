@@ -50,7 +50,7 @@ logback = { module = "ch.qos.logback:logback-classic", version = "1.6.3" }
 
 kotlin-ecosystem = { module = "org.jetbrains.ecosystem:ecosystem-plugin", version = "0.117.0" }
 
-androidx-annotations = { module = "androidx.annotation:annotation", version = "1.10.0" }
+androidx-annotations = { module = "androidx.annotation:annotation", version = "1.11.0" }
 
 r8-feature = { module = "io.github.hfhbd.r8:gradle-feature", version = "0.0.8" }
 
