@@ -36,7 +36,7 @@ public fun generateOpenAPIProxyTransformer(
                 )
                 returns(ClassName("io.github.hfhbd.kfx.openapi.model", "OpenApi"))
 
-                addStatement("val paths = openApi.paths")
+                addStatement("val paths = openApi.paths.entries")
                 beginControlFlow(
                     "val apiPaths = %M<%T, %T>",
                     MemberName("kotlin.collections", "buildMap", isExtension = true),
@@ -111,9 +111,9 @@ public fun generateOpenAPIProxyTransformer(
                     )
 
                     addStatement(
-                        "this[%S] = paths[%L]!!.let { it.copy(head = it.head?.%L, post = it.post!!.%L) }",
+                        $$"this[%S] = paths.single { (path, _) -> \"$path/\".startsWith(%L) }.value.let { it.copy(head = it.head?.%L, post = it.post!!.%L) }",
                         apiPath,
-                        CodeBlock.of("%S", iFlowPath),
+                        CodeBlock.of("%S", "$iFlowPath/"),
                         copyBlock,
                         copyBlock,
                     )

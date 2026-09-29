@@ -36,6 +36,7 @@
     <ID>MaxLineLength:GenerateFunction.kt:"${input.propertyName} = ${previousEntrypoint.resultName}.${previousOutputProperty.propertyName},"</ID>
     <ID>MaxLineLength:GenerateOpenAPIProxyTransformer.kt:"VerifyJWT policy $policyName must start with 'verify'. The suffix will be used as global security id."</ID>
     <ID>MaxLineLength:GenerateOpenAPIProxyTransformer.kt:"return openApi.copy(servers = %L, paths = apiPaths, components = openApi.components.copy(securitySchemes = %L))"</ID>
+    <ID>MaxLineLength:GenerateOpenAPIProxyTransformer.kt:$$"this[%S] = paths.single { (path, _) -> \"$path/\".startsWith(%L) }.value.let { it.copy(head = it.head?.%L, post = it.post!!.%L) }"</ID>
     <ID>MaxLineLength:WriteKotlinEntryPoints.kt:"${input.propertyName} = %T.getService&lt;%T>(%T::class.java, null).getUserCredential(getProperty(%S) as %T).password,\n"</ID>
     <ID>TooManyFunctions:GenerateKtorServer.kt:app.softwork.cikraft.generator.GenerateKtorServer.kt</ID>
     <ID>TooManyFunctions:GenerateOpenApi.kt:app.softwork.cikraft.generator.GenerateOpenApi.kt</ID>

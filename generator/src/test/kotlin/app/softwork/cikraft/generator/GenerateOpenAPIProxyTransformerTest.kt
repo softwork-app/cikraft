@@ -45,7 +45,7 @@ class GenerateOpenAPIProxyTransformerTest {
                             }
                         }
                         targetEndPoint {
-                            relativePath = "/http/foo/iflow"
+                            relativePath = "/http/foo/bar/baz"
                             providerId = "Provider"
                             loadBalancerConfigurations {
                             }
