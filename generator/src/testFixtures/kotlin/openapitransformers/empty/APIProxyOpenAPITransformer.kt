@@ -10,7 +10,7 @@ import kotlin.collections.listOf
 
 public class APIProxyOpenAPITransformer : SAPOpenAPITransformer {
   override fun convert(openApi: OpenApi, infrastructure: OpenApiInfrastructure): OpenApi {
-    val paths = openApi.paths
+    val paths = openApi.paths.entries
     val apiPaths = buildMap<String, OpenApi.Path> {
     }
     return openApi.copy(servers = listOf(), paths = apiPaths, components = openApi.components.copy(securitySchemes = emptyMap()))
