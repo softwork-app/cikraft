@@ -1,9 +1,9 @@
 package app.softwork.cikraft.core
 
-import app.softwork.validation.MaxLength
-import app.softwork.validation.MinLength
 import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.github.hfhbd.kfx.codegen.CodeGenTree.Member
+import io.github.hfhbd.validation.MaxLength
+import io.github.hfhbd.validation.MinLength
 import kotlinx.serialization.SerialName
 import kotlin.test.Test
 import kotlin.test.assertEquals
