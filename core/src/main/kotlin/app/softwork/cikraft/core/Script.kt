@@ -155,7 +155,7 @@ private val List<CodeGenTree.Annotation>.serialName: String?
         }?.values["value"] as StringLiteral?
         )?.value
 
-private const val VALIDATION_PACKAGENAME = "app.softwork.validation"
+private const val VALIDATION_PACKAGENAME = "io.github.hfhbd.validation"
 private const val VALIDATION_INCLUSIVE = "inclusive"
 
 internal fun getPackageName(jvmFunction: String): String =
