@@ -413,7 +413,7 @@ public class FlowBuilder internal constructor() {
         step(policyBuilder.name, condition)
     }
 
-    public val PolicyBuilder.failed: String get() = "$prefix.$name.failed"
+    public val PolicyBuilder.failed: String get() = "$failureName.failed"
 
     public infix fun String.eq(other: String): String = "$this == $other"
 
@@ -725,6 +725,8 @@ public class VerifyJWTBuilder internal constructor(public override val name: Str
     public var audience: RefValue? = null
     public lateinit var publicKeyJWKS: RefValue
 
+    override val failureName: String = "JWT"
+
     public val additionalClaims: MutableMap<String, String> = mutableMapOf()
 
     internal fun build() = VerifyJWT(
@@ -913,6 +915,8 @@ public sealed interface PolicyBuilder {
     public var async: Boolean
     public var continueOnError: Boolean
     public var enabled: Boolean
+
+    public val failureName: String get() = "$prefix.$name"
 }
 
 @ProxyDSL
