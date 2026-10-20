@@ -116,8 +116,8 @@ testing.suites {
 
                 environment("offlineMode", isOffline)
 
-                environment("KDGP_USERNAME", providers.gradleProperty("KDGPUsername").get())
-                environment("KDGP_PASSWORD", providers.gradleProperty("KDGPPassword").get())
+                environment("GitHubPackagesUsername", providers.gradleProperty("GitHubPackagesUsername").get())
+                environment("GitHubPackagesPassword", providers.gradleProperty("GitHubPackagesPassword").get())
             }
         }
     }
@@ -150,8 +150,8 @@ testing.suites {
                 environment("TRIAL_AUTH_SERVER", providers.gradleProperty("TRIAL_AUTH_SERVER").get())
                 environment("TRIAL_WEB", providers.gradleProperty("TRIAL_WEB").get())
 
-                environment("KDGP_USERNAME", providers.gradleProperty("KDGPUsername").get())
-                environment("KDGP_PASSWORD", providers.gradleProperty("KDGPPassword").get())
+                environment("GitHubPackagesUsername", providers.gradleProperty("GitHubPackagesUsername").get())
+                environment("GitHubPackagesPassword", providers.gradleProperty("GitHubPackagesPassword").get())
             }
         }
     }

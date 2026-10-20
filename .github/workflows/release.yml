@@ -43,8 +43,6 @@ jobs:
           ORG_GRADLE_PROJECT_GitHubPackagesUploadPassword: ${{ github.token }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
-          ORG_GRADLE_PROJECT_KDGPUsername: ${{ github.actor }}
-          ORG_GRADLE_PROJECT_KDGPPassword: ${{ github.token }}
 
   publishDocs:
     runs-on: ubuntu-26.04-arm
@@ -73,8 +71,6 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
-          ORG_GRADLE_PROJECT_KDGPUsername: ${{ github.actor }}
-          ORG_GRADLE_PROJECT_KDGPPassword: ${{ github.token }}
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:

@@ -37,8 +37,6 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
           ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
-          ORG_GRADLE_PROJECT_KDGPUsername: ${{ github.actor }}
-          ORG_GRADLE_PROJECT_KDGPPassword: ${{ github.token }}
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4

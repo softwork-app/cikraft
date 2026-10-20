@@ -19,8 +19,6 @@ jobs:
     env:
       ORG_GRADLE_PROJECT_GitHubPackagesUsername: ${{ github.actor }}
       ORG_GRADLE_PROJECT_GitHubPackagesPassword: ${{ github.token }}
-      ORG_GRADLE_PROJECT_KDGPUsername: ${{ github.actor }}
-      ORG_GRADLE_PROJECT_KDGPPassword: ${{ github.token }}
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
