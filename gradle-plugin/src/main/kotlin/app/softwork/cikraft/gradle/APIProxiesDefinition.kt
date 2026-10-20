@@ -40,6 +40,7 @@ abstract class DefaultAPIProxiesBuildModel : APIProxiesBuildModel {
 
 interface ApiProxy : Definition<ApiProxyBuildModel>, Named {
     val description: Property<String>
+
     /**
      * The name, not the stage specific id
      */
@@ -48,6 +49,7 @@ interface ApiProxy : Definition<ApiProxyBuildModel>, Named {
 
 interface ApiProxyBuildModel : BuildModel, Named {
     val description: Property<String>
+
     /**
      * The name, not the stage specific id
      */
@@ -56,6 +58,7 @@ interface ApiProxyBuildModel : BuildModel, Named {
 
 // https://github.com/gradle/gradle/issues/38207
 abstract class DefaultApiProxyBuildModel : ApiProxyBuildModel {
+    @get:JvmName("internalName")
     lateinit var name: String
     override fun getName(): String = name
 }

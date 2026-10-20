@@ -30,7 +30,6 @@ import java.nio.file.*
 import kotlin.io.path.*
 import kotlin.test.*
 
-@ExperimentalPathApi
 class IntegrationTest {
     private val fixtureDir = Path(System.getenv("fixtureDir"))
 

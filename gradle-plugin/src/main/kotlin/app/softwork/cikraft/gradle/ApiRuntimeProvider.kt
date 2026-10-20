@@ -19,6 +19,7 @@ interface ApiRuntimeProviderBuildModel : BuildModel, Named {
 
 // https://github.com/gradle/gradle/issues/38207
 abstract class DefaultApiRuntimeProviderBuildModel : ApiRuntimeProviderBuildModel {
+    @get:JvmName("internalName")
     lateinit var name: String
     override fun getName(): String = name
 }

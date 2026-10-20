@@ -28,10 +28,22 @@ abstract class APIProxyFeature :
         builder.bindProjectFeature("apiProxies", ApplyAction::class)
             .withUnsafeApplyAction()
             .withBuildModelImplementationType(DefaultAPIProxiesBuildModel::class.java)
-            .withNestedBuildModelImplementationType(ApiKeyStoreBuildModel::class.java, DefaultApiKeyStoreBuildModel::class.java)
-            .withNestedBuildModelImplementationType(ApiCertificateBuildModel::class.java, DefaultApiCertificateBuildModel::class.java)
-            .withNestedBuildModelImplementationType(ApiRuntimeProviderBuildModel::class.java, DefaultApiRuntimeProviderBuildModel::class.java)
-            .withNestedBuildModelImplementationType(ApiProxyBuildModel::class.java, DefaultApiProxyBuildModel::class.java)
+            .withNestedBuildModelImplementationType(
+                ApiKeyStoreBuildModel::class.java,
+                DefaultApiKeyStoreBuildModel::class.java,
+            )
+            .withNestedBuildModelImplementationType(
+                ApiCertificateBuildModel::class.java,
+                DefaultApiCertificateBuildModel::class.java,
+            )
+            .withNestedBuildModelImplementationType(
+                ApiRuntimeProviderBuildModel::class.java,
+                DefaultApiRuntimeProviderBuildModel::class.java,
+            )
+            .withNestedBuildModelImplementationType(
+                ApiProxyBuildModel::class.java,
+                DefaultApiProxyBuildModel::class.java,
+            )
     }
 
     abstract class ApplyAction :
@@ -69,46 +81,54 @@ abstract class APIProxyFeature :
             val parentBuildModel = context.getBuildModel(parentDefinition)
 
             buildModel as DefaultAPIProxiesBuildModel
-            buildModel.apiCertificates.addAllLater(definition.apiCertificates.elements.map {
-                it.map {
-                    val buildModel = context.getBuildModel(it)
-                    buildModel as DefaultApiCertificateBuildModel
-                    buildModel.name = it.name
-                    buildModel.p12File.set(it.p12File)
-                    buildModel.storeName.set(it.storeName)
-                    buildModel.description.set(it.description)
-                    buildModel
-                }
-            })
-            buildModel.apiKeyStores.addAllLater(definition.apiKeyStores.elements.map {
-                it.map {
-                    val buildModel = context.getBuildModel(it)
-                    buildModel as DefaultApiKeyStoreBuildModel
-                    buildModel.name = it.name
-                    buildModel
-                }
-            })
-            buildModel.apiRuntimeProviders.addAllLater(definition.apiRuntimeProviders.elements.map {
-                it.map {
-                    val buildModel = context.getBuildModel(it)
-                    buildModel as DefaultApiRuntimeProviderBuildModel
-                    buildModel.name = it.name
-                    buildModel.title.set(it.title)
-                    buildModel.credentialStoreName.set(it.credentialStoreName)
-                    buildModel.credentialName.set(it.credentialName)
-                    buildModel
-                }
-            })
-            buildModel.apiProxies.addAllLater(definition.apiProxies.elements.map {
-                it.map {
-                    val buildModel = context.getBuildModel(it)
-                    buildModel as DefaultApiProxyBuildModel
-                    buildModel.name = it.name // https://github.com/gradle/gradle/issues/38207
-                    buildModel.description.set(it.description)
-                    buildModel.virtualHostName.set(it.virtualHostName)
-                    buildModel
-                }
-            })
+            buildModel.apiCertificates.addAllLater(
+                definition.apiCertificates.elements.map {
+                    it.map {
+                        val buildModel = context.getBuildModel(it)
+                        buildModel as DefaultApiCertificateBuildModel
+                        buildModel.name = it.name
+                        buildModel.p12File.set(it.p12File)
+                        buildModel.storeName.set(it.storeName)
+                        buildModel.description.set(it.description)
+                        buildModel
+                    }
+                },
+            )
+            buildModel.apiKeyStores.addAllLater(
+                definition.apiKeyStores.elements.map {
+                    it.map {
+                        val buildModel = context.getBuildModel(it)
+                        buildModel as DefaultApiKeyStoreBuildModel
+                        buildModel.name = it.name
+                        buildModel
+                    }
+                },
+            )
+            buildModel.apiRuntimeProviders.addAllLater(
+                definition.apiRuntimeProviders.elements.map {
+                    it.map {
+                        val buildModel = context.getBuildModel(it)
+                        buildModel as DefaultApiRuntimeProviderBuildModel
+                        buildModel.name = it.name
+                        buildModel.title.set(it.title)
+                        buildModel.credentialStoreName.set(it.credentialStoreName)
+                        buildModel.credentialName.set(it.credentialName)
+                        buildModel
+                    }
+                },
+            )
+            buildModel.apiProxies.addAllLater(
+                definition.apiProxies.elements.map {
+                    it.map {
+                        val buildModel = context.getBuildModel(it)
+                        buildModel as DefaultApiProxyBuildModel
+                        buildModel.name = it.name // https://github.com/gradle/gradle/issues/38207
+                        buildModel.description.set(it.description)
+                        buildModel.virtualHostName.set(it.virtualHostName)
+                        buildModel
+                    }
+                },
+            )
             buildModel.httpSuffix.set(parentBuildModel.httpSuffix)
             buildModel.stages.addAllLater(parentBuildModel.apiStages.elements)
             buildModel.stages.addAllLater(parentBuildModel.transportStages.elements)
