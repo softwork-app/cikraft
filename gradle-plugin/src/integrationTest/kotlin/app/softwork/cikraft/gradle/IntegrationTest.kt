@@ -538,10 +538,8 @@ public data object IFBa
                     add("-Dorg.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=2g")
                     add("--stacktrace")
                     add("--info")
-                    add("-PKDGPUsername=${System.getenv("KDGP_USERNAME")}")
-                    add("-PKDGPPassword=${System.getenv("KDGP_PASSWORD")}")
-                    add("-PGitHubPackagesUsername=${System.getenv("KDGP_USERNAME")}")
-                    add("-PGitHubPackagesPassword=${System.getenv("KDGP_PASSWORD")}")
+                    add("-PGitHubPackagesUsername=${System.getenv("GitHubPackagesUsername")}")
+                    add("-PGitHubPackagesPassword=${System.getenv("GitHubPackagesPassword")}")
                 },
             )
     }

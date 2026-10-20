@@ -14,11 +14,13 @@ dependencyResolutionManagement {
                     setUrl(
                         "https://maven.pkg.github.com/Kotlin/declarative-gradle-jetbrains-ecosystem-plugin"
                     )
-                    name = "KDGP"
                     metadataSources {
                         gradleMetadata()
                     }
-                    credentials(org.gradle.api.credentials.PasswordCredentials::class)
+                    credentials(PasswordCredentials::class) {
+                        username = providers.gradleProperty("GitHubPackagesUsername").get()
+                        password = providers.gradleProperty("GitHubPackagesPassword").get()
+                    }
                 }
             }
             filter {
