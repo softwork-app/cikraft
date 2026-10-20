@@ -21,10 +21,10 @@ interface APIProxiesDefinition : Definition<APIProxiesBuildModel> {
 }
 
 interface APIProxiesBuildModel : BuildModel {
-    val apiKeyStores: NamedDomainObjectContainer<ApiKeyStore>
-    val apiCertificates: NamedDomainObjectContainer<ApiCertificate>
-    val apiRuntimeProviders: NamedDomainObjectContainer<ApiRuntimeProvider>
-    val apiProxies: NamedDomainObjectContainer<ApiProxy>
+    val apiKeyStores: NamedDomainObjectContainer<ApiKeyStoreBuildModel>
+    val apiCertificates: NamedDomainObjectContainer<ApiCertificateBuildModel>
+    val apiRuntimeProviders: NamedDomainObjectContainer<ApiRuntimeProviderBuildModel>
+    val apiProxies: NamedDomainObjectContainer<ApiProxyBuildModel>
     val httpSuffix: Provider<String>
     val stages: NamedDomainObjectContainer<Stage>
 
@@ -38,9 +38,24 @@ abstract class DefaultAPIProxiesBuildModel : APIProxiesBuildModel {
     abstract override val runtimeClasspath: ConfigurableFileCollection
 }
 
-interface ApiProxy : Named {
+interface ApiProxy : Definition<ApiProxyBuildModel>, Named {
+    val description: Property<String>
     /**
      * The name, not the stage specific id
      */
     val virtualHostName: Property<String>
+}
+
+interface ApiProxyBuildModel : BuildModel, Named {
+    val description: Property<String>
+    /**
+     * The name, not the stage specific id
+     */
+    val virtualHostName: Property<String>
+}
+
+// https://github.com/gradle/gradle/issues/38207
+abstract class DefaultApiProxyBuildModel : ApiProxyBuildModel {
+    lateinit var name: String
+    override fun getName(): String = name
 }
