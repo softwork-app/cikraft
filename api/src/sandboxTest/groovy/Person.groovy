@@ -43,6 +43,7 @@ Message logic(Message message) {
 }
 
 static Message client(Message message) {
+    org.slf4j.LoggerFactory.getLogger("Test").warn("My warning")
     message.setProperty("_RESULT_", new PersonConstructor('Marie', 1))
     return message
 }
