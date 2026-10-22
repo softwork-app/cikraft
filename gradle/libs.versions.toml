@@ -3,7 +3,7 @@ kotlin = "2.4.21"
 ktor = "3.6.0"
 ksp = "2.3.12"
 kfx = "0.2.17"
-serialization = "1.11.0"
+serialization = "1.12.0"
 
 [libraries]
 serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
