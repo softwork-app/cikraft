@@ -34,7 +34,7 @@ abstract class GeneratePropertiesTask : DefaultTask() {
     @get:SkipWhenEmpty
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.NONE)
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val propertiesFiles: ConfigurableFileCollection
 
     @get:OutputDirectory
