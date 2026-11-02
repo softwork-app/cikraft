@@ -38,7 +38,9 @@ abstract class DefaultAPIProxiesBuildModel : APIProxiesBuildModel {
     abstract override val runtimeClasspath: ConfigurableFileCollection
 }
 
-interface ApiProxy : Definition<ApiProxyBuildModel>, Named {
+interface ApiProxy :
+    Definition<ApiProxyBuildModel>,
+    Named {
     val description: Property<String>
 
     /**
@@ -47,7 +49,9 @@ interface ApiProxy : Definition<ApiProxyBuildModel>, Named {
     val virtualHostName: Property<String>
 }
 
-interface ApiProxyBuildModel : BuildModel, Named {
+interface ApiProxyBuildModel :
+    BuildModel,
+    Named {
     val description: Property<String>
 
     /**

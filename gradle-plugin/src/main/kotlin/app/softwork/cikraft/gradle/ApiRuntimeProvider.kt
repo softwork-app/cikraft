@@ -5,13 +5,17 @@ import org.gradle.api.provider.Property
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 
-interface ApiRuntimeProvider : Definition<ApiRuntimeProviderBuildModel>, Named {
+interface ApiRuntimeProvider :
+    Definition<ApiRuntimeProviderBuildModel>,
+    Named {
     val title: Property<String>
     val credentialStoreName: Property<String>
     val credentialName: Property<String>
 }
 
-interface ApiRuntimeProviderBuildModel : BuildModel, Named {
+interface ApiRuntimeProviderBuildModel :
+    BuildModel,
+    Named {
     val title: Property<String>
     val credentialStoreName: Property<String>
     val credentialName: Property<String>

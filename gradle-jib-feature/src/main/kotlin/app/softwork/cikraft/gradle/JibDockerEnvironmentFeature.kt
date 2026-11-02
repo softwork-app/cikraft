@@ -36,7 +36,7 @@ abstract class JibDockerEnvironmentFeature :
     }
 
     abstract class ApplyAction :
-        ProjectFeatureApplyAction<DockerEnvironmentDefinition, BuildModel.None, JibDefinition> {
+        ProjectFeatureApplyAction<DockerEnvironmentDefinition, DockerEnvironmentBuildModel, JibDefinition> {
         @get:Inject
         abstract val tasks: TaskRegistrar
 
@@ -52,14 +52,16 @@ abstract class JibDockerEnvironmentFeature :
         override fun apply(
             context: ProjectFeatureApplicationContext,
             definition: DockerEnvironmentDefinition,
-            buildModel: BuildModel.None,
+            buildModel: DockerEnvironmentBuildModel,
             parentDefinition: JibDefinition,
         ) {
             val parentBuildModel = context.getBuildModel(parentDefinition)
 
+            buildModel.stage.set(definition.stage)
+
             val containerWorkerDeps = configurations.dependencyScope("containerWorkerDeps") {
                 dependencies.add(
-                    dependencyFactory.create("app.softwork.cikraft:core:${app.softwork.cikraft.gradle.VERSION}"),
+                    dependencyFactory.create("app.softwork.cikraft:core:$VERSION"),
                 )
             }
 
@@ -72,13 +74,13 @@ abstract class JibDockerEnvironmentFeature :
                 attributes {
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
                     attribute(SAPCI.attribute, named(SAPCI.STAGE_PROPERTIES))
-                    attributeProvider(SAPCIStage.attribute, definition.stage.map { named(it) })
                 }
             }
 
             val writePropertiesToFile =
                 tasks.register("writePropertiesToFile", WritePropertiesToFile::class.java) {
                     propertyFiles.from(propertiesConfiguration)
+                    stage.set(buildModel.stage)
                     output.convention(
                         layout.contextBuildDirectory.map { it.file("cikraft/docker/properties.properties") },
                     )
@@ -96,7 +98,7 @@ abstract class JibDockerEnvironmentFeature :
     }
 }
 
-interface DockerEnvironmentDefinition : Definition<BuildModel.None> {
+interface DockerEnvironmentDefinition : Definition<DockerEnvironmentBuildModel> {
     @get:Nested
     val dependencies: DockerEnvironmentDependencies
 
@@ -105,4 +107,8 @@ interface DockerEnvironmentDefinition : Definition<BuildModel.None> {
 
 interface DockerEnvironmentDependencies : Dependencies {
     val infrastructure: DependencyCollector
+}
+
+interface DockerEnvironmentBuildModel : BuildModel {
+    val stage: Property<String>
 }

@@ -7,6 +7,7 @@ import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.*
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.*
 import org.gradle.work.*
@@ -19,6 +20,9 @@ abstract class GeneratePropertiesTask : DefaultTask() {
         group = "cikraft"
     }
 
+    @get:Input
+    abstract val stage: Property<String>
+
     @get:InputFiles
     @get:SkipWhenEmpty
     @get:IgnoreEmptyDirectories
@@ -30,7 +34,7 @@ abstract class GeneratePropertiesTask : DefaultTask() {
     @get:SkipWhenEmpty
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
-    @get:PathSensitive(PathSensitivity.NONE)
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val propertiesFiles: ConfigurableFileCollection
 
     @get:OutputDirectory
@@ -52,7 +56,9 @@ abstract class GeneratePropertiesTask : DefaultTask() {
             worker.submit(GenerateProperties::class) {
                 this.createdFlow.set(createdFlow)
                 this.propertyFile.set(
-                    propertiesFiles.single { it.nameWithoutExtension == createdFlow.nameWithoutExtension },
+                    propertiesFiles.single {
+                        it.parentFile.name == stage.get() && it.nameWithoutExtension == createdFlow.nameWithoutExtension
+                    },
                 )
                 this.outputDirectory.set(propertiesFolder)
             }
