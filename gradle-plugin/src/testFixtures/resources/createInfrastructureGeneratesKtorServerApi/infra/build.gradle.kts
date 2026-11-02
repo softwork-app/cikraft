@@ -8,6 +8,12 @@ jvmApplication {
                     httpServer = "localhost"
                     web = "localhost"
                 }
+                apiStage("Prod") {
+                    apiServer = "prod-foo"
+                    authServer = "prod-bar"
+                    httpServer = "prod-localhost"
+                    web = "prod-localhost"
+                }
             }
 
             httpNamespace = "foo"
