@@ -633,28 +633,47 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 }
             }
 
-            parentBuildModel.apiStages.all {
-                val stageName = name
-                configurations.consumable("properties$stageName") {
-                    attributes {
-                        attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                        attribute(SAPCI.attribute, named(SAPCI.STAGE_PROPERTIES))
-                        attribute(SAPCIStage.attribute, named(stageName))
-                    }
-                    outgoing {
-                        val propertiesStageArtifact = objectFactory.newInstance(
-                            LazyDirectoryArtifact::class,
-                            "properties",
-                            "properties",
-                            createInfrastructureDryRun,
-                            createInfrastructureDryRunOutputFolder.map {
-                                it.dir("properties/$stageName")
-                            },
-                        )
-                        artifact(propertiesStageArtifact)
+            configurations.consumable("cikraftProperties") {
+                attributes {
+                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
+                    attribute(SAPCI.attribute, named(SAPCI.STAGE_PROPERTIES))
+                }
+                outgoing {
+                    val propertiesStageArtifact = objectFactory.newInstance(
+                        LazyDirectoryArtifact::class,
+                        "properties",
+                        "properties",
+                        createInfrastructureDryRun,
+                        createInfrastructureDryRunOutputFolder.map {
+                            it.dir("properties")
+                        },
+                    )
+                    artifact(propertiesStageArtifact)
+
+                    parentBuildModel.apiStages.all {
+                        val stageName = name
+                        variants {
+                            register(stageName) {
+                                attributes {
+                                    attribute(SAPCIStage.attribute, named(stageName))
+                                }
+                                artifact(
+                                    objectFactory.newInstance(
+                                        LazyDirectoryArtifact::class,
+                                        "properties",
+                                        "properties",
+                                        createInfrastructureDryRun,
+                                        createInfrastructureDryRunOutputFolder.map {
+                                            it.dir("properties/$stageName")
+                                        },
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
             }
+
             parentBuildModel.transportStages.all {
                 val stageName = name
                 configurations.consumable("properties$stageName") {
