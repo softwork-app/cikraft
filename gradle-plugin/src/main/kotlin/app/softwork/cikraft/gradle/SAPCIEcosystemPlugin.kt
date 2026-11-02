@@ -36,7 +36,6 @@ abstract class SAPCIEcosystemPlugin : Plugin<Settings> {
         settings.gradle.lifecycle.beforeProject {
             dependencies.attributesSchema {
                 attribute(SAPCI.attribute)
-                attribute(SAPCIStage.attribute)
             }
         }
         settings.dependencyResolutionManagement {

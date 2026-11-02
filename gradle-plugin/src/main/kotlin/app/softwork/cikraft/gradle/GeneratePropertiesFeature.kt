@@ -63,7 +63,6 @@ abstract class GeneratePropertiesFeature :
                 attributes {
                     attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
                     attribute(SAPCI.attribute, named(SAPCI.STAGE_PROPERTIES))
-                    attribute(SAPCIStage.attribute, named(stage))
                 }
             }
 
@@ -89,6 +88,7 @@ abstract class GeneratePropertiesFeature :
 
             val task = tasks.register("generateProperties$stage$buildModelName", GeneratePropertiesTask::class.java) {
                 createdFlows.from(sapCICreatedFlows)
+                this.stage.set(stage)
                 propertiesFiles.from(propertiesConfiguration)
                 propertiesFolder.convention(
                     layout.contextBuildDirectory.map {

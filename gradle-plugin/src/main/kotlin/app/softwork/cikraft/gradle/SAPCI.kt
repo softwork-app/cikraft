@@ -20,9 +20,3 @@ const val SAPCI_USAGE = "sap-ci"
 
 const val SAPCI_JVM_TARGET = 8
 internal const val SAPCI_JVM_TARGET_STRING = "JVM_1_8"
-
-interface SAPCIStage : Named {
-    companion object {
-        val attribute: Attribute<SAPCIStage> = Attribute.of("app.softwork.cikraft.stage", SAPCIStage::class.java)
-    }
-}
