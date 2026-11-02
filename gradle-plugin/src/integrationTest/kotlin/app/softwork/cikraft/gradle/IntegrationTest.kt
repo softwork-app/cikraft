@@ -415,13 +415,29 @@ public data object IFBa
     fun createInfrastructureGeneratesKtorServerApi() {
         val projectDir = fixtureDir / "resources" / "createInfrastructureGeneratesKtorServerApi"
 
-        createRunner(
+        val result = createRunner(
             projectDir,
             "assemble",
             ":server:testClasses",
+            ":server:resolveUnstagedProperties",
+            ":server:resolveDevProperties",
+            ":server:resolveProdProperties",
             "-Psuffix=/pr/42",
             "--stacktrace",
         ).build()
+
+        assertContains(
+            result.output,
+            "resolved=${projectDir.resolve("infra/build/cikraft/flows/dryrun/properties")}",
+        )
+        assertContains(
+            result.output,
+            "resolved=${projectDir.resolve("infra/build/cikraft/flows/dryrun/properties/Dev")}",
+        )
+        assertContains(
+            result.output,
+            "resolved=${projectDir.resolve("infra/build/cikraft/flows/dryrun/properties/Prod")}",
+        )
 
         assertEquals(
             (fixtureDir / "kotlin/pr.kt").readText().drop(63),
