@@ -253,16 +253,20 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 }
             }
 
-            definition.integrationPackages.all {
-                val integrationPackage = this
+            parentBuildModel.apiStages.all {
+                val stage = this
+                val createAllPackages = tasks.register("createAllPackagesOn${stage.name}") {
+                    group = "cikraft"
+                }
+                buildModel.integrationPackages.all {
+                    val integrationPackage = this
 
-                parentBuildModel.apiStages.all {
-                    val stage = this
-                    tasks.register(
+                    val createPackageTaskPerStage = tasks.register(
                         "create${integrationPackage.name}On${stage.name}",
                         CreateIntegrationPackageTask::class.java,
                         stage.name,
-                    ).configure {
+                    )
+                    createPackageTaskPerStage.configure {
                         this.apiServer.set(stage.apiServer)
                         this.authServer.set(stage.authServer)
 
@@ -273,22 +277,21 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                         workerClasspath.from(apiWorkerClasspath)
                     }
+                    createAllPackages.configure {
+                        dependsOn(createPackageTaskPerStage)
+                    }
                 }
+            }
+
+            buildModel.integrationPackages.all {
+                val integrationPackage = this
+
                 parentBuildModel.transportStages.all {
                     val transportStage = this
 
                     transportStage.apiSourceStages.all {
                         val apiSourceStage = this
                         val apiStage = parentBuildModel.apiStages.named(apiSourceStage.name)
-
-                        val service = project.gradle.sharedServices.registerIfAbsent(
-                            "lockService",
-                            TransportLockBuildService::class.java,
-                        ) {
-                            this.parameters.packageId.set(integrationPackage.name.replace("_", ""))
-                            this.parameters.apiSourceStage.set(apiSourceStage.name)
-                            this.maxParallelUsages.set(1)
-                        }
 
                         tasks.register(
                             "create${integrationPackage.name}For${transportStage.name}On${apiSourceStage.name}",
@@ -297,9 +300,6 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         ).configure {
                             this.apiServer.set(apiStage.flatMap { it.apiServer })
                             this.authServer.set(apiStage.flatMap { it.authServer })
-
-                            this.lockService.set(service)
-                            this.usesService(service)
 
                             this.packageName.set(integrationPackage.name)
                             this.packageID.set(integrationPackage.name.replace("_", ""))
@@ -310,7 +310,10 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         }
                     }
                 }
+            }
 
+            buildModel.integrationPackages.all {
+                val integrationPackage = this
                 this.integrationFlows.all {
                     val integrationFlowM = this
                     val iFlowBuildModel = context.getBuildModel(integrationFlowM)
@@ -552,7 +555,6 @@ abstract class InfrastructureIntegrationFlowsFeature :
                                 apiSourceStage.name,
                             )
                             uploadIFlow.configure {
-                                dependsOn(createIPTask)
                                 this.libs.from(iFlowBuildModel.libs)
                                 this.scripts.from(iFlowBuildModel.scripts)
                                 this.scripts.from(iFlowBuildModel.generatedScripts)

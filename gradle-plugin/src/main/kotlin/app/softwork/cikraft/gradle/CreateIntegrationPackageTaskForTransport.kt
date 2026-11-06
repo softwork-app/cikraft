@@ -16,7 +16,6 @@ import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
@@ -28,18 +27,12 @@ import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
 import org.gradle.api.logging.Logging as GradleLogger
 
-@UntrackedTask(because = "Because creating a provider is a remote operation")
-abstract class CreateIntegrationPackageTaskForTransport @Inject constructor(
-    @get:Input
-    private val apiStageName: String,
-) : DefaultTask() {
+@UntrackedTask(because = "Because creating a package is a remote operation")
+abstract class CreateIntegrationPackageTaskForTransport @Inject constructor(apiStageName: String) : DefaultTask() {
     init {
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }
     }
-
-    @get:Internal
-    abstract val lockService: Property<TransportLockBuildService>
 
     @get:Input
     abstract val packageName: Property<String>
