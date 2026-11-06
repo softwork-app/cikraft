@@ -27,7 +27,6 @@ import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
@@ -50,10 +49,6 @@ internal abstract class UploadIFlow @Inject constructor(
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }
     }
-
-    @get:Input
-    @get:Optional
-    abstract val lockService: Property<TransportLockBuildService>
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.NONE)
