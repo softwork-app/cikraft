@@ -180,10 +180,10 @@ internal abstract class UploadIFlowWorker : WorkAction<UploadIFlowWorker.Params>
                 val artifactContentAsBase64 = CreateArtifact(
                     libs = parameters.libs.filter {
                         it.exists()
-                    },
+                    }.files,
                     scripts = parameters.scripts.filter {
                         it.exists()
-                    },
+                    }.files,
                     name = parameters.flowName.get(),
                     description = parameters.flowDescription.get(),
                     source = parameters.flowSource.get(),

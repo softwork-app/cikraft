@@ -3,6 +3,7 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:CreateArtifact.kt:CreateArtifact.Companion$public fun fromZip: CreateArtifact</ID>
+    <ID>LongMethod:CreateArtifact.kt:CreateArtifact.Companion$public fun fromZip: CreateArtifact</ID>
     <ID>LongMethod:FlowDSL.kt:EndpointBuilder$internal fun buildMessageFlow: MessageFlow?</ID>
     <ID>LongMethod:FlowDSL.kt:private fun Entry.toProcess: Process</ID>
     <ID>LongMethod:FlowDSL.kt:public fun Config.integrationFlow: Definitions</ID>
@@ -16,6 +17,5 @@
     <ID>MaxLineLength:FlowDSL.kt:StepBuilder$* If you disable this option, the header `SAP_DatastoreEntryFound` is set to false and no exception is thrown, even if the [entryID] does not exist.</ID>
     <ID>MaxLineLength:FlowDSL.kt:incoming = if (subprocess.callActivities.isNotEmpty()) "SequenceFlow_End$suffix" else "SequenceFlow_Start$suffix"</ID>
     <ID>MaxLineLength:StringProperties.kt:*</ID>
-    <ID>ThrowingExceptionsWithoutMessageOrCause:FlowDSL.kt:StepBuilder$Exception()</ID>
   </CurrentIssues>
 </SmellBaseline>
