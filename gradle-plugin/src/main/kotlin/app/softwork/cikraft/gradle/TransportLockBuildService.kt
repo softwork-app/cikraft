@@ -27,9 +27,6 @@ abstract class TransportLockBuildService : BuildService<TransportLockBuildServic
     }
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
-
-    @get:Inject
     internal abstract val providers: ProviderFactory
 
     private var initialized = false
