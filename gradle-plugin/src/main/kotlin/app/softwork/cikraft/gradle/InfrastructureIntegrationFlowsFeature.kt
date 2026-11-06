@@ -319,6 +319,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     val iFlowBuildModel = context.getBuildModel(integrationFlowM)
                     iFlowBuildModel as DefaultIntegrationFlowBuildModel
                     iFlowBuildModel.internalName = integrationFlowM.name
+                    iFlowBuildModel.integrationPackage = integrationPackage.name
                     iFlowBuildModel.flowID.set(
                         parentBuildModel.suffix.orElse("").map { suffix ->
                             val flowID = iFlowBuildModel.name.replace("_", "")
