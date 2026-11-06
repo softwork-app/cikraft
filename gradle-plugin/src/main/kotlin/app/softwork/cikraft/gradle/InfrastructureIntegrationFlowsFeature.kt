@@ -253,20 +253,16 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 }
             }
 
-            parentBuildModel.apiStages.all {
-                val stage = this
-                val createAllPackages = tasks.register("createAllPackagesOn${stage.name}") {
-                    group = "cikraft"
-                }
-                buildModel.integrationPackages.all {
-                    val integrationPackage = this
+            definition.integrationPackages.all {
+                val integrationPackage = this
 
-                    val createPackageTaskPerStage = tasks.register(
+                parentBuildModel.apiStages.all {
+                    val stage = this
+                    tasks.register(
                         "create${integrationPackage.name}On${stage.name}",
                         CreateIntegrationPackageTask::class.java,
                         stage.name,
-                    )
-                    createPackageTaskPerStage.configure {
+                    ).configure {
                         this.apiServer.set(stage.apiServer)
                         this.authServer.set(stage.authServer)
 
@@ -277,21 +273,22 @@ abstract class InfrastructureIntegrationFlowsFeature :
 
                         workerClasspath.from(apiWorkerClasspath)
                     }
-                    createAllPackages.configure {
-                        dependsOn(createPackageTaskPerStage)
-                    }
                 }
-            }
-
-            buildModel.integrationPackages.all {
-                val integrationPackage = this
-
                 parentBuildModel.transportStages.all {
                     val transportStage = this
 
                     transportStage.apiSourceStages.all {
                         val apiSourceStage = this
                         val apiStage = parentBuildModel.apiStages.named(apiSourceStage.name)
+
+                        val service = project.gradle.sharedServices.registerIfAbsent(
+                            "lockService",
+                            TransportLockBuildService::class.java,
+                        ) {
+                            this.parameters.packageId.set(integrationPackage.name.replace("_", ""))
+                            this.parameters.apiSourceStage.set(apiSourceStage.name)
+                            this.maxParallelUsages.set(1)
+                        }
 
                         tasks.register(
                             "create${integrationPackage.name}For${transportStage.name}On${apiSourceStage.name}",
@@ -300,6 +297,9 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         ).configure {
                             this.apiServer.set(apiStage.flatMap { it.apiServer })
                             this.authServer.set(apiStage.flatMap { it.authServer })
+
+                            this.lockService.set(service)
+                            this.usesService(service)
 
                             this.packageName.set(integrationPackage.name)
                             this.packageID.set(integrationPackage.name.replace("_", ""))
@@ -310,16 +310,12 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         }
                     }
                 }
-            }
 
-            buildModel.integrationPackages.all {
-                val integrationPackage = this
                 this.integrationFlows.all {
                     val integrationFlowM = this
                     val iFlowBuildModel = context.getBuildModel(integrationFlowM)
                     iFlowBuildModel as DefaultIntegrationFlowBuildModel
                     iFlowBuildModel.internalName = integrationFlowM.name
-                    iFlowBuildModel.integrationPackage = integrationPackage.name
                     iFlowBuildModel.flowID.set(
                         parentBuildModel.suffix.orElse("").map { suffix ->
                             val flowID = iFlowBuildModel.name.replace("_", "")
@@ -550,12 +546,27 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             val apiSourceStage = this
                             val stage = parentBuildModel.apiStages.named(apiSourceStage.name)
 
+                            val service = project.gradle.sharedServices.registerIfAbsent(
+                                "lockService",
+                                TransportLockBuildService::class.java,
+                            ) {
+                                this.parameters.packageId.set(integrationPackage.name.replace("_", ""))
+                                this.parameters.apiSourceStage.set(apiSourceStage.name)
+                                this.maxParallelUsages.set(1)
+                            }
+
+                            val createIPTask = project.tasks.named(
+                                "create${integrationPackage.name}For${transportStageName}On${apiSourceStage.name}",
+                                CreateIntegrationPackageTaskForTransport::class.java,
+                            )
+
                             val uploadIFlow = tasks.register(
                                 "upload${iFlowBuildModel.name}On${apiSourceStage.name}ForTransportTo$transportStageName",
                                 UploadIFlow::class.java,
                                 apiSourceStage.name,
                             )
                             uploadIFlow.configure {
+                                dependsOn(createIPTask)
                                 this.libs.from(iFlowBuildModel.libs)
                                 this.scripts.from(iFlowBuildModel.scripts)
                                 this.scripts.from(iFlowBuildModel.generatedScripts)
@@ -563,6 +574,9 @@ abstract class InfrastructureIntegrationFlowsFeature :
                                     createInfrastructureDryRun.flatMap { it.outputFolder }
                                         .map { it.file("definitions/${iFlowBuildModel.name}.xml") },
                                 )
+
+                                this.lockService.set(service)
+                                this.usesService(service)
 
                                 this.apiServer.set(stage.flatMap { it.apiServer })
                                 this.authServer.set(stage.flatMap { it.authServer })
