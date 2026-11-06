@@ -23,10 +23,12 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
+import org.gradle.api.services.ServiceReference
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
@@ -49,6 +51,10 @@ internal abstract class UploadIFlow @Inject constructor(
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }
     }
+
+    @get:ServiceReference
+    @get:Optional
+    abstract val lockService: Property<TransportLockBuildService>
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.NONE)
@@ -107,6 +113,8 @@ internal abstract class UploadIFlow @Inject constructor(
 
     @TaskAction
     internal fun create() {
+        lockService.orNull?.initialize(workerExecutor)
+
         workerExecutor.classLoaderIsolation {
             classpath.from(workerClasspath)
         }.submit(UploadIFlowWorker::class) {

@@ -54,8 +54,8 @@ abstract class WritePropertiesToFile : DefaultTask() {
             output.set(this@WritePropertiesToFile.output)
             propertyFiles.from(
                 this@WritePropertiesToFile.propertyFiles.asFileTree.filter {
-                it.parentFile.name == stage.get()
-            }.asFileTree
+                    it.parentFile.name == stage.get()
+                }.asFileTree,
             )
         }
     }
