@@ -51,10 +51,6 @@ internal abstract class UploadIFlow @Inject constructor(
         onlyIf { !isOffline }
     }
 
-    @get:Input
-    @get:Optional
-    abstract val lockService: Property<TransportLockBuildService>
-
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.NONE)
     abstract val libs: ConfigurableFileCollection

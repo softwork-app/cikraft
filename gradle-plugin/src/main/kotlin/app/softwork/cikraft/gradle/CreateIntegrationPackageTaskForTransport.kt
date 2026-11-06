@@ -122,18 +122,18 @@ abstract class CreateIntegrationPackageForTransportWorker :
         }.use { client ->
             runBlocking {
                 val foundPackage = client.getIntegrationPackage(parameters.packageID.get())
-                if (foundPackage == null) {
-                    client.createIntegrationPackage(
-                        IntegrationPackage.New(
-                            parameters.packageID.get(),
-                            parameters.packageName.get(),
-                            parameters.packageDescription.orNull ?: "",
-                            version = parameters.packageVersion.orNull,
-                        ),
-                    )
-                } else {
+                if (foundPackage != null) {
                     client.deleteIntegrationPackage(parameters.packageID.get())
                 }
+
+                client.createIntegrationPackage(
+                    IntegrationPackage.New(
+                        id = parameters.packageID.get(),
+                        name = parameters.packageName.get(),
+                        shortText = parameters.packageDescription.orNull ?: "",
+                        version = parameters.packageVersion.orNull,
+                    ),
+                )
             }
         }
     }
