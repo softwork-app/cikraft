@@ -113,6 +113,8 @@ internal abstract class UploadIFlow @Inject constructor(
 
     @TaskAction
     internal fun create() {
+        lockService.orNull?.initialize(workerExecutor)
+
         workerExecutor.classLoaderIsolation {
             classpath.from(workerClasspath)
         }.submit(UploadIFlowWorker::class) {

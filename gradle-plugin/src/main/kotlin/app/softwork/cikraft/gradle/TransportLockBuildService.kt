@@ -32,7 +32,12 @@ abstract class TransportLockBuildService : BuildService<TransportLockBuildServic
     @get:Inject
     internal abstract val providers: ProviderFactory
 
-    init {
+    private var initialized = false
+
+    @Synchronized
+    internal fun initialize(workerExecutor: WorkerExecutor) {
+        if (initialized) return
+
         val apiSourceStage = parameters.apiSourceStage.get()
         val credentials = providers.credentials(
             PasswordCredentials::class,
@@ -54,5 +59,6 @@ abstract class TransportLockBuildService : BuildService<TransportLockBuildServic
             packageDescription.set(parameters.packageDescription)
         }
         queue.await()
+        initialized = true
     }
 }
