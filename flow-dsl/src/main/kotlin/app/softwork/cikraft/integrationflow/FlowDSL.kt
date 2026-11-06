@@ -244,6 +244,7 @@ private fun MutableList<Shape>.addCallActivities(
 public interface Config {
     public val baseUrl: String
     public val allowedHeaders: Set<String>
+    public val autoNumbering: Boolean
 }
 
 private fun buildXml(xmlBuilder: XmlBuilder.() -> Unit): String = buildString {

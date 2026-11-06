@@ -7,4 +7,5 @@ public interface CreatedFlowConfig : Config {
     override val allowedHeaders: MutableSet<String>
     public val parameters: MutableMap<String, (Stage) -> Any>
     public val suffix: String?
+    override var autoNumbering: Boolean
 }
