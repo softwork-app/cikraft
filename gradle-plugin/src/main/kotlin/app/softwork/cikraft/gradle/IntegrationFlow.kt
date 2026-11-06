@@ -37,6 +37,8 @@ interface IntegrationFlowBuildModel :
     val source: ListProperty<String>
     val target: ListProperty<String>
 
+    val packageName: String
+
     val flowID: Provider<String>
 
     val libs: ConfigurableFileCollection
@@ -50,6 +52,8 @@ interface IntegrationFlowBuildModel :
 abstract class DefaultIntegrationFlowBuildModel : IntegrationFlowBuildModel {
     override fun getName(): String = internalName
     lateinit var internalName: String
+    override lateinit var packageName: String
+
     abstract override val flowID: Property<String>
 
     abstract override val dependenciesJars: ConfigurableFileCollection
