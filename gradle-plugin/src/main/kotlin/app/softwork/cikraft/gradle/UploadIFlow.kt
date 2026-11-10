@@ -177,6 +177,36 @@ internal abstract class UploadIFlowWorker : WorkAction<UploadIFlowWorker.Params>
             }
         }.use { client ->
             runBlocking {
+                val artifactContentAsBase64 = CreateArtifact(
+                    libs = parameters.libs.filter {
+                        it.exists()
+                    },
+                    scripts = parameters.scripts.filter {
+                        it.exists()
+                    },
+                    name = parameters.flowName.get(),
+                    description = parameters.flowDescription.get(),
+                    source = parameters.flowSource.get(),
+                    target = parameters.flowTarget.get(),
+                    integrationFlow = definitionsXML.decodeFromString(
+                        Definitions.serializer(),
+                        this@UploadIFlowWorker.parameters.definitions.get().asFile.readText(),
+                    ),
+                    parameters = Json.decodeFromString(
+                        MapSerializer(String.serializer(), Value.serializer()),
+                        parameters.parametersFile.get().asFile.readText(),
+                    ).mapValues {
+                        when (val value = it.value) {
+                            is Value.BOOLEAN -> value.value.toString()
+                            is Value.DOUBLE -> value.value.toString()
+                            is Value.FLOAT -> value.value.toString()
+                            is Value.INT -> value.value.toString()
+                            is Value.STRING -> value.value
+                        }
+                    },
+                    version = version,
+                ).toBase64()
+
                 val iFlowExists = client.getIntegrationFlow(flowID, version)
                 if (iFlowExists != null) {
                     client.deleteIntegrationFlow(flowID, version)
@@ -186,35 +216,7 @@ internal abstract class UploadIFlowWorker : WorkAction<UploadIFlowWorker.Params>
                         id = flowID,
                         name = parameters.flowName.get(),
                         packageId = parameters.packageID.get(),
-                        artifactContentAsBase64 = CreateArtifact(
-                            libs = parameters.libs.filter {
-                                it.exists()
-                            },
-                            scripts = parameters.scripts.filter {
-                                it.exists()
-                            },
-                            name = parameters.flowName.get(),
-                            description = parameters.flowDescription.get(),
-                            source = parameters.flowSource.get(),
-                            target = parameters.flowTarget.get(),
-                            integrationFlow = definitionsXML.decodeFromString(
-                                Definitions.serializer(),
-                                this@UploadIFlowWorker.parameters.definitions.get().asFile.readText(),
-                            ),
-                            parameters = Json.decodeFromString(
-                                MapSerializer(String.serializer(), Value.serializer()),
-                                parameters.parametersFile.get().asFile.readText(),
-                            ).mapValues {
-                                when (val value = it.value) {
-                                    is Value.BOOLEAN -> value.value.toString()
-                                    is Value.DOUBLE -> value.value.toString()
-                                    is Value.FLOAT -> value.value.toString()
-                                    is Value.INT -> value.value.toString()
-                                    is Value.STRING -> value.value
-                                }
-                            },
-                            version = version,
-                        ).toBase64(),
+                        artifactContentAsBase64 = artifactContentAsBase64,
                     ),
                 )
             }
