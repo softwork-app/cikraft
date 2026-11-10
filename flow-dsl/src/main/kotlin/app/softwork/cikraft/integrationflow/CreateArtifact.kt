@@ -34,6 +34,17 @@ public data class CreateArtifact(
     val parameters: Map<String, String> = emptyMap(),
     val integrationFlow: Definitions,
 ) {
+
+    init {
+        for (source in source) {
+            require(" " !in source) { "source contains a whitespace: $source" }
+        }
+        
+        for (target in target) {
+            require(" " !in target) { "target contains a whitespace: $target" }
+        }
+    }
+    
     public fun toBase64(): String {
         val inMemoryZipFile = ByteArrayOutputStream()
 
