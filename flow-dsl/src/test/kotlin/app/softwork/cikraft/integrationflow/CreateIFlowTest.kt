@@ -102,6 +102,23 @@ class CreateIFlowTest {
         assertEquals(actual, CreateArtifact.fromBase64(actual.toBase64()))
     }
 
+    @Test
+    fun sourceAndTargetCannotContainSpaces() {
+        val artifact = CreateArtifact(
+            name = "FOO",
+            version = "1.0.0",
+            description = null,
+            integrationFlow = flow,
+        )
+
+        assertFailsWith<IllegalArgumentException> {
+            artifact.copy(source = listOf("Foo Bar"))
+        }
+        assertFailsWith<IllegalArgumentException> {
+            artifact.copy(target = listOf("Foo Bar"))
+        }
+    }
+
     data object SchedulerBase : Config {
         override val baseUrl: String = "/Foo"
         override val allowedHeaders: Set<String> = emptySet()
