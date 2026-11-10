@@ -35,6 +35,7 @@ public fun IntegrationFlowBuilder.Baz_Two(builder: context(BazTwo) EndpointBuild
   integrationFlowSource = listOf(),
   integrationFlowTarget = listOf(),
   config = BazTwo,
+  autoNumbering = false,
   ) {
     builder(BazTwo, this)
   }

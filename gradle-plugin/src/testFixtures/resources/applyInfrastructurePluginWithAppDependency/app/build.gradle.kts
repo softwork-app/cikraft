@@ -35,6 +35,8 @@ jvmApplication {
                             integrationFlow("IF_Baz") {
                                 description = "Baz test"
 
+                                autoNumbering = true
+
                                 dependencies {
                                     implementation(project())
                                 }

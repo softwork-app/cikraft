@@ -38,6 +38,7 @@ public fun IntegrationFlowBuilder.Baz_A(builder: context(BazA) EndpointBuilder.(
   integrationFlowSource = listOf("Foo"),
   integrationFlowTarget = listOf("Bar"),
   config = BazA,
+  autoNumbering = true,
   ) {
     builder(BazA, this)
   }

@@ -30,6 +30,7 @@ class IntegrationFlowBuilderTest {
             integrationFlowSource = emptyList(),
             integrationFlowTarget = emptyList(),
             config = BazA,
+            autoNumbering = false,
             builder = {
                 context(BazA) {
                     https(

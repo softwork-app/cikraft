@@ -35,6 +35,7 @@ public fun IntegrationFlowBuilder.IF_Multiple(builder: context(IFMultiple) Endpo
   integrationFlowSource = listOf(),
   integrationFlowTarget = listOf(),
   config = IFMultiple,
+  autoNumbering = false,
   ) {
     builder(IFMultiple, this)
   }

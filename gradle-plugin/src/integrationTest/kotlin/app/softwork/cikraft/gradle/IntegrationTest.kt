@@ -1,13 +1,16 @@
 package app.softwork.cikraft.gradle
 
-import com.example.*
 import app.softwork.cikraft.api.BuildAndDeployStatus
 import app.softwork.cikraft.api.BuildAndDeployStatus.Status.Success
 import app.softwork.cikraft.api.IntegrationFlow
 import app.softwork.cikraft.api.IntegrationPackage
 import app.softwork.cikraft.api.sapciSerialization
-import app.softwork.cikraft.core.*
-import app.softwork.cikraft.core.Script.*
+import app.softwork.cikraft.core.Script
+import app.softwork.cikraft.core.Script.None
+import app.softwork.cikraft.integrationflow.CreateArtifact
+import applyInfrastructurePluginWithAppDependencyIntegrationFlow
+import com.example.serializedScript
+import com.example.typedScript
 import createIntegrationFlow
 import createIntegrationPackage
 import deployIntegrationFlow
@@ -17,18 +20,28 @@ import fooWildcardScript
 import getBuildAndDeployStatus
 import getCSRFToken
 import getIntegrationPackage
-import io.github.hfhbd.kfx.codegen.*
+import io.github.hfhbd.kfx.codegen.CodeGenTree
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.server.routing.route
-import io.ktor.server.routing.routing
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.routing.*
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.*
-import org.gradle.testkit.runner.*
-import java.nio.file.*
-import kotlin.io.path.*
-import kotlin.test.*
+import kotlinx.serialization.json.Json
+import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
+import java.nio.file.Path
+import kotlin.io.path.Path
+import kotlin.io.path.div
+import kotlin.io.path.exists
+import kotlin.io.path.fileSize
+import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.readText
+import kotlin.test.Ignore
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class IntegrationTest {
     private val fixtureDir = Path(System.getenv("fixtureDir"))
@@ -150,6 +163,15 @@ class IntegrationTest {
                     }
 
                     createIntegrationFlow {
+                        val base64Artifact = it.artifactContentAsBase64
+                        assertNotNull(base64Artifact)
+                        val artifact = CreateArtifact.fromBase64(base64Artifact)
+
+                        assertEquals(
+                            applyInfrastructurePluginWithAppDependencyIntegrationFlow,
+                            artifact.integrationFlow,
+                        )
+
                         IntegrationFlow(
                             id = it.id,
                             version = "1.0.1",
@@ -218,7 +240,8 @@ class IntegrationTest {
     @Test
     fun applyInfrastructurePluginWithAppDependencyAndPr() {
         val projectDir = fixtureDir / "resources" / "applyInfrastructurePluginWithAppDependencyAndPr"
-        val result = createRunner(projectDir, ":app:deployDevInfrastructure",
+        val result = createRunner(
+            projectDir, ":app:deployDevInfrastructure",
             "-PcikraftDevUsername=foo",
             "-PcikraftDevPassword=bar",
             "--offline",
@@ -312,10 +335,12 @@ class IntegrationTest {
 
         val result = createRunner(projectDir, ":infra:generateOpenApiApiProxy", "writeStages", "--stacktrace").build()
         assertEquals(TaskOutcome.SUCCESS, result.task(":infra:compileApiProxiesKotlin")?.outcome)
-        assertEquals("""Dev_HTTP=localhost/foo/pr
+        assertEquals(
+            """Dev_HTTP=localhost/foo/pr
 Dev_API_default=https://api.example.com/http/foo/pr
 Dev_API_mTLS=https://api-mtls.example.com/http/foo/pr
-""", (projectDir / "infra/build/cikraft/stages.properties").readText())
+""", (projectDir / "infra/build/cikraft/stages.properties").readText()
+        )
     }
 
     @Test

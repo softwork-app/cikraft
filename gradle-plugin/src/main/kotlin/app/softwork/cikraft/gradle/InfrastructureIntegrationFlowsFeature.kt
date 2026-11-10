@@ -310,6 +310,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     iFlowBuildModel.source.set(integrationFlowM.source)
                     iFlowBuildModel.target.set(integrationFlowM.target)
                     iFlowBuildModel.scripts.from(integrationFlowM.scripts)
+                    iFlowBuildModel.autoNumbering.set(integrationFlowM.autoNumbering)
 
                     iFlowBuildModel.dependenciesJars.from(
                         configurations.resolvable(
@@ -418,6 +419,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         this.baseUrl.set(buildModel.httpSuffix)
                         this.workerClasspath.from(generatorClasspath)
                         this.groovyScripts.from(iFlowBuildModel.scripts)
+                        this.autoNumbering.set(iFlowBuildModel.autoNumbering)
                     }
 
                     integrationFlowsSourceSet.kotlin.srcDirs(generateTypedKotlinIntegrationFlowBuilder)

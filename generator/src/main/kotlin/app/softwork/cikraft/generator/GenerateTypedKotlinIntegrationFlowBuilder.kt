@@ -16,6 +16,7 @@ public fun generateTypedKotlinIntegrationFlowBuilder(
     baseUrl: String,
     entryPoints: List<Script>,
     groovyScripts: List<String>,
+    autoNumbering: Boolean,
 ): FileSpec {
     val flowFile = FileSpec.builder("", flowName)
 
@@ -107,6 +108,7 @@ public fun generateTypedKotlinIntegrationFlowBuilder(
             |integrationFlowSource = %M(%L),
             |integrationFlowTarget = %M(%L),
             |config = %N,
+            |autoNumbering = %L,
             |)
         """.trimMargin(),
         packageID,
@@ -122,6 +124,7 @@ public fun generateTypedKotlinIntegrationFlowBuilder(
         MemberName("kotlin.collections", "listOf", isExtension = true),
         flowTarget.map { CodeBlock.of("%S", it) }.joinToCode(),
         flowObject,
+        autoNumbering,
     )
     flowFunction.addStatement("builder(%T, this)", flowObjectTypeName)
     flowFunction.endControlFlow()
