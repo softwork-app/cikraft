@@ -37,11 +37,11 @@ public data class CreateArtifact(
 
     init {
         for (source in source) {
-            require(" " !in source) { "source contains a whitespace: $source" }
+            require(source.none { it.isWhitespace() }) { "source contains a whitespace: $source" }
         }
-        
+
         for (target in target) {
-            require(" " !in target) { "target contains a whitespace: $target" }
+            require(target.none { it.isWhitespace() }) { "target contains a whitespace: $target" }
         }
     }
     
