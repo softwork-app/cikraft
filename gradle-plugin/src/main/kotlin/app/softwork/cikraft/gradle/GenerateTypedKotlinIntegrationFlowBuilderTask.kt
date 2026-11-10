@@ -64,6 +64,10 @@ public abstract class GenerateTypedKotlinIntegrationFlowBuilderTask : DefaultTas
     @get:Input
     abstract val baseUrl: Property<String>
 
+    @get:Input
+    @get:Optional
+    abstract val autoNumbering: Property<Boolean>
+
     @get:Inject
     internal abstract val workerExecutor: WorkerExecutor
 
@@ -86,6 +90,7 @@ public abstract class GenerateTypedKotlinIntegrationFlowBuilderTask : DefaultTas
             suffix.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.suffix)
             baseUrl.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.baseUrl)
             groovyScripts.from(this@GenerateTypedKotlinIntegrationFlowBuilderTask.groovyScripts)
+            autoNumbering.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.autoNumbering)
         }
     }
 }
@@ -103,6 +108,7 @@ abstract class GenerateTypedFlowsWorker : WorkAction<GenerateTypedFlowsWorker.Wo
         val suffix: Property<String>
         val baseUrl: Property<String>
         val groovyScripts: ConfigurableFileCollection
+        val autoNumbering: Property<Boolean>
     }
 
     @ExperimentalKotlinPoetApi
@@ -132,6 +138,7 @@ abstract class GenerateTypedFlowsWorker : WorkAction<GenerateTypedFlowsWorker.Wo
             suffixID = parameters.suffix.orNull?.takeIf { it.isNotBlank() }?.replace("/", "")?.uppercase(),
             baseUrl = parameters.baseUrl.get(),
             groovyScripts = parameters.groovyScripts.map { it.nameWithoutExtension },
+            autoNumbering = parameters.autoNumbering.getOrElse(false),
         ).writeTo(typedKotlinFlows)
     }
 }

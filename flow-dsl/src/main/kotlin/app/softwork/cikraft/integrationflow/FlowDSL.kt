@@ -11,9 +11,10 @@ import kotlin.time.Duration.Companion.seconds
 public annotation class FlowDSL
 
 public fun Config.integrationFlow(
+    autoNumbering: Boolean = false,
     builder: EndpointBuilder.() -> Unit,
 ): Definitions {
-    val endpointBuilder = EndpointBuilder(this).apply(builder)
+    val endpointBuilder = EndpointBuilder(this, autoNumbering).apply(builder)
     val senderParticipant = endpointBuilder.senderParticipant()
     val endpointMessageFlow = endpointBuilder.buildMessageFlow()
 
@@ -244,7 +245,6 @@ private fun MutableList<Shape>.addCallActivities(
 public interface Config {
     public val baseUrl: String
     public val allowedHeaders: Set<String>
-    public val autoNumbering: Boolean
 }
 
 private fun buildXml(xmlBuilder: XmlBuilder.() -> Unit): String = buildString {
@@ -272,7 +272,7 @@ private class XmlBuilder(private val stringBuilder: StringBuilder) {
 }
 
 @FlowDSL
-public class EndpointBuilder internal constructor(private val config: Config) {
+public class EndpointBuilder internal constructor(private val config: Config, private val autoNumbering: Boolean) {
     public var sender: String = "Sender"
     public var receiver: String = "Receiver"
 
@@ -296,7 +296,7 @@ public class EndpointBuilder internal constructor(private val config: Config) {
             clientCertificates = clientCertificates,
             returnExceptionsToSender = returnExceptionsToSender,
             maximumBodySize = maximumBodySize.value,
-            stepBuilder = StepBuilder.NeedsStartMessage(suffix = "").apply(stepBuilder),
+            stepBuilder = StepBuilder.NeedsStartMessage(suffix = "", autoNumbering).apply(stepBuilder),
         )
     }
 
@@ -309,7 +309,7 @@ public class EndpointBuilder internal constructor(private val config: Config) {
     ) {
         entry = Entry.Timer.Scheduled(
             quartzCron = quartzCron,
-            stepBuilder = StepBuilder.Normal().apply {
+            stepBuilder = StepBuilder.Normal(autoNumbering).apply {
                 startMessage = StepBuilder.TimerStartMessage
                 stepBuilder()
             },
@@ -334,7 +334,7 @@ public class EndpointBuilder internal constructor(private val config: Config) {
             exponentialBackoff = exponentialBackoff,
             maximumRetryInterval = maximumRetryInterval,
             lockTimeout = lockTimeout,
-            StepBuilder.NeedsStartMessage(suffix = "").apply(stepBuilder),
+            StepBuilder.NeedsStartMessage(autoNumbering = autoNumbering, suffix = "").apply(stepBuilder),
         )
     }
 
@@ -745,6 +745,7 @@ private const val MAX_DATA_STORE_NAME = 40
 @FlowDSL
 public sealed class StepBuilder private constructor(
     internal val callActivities: MutableList<CallActivity> = mutableListOf(),
+    private val autoNumbering: Boolean,
     private val idPrefix: String = "",
     private val suffix: String,
 ) {
@@ -806,20 +807,32 @@ public sealed class StepBuilder private constructor(
     internal lateinit var startMessage: StartMessage
     internal lateinit var endMessage: EndMessage
 
-    public class NeedsStartMessage internal constructor(suffix: String) : StepBuilder(suffix = suffix) {
+    public class NeedsStartMessage internal constructor(suffix: String, autoNumbering: Boolean) :
+        StepBuilder(
+            suffix = suffix,
+            autoNumbering = autoNumbering,
+        ) {
         public fun startMessage(name: String = "Start") {
             startMessage = NormalStartMessage(name)
         }
     }
 
-    internal class Nested(callActivities: MutableList<CallActivity>, prefix: String, suffix: String) :
-        StepBuilder(callActivities, prefix, suffix)
+    internal class Nested(
+        callActivities: MutableList<CallActivity>,
+        autoNumbering: Boolean,
+        prefix: String,
+        suffix: String,
+    ) : StepBuilder(callActivities, autoNumbering, prefix, suffix)
 
-    internal class Normal : StepBuilder(suffix = "")
+    internal class Normal internal constructor(autoNumbering: Boolean) :
+        StepBuilder(
+            suffix = "",
+            autoNumbering = autoNumbering,
+        )
 
     public fun withPrefix(prefix: String, action: StepBuilder.() -> Unit) {
         require(prefix.isNotBlank()) { "Prefix cannot be blank" }
-        Nested(callActivities, prefix, suffix = suffix).action()
+        Nested(callActivities, autoNumbering, prefix, suffix = suffix).action()
     }
 
     public fun endMessage(name: String = "End") {
@@ -829,10 +842,14 @@ public sealed class StepBuilder private constructor(
     internal var subprocess: Exception? = null
 
     public fun exceptionSubprocess(subprocess: Exception.() -> Unit) {
-        this.subprocess = Exception().apply(subprocess)
+        this.subprocess = Exception(autoNumbering).apply(subprocess)
     }
 
-    public class Exception internal constructor() : StepBuilder(suffix = "_$EXCEPTION_SUBPROCESS") {
+    public class Exception internal constructor(autoNumbering: Boolean) :
+        StepBuilder(
+            autoNumbering = autoNumbering,
+            suffix = "_$EXCEPTION_SUBPROCESS",
+        ) {
         public fun startErrorEvent(name: String = "Error Start") {
             startMessage = ErrorStartMessage(name)
         }
@@ -852,6 +869,12 @@ public sealed class StepBuilder private constructor(
             callActivities[callActivities.lastIndex] = previous.copy(
                 outgoing = "SequenceFlow_${callActivities.size - 1}$suffix",
             )
+        }
+
+        val name = if (autoNumbering) {
+            "${callActivities.size + 1}. $name"
+        } else {
+            name
         }
 
         val groovyScript = CallActivity(
@@ -894,6 +917,12 @@ public sealed class StepBuilder private constructor(
         }
 
         val contentModifierBuilder = ContentModifierBuilder().apply(builder)
+
+        val name = if (autoNumbering) {
+            "${callActivities.size + 1}. $name"
+        } else {
+            name
+        }
 
         val contentModifier = CallActivity(
             id = "${idPrefix}ContentModifier_${callActivities.size}$suffix",
@@ -949,6 +978,12 @@ public sealed class StepBuilder private constructor(
             callActivities[callActivities.lastIndex] = previous.copy(
                 outgoing = "SequenceFlow_${callActivities.size - 1}$suffix",
             )
+        }
+
+        val name = if (autoNumbering) {
+            "${callActivities.size + 1}. $name"
+        } else {
+            name
         }
 
         val write = CallActivity(
@@ -1012,6 +1047,12 @@ public sealed class StepBuilder private constructor(
             )
         }
 
+        val name = if (autoNumbering) {
+            "${callActivities.size + 1}. $name"
+        } else {
+            name
+        }
+
         val get = CallActivity(
             id = "${idPrefix}Get${callActivities.size}$suffix",
             name = name,
@@ -1064,6 +1105,12 @@ public sealed class StepBuilder private constructor(
             )
         }
 
+        val name = if (autoNumbering) {
+            "${callActivities.size + 1}. $name"
+        } else {
+            name
+        }
+
         val get = CallActivity(
             id = "${idPrefix}Select${callActivities.size}$suffix",
             name = name,
@@ -1112,6 +1159,12 @@ public sealed class StepBuilder private constructor(
             callActivities[callActivities.lastIndex] = previous.copy(
                 outgoing = "SequenceFlow_${callActivities.size - 1}$suffix",
             )
+        }
+
+        val name = if (autoNumbering) {
+            "${callActivities.size + 1}. $name"
+        } else {
+            name
         }
 
         val delete = CallActivity(

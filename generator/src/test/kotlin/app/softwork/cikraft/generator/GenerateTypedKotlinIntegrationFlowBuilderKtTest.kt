@@ -31,6 +31,7 @@ class GenerateTypedKotlinIntegrationFlowBuilderKtTest {
                 suffixID = null,
                 baseUrl = "foo",
                 groovyScripts = listOf("custom"),
+                autoNumbering = true,
             ).toString(),
         )
     }
@@ -52,6 +53,7 @@ class GenerateTypedKotlinIntegrationFlowBuilderKtTest {
                 suffixID = "PR42",
                 baseUrl = "foo",
                 groovyScripts = listOf(),
+                autoNumbering = true,
             ).toString(),
         )
     }
@@ -73,6 +75,7 @@ class GenerateTypedKotlinIntegrationFlowBuilderKtTest {
                 suffixID = null,
                 baseUrl = "foo",
                 groovyScripts = listOf(),
+                autoNumbering = false,
             ).toString(),
         )
     }

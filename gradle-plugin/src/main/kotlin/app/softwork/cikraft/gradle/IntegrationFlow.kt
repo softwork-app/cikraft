@@ -24,6 +24,8 @@ interface IntegrationFlow :
     val target: ListProperty<String>
 
     val scripts: ConfigurableFileCollection
+
+    val autoNumbering: Property<Boolean>
 }
 
 interface IntegrationFlowDependencies : Dependencies {
@@ -45,6 +47,7 @@ interface IntegrationFlowBuildModel :
 
     val dependenciesJars: FileCollection
     val kotlinEntryPointsClasses: FileCollection
+    val autoNumbering: Property<Boolean>
 }
 
 abstract class DefaultIntegrationFlowBuildModel : IntegrationFlowBuildModel {

@@ -34,6 +34,31 @@ class FlowDslTest {
     }
 
     @Test
+    fun numbering() {
+        val generated = Foo.integrationFlow(autoNumbering = true) {
+            https(
+                url = "/01/50/4/1/7/5",
+                userRole = "AAA_Foo_ISCI_TEC_RO_ESBMessaging.send",
+                xsrfProtection = true,
+                clientCertificates = true,
+                returnExceptionsToSender = true,
+            ) {
+                startMessage()
+                contentModifier {
+                    externalParameter("foo")
+                    externalParameter("bar")
+                }
+                groovyScript(
+                    function = "convert",
+                    file = "action.groovy",
+                )
+                endMessage()
+            }
+        }
+        assertEquals(expected = numbering, actual = generated)
+    }
+
+    @Test
     fun multiple() {
         val generated = Foo.integrationFlow {
             https(

@@ -30,9 +30,10 @@ public class IntegrationFlowBuilder(
         integrationFlowSource: List<String>,
         integrationFlowTarget: List<String>,
         config: CreatedFlowConfig,
+        autoNumbering: Boolean,
         builder: EndpointBuilder.() -> Unit,
     ) {
-        val integrationFlow = config.integrationFlow {
+        val integrationFlow = config.integrationFlow(autoNumbering = autoNumbering) {
             if (integrationFlowSource.isNotEmpty()) {
                 sender = integrationFlowSource.joinToString()
             }

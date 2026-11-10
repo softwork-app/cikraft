@@ -35,6 +35,7 @@ public fun IntegrationFlowBuilder.IF_Bar(builder: context(IFBar) EndpointBuilder
   integrationFlowSource = listOf(),
   integrationFlowTarget = listOf(),
   config = IFBar,
+  autoNumbering = false,
   ) {
     builder(IFBar, this)
   }

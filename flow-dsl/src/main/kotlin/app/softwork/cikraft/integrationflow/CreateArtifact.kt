@@ -125,6 +125,9 @@ public data class CreateArtifact(
                         integrationFlow = definitionsXML.decodeFromReader(Definitions.serializer(), reader)
                     }
 
+                    name.startsWith("src/main/resources/lib/") -> continue
+                    name.startsWith("src/main/resources/script/") -> continue
+
                     else -> error("Unexpected entry $name")
                 }
             }

@@ -35,6 +35,7 @@ public fun IntegrationFlowBuilder.IF_Baz(builder: context(IFBaz) EndpointBuilder
   integrationFlowSource = listOf(),
   integrationFlowTarget = listOf(),
   config = IFBaz,
+  autoNumbering = true,
   ) {
     builder(IFBaz, this)
   }
