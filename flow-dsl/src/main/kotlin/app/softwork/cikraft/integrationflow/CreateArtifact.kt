@@ -135,7 +135,10 @@ public data class CreateArtifact(
                         requireNotNull(resourcesDirectory)
                         val libFolder = File(resourcesDirectory, "lib")
                         libFolder.mkdirs()
-                        val file = File(libFolder, name)
+                        val file = File(libFolder, name).canonicalFile
+                        require(file.toPath().startsWith(libFolder.canonicalFile.toPath())) {
+                            "Library entry escapes the extraction directory: $name"
+                        }
                         file.mkdirs()
                         file.outputStream().use { fileOutput ->
                             it.copyTo(fileOutput)
@@ -148,7 +151,10 @@ public data class CreateArtifact(
                         requireNotNull(resourcesDirectory)
                         val libFolder = File(resourcesDirectory, "script")
                         libFolder.mkdirs()
-                        val file = File(libFolder, name)
+                        val file = File(libFolder, name).canonicalFile
+                        require(file.toPath().startsWith(libFolder.canonicalFile.toPath())) {
+                            "Script entry escapes the extraction directory: $name"
+                        }
                         file.mkdirs()
                         file.outputStream().use { fileOutput ->
                             it.copyTo(fileOutput)
