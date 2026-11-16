@@ -23,8 +23,8 @@ fun person(
 ): CreateArtifact {
     val groovyFile = File("src/sandboxTest/groovy/Person.groovy")
     return CreateArtifact(
-        libs = listOf(),
-        scripts = listOf(groovyFile),
+        libs = setOf(),
+        scripts = setOf(groovyFile),
         name = "IF0100TestPW$uuid",
         version = "1.0.0",
         description = "Some Test IFlow",
@@ -63,8 +63,8 @@ fun alwaysFails(
 ): CreateArtifact {
     val groovyFile = File("src/sandboxTest/groovy/alwaysFails.groovy")
     return CreateArtifact(
-        libs = listOf(),
-        scripts = listOf(groovyFile),
+        libs = setOf(),
+        scripts = setOf(groovyFile),
         name = "IF0100TestPW$uuid",
         version = "1.0.0",
         description = "Some Failing Test IFlow",
@@ -96,7 +96,7 @@ fun write(
 ): CreateArtifact {
     val groovyFile = File("src/sandboxTest/groovy/deleteBody.groovy")
     return CreateArtifact(
-        scripts = listOf(groovyFile),
+        scripts = setOf(groovyFile),
         name = "IF0100TestPWWrite$uuid",
         version = "1.0.0",
         description = "Some Test IFlow",
@@ -156,7 +156,7 @@ fun get(
 ): CreateArtifact {
     val groovyFile = File("src/sandboxTest/groovy/getDataStoreSetOutgoingHeaders.groovy")
     return CreateArtifact(
-        scripts = listOf(groovyFile),
+        scripts = setOf(groovyFile),
         name = "IF0100TestPWGet$uuid",
         version = "1.0.0",
         description = "Some Test IFlow",

@@ -12,20 +12,10 @@ import java.util.Properties
 import java.util.jar.*
 import java.util.jar.Attributes.*
 import java.util.zip.*
-import kotlin.collections.Collection
-import kotlin.collections.Iterable
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.emptyList
-import kotlin.collections.emptyMap
-import kotlin.collections.joinToString
-import kotlin.collections.listOf
-import kotlin.collections.map
-import kotlin.collections.set
 
 public data class CreateArtifact(
-    val libs: Iterable<File> = emptyList(),
-    val scripts: Iterable<File> = emptyList(),
+    val libs: Set<File> = emptySet(),
+    val scripts: Set<File> = emptySet(),
     val name: String,
     val version: String,
     val description: String?,
@@ -94,19 +84,23 @@ public data class CreateArtifact(
             repairNamespaces = false
         }
 
-        public fun fromBase64(content: String): CreateArtifact = ByteArrayInputStream(
+        public fun fromBase64(content: String, resourcesDirectory: File?): CreateArtifact = ByteArrayInputStream(
             Base64.getDecoder().decode(content),
         ).use {
-            fromZip(it)
+            fromZip(it, resourcesDirectory)
         }
 
-        public fun fromZip(inputStream: InputStream): CreateArtifact = ZipInputStream(inputStream).use {
+        public fun fromZip(inputStream: InputStream, resourcesDirectory: File?): CreateArtifact = ZipInputStream(
+            inputStream,
+        ).use {
             var manifest: Manifest? = null
             var description: String? = null
             var source: List<String>? = null
             var target: List<String>? = null
             var parameters: Map<String, String>? = null
             var integrationFlow: Definitions? = null
+            val libs = mutableSetOf<File>()
+            val scripts = mutableSetOf<File>()
 
             while (true) {
                 val nextEntry: ZipEntry = it.nextEntry ?: break
@@ -136,8 +130,37 @@ public data class CreateArtifact(
                         integrationFlow = definitionsXML.decodeFromReader(Definitions.serializer(), reader)
                     }
 
-                    name.startsWith("src/main/resources/lib/") -> continue
-                    name.startsWith("src/main/resources/script/") -> continue
+                    name.startsWith("src/main/resources/lib/") -> {
+                        val name = name.removePrefix("src/main/resources/lib/")
+                        requireNotNull(resourcesDirectory)
+                        val libFolder = File(resourcesDirectory, "lib")
+                        libFolder.mkdirs()
+                        val file = File(libFolder, name).canonicalFile
+                        require(file.toPath().startsWith(libFolder.canonicalFile.toPath())) {
+                            "Library entry escapes the extraction directory: $name"
+                        }
+                        file.mkdirs()
+                        file.outputStream().use { fileOutput ->
+                            it.copyTo(fileOutput)
+                        }
+                        libs.add(file)
+                    }
+
+                    name.startsWith("src/main/resources/script/") -> {
+                        val name = name.removePrefix("src/main/resources/script/")
+                        requireNotNull(resourcesDirectory)
+                        val libFolder = File(resourcesDirectory, "script")
+                        libFolder.mkdirs()
+                        val file = File(libFolder, name).canonicalFile
+                        require(file.toPath().startsWith(libFolder.canonicalFile.toPath())) {
+                            "Script entry escapes the extraction directory: $name"
+                        }
+                        file.mkdirs()
+                        file.outputStream().use { fileOutput ->
+                            it.copyTo(fileOutput)
+                        }
+                        scripts.add(file)
+                    }
 
                     else -> error("Unexpected entry $name")
                 }
@@ -146,8 +169,8 @@ public data class CreateArtifact(
             requireNotNull(integrationFlow)
 
             CreateArtifact(
-                libs = emptyList(),
-                scripts = emptyList(),
+                libs = libs,
+                scripts = scripts,
                 name = manifest.mainAttributes[Name("Bundle-Name")]!!.toString(),
                 version = manifest.mainAttributes[Name("Bundle-Version")]!!.toString(),
                 description = description,

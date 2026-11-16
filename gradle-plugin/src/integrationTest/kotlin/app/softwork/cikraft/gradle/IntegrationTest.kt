@@ -165,7 +165,7 @@ class IntegrationTest {
                     createIntegrationFlow {
                         val base64Artifact = it.artifactContentAsBase64
                         assertNotNull(base64Artifact)
-                        val artifact = CreateArtifact.fromBase64(base64Artifact)
+                        val artifact = CreateArtifact.fromBase64(base64Artifact, null)
 
                         assertEquals(
                             applyInfrastructurePluginWithAppDependencyIntegrationFlow,
