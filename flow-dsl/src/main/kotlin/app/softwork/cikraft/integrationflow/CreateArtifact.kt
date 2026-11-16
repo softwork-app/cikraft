@@ -34,7 +34,6 @@ public data class CreateArtifact(
     val parameters: Map<String, String> = emptyMap(),
     val integrationFlow: Definitions,
 ) {
-
     init {
         for (source in source) {
             require(source.none { it.isWhitespace() }) { "source contains a whitespace: $source" }
@@ -44,7 +43,7 @@ public data class CreateArtifact(
             require(target.none { it.isWhitespace() }) { "target contains a whitespace: $target" }
         }
     }
-    
+
     public fun toBase64(): String {
         val inMemoryZipFile = ByteArrayOutputStream()
 
@@ -137,6 +136,7 @@ public data class CreateArtifact(
                     }
 
                     name.startsWith("src/main/resources/lib/") -> continue
+
                     name.startsWith("src/main/resources/script/") -> continue
 
                     else -> error("Unexpected entry $name")

@@ -8,8 +8,8 @@ import io.github.hfhbd.kfx.kotlin.toPoetType
 
 public fun generateKtorClientSetup(
     createdFlow: CreatedFlow,
-): FileSpec? = when (val sender = createdFlow.sender) {
-    is CreatedFlow.Sender.Https -> {
+): FileSpec? = when (val sender = createdFlow.type) {
+    is CreatedFlow.Type.Https -> {
         val file = FileSpec.builder(
             packageName = createdFlow.packageName.toPackageName(),
             fileName = createdFlow.rawId + "ClientSetup",
@@ -32,7 +32,9 @@ public fun generateKtorClientSetup(
         file.build()
     }
 
-    is CreatedFlow.Sender.DataStore -> null
+    is CreatedFlow.Type.DataStore -> null
+
+    is CreatedFlow.Type.Scheduler -> null
 
     null -> null
 }
