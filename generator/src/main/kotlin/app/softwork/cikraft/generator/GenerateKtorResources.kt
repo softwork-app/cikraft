@@ -9,8 +9,8 @@ import com.squareup.kotlinpoet.TypeSpec
 
 public fun generateKtorResources(
     createdFlow: CreatedFlow,
-): FileSpec? = when (val sender = createdFlow.sender) {
-    is CreatedFlow.Sender.Https -> {
+): FileSpec? = when (val sender = createdFlow.type) {
+    is CreatedFlow.Type.Https -> {
         val file = FileSpec.builder(
             packageName = createdFlow.packageName.toPackageName(),
             fileName = createdFlow.rawId + "Resources",
@@ -32,7 +32,9 @@ public fun generateKtorResources(
         file.build()
     }
 
-    is CreatedFlow.Sender.DataStore -> null
+    is CreatedFlow.Type.DataStore -> null
+
+    is CreatedFlow.Type.Scheduler -> null
 
     null -> null
 }

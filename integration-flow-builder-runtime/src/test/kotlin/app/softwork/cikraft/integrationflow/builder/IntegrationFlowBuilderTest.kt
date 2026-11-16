@@ -5,6 +5,7 @@ import exceptionScript
 import foo
 import fooExceptionFlow
 import fooExceptionScript
+import fooSchedulerExceptionFlow
 import handleException
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -62,5 +63,57 @@ class IntegrationFlowBuilderTest {
         )
 
         assertEquals(listOf(fooExceptionFlow), builder.createdFlows)
+    }
+
+    @Test
+    fun buildScheduler() {
+        val builder = IntegrationFlowBuilder(
+            scripts = listOf(fooExceptionScript, exceptionScript),
+            outputFolder = null,
+            stageNames = setOf("QS"),
+        )
+
+        builder.createPackageAndFlow(
+            packageId = "ComExampleKtorResources",
+            packageName = "Com_Example_Ktor_Resources",
+            packageDescription = "",
+            integrationFlowId = "ExceptionSubprocess",
+            integrationFlowIdRaw = "ExceptionSubprocess",
+            integrationFlowName = "ExceptionSubprocess",
+            integrationFlowNameRaw = "ExceptionSubprocess",
+            integrationFlowDescription = "Foo Bar API",
+            integrationFlowSource = emptyList(),
+            integrationFlowTarget = emptyList(),
+            config = BazA,
+            autoNumbering = false,
+            builder = {
+                context(BazA) {
+                    val every6Hours = "0 0 0/6 ? * * *"
+                    timer(
+                        quartzCron = every6Hours,
+                    ) {
+                        foo(
+                            c = {
+                                ""
+                            },
+                            d = { "" },
+                            e = { 42 },
+                            ds = { "" },
+                            injected = {
+                            },
+                        )
+                        endMessage()
+
+                        exceptionSubprocess {
+                            startErrorEvent()
+                            handleException()
+                            errorEndEvent()
+                        }
+                    }
+                }
+            },
+        )
+
+        assertEquals(listOf(fooSchedulerExceptionFlow), builder.createdFlows)
     }
 }

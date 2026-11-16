@@ -67,7 +67,9 @@ public class IntegrationFlowBuilder(
             packageID = packageId,
             packageName = packageName,
             packageDescription = packageDescription,
-            sender = integrationFlow.collaboration.messageFlow?.toSender(config),
+            type = integrationFlow.collaboration.messageFlow?.toSender(
+                config,
+            ) ?: integrationFlow.process.startEvent.timerEventDefinition?.toSender(),
             scripts = scriptJvmFunctions.mapNotNull { userScript ->
                 scripts.singleOrNull { it.name == userScript }
             },

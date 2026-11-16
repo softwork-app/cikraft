@@ -65,9 +65,10 @@ public fun generateOpenApi(
         }
     }
     val httpApis = infrastructure.apis.filter {
-        when (it.sender) {
-            is CreatedFlow.Sender.Https -> true
-            is CreatedFlow.Sender.DataStore -> false
+        when (it.type) {
+            is CreatedFlow.Type.Https -> true
+            is CreatedFlow.Type.DataStore -> false
+            is CreatedFlow.Type.Scheduler -> false
             null -> false
         }
     }
@@ -91,7 +92,7 @@ public fun generateOpenApi(
         components = Components(
             schemas = components.toSortedMap(String::compareTo),
             securitySchemes = httpApis.associate {
-                val sender = it.sender as CreatedFlow.Sender.Https
+                val sender = it.type as CreatedFlow.Type.Https
                 val userRole = sender.role
                 userRole to SecurityScheme.MutualTLS(description = "Client Cert connected to the User Role $userRole")
             }.toSortedMap(String::compareTo),
@@ -106,7 +107,7 @@ public fun generateOpenApi(
 private fun paths(
     httpApis: List<CreatedFlow>,
 ): Map<String, Path> = httpApis.associate { api ->
-    val sender = api.sender as CreatedFlow.Sender.Https
+    val sender = api.type as CreatedFlow.Type.Https
 
     var firstBody: Body? = null
     for (entryPoint in api.scripts) {
@@ -176,7 +177,7 @@ private fun paths(
 
 private fun csrfOperation(
     api: CreatedFlow,
-    sender: CreatedFlow.Sender.Https,
+    sender: CreatedFlow.Type.Https,
     errorBody: Body?,
 ): Operation = Operation(
     summary = "Get the CSRF Token for ${api.rawId}",
@@ -225,7 +226,7 @@ private fun csrfOperation(
 
 private fun iFlowOperation(
     api: CreatedFlow,
-    sender: CreatedFlow.Sender.Https,
+    sender: CreatedFlow.Type.Https,
     bodyInput: Body?,
     headersInput: List<Script.Header>,
     bodyOutput: Body?,

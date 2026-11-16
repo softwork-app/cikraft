@@ -1,6 +1,7 @@
 package app.softwork.cikraft.core
 
 import kotlinx.serialization.Serializable
+import org.intellij.lang.annotations.Language
 import kotlin.time.Duration
 
 @Serializable
@@ -13,7 +14,7 @@ public data class CreatedFlow(
     public val packageID: String,
     public val packageName: String,
     public val packageDescription: String? = null,
-    public val sender: Sender?,
+    public val type: Type?,
     val source: List<String> = emptyList(),
     val target: List<String> = emptyList(),
     val scripts: List<Script>,
@@ -21,12 +22,18 @@ public data class CreatedFlow(
     val exceptionHandler: ExceptionHandler? = null,
 ) {
     @Serializable
-    public sealed interface Sender {
+    public sealed interface Type {
         @Serializable
-        public data class Https(val url: String, val role: String, val csrfProtection: Boolean) : Sender
+        public data class Https(val url: String, val role: String, val csrfProtection: Boolean) : Type
 
         @Serializable
-        public data class DataStore(val name: String, val pollDelay: Duration) : Sender
+        public data class DataStore(val name: String, val pollDelay: Duration) : Type
+
+        @Serializable
+        public data class Scheduler(
+            @Language("CronExp")
+            val quartzCron: String,
+        ) : Type
     }
 
     @Serializable

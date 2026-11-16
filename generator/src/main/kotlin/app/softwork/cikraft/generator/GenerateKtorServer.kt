@@ -12,9 +12,10 @@ import io.github.hfhbd.kfx.kotlin.*
 
 public fun generateKtorServer(
     createdFlow: CreatedFlow,
-): FileSpec? = when (createdFlow.sender) {
-    is CreatedFlow.Sender.Https -> generateKtorServerRoute(createdFlow)
-    is CreatedFlow.Sender.DataStore -> generateDataStorePolling(createdFlow)
+): FileSpec? = when (createdFlow.type) {
+    is CreatedFlow.Type.Https -> generateKtorServerRoute(createdFlow)
+    is CreatedFlow.Type.DataStore -> generateDataStorePolling(createdFlow)
+    is CreatedFlow.Type.Scheduler -> null
     null -> null
 }
 
@@ -40,7 +41,7 @@ private fun generateDataStorePolling(createdFlow: CreatedFlow): FileSpec {
             returnType = MESSAGE_LOG,
         ),
     )
-    val sender = createdFlow.sender as CreatedFlow.Sender.DataStore
+    val sender = createdFlow.type as CreatedFlow.Type.DataStore
 
     function.beginControlFlow("invoke(%S).collect", sender.name)
     function.addStatement(
@@ -78,7 +79,7 @@ private fun generateKtorServerRoute(createdFlow: CreatedFlow): FileSpec {
         ),
     )
 
-    val sender = createdFlow.sender as CreatedFlow.Sender.Https
+    val sender = createdFlow.type as CreatedFlow.Type.Https
     if (sender.csrfProtection) {
         function.addCSRFVariables(createdFlow.rawId)
 
