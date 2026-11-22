@@ -3,13 +3,13 @@ import org.gradle.api.Named
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.plugins.PluginManager
 import org.gradle.api.plugins.jvm.JvmComponentDependencies
 import org.gradle.api.plugins.jvm.JvmTestSuite
 import org.gradle.api.plugins.jvm.JvmTestSuiteTarget
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.TaskContainer
 import org.gradle.declarative.dsl.model.annotations.ElementFactoryName
@@ -21,10 +21,6 @@ import org.gradle.features.binding.ProjectFeatureApplyAction
 import org.gradle.features.binding.ProjectFeatureBinding
 import org.gradle.features.binding.ProjectFeatureBindingBuilder
 import org.gradle.features.dsl.bindProjectFeature
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.getByName
-import org.gradle.kotlin.dsl.invoke
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.testing.base.TestingExtension
 import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationProjectType
@@ -32,7 +28,7 @@ import javax.inject.Inject
 
 // https://github.com/Kotlin/declarative-gradle-jetbrains-ecosystem-plugin/issues/50
 @BindsProjectFeature(JvmTestSuiteFeature::class)
-abstract class JvmTestSuiteFeature :
+public abstract class JvmTestSuiteFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(target: Project) {}
@@ -49,16 +45,19 @@ abstract class JvmTestSuiteFeature :
             )
     }
 
-    abstract class JvmTestSuiteFeatureAction :
+    protected abstract class JvmTestSuiteFeatureAction :
         ProjectFeatureApplyAction<DclTestingExtension, BuildModel.None, JvmApplicationProjectType> {
         @get:Inject
-        abstract val pluginManager: PluginManager
+        protected abstract val pluginManager: PluginManager
 
         @get:Inject
-        abstract val tasks: TaskContainer
+        protected abstract val tasks: TaskContainer
 
         @get:Inject
-        abstract val project: Project
+        protected abstract val project: Project
+
+        @get:Inject
+        protected abstract val providerFactory: ProviderFactory
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -68,55 +67,57 @@ abstract class JvmTestSuiteFeature :
         ) {
             pluginManager.apply("jvm-test-suite")
 
-            val testing = project.extensions["testing"] as TestingExtension
+            val testing = project.extensions.getByName("testing") as TestingExtension
 
-            definition.suites.all {
-                val buildModel = context.getBuildModel(this)
+            definition.suites.all { dclJvmSuite ->
+                val buildModel = context.getBuildModel(dclJvmSuite)
                 buildModel as DefaultJvmDclTestSuiteBuildModel
 
-                val dclJvmSuite = this
-                val action: Action<JvmTestSuite> = Action {
-                    dependencies.implementation.bundle(dclJvmSuite.dependencies.implementation.dependencies)
-                    dependencies.compileOnly.bundle(dclJvmSuite.dependencies.compileOnly.dependencies)
-                    dependencies.runtimeOnly.bundle(dclJvmSuite.dependencies.runtimeOnly.dependencies)
-                    dependencies.annotationProcessor.bundle(dclJvmSuite.dependencies.annotationProcessor.dependencies)
+                val action: Action<JvmTestSuite> = Action { jvmTestSuite ->
+                    jvmTestSuite.dependencies.implementation.bundle(
+                        dclJvmSuite.dependencies.implementation.dependencies,
+                    )
+                    jvmTestSuite.dependencies.compileOnly.bundle(dclJvmSuite.dependencies.compileOnly.dependencies)
+                    jvmTestSuite.dependencies.runtimeOnly.bundle(dclJvmSuite.dependencies.runtimeOnly.dependencies)
+                    jvmTestSuite.dependencies.annotationProcessor.bundle(
+                        dclJvmSuite.dependencies.annotationProcessor.dependencies,
+                    )
 
-                    dclJvmSuite.targets.all {
-                        val buildModel = context.getBuildModel(this)
+                    dclJvmSuite.targets.all { dclTestSuiteTarget ->
+                        val buildModel = context.getBuildModel(dclTestSuiteTarget)
                         buildModel as DefaultJvmDclTestSuiteTargetBuildModel
-                        val dclTestSuiteTarget = this
-                        val action: Action<JvmTestSuiteTarget> = Action {
-                            tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME) {
+                        val action: Action<JvmTestSuiteTarget> = Action { jvmTestSuiteTarget ->
+                            tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME) { checkTask ->
                                 // TaskProvider<Test> getTestTask(); is not supported in DCL, so we use this workaround for lifecycle task dependencies
                                 val s = dclTestSuiteTarget.testing.dependsOnCheck.flatMap {
                                     if (it) {
-                                        testTask
+                                        jvmTestSuiteTarget.testTask
                                     } else {
-                                        project.provider { emptyList<Task>() }
+                                        providerFactory.present(emptyList<Nothing>())
                                     }
-                                }.orElse(emptyList<Task>())
-                                dependsOn(s)
+                                }.orElse(emptyList<Nothing>())
+                                checkTask.dependsOn(s)
                             }
 
-                            testTask {
+                            jvmTestSuiteTarget.testTask.configure { testTask ->
                                 // JavaForkOptions uses Any/Object, that is not supported in DCL
                                 // No provider api migration (yet), so there is no provider support, thus calling get
-                                environment(dclTestSuiteTarget.testing.javaForkOptions.environment.get())
+                                testTask.environment(dclTestSuiteTarget.testing.javaForkOptions.environment.get())
                             }
                         }
-                        buildModel.target = if (name in targets.names) {
-                            targets.getByName(name, action)
+                        buildModel.target = if (dclTestSuiteTarget.name in jvmTestSuite.targets.names) {
+                            jvmTestSuite.targets.getByName(dclTestSuiteTarget.name, action)
                         } else {
-                            targets.create(name, action)
+                            jvmTestSuite.targets.create(dclTestSuiteTarget.name, action)
                         }
                     }
                 }
                 buildModel.testSuite = if (dclJvmSuite.name in testing.suites.names) {
-                    testing.suites.getByName(dclJvmSuite.name, JvmTestSuite::class).apply {
-                        action.execute(this)
-                    }
+                    val jvmTestSuite = testing.suites.getByName(dclJvmSuite.name) as JvmTestSuite
+                    action.execute(jvmTestSuite)
+                    jvmTestSuite
                 } else {
-                    testing.suites.create(dclJvmSuite.name, JvmTestSuite::class, action)
+                    testing.suites.create(dclJvmSuite.name, JvmTestSuite::class.java, action)
                 }
             }
         }
@@ -125,24 +126,24 @@ abstract class JvmTestSuiteFeature :
 
 // Can't reuse TestingExtension from core-api because of DomainObjectCollection<? extends TestSuiteTarget> getTargets();
 // OUT/? extends is not (yet?) supported in DCL
-interface DclTestingExtension : Definition<BuildModel.None> {
-    val suites: NamedDomainObjectContainer<JvmDclTestSuite>
+public interface DclTestingExtension : Definition<BuildModel.None> {
+    public val suites: NamedDomainObjectContainer<JvmDclTestSuite>
 }
 
 // Can't extend TestSuite from core-api because of DomainObjectCollection<? extends TestSuiteTarget> getTargets();
 // OUT/? extends is not (yet?) supported in DCL
 @ElementFactoryName("jvmTestSuite")
-interface JvmDclTestSuite :
+public interface JvmDclTestSuite :
     Definition<JvmDclTestSuiteBuildModel>,
     Named {
-    val targets: NamedDomainObjectContainer<JvmDclTestSuiteTarget>
+    public val targets: NamedDomainObjectContainer<JvmDclTestSuiteTarget>
 
     @get:Nested
-    val dependencies: JvmComponentDependencies
+    public val dependencies: JvmComponentDependencies
 }
 
-interface JvmDclTestSuiteBuildModel : BuildModel {
-    val testSuite: JvmTestSuite
+public interface JvmDclTestSuiteBuildModel : BuildModel {
+    public val testSuite: JvmTestSuite
 }
 
 internal abstract class DefaultJvmDclTestSuiteBuildModel : JvmDclTestSuiteBuildModel {
@@ -150,31 +151,31 @@ internal abstract class DefaultJvmDclTestSuiteBuildModel : JvmDclTestSuiteBuildM
 }
 
 @ElementFactoryName("jvmTestSuiteTarget")
-interface JvmDclTestSuiteTarget :
+public interface JvmDclTestSuiteTarget :
     Named,
     Definition<JvmDclTestSuiteTargetBuildModel> {
     @get:Nested
-    val testing: TestingSpec
+    public val testing: TestingSpec
 
     // https://github.com/gradle/gradle/issues/36410
     // override fun getBinaryResultsDirectory(): DirectoryProperty
 }
 
-interface JvmDclTestSuiteTargetBuildModel : BuildModel {
-    val target: JvmTestSuiteTarget
+public interface JvmDclTestSuiteTargetBuildModel : BuildModel {
+    public val target: JvmTestSuiteTarget
 }
 internal abstract class DefaultJvmDclTestSuiteTargetBuildModel : JvmDclTestSuiteTargetBuildModel {
     override lateinit var target: JvmTestSuiteTarget
 }
 
-interface TestingSpec {
-    val dependsOnCheck: Property<Boolean>
+public interface TestingSpec {
+    public val dependsOnCheck: Property<Boolean>
 
     // JavaForkOptions uses Any/Object, that is not supported in DCL
     @get:Nested
-    val javaForkOptions: JavaDclForkOptions
+    public val javaForkOptions: JavaDclForkOptions
 }
 
-interface JavaDclForkOptions {
-    val environment: MapProperty<String, String>
+public interface JavaDclForkOptions {
+    public val environment: MapProperty<String, String>
 }

@@ -12,47 +12,47 @@ import org.gradle.api.tasks.Nested
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 
-interface IntegrationFlow :
+public interface IntegrationFlow :
     Definition<IntegrationFlowBuildModel>,
     Named {
     @get:Nested
-    val dependencies: IntegrationFlowDependencies
+    public val dependencies: IntegrationFlowDependencies
 
-    val description: Property<String>
+    public val description: Property<String>
 
-    val source: ListProperty<String>
-    val target: ListProperty<String>
+    public val source: ListProperty<String>
+    public val target: ListProperty<String>
 
-    val scripts: ConfigurableFileCollection
+    public val scripts: ConfigurableFileCollection
 
-    val autoNumbering: Property<Boolean>
+    public val autoNumbering: Property<Boolean>
 }
 
-interface IntegrationFlowDependencies : Dependencies {
-    val implementation: DependencyCollector
+public interface IntegrationFlowDependencies : Dependencies {
+    public val implementation: DependencyCollector
 }
 
-interface IntegrationFlowBuildModel :
+public interface IntegrationFlowBuildModel :
     BuildModel,
     Named {
-    val description: Property<String>
-    val source: ListProperty<String>
-    val target: ListProperty<String>
+    public val description: Property<String>
+    public val source: ListProperty<String>
+    public val target: ListProperty<String>
 
-    val packageName: String
+    public val packageName: String
 
-    val flowID: Provider<String>
+    public val flowID: Provider<String>
 
-    val libs: ConfigurableFileCollection
-    val scripts: ConfigurableFileCollection
-    val generatedScripts: ConfigurableFileCollection
+    public val libs: ConfigurableFileCollection
+    public val scripts: ConfigurableFileCollection
+    public val generatedScripts: ConfigurableFileCollection
 
-    val dependenciesJars: FileCollection
-    val kotlinEntryPointsClasses: FileCollection
-    val autoNumbering: Property<Boolean>
+    public val dependenciesJars: FileCollection
+    public val kotlinEntryPointsClasses: FileCollection
+    public val autoNumbering: Property<Boolean>
 }
 
-abstract class DefaultIntegrationFlowBuildModel : IntegrationFlowBuildModel {
+internal abstract class DefaultIntegrationFlowBuildModel : IntegrationFlowBuildModel {
     override fun getName(): String = internalName
     lateinit var internalName: String
     override lateinit var packageName: String

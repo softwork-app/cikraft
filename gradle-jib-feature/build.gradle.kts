@@ -1,5 +1,6 @@
 plugins {
-    `kotlin-dsl`
+    id("java-gradle-plugin")
+    kotlin("jvm")
     id("setup")
     id("java-test-fixtures")
     id("jvm-test-suite")
@@ -44,4 +45,10 @@ configurations.apiElements {
 java {
     withJavadocJar()
     withSourcesJar()
+}
+
+testing.suites {
+    withType(JvmTestSuite::class).configureEach {
+        useKotlinTest()
+    }
 }

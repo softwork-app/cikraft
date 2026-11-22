@@ -8,9 +8,9 @@ import org.gradle.api.tasks.UntrackedTask
 import java.io.File
 
 @UntrackedTask(because = "Not worth")
-abstract class GenerateOpenAPITransformerServiceLoader : DefaultTask() {
+public abstract class GenerateOpenAPITransformerServiceLoader : DefaultTask() {
     @get:OutputDirectory
-    abstract val outputDirectory: DirectoryProperty
+    public abstract val outputDirectory: DirectoryProperty
 
     @TaskAction
     protected fun generate() {

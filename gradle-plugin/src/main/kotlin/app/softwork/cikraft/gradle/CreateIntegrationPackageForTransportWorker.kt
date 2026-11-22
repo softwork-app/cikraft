@@ -14,7 +14,7 @@ import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import org.gradle.api.logging.Logging as GradleLogger
 
-abstract class CreateIntegrationPackageForTransportWorker :
+internal abstract class CreateIntegrationPackageForTransportWorker :
     WorkAction<CreateIntegrationPackageForTransportWorker.Params> {
     interface Params : WorkParameters {
         val apiServer: Property<String>

@@ -4,21 +4,21 @@ import org.gradle.api.Named
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.provider.Property
 
-interface Stage : Named {
-    val httpServer: Property<String>
+public interface Stage : Named {
+    public val httpServer: Property<String>
 
-    val description: Property<String>
+    public val description: Property<String>
 
-    val web: Property<String>
+    public val web: Property<String>
 
-    val apiVirtualHosts: NamedDomainObjectContainer<ApiVirtualHost>
+    public val apiVirtualHosts: NamedDomainObjectContainer<ApiVirtualHost>
 }
 
 /**
  * The name must be the same across stages
  */
-interface ApiVirtualHost : Named {
-    val id: Property<String>
-    val apiHttpServer: Property<String>
-    val clientAuthEnabled: Property<Boolean>
+public interface ApiVirtualHost : Named {
+    public val id: Property<String>
+    public val apiHttpServer: Property<String>
+    public val clientAuthEnabled: Property<Boolean>
 }

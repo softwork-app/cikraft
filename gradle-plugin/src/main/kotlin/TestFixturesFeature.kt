@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmAp
 import javax.inject.Inject
 
 @BindsProjectFeature(TestFixturesFeature::class)
-abstract class TestFixturesFeature :
+public abstract class TestFixturesFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(target: Project) {}
@@ -26,7 +26,7 @@ abstract class TestFixturesFeature :
             .withUnsafeDefinition()
     }
 
-    abstract class ApplyAction @Inject constructor(
+    protected abstract class ApplyAction @Inject constructor(
         private val pluginManager: PluginManager,
         private val configurations: ConfigurationContainer,
     ) : ProjectFeatureApplyAction<TestFixturesDefinition, BuildModel.None, JvmApplicationProjectType> {
@@ -42,7 +42,7 @@ abstract class TestFixturesFeature :
     }
 }
 
-interface TestFixturesDefinition : Definition<BuildModel.None> {
+public interface TestFixturesDefinition : Definition<BuildModel.None> {
     @get:Nested
-    val dependencies: JvmLibraryDependencies
+    public val dependencies: JvmLibraryDependencies
 }

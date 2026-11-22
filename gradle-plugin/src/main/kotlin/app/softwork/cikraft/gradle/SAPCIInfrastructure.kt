@@ -10,32 +10,34 @@ import org.gradle.api.tasks.Nested
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 
-interface SAPCIIFlowsDefinition : Definition<SAPCIIFlowsBuildModel> {
-    val integrationPackages: NamedDomainObjectContainer<IntegrationPackage>
+public interface SAPCIIFlowsDefinition : Definition<SAPCIIFlowsBuildModel> {
+    public val integrationPackages: NamedDomainObjectContainer<IntegrationPackage>
 
-    @get:Nested val dependencies: SAPCIIFlowsDependencies
+    @get:Nested
+    public val dependencies: SAPCIIFlowsDependencies
 }
 
-interface SAPCIIFlowsDependencies : JvmComponentDependencies {
-    @get:Nested val integrationFlows: IntegrationFlowsDependencyModifier
+public interface SAPCIIFlowsDependencies : JvmComponentDependencies {
+    @get:Nested
+    public val integrationFlows: IntegrationFlowsDependencyModifier
 
-    abstract class IntegrationFlowsDependencyModifier : DependencyModifier() {
+    public abstract class IntegrationFlowsDependencyModifier : DependencyModifier() {
         override fun modifyImplementation(dependency: ModuleDependency) {
             dependency.capabilities {
-                requireFeature("integration-flows")
+                it.requireFeature("integration-flows")
             }
         }
     }
 }
 
-interface SAPCIIFlowsBuildModel : BuildModel {
-    val integrationPackages: NamedDomainObjectContainer<IntegrationPackage>
-    val suffix: Provider<String>
-    val httpSuffix: Provider<String>
-    val stages: NamedDomainObjectContainer<Stage>
+public interface SAPCIIFlowsBuildModel : BuildModel {
+    public val integrationPackages: NamedDomainObjectContainer<IntegrationPackage>
+    public val suffix: Provider<String>
+    public val httpSuffix: Provider<String>
+    public val stages: NamedDomainObjectContainer<Stage>
 }
 
-abstract class DefaultSAPCIIFlowsBuildModel : SAPCIIFlowsBuildModel {
+internal abstract class DefaultSAPCIIFlowsBuildModel : SAPCIIFlowsBuildModel {
     abstract override val httpSuffix: Property<String>
     abstract override val suffix: Property<String>
 }

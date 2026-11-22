@@ -16,7 +16,6 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.submit
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import org.gradle.workers.WorkerExecutor
@@ -49,10 +48,10 @@ abstract class WritePropertiesToFile : DefaultTask() {
     @TaskAction
     protected fun generate() {
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
-        }.submit(WritePropertiesToFileWorker::class) {
-            output.set(this@WritePropertiesToFile.output)
-            propertyFiles.from(
+            it.classpath.from(workerClasspath)
+        }.submit(WritePropertiesToFileWorker::class.java) {
+            it.output.set(this@WritePropertiesToFile.output)
+            it.propertyFiles.from(
                 this@WritePropertiesToFile.propertyFiles.asFileTree.filter {
                     it.parentFile.name == stage.get()
                 }.asFileTree,

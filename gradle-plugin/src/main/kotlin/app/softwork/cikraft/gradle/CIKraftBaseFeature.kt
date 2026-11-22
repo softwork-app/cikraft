@@ -16,14 +16,12 @@ import org.gradle.features.binding.ProjectFeatureBindingBuilder
 import org.gradle.features.dsl.bindProjectFeature
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
-import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.newInstance
 import org.gradle.language.jvm.tasks.ProcessResources
 import org.jetbrains.kotlin.gradle.declarative.projecttypes.jvmapplication.JvmApplicationProjectType
 import javax.inject.Inject
 
 @BindsProjectFeature(CIKraftBaseFeature::class)
-abstract class CIKraftBaseFeature :
+public abstract class CIKraftBaseFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(project: Project) {}
@@ -33,26 +31,26 @@ abstract class CIKraftBaseFeature :
             .withBuildModelImplementationType(DefaultSAPCIGeneratorBuildModel::class.java)
     }
 
-    abstract class ApplyAction :
+    public abstract class ApplyAction :
         ProjectFeatureApplyAction<CiKraftBaseDefinition, SAPCIGeneratorBuildModel, JvmApplicationProjectType> {
         @get:Inject
-        abstract val pluginManager: PluginManager
+        protected abstract val pluginManager: PluginManager
 
         @get:Inject
-        abstract val tasks: TaskContainer
+        protected abstract val tasks: TaskContainer
 
         @get:Inject
-        abstract val configurations: ConfigurationRegistrar
+        protected abstract val configurations: ConfigurationRegistrar
 
         @get:Inject
-        abstract val configurationsContainer: ConfigurationContainer
+        protected abstract val configurationsContainer: ConfigurationContainer
 
         @get:Inject
-        abstract val dependencyFactory: DependencyFactory
+        protected abstract val dependencyFactory: DependencyFactory
 
-        @get:Inject abstract val layout: ProjectFeatureLayout
+        @get:Inject protected abstract val layout: ProjectFeatureLayout
 
-        @get:Inject abstract val objects: ObjectFactory
+        @get:Inject protected abstract val objects: ObjectFactory
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -69,14 +67,14 @@ abstract class CIKraftBaseFeature :
                 "ksp",
             ).dependencies.add(dependencyFactory.create("app.softwork.cikraft:ksp-plugin:$VERSION"))
 
-            configurations.consumable("cikraftEntryPoints") {
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                    attribute(SAPCI.attribute, named(SAPCI.JSON_ENTRYPOINTS))
+            configurations.consumable("cikraftEntryPoints") { cikraftEntryPoints ->
+                cikraftEntryPoints.attributes {
+                    it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, SAPCI_USAGE))
+                    it.attribute(SAPCI.attribute, it.named(SAPCI::class.java, SAPCI.JSON_ENTRYPOINTS))
                 }
-                outgoing {
+                cikraftEntryPoints.outgoing {
                     val lazyArtifact = objects.newInstance(
-                        LazyDirectoryArtifact::class,
+                        LazyDirectoryArtifact::class.java,
                         "json",
                         "entrypoints",
                         "kspKotlin",
@@ -86,7 +84,7 @@ abstract class CIKraftBaseFeature :
                             )
                         },
                     )
-                    artifact(lazyArtifact)
+                    it.artifact(lazyArtifact)
                 }
             }
 
@@ -99,8 +97,8 @@ abstract class CIKraftBaseFeature :
             mainJvmEcosystem.compileOnlyConfiguration.dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
             mainJvmEcosystem.compileOnlyConfiguration.dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
 
-            tasks.named("processResources", ProcessResources::class) {
-                exclude("cikraft/entrypoint.json")
+            tasks.named("processResources", ProcessResources::class.java) {
+                it.exclude("cikraft/entrypoint.json")
             }
 
             buildModel as DefaultSAPCIGeneratorBuildModel
@@ -110,4 +108,4 @@ abstract class CIKraftBaseFeature :
     }
 }
 
-interface CiKraftBaseDefinition : SAPCIGeneratorDefinition
+public interface CiKraftBaseDefinition : SAPCIGeneratorDefinition

@@ -18,8 +18,6 @@ import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
-import org.gradle.kotlin.dsl.credentials
-import org.gradle.kotlin.dsl.submit
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import org.gradle.workers.WorkerExecutor
@@ -28,10 +26,7 @@ import kotlin.time.Duration.Companion.seconds
 import org.gradle.api.logging.Logging as GradleLogger
 
 @UntrackedTask(because = "Deploying a IFlow is a remote operation")
-internal abstract class DeployIFlow @Inject constructor(
-    @get:Input
-    private val stageName: String,
-) : DefaultTask() {
+public abstract class DeployIFlow @Inject constructor(stageName: String) : DefaultTask() {
     init {
         group = "cikraft"
         val isOffline = project.gradle.startParameter.isOffline
@@ -46,7 +41,7 @@ internal abstract class DeployIFlow @Inject constructor(
 
     @get:Input
     internal val credentials: Provider<PasswordCredentials> = project.providers.credentials(
-        PasswordCredentials::class,
+        PasswordCredentials::class.java,
         SAP_CI_CREDENTIALS + stageName,
     )
 
@@ -60,20 +55,20 @@ internal abstract class DeployIFlow @Inject constructor(
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @TaskAction
-    internal fun create() {
+    protected fun create() {
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
-        }.submit(DeployIFlowWorker::class) {
-            apiServer.set(this@DeployIFlow.apiServer)
-            authServer.set(this@DeployIFlow.authServer)
-            clientID.set(this@DeployIFlow.credentials.map { it.username })
-            clientSecret.set(this@DeployIFlow.credentials.map { it.password })
+            it.classpath.from(workerClasspath)
+        }.submit(DeployIFlowWorker::class.java) {
+            it.apiServer.set(apiServer)
+            it.authServer.set(authServer)
+            it.clientID.set(credentials.map { it.username })
+            it.clientSecret.set(credentials.map { it.password })
 
-            flowID.set(this@DeployIFlow.flowID)
-            version.set(this@DeployIFlow.version)
+            it.flowID.set(flowID)
+            it.version.set(version)
         }
     }
 }

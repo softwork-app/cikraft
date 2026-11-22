@@ -18,8 +18,6 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
-import org.gradle.kotlin.dsl.credentials
-import org.gradle.kotlin.dsl.submit
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import org.gradle.workers.WorkerExecutor
@@ -27,27 +25,24 @@ import javax.inject.Inject
 import org.gradle.api.logging.Logging as GradleLogger
 
 @UntrackedTask(because = "Because creating a provider is a remote operation")
-abstract class CreateIntegrationPackageTask @Inject constructor(
-    @get:Input
-    private val stageName: String,
-) : DefaultTask() {
+public abstract class CreateIntegrationPackageTask @Inject constructor(stageName: String) : DefaultTask() {
     init {
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }
     }
 
     @get:Input
-    abstract val packageName: Property<String>
+    public abstract val packageName: Property<String>
 
     @get:Input
-    abstract val packageID: Property<String>
+    public abstract val packageID: Property<String>
 
     @get:Input
     @get:Optional
-    abstract val packageVersion: Property<String>
+    public abstract val packageVersion: Property<String>
 
     @get:Input
-    abstract val packageDescription: Property<String>
+    public abstract val packageDescription: Property<String>
 
     @get:Input
     internal abstract val apiServer: Property<String>
@@ -57,7 +52,7 @@ abstract class CreateIntegrationPackageTask @Inject constructor(
 
     @get:Input
     internal val credentials: Provider<PasswordCredentials> = project.providers.credentials(
-        PasswordCredentials::class,
+        PasswordCredentials::class.java,
         SAP_CI_CREDENTIALS + stageName,
     )
 
@@ -66,7 +61,7 @@ abstract class CreateIntegrationPackageTask @Inject constructor(
     }
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
@@ -74,22 +69,22 @@ abstract class CreateIntegrationPackageTask @Inject constructor(
     @TaskAction
     protected fun createIntegrationPackage() {
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
-        }.submit(CreateIntegrationPackageWorker::class) {
-            apiServer.set(this@CreateIntegrationPackageTask.apiServer)
-            authServer.set(this@CreateIntegrationPackageTask.authServer)
-            clientID.set(this@CreateIntegrationPackageTask.credentials.map { it.username })
-            clientSecret.set(this@CreateIntegrationPackageTask.credentials.map { it.password })
+            it.classpath.from(workerClasspath)
+        }.submit(CreateIntegrationPackageWorker::class.java) {
+            it.apiServer.set(apiServer)
+            it.authServer.set(authServer)
+            it.clientID.set(credentials.map { it.username })
+            it.clientSecret.set(credentials.map { it.password })
 
-            packageName.set(this@CreateIntegrationPackageTask.packageName)
-            packageID.set(this@CreateIntegrationPackageTask.packageID)
-            packageVersion.set(this@CreateIntegrationPackageTask.packageVersion)
-            packageDescription.set(this@CreateIntegrationPackageTask.packageDescription)
+            it.packageName.set(packageName)
+            it.packageID.set(packageID)
+            it.packageVersion.set(packageVersion)
+            it.packageDescription.set(packageDescription)
         }
     }
 }
 
-abstract class CreateIntegrationPackageWorker : WorkAction<CreateIntegrationPackageWorker.Params> {
+internal abstract class CreateIntegrationPackageWorker : WorkAction<CreateIntegrationPackageWorker.Params> {
     interface Params : WorkParameters {
         val apiServer: Property<String>
         val authServer: Property<String>

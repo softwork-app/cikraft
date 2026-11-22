@@ -6,21 +6,21 @@ import org.gradle.api.provider.Provider
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 
-interface SAPCIInfrastructureDefinition : Definition<SAPCIInfrastructureBuildModel> {
-    val apiStages: NamedDomainObjectContainer<ApiStage>
+public interface SAPCIInfrastructureDefinition : Definition<SAPCIInfrastructureBuildModel> {
+    public val apiStages: NamedDomainObjectContainer<ApiStage>
 
-    val transportStages: NamedDomainObjectContainer<TransportStage>
+    public val transportStages: NamedDomainObjectContainer<TransportStage>
 
-    val suffix: Property<String>
+    public val suffix: Property<String>
 
-    val httpNamespace: Property<String>
+    public val httpNamespace: Property<String>
 }
 
-interface SAPCIInfrastructureBuildModel : BuildModel {
-    val apiStages: NamedDomainObjectContainer<ApiStage>
-    val transportStages: NamedDomainObjectContainer<TransportStage>
-    val suffix: Provider<String>
-    val httpSuffix: Provider<String>
+public interface SAPCIInfrastructureBuildModel : BuildModel {
+    public val apiStages: NamedDomainObjectContainer<ApiStage>
+    public val transportStages: NamedDomainObjectContainer<TransportStage>
+    public val suffix: Provider<String>
+    public val httpSuffix: Provider<String>
 }
 
 internal abstract class DefaultSAPCIInfrastructureBuildModel : SAPCIInfrastructureBuildModel {

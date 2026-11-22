@@ -17,35 +17,33 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.submit
 import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
 
 @CacheableTask
-abstract class CreateInfrastructureDryRun : DefaultTask() {
+public abstract class CreateInfrastructureDryRun : DefaultTask() {
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.NONE)
-    abstract val entryPoints: ConfigurableFileCollection
+    public abstract val entryPoints: ConfigurableFileCollection
 
     @get:Input
-    abstract val expectedRawIFlowsIds: SetProperty<String>
+    public abstract val expectedRawIFlowsIds: SetProperty<String>
 
     @get:OutputDirectory
-    abstract val outputFolder: DirectoryProperty
+    public abstract val outputFolder: DirectoryProperty
 
     init {
         group = "cikraft"
     }
 
     @get:Inject
-    internal abstract val javaToolchainService: JavaToolchainService
+    protected abstract val javaToolchainService: JavaToolchainService
 
     @get:Nested
-    abstract val launcher: Property<JavaLauncher>
+    public abstract val launcher: Property<JavaLauncher>
 
     init {
-        val toolchain = project.extensions.getByType<JavaPluginExtension>().toolchain
+        val toolchain = project.extensions.getByType(JavaPluginExtension::class.java).toolchain
         val defaultLauncher = javaToolchainService.launcherFor(toolchain)
         launcher.convention(defaultLauncher)
     }
@@ -54,23 +52,21 @@ abstract class CreateInfrastructureDryRun : DefaultTask() {
     internal abstract val stageNames: SetProperty<String>
 
     @get:Classpath
-    abstract val classpath: ConfigurableFileCollection
+    public abstract val classpath: ConfigurableFileCollection
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @TaskAction
-    internal fun create() {
-        val s = launcher.map { it.executablePath.asFile }.get()
-        val ss = this@CreateInfrastructureDryRun.classpath
+    protected fun create() {
         workerExecutor.processIsolation {
-            classpath.from(ss)
-            forkOptions.setExecutable(s)
-        }.submit(CreateInfrastructureDryRunWorker::class) {
-            expectedRawIFlowsIds.set(this@CreateInfrastructureDryRun.expectedRawIFlowsIds)
-            entryPoints.from(this@CreateInfrastructureDryRun.entryPoints)
-            outputFolder.set(this@CreateInfrastructureDryRun.outputFolder)
-            stageNames.set(this@CreateInfrastructureDryRun.stageNames)
+            it.classpath.from(classpath)
+            it.forkOptions.setExecutable(launcher.map { it.executablePath.asFile }.get())
+        }.submit(CreateInfrastructureDryRunWorker::class.java) {
+            it.expectedRawIFlowsIds.set(expectedRawIFlowsIds)
+            it.entryPoints.from(entryPoints)
+            it.outputFolder.set(outputFolder)
+            it.stageNames.set(stageNames)
         }
     }
 }

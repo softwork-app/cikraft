@@ -13,7 +13,7 @@ import org.gradle.workers.*
 import javax.inject.*
 
 @CacheableTask
-abstract class GenerateGroovyEntryPoints : DefaultTask() {
+public abstract class GenerateGroovyEntryPoints : DefaultTask() {
     init {
         group = "cikraft"
     }
@@ -22,29 +22,29 @@ abstract class GenerateGroovyEntryPoints : DefaultTask() {
     @get:SkipWhenEmpty
     @get:NormalizeLineEndings
     @get:PathSensitive(PathSensitivity.NONE)
-    abstract val scripts: ConfigurableFileCollection
+    public abstract val scripts: ConfigurableFileCollection
 
     @get:OutputFile
-    abstract val groovyEntryPoints: RegularFileProperty
+    public abstract val groovyEntryPoints: RegularFileProperty
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun generateGroovyEntrypoints() {
+    protected fun generateGroovyEntrypoints() {
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
-        }.submit(GenerateGroovyEntryPointsWorker::class) {
-            scripts.from(this@GenerateGroovyEntryPoints.scripts)
-            groovyEntryPoints.set(this@GenerateGroovyEntryPoints.groovyEntryPoints)
+            it.classpath.from(workerClasspath)
+        }.submit(GenerateGroovyEntryPointsWorker::class.java) {
+            it.scripts.from(scripts)
+            it.groovyEntryPoints.set(groovyEntryPoints)
         }
     }
 }
 
-abstract class GenerateGroovyEntryPointsWorker : WorkAction<GenerateGroovyEntryPointsWorker.WorkParameters> {
+internal abstract class GenerateGroovyEntryPointsWorker : WorkAction<GenerateGroovyEntryPointsWorker.WorkParameters> {
     interface WorkParameters : org.gradle.workers.WorkParameters {
         val scripts: ConfigurableFileCollection
         val groovyEntryPoints: RegularFileProperty

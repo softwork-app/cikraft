@@ -16,11 +16,10 @@ import org.gradle.features.dsl.bindProjectFeature
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
-import org.gradle.kotlin.dsl.named
 import javax.inject.Inject
 
 @BindsProjectFeature(GenerateKtorResourcesFeature::class)
-abstract class GenerateKtorResourcesFeature :
+public abstract class GenerateKtorResourcesFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(target: Project) {}
@@ -31,19 +30,19 @@ abstract class GenerateKtorResourcesFeature :
             .withUnsafeDefinition()
     }
 
-    abstract class ApplyAction :
+    protected abstract class ApplyAction :
         ProjectFeatureApplyAction<GenerateResourcesDefinition, BuildModel.None, SAPCIGeneratorDefinition> {
         @get:Inject
-        abstract val configurations: ConfigurationRegistrar
+        protected abstract val configurations: ConfigurationRegistrar
 
         @get:Inject
-        abstract val tasks: TaskRegistrar
+        protected abstract val tasks: TaskRegistrar
 
         @get:Inject
-        abstract val dependencyFactory: DependencyFactory
+        protected abstract val dependencyFactory: DependencyFactory
 
         @get:Inject
-        abstract val layout: ProjectFeatureLayout
+        protected abstract val layout: ProjectFeatureLayout
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -54,26 +53,26 @@ abstract class GenerateKtorResourcesFeature :
             val parentBuildModel = context.getBuildModel(parentDefinition)
             val buildModelName = parentBuildModel.name
 
-            val workerDeps = configurations.dependencyScope("cikraftResourcesWorker" + buildModelName) {
-                dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
+            val workerDeps = configurations.dependencyScope("cikraftResourcesWorker$buildModelName") {
+                it.dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
             }
             val functionsWorkerClasspath = configurations.resolvable(
-                "cikraftResourcesWorkerClasspath" + buildModelName,
+                "cikraftResourcesWorkerClasspath$buildModelName",
             ) {
-                extendsFrom(workerDeps)
+                it.extendsFrom(workerDeps)
             }
 
             val sapCICreatedFlows = configurations.resolvable("cikraftGenerateKtorResourcesFlows$buildModelName") {
-                fromDependencyCollector(definition.dependencies.infrastructure)
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                    attribute(SAPCI.attribute, named(SAPCI.API))
+                it.fromDependencyCollector(definition.dependencies.infrastructure)
+                it.attributes {
+                    it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, SAPCI_USAGE))
+                    it.attribute(SAPCI.attribute, it.named(SAPCI::class.java, SAPCI.API))
                 }
             }
 
-            val task = tasks.register("generateKtorResources" + buildModelName, GenerateKtorResources::class.java) {
-                createdFlows.from(sapCICreatedFlows)
-                ktorApi.convention(
+            val task = tasks.register("generateKtorResources$buildModelName", GenerateKtorResources::class.java) {
+                it.createdFlows.from(sapCICreatedFlows)
+                it.ktorApi.convention(
                     layout.contextBuildDirectory.map {
                         val sourceSetName = parentBuildModel.name.ifEmpty { "main" }
                         it.dir(
@@ -81,14 +80,14 @@ abstract class GenerateKtorResourcesFeature :
                         )
                     },
                 )
-                workerClasspath.from(functionsWorkerClasspath)
+                it.workerClasspath.from(functionsWorkerClasspath)
             }
             parentBuildModel.sourceDirectorySet.srcDir(task)
         }
     }
 }
 
-interface GenerateResourcesDefinition : Definition<BuildModel.None> {
+public interface GenerateResourcesDefinition : Definition<BuildModel.None> {
     @get:Nested
-    val dependencies: IFlowDependencies
+    public val dependencies: IFlowDependencies
 }

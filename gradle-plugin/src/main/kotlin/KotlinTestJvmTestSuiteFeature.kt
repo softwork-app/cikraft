@@ -13,7 +13,7 @@ import org.gradle.features.dsl.bindProjectFeature
 
 // https://github.com/Kotlin/declarative-gradle-jetbrains-ecosystem-plugin/issues/50
 @BindsProjectFeature(KotlinTestJvmTestSuiteFeature::class)
-abstract class KotlinTestJvmTestSuiteFeature :
+public abstract class KotlinTestJvmTestSuiteFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(target: Project) {}
@@ -22,7 +22,8 @@ abstract class KotlinTestJvmTestSuiteFeature :
         builder.bindProjectFeature("useKotlinTest", ApplyAction::class)
     }
 
-    abstract class ApplyAction : ProjectFeatureApplyAction<UseKotlinTestDefinition, BuildModel.None, JvmDclTestSuite> {
+    protected abstract class ApplyAction :
+        ProjectFeatureApplyAction<UseKotlinTestDefinition, BuildModel.None, JvmDclTestSuite> {
         override fun apply(
             context: ProjectFeatureApplicationContext,
             definition: UseKotlinTestDefinition,
@@ -36,6 +37,6 @@ abstract class KotlinTestJvmTestSuiteFeature :
     }
 }
 
-interface UseKotlinTestDefinition : Definition<BuildModel.None> {
-    val version: Property<String>
+public interface UseKotlinTestDefinition : Definition<BuildModel.None> {
+    public val version: Property<String>
 }

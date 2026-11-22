@@ -33,69 +33,69 @@ public abstract class GenerateTypedKotlinIntegrationFlowBuilderTask : DefaultTas
     }
 
     @get:Input
-    abstract val packageName: Property<String>
+    public abstract val packageName: Property<String>
 
     @get:Input
-    abstract val packageDescription: Property<String>
+    public abstract val packageDescription: Property<String>
 
     @get:Input
-    abstract val flowName: Property<String>
-
-    @get:Input
-    @get:Optional
-    abstract val flowDescription: Property<String>
+    public abstract val flowName: Property<String>
 
     @get:Input
     @get:Optional
-    abstract val flowSource: ListProperty<String>
+    public abstract val flowDescription: Property<String>
 
     @get:Input
     @get:Optional
-    abstract val flowTarget: ListProperty<String>
+    public abstract val flowSource: ListProperty<String>
 
     @get:Input
     @get:Optional
-    abstract val suffix: Property<String>
+    public abstract val flowTarget: ListProperty<String>
+
+    @get:Input
+    @get:Optional
+    public abstract val suffix: Property<String>
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.NAME_ONLY)
-    abstract val groovyScripts: ConfigurableFileCollection
+    public abstract val groovyScripts: ConfigurableFileCollection
 
     @get:Input
-    abstract val baseUrl: Property<String>
+    public abstract val baseUrl: Property<String>
 
     @get:Input
     @get:Optional
-    abstract val autoNumbering: Property<Boolean>
+    public abstract val autoNumbering: Property<Boolean>
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun generate() {
+    protected fun generate() {
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
-        }.submit(GenerateTypedFlowsWorker::class) {
-            packageName.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.packageName)
-            packageDescription.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.packageDescription)
-            flowName.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.flowName)
-            flowDescription.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.flowDescription)
-            flowSource.addAll(this@GenerateTypedKotlinIntegrationFlowBuilderTask.flowSource)
-            flowTarget.addAll(this@GenerateTypedKotlinIntegrationFlowBuilderTask.flowTarget)
-            jsonScriptEntry.from(this@GenerateTypedKotlinIntegrationFlowBuilderTask.jsonScriptEntry)
-            typedKotlinFlows.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.typedKotlinFlows)
-            suffix.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.suffix)
-            baseUrl.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.baseUrl)
-            groovyScripts.from(this@GenerateTypedKotlinIntegrationFlowBuilderTask.groovyScripts)
-            autoNumbering.set(this@GenerateTypedKotlinIntegrationFlowBuilderTask.autoNumbering)
+            it.classpath.from(workerClasspath)
+        }.submit(GenerateTypedFlowsWorker::class.java) {
+            it.packageName.set(packageName)
+            it.packageDescription.set(packageDescription)
+            it.flowName.set(flowName)
+            it.flowDescription.set(flowDescription)
+            it.flowSource.addAll(flowSource)
+            it.flowTarget.addAll(flowTarget)
+            it.jsonScriptEntry.from(jsonScriptEntry)
+            it.typedKotlinFlows.set(typedKotlinFlows)
+            it.suffix.set(suffix)
+            it.baseUrl.set(baseUrl)
+            it.groovyScripts.from(groovyScripts)
+            it.autoNumbering.set(autoNumbering)
         }
     }
 }
 
-abstract class GenerateTypedFlowsWorker : WorkAction<GenerateTypedFlowsWorker.WorkParameters> {
+internal abstract class GenerateTypedFlowsWorker : WorkAction<GenerateTypedFlowsWorker.WorkParameters> {
     interface WorkParameters : org.gradle.workers.WorkParameters {
         val packageName: Property<String>
         val packageDescription: Property<String>

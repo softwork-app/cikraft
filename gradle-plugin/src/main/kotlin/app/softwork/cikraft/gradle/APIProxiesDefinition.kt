@@ -11,57 +11,58 @@ import org.gradle.api.tasks.Nested
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 
-interface APIProxiesDefinition : Definition<APIProxiesBuildModel> {
-    val apiKeyStores: NamedDomainObjectContainer<ApiKeyStore>
-    val apiCertificates: NamedDomainObjectContainer<ApiCertificate>
-    val apiRuntimeProviders: NamedDomainObjectContainer<ApiRuntimeProvider>
-    val apiProxies: NamedDomainObjectContainer<ApiProxy>
+public interface APIProxiesDefinition : Definition<APIProxiesBuildModel> {
+    public val apiKeyStores: NamedDomainObjectContainer<ApiKeyStore>
+    public val apiCertificates: NamedDomainObjectContainer<ApiCertificate>
+    public val apiRuntimeProviders: NamedDomainObjectContainer<ApiRuntimeProvider>
+    public val apiProxies: NamedDomainObjectContainer<ApiProxy>
 
-    @get:Nested val dependencies: JvmComponentDependencies
+    @get:Nested
+    public val dependencies: JvmComponentDependencies
 }
 
-interface APIProxiesBuildModel : BuildModel {
-    val apiKeyStores: NamedDomainObjectContainer<ApiKeyStoreBuildModel>
-    val apiCertificates: NamedDomainObjectContainer<ApiCertificateBuildModel>
-    val apiRuntimeProviders: NamedDomainObjectContainer<ApiRuntimeProviderBuildModel>
-    val apiProxies: NamedDomainObjectContainer<ApiProxyBuildModel>
-    val httpSuffix: Provider<String>
-    val stages: NamedDomainObjectContainer<Stage>
+public interface APIProxiesBuildModel : BuildModel {
+    public val apiKeyStores: NamedDomainObjectContainer<ApiKeyStoreBuildModel>
+    public val apiCertificates: NamedDomainObjectContainer<ApiCertificateBuildModel>
+    public val apiRuntimeProviders: NamedDomainObjectContainer<ApiRuntimeProviderBuildModel>
+    public val apiProxies: NamedDomainObjectContainer<ApiProxyBuildModel>
+    public val httpSuffix: Provider<String>
+    public val stages: NamedDomainObjectContainer<Stage>
 
-    val classes: FileCollection
-    val runtimeClasspath: FileCollection
+    public val classes: FileCollection
+    public val runtimeClasspath: FileCollection
 }
 
-abstract class DefaultAPIProxiesBuildModel : APIProxiesBuildModel {
+internal abstract class DefaultAPIProxiesBuildModel : APIProxiesBuildModel {
     abstract override val httpSuffix: Property<String>
     abstract override val classes: ConfigurableFileCollection
     abstract override val runtimeClasspath: ConfigurableFileCollection
 }
 
-interface ApiProxy :
+public interface ApiProxy :
     Definition<ApiProxyBuildModel>,
     Named {
-    val description: Property<String>
+    public val description: Property<String>
 
     /**
      * The name, not the stage specific id
      */
-    val virtualHostName: Property<String>
+    public val virtualHostName: Property<String>
 }
 
-interface ApiProxyBuildModel :
+public interface ApiProxyBuildModel :
     BuildModel,
     Named {
-    val description: Property<String>
+    public val description: Property<String>
 
     /**
      * The name, not the stage specific id
      */
-    val virtualHostName: Property<String>
+    public val virtualHostName: Property<String>
 }
 
 // https://github.com/gradle/gradle/issues/38207
-abstract class DefaultApiProxyBuildModel : ApiProxyBuildModel {
+internal abstract class DefaultApiProxyBuildModel : ApiProxyBuildModel {
     @get:JvmName("internalName")
     lateinit var name: String
     override fun getName(): String = name

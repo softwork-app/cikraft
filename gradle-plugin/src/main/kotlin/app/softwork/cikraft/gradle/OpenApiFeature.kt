@@ -24,12 +24,10 @@ import org.gradle.features.dsl.bindProjectFeature
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
-import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.newInstance
 import javax.inject.Inject
 
 @BindsProjectFeature(OpenApiFeature::class)
-abstract class OpenApiFeature :
+public abstract class OpenApiFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(target: Project) {}
@@ -44,7 +42,7 @@ abstract class OpenApiFeature :
             .withUnsafeDefinition()
     }
 
-    abstract class IFlowApplyAction : ApplyAction<SAPCIIFlowsDefinition, SAPCIIFlowsBuildModel> {
+    protected abstract class IFlowApplyAction : ApplyAction<SAPCIIFlowsDefinition, SAPCIIFlowsBuildModel>() {
         override fun apply(
             context: ProjectFeatureApplicationContext,
             definition: OpenApiDefinition,
@@ -55,7 +53,7 @@ abstract class OpenApiFeature :
 
             val servers = parentBuildModel.stages.elements.map { stages ->
                 stages.map { stage ->
-                    objectFactory.newInstance<Server>().apply {
+                    objectFactory.newInstance(Server::class.java).apply {
                         http.set(
                             stage.httpServer.zip(parentBuildModel.httpSuffix) { server, suffix -> server + suffix },
                         )
@@ -65,8 +63,8 @@ abstract class OpenApiFeature :
             }
 
             apply(definition, "", null, SAPCI.OPENAPI).configure {
-                this.servers.addAll(servers)
-                openApiFile.convention(
+                it.servers.addAll(servers)
+                it.openApiFile.convention(
                     layout.contextBuildDirectory.map {
                         it.file("cikraft/openapi.json")
                     },
@@ -75,11 +73,11 @@ abstract class OpenApiFeature :
         }
     }
 
-    abstract class ApiProxyApplyAction : ApplyAction<APIProxiesDefinition, APIProxiesBuildModel> {
+    protected abstract class ApiProxyApplyAction : ApplyAction<APIProxiesDefinition, APIProxiesBuildModel>() {
         @get:Inject
-        abstract val sourceSets: SourceSetContainer
+        protected abstract val sourceSets: SourceSetContainer
 
-        @get:Inject abstract val allConfigurations: ConfigurationContainer
+        @get:Inject protected abstract val allConfigurations: ConfigurationContainer
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -91,14 +89,14 @@ abstract class OpenApiFeature :
 
             val apiProxiesOpenApiSourceSet = sourceSets.create("apiProxiesOpenApi")
             allConfigurations.named(apiProxiesOpenApiSourceSet.implementationConfigurationName) {
-                dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
+                it.dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
             }
 
             val s = tasks.register(
                 "generateOpenAPITransformerServiceLoader",
                 GenerateOpenAPITransformerServiceLoader::class.java,
             ) {
-                outputDirectory.set(
+                it.outputDirectory.set(
                     layout.contextBuildDirectory.map {
                         it.dir("generated/cikraft/apiProxies/resources")
                     },
@@ -108,16 +106,16 @@ abstract class OpenApiFeature :
             apiProxiesOpenApiSourceSet.resources.srcDir(s)
 
             val sapCIWorkerGenerator = configurations.dependencyScope("cikraftOpenApiProxyWorkerGenerator") {
-                dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
+                it.dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
             }
             val sapCIWorkerGeneratorClasspath =
                 configurations.resolvable("cikraftOpenApiProxyWorkerGeneratorClasspath$sapCIWorkerGenerator") {
-                    extendsFrom(sapCIWorkerGenerator)
+                    it.extendsFrom(sapCIWorkerGenerator)
                 }
 
             val generateTransformer =
                 tasks.register("generateOpenAPIProxyTransformer", GenerateOpenAPIProxyTransformer::class.java) {
-                    this.apiProxies.addAllLater(
+                    it.apiProxies.addAllLater(
                         parentBuildModel.apiProxies.elements.map {
                             it.map { apiProxy ->
                                 objectFactory.newInstance(Proxies::class.java, apiProxy.name).apply {
@@ -154,13 +152,13 @@ abstract class OpenApiFeature :
                             }
                         },
                     )
-                    this.httpSuffix.set(parentBuildModel.httpSuffix)
-                    workerClasspath.from(
+                    it.httpSuffix.set(parentBuildModel.httpSuffix)
+                    it.workerClasspath.from(
                         parentBuildModel.classes,
                         parentBuildModel.runtimeClasspath,
                         sapCIWorkerGeneratorClasspath,
                     )
-                    outputDirectory.set(
+                    it.outputDirectory.set(
                         layout.contextBuildDirectory.map {
                             it.dir(
                                 "generated/cikraft/apiproxies/openapi/kotlin/apiProxiesOpenApi",
@@ -173,80 +171,80 @@ abstract class OpenApiFeature :
 
             val generateOpenAPITask = apply(definition, "apiProxy", "api-proxy", SAPCI.OPENAPI_PROXY)
             generateOpenAPITask.configure {
-                openApiFile.convention(
+                it.openApiFile.convention(
                     layout.contextBuildDirectory.map {
                         it.file("cikraft/openapi-apiproxy.json")
                     },
                 )
-                this.transformers.from(apiProxiesOpenApiSourceSet.output)
+                it.transformers.from(apiProxiesOpenApiSourceSet.output)
             }
         }
     }
 
-    interface ApplyAction<D : Definition<B>, B : BuildModel> :
+    protected abstract class ApplyAction<D : Definition<B>, B : BuildModel> :
         ProjectFeatureApplyAction<OpenApiDefinition, BuildModel.None, D> {
         @get:Inject
-        val configurations: ConfigurationRegistrar
+        protected abstract val configurations: ConfigurationRegistrar
 
         @get:Inject
-        val tasks: TaskRegistrar
+        protected abstract val tasks: TaskRegistrar
 
         @get:Inject
-        val layout: ProjectFeatureLayout
+        protected abstract val layout: ProjectFeatureLayout
 
         @get:Inject
-        val dependencyFactory: DependencyFactory
+        protected abstract val dependencyFactory: DependencyFactory
 
         @get:Inject
-        val components: SoftwareComponentContainer
+        protected abstract val components: SoftwareComponentContainer
 
         @get:Inject
-        val objectFactory: ObjectFactory
+        protected abstract val objectFactory: ObjectFactory
 
-        fun apply(
+        protected fun apply(
             definition: OpenApiDefinition,
             suffix: String,
             classifier: String?,
             sapciAttribute: String,
         ): TaskProvider<GenerateOpenApi> {
             val flowsFolder = configurations.resolvable("cikraftOpenApiCreatedFlows$suffix") {
-                fromDependencyCollector(definition.dependencies.infrastructure)
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                    attribute(SAPCI.attribute, named(SAPCI.API))
+                it.fromDependencyCollector(definition.dependencies.infrastructure)
+                it.attributes {
+                    it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, SAPCI_USAGE))
+                    it.attribute(SAPCI.attribute, it.named(SAPCI::class.java, SAPCI.API))
                 }
             }
 
             val sapCIWorkerGenerator = configurations.dependencyScope("cikraftOpenApiWorkerGenerator$suffix") {
-                dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
+                it.dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
             }
             val sapCIWorkerGeneratorClasspath =
                 configurations.resolvable("cikraftOpenApiWorkerGeneratorClasspath$suffix") {
-                    extendsFrom(sapCIWorkerGenerator)
+                    it.extendsFrom(sapCIWorkerGenerator)
                 }
 
             val generateOpenApiToolsClasspath = configurations.resolvable(
                 "cikraftGenerateOpenApiTransformersClasspath$suffix",
             ) {
-                fromDependencyCollector(definition.dependencies.transformers)
+                it.fromDependencyCollector(definition.dependencies.transformers)
             }
 
             val generateOpenApi = tasks.register("generateOpenApi$suffix", GenerateOpenApi::class.java) {
-                workerClasspath.from(sapCIWorkerGeneratorClasspath)
-                createdFlows.setFrom(flowsFolder)
-                transformers.from(generateOpenApiToolsClasspath)
-                this.title.convention(definition.title)
-                this.apiDescription.convention(definition.description)
+                it.workerClasspath.from(sapCIWorkerGeneratorClasspath)
+                it.createdFlows.setFrom(flowsFolder)
+                it.transformers.from(generateOpenApiToolsClasspath)
+                it.title.convention(definition.title)
+                it.apiDescription.convention(definition.description)
             }
 
             val sapCIOpenApi = configurations.consumable("cikraftOpenApi$suffix") {
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                    attribute(SAPCI.attribute, named(sapciAttribute))
+                it.attributes {
+                    it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, SAPCI_USAGE))
+                    it.attribute(SAPCI.attribute, it.named(SAPCI::class.java, sapciAttribute))
                 }
-                outgoing {
-                    artifact(generateOpenApi) {
-                        this.classifier = classifier
+                it.outgoing {
+                    it.artifact(generateOpenApi) {
+                        it.classifier = classifier
                     }
                 }
             }

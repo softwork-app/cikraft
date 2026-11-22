@@ -8,7 +8,6 @@ import org.gradle.api.*
 import org.gradle.api.file.*
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
-import org.gradle.kotlin.dsl.*
 import org.gradle.work.*
 import org.gradle.workers.*
 import javax.inject.*
@@ -27,25 +26,25 @@ public abstract class CreateKotlinEntryPoints : DefaultTask() {
 
     @get:Input
     @get:Optional
-    abstract val useAndroidxAnnotation: Property<Boolean>
+    public abstract val useAndroidxAnnotation: Property<Boolean>
 
     @get:OutputDirectory
     public abstract val kotlinEntryPoints: DirectoryProperty
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun generateGroovyEntrypoints() {
+    protected fun generateGroovyEntrypoints() {
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
-        }.submit(CreateKotlinEntryPointsAction::class) {
-            scripts.from(this@CreateKotlinEntryPoints.scripts)
-            kotlinEntryPointsDir.set(this@CreateKotlinEntryPoints.kotlinEntryPoints)
-            useAndroidxAnnotation.set(this@CreateKotlinEntryPoints.useAndroidxAnnotation)
+            it.classpath.from(workerClasspath)
+        }.submit(CreateKotlinEntryPointsAction::class.java) {
+            it.scripts.from(scripts)
+            it.kotlinEntryPointsDir.set(kotlinEntryPoints)
+            it.useAndroidxAnnotation.set(useAndroidxAnnotation)
         }
     }
 }

@@ -6,28 +6,28 @@ import org.gradle.api.provider.Property
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 
-interface ApiCertificate :
+public interface ApiCertificate :
     Definition<ApiCertificateBuildModel>,
     Named {
-    val p12File: RegularFileProperty
+    public val p12File: RegularFileProperty
 
-    val storeName: Property<String>
+    public val storeName: Property<String>
 
-    val description: Property<String>
+    public val description: Property<String>
 }
 
-interface ApiCertificateBuildModel :
+public interface ApiCertificateBuildModel :
     BuildModel,
     Named {
-    val p12File: RegularFileProperty
+    public val p12File: RegularFileProperty
 
-    val storeName: Property<String>
+    public val storeName: Property<String>
 
-    val description: Property<String>
+    public val description: Property<String>
 }
 
 // https://github.com/gradle/gradle/issues/38207
-abstract class DefaultApiCertificateBuildModel : ApiCertificateBuildModel {
+internal abstract class DefaultApiCertificateBuildModel : ApiCertificateBuildModel {
     @get:JvmName("internalName")
     lateinit var name: String
     override fun getName(): String = name

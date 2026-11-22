@@ -24,10 +24,10 @@ public abstract class GenerateTypedGroovyStepBuilderTask : DefaultTask() {
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.NAME_ONLY)
-    abstract val groovyScripts: ConfigurableFileCollection
+    public abstract val groovyScripts: ConfigurableFileCollection
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
@@ -35,15 +35,16 @@ public abstract class GenerateTypedGroovyStepBuilderTask : DefaultTask() {
     @TaskAction
     protected fun generate() {
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
-        }.submit(GenerateTypedGroovyStepBuilderWorker::class) {
-            typedKotlinFlows.set(this@GenerateTypedGroovyStepBuilderTask.typedKotlinFlows)
-            groovyScripts.from(this@GenerateTypedGroovyStepBuilderTask.groovyScripts)
+            it.classpath.from(workerClasspath)
+        }.submit(GenerateTypedGroovyStepBuilderWorker::class.java) {
+            it.typedKotlinFlows.set(typedKotlinFlows)
+            it.groovyScripts.from(groovyScripts)
         }
     }
 }
 
-abstract class GenerateTypedGroovyStepBuilderWorker : WorkAction<GenerateTypedGroovyStepBuilderWorker.WorkParameters> {
+internal abstract class GenerateTypedGroovyStepBuilderWorker :
+    WorkAction<GenerateTypedGroovyStepBuilderWorker.WorkParameters> {
     interface WorkParameters : org.gradle.workers.WorkParameters {
         val typedKotlinFlows: DirectoryProperty
         val groovyScripts: ConfigurableFileCollection

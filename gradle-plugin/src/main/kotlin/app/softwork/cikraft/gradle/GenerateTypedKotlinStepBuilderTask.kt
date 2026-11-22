@@ -15,7 +15,6 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.submit
 import org.gradle.work.NormalizeLineEndings
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkerExecutor
@@ -40,23 +39,23 @@ public abstract class GenerateTypedKotlinStepBuilderTask : DefaultTask() {
     }
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun generate() {
+    protected fun generate() {
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
-        }.submit(GenerateTypedKotlinStepBuilderTaskWorker::class) {
-            jsonScriptEntry.from(this@GenerateTypedKotlinStepBuilderTask.jsonScriptEntry)
-            typedKotlinFlows.set(this@GenerateTypedKotlinStepBuilderTask.typedKotlinFlows)
+            it.classpath.from(workerClasspath)
+        }.submit(GenerateTypedKotlinStepBuilderTaskWorker::class.java) {
+            it.jsonScriptEntry.from(jsonScriptEntry)
+            it.typedKotlinFlows.set(typedKotlinFlows)
         }
     }
 }
 
-abstract class GenerateTypedKotlinStepBuilderTaskWorker :
+internal abstract class GenerateTypedKotlinStepBuilderTaskWorker :
     WorkAction<GenerateTypedKotlinStepBuilderTaskWorker.WorkParameters> {
     interface WorkParameters : org.gradle.workers.WorkParameters {
         val jsonScriptEntry: ConfigurableFileCollection

@@ -20,7 +20,6 @@ import org.gradle.features.dsl.bindProjectFeature
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
-import org.gradle.kotlin.dsl.named
 import java.util.*
 import javax.inject.Inject
 
@@ -60,31 +59,31 @@ abstract class JibDockerEnvironmentFeature :
             buildModel.stage.set(definition.stage)
 
             val containerWorkerDeps = configurations.dependencyScope("containerWorkerDeps") {
-                dependencies.add(
+                it.dependencies.add(
                     dependencyFactory.create("app.softwork.cikraft:core:$VERSION"),
                 )
             }
 
             val containerWorkerClasspath = configurations.resolvable("containerWorkerClasspath") {
-                extendsFrom(containerWorkerDeps)
+                it.extendsFrom(containerWorkerDeps)
             }
 
             val propertiesConfiguration = configurations.resolvable("dockerProperties") {
-                fromDependencyCollector(definition.dependencies.infrastructure)
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                    attribute(SAPCI.attribute, named(SAPCI.STAGE_PROPERTIES))
+                it.fromDependencyCollector(definition.dependencies.infrastructure)
+                it.attributes {
+                    it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, SAPCI_USAGE))
+                    it.attribute(SAPCI.attribute, it.named(SAPCI::class.java, SAPCI.STAGE_PROPERTIES))
                 }
             }
 
             val writePropertiesToFile =
                 tasks.register("writePropertiesToFile", WritePropertiesToFile::class.java) {
-                    propertyFiles.from(propertiesConfiguration)
-                    stage.set(buildModel.stage)
-                    output.convention(
+                    it.propertyFiles.from(propertiesConfiguration)
+                    it.stage.set(buildModel.stage)
+                    it.output.convention(
                         layout.contextBuildDirectory.map { it.file("cikraft/docker/properties.properties") },
                     )
-                    workerClasspath.from(containerWorkerClasspath)
+                    it.workerClasspath.from(containerWorkerClasspath)
                 }
 
             val propertiesAsMapProvider = writePropertiesToFile.flatMap { it.output }.map {

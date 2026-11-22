@@ -20,33 +20,32 @@ import org.gradle.api.file.*
 import org.gradle.api.provider.*
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.*
-import org.gradle.kotlin.dsl.*
 import org.gradle.workers.*
 import javax.inject.*
 import kotlin.io.encoding.*
 import org.gradle.api.logging.Logging as GradleLogger
 
 @UntrackedTask(because = "Creating an API certificate is a remote operation")
-abstract class CreateApiCertificateTask @Inject constructor(stageName: String) : DefaultTask() {
+public abstract class CreateApiCertificateTask @Inject constructor(stageName: String) : DefaultTask() {
     init {
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }
     }
 
     @get:Input
-    abstract val apiPortalServer: Property<String>
+    public abstract val apiPortalServer: Property<String>
 
     @get:Input
-    abstract val authServer: Property<String>
+    public abstract val authServer: Property<String>
 
     @get:Input
     internal val credentials: Provider<PasswordCredentials> = project.providers.credentials(
-        PasswordCredentials::class,
+        PasswordCredentials::class.java,
         "${SAP_CI_CREDENTIALS}Api$stageName",
     )
 
     @get:Input
-    abstract val apiCertificateName: Property<String>
+    public abstract val apiCertificateName: Property<String>
 
     @get:Input
     internal val apiCertificatePassword: Provider<String> = apiCertificateName.flatMap {
@@ -57,35 +56,35 @@ abstract class CreateApiCertificateTask @Inject constructor(stageName: String) :
 
     @get:InputFile
     @get:PathSensitive(PathSensitivity.NONE)
-    abstract val apiCertificateP12File: RegularFileProperty
+    public abstract val apiCertificateP12File: RegularFileProperty
 
     @get:Input
-    abstract val apiCertificateStoreName: Property<String>
+    public abstract val apiCertificateStoreName: Property<String>
 
     @get:Input
     @get:Optional
-    abstract val apiCertificateDescription: Property<String>
+    public abstract val apiCertificateDescription: Property<String>
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun createApiCertificate() {
+    protected fun createApiCertificate() {
         workerExecutor.processIsolation {
-            this.classpath.from(workerClasspath)
-        }.submit(CreateApiCertificateWorker::class) {
-            this.apiPortalServer.set(this@CreateApiCertificateTask.apiPortalServer)
-            this.apiPortalClientId.set(this@CreateApiCertificateTask.credentials.map { it.username })
-            this.apiPortalClientSecret.set(this@CreateApiCertificateTask.credentials.map { it.password })
-            this.authServer.set(this@CreateApiCertificateTask.authServer)
-            this.storeName.set(apiCertificateStoreName)
-            this.name.set(apiCertificateName)
-            this.p12File.set(apiCertificateP12File)
-            this.password.set(apiCertificatePassword)
-            this.description.set(apiCertificateDescription)
+            it.classpath.from(workerClasspath)
+        }.submit(CreateApiCertificateWorker::class.java) {
+            it.apiPortalServer.set(apiPortalServer)
+            it.apiPortalClientId.set(credentials.map { it.username })
+            it.apiPortalClientSecret.set(credentials.map { it.password })
+            it.authServer.set(authServer)
+            it.storeName.set(apiCertificateStoreName)
+            it.name.set(apiCertificateName)
+            it.p12File.set(apiCertificateP12File)
+            it.password.set(apiCertificatePassword)
+            it.description.set(apiCertificateDescription)
         }
     }
 }
@@ -148,44 +147,46 @@ internal abstract class CreateApiCertificateWorker : WorkAction<CreateApiCertifi
 }
 
 @UntrackedTask(because = "Deleting an API certificate is a remote operation")
-abstract class DeleteApiCertificateTask @Inject constructor(stageName: String, @get:Input val credentialName: String) :
-    DefaultTask() {
+public abstract class DeleteApiCertificateTask @Inject constructor(
+    stageName: String,
+    @get:Input public val credentialName: String,
+) : DefaultTask() {
     init {
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }
     }
 
     @get:Input
-    abstract val apiPortalServer: Property<String>
+    public abstract val apiPortalServer: Property<String>
 
     @get:Input
-    abstract val authServer: Property<String>
+    public abstract val authServer: Property<String>
 
     @get:Input
     internal val credentials: Provider<PasswordCredentials> = project.providers.credentials(
-        PasswordCredentials::class,
+        PasswordCredentials::class.java,
         "${SAP_CI_CREDENTIALS}Api$stageName",
     )
 
-    @get:Input abstract val storeName: Property<String>
+    @get:Input public abstract val storeName: Property<String>
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun deleteApiCertificate() {
+    protected fun deleteApiCertificate() {
         workerExecutor.processIsolation {
-            this.classpath.from(workerClasspath)
-        }.submit(DeleteApiCertificateWorker::class) {
-            this.apiPortalServer.set(this@DeleteApiCertificateTask.apiPortalServer)
-            this.apiPortalClientId.set(this@DeleteApiCertificateTask.credentials.map { it.username })
-            this.apiPortalClientSecret.set(this@DeleteApiCertificateTask.credentials.map { it.password })
-            this.authServer.set(this@DeleteApiCertificateTask.authServer)
-            this.storeName.set(this@DeleteApiCertificateTask.storeName)
-            this.name.set(this@DeleteApiCertificateTask.credentialName)
+            it.classpath.from(workerClasspath)
+        }.submit(DeleteApiCertificateWorker::class.java) {
+            it.apiPortalServer.set(apiPortalServer)
+            it.apiPortalClientId.set(credentials.map { it.username })
+            it.apiPortalClientSecret.set(credentials.map { it.password })
+            it.authServer.set(authServer)
+            it.storeName.set(storeName)
+            it.name.set(credentialName)
         }
     }
 }
