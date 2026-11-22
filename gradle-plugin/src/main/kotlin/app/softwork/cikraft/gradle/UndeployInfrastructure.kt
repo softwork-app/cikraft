@@ -18,7 +18,7 @@ import javax.inject.*
 import org.gradle.api.logging.Logging as GradleLogging
 
 @UntrackedTask(because = "Deleting is a remote operation.")
-abstract class UndeployInfrastructure : DefaultTask() {
+public abstract class UndeployInfrastructure : DefaultTask() {
     init {
         group = "cikraft"
         val isOffline = project.gradle.startParameter.isOffline
@@ -37,7 +37,7 @@ abstract class UndeployInfrastructure : DefaultTask() {
     @get:Input
     internal val credentials: Provider<PasswordCredentials> = stageName.flatMap { stageName ->
         project.providers.credentials(
-            PasswordCredentials::class,
+            PasswordCredentials::class.java,
             SAP_CI_CREDENTIALS + stageName.replaceFirstChar { it.uppercase() },
         )
     }
@@ -46,7 +46,7 @@ abstract class UndeployInfrastructure : DefaultTask() {
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Input
     internal abstract val flowIds: SetProperty<String>
@@ -54,19 +54,19 @@ abstract class UndeployInfrastructure : DefaultTask() {
     @get:Option(option = "suffix", description = "")
     @get:Input
     @get:Optional
-    abstract val suffix: Property<String>
+    public abstract val suffix: Property<String>
 
     @TaskAction
-    internal fun deleteFlow() {
+    protected fun deleteFlow() {
         workerExecutor.processIsolation {
-            classpath.from(workerClasspath)
-        }.submit(UndeployInfrastructureWorker::class) {
-            apiServer.set(this@UndeployInfrastructure.apiServer)
-            authServer.set(this@UndeployInfrastructure.authServer)
-            clientID.set(this@UndeployInfrastructure.credentials.map { it.username!! })
-            clientSecret.set(this@UndeployInfrastructure.credentials.map { it.password!! })
-            flowIds.set(
-                this@UndeployInfrastructure.flowIds.zip(suffix.orElse("")) { flowIds, suffix ->
+            it.classpath.from(workerClasspath)
+        }.submit(UndeployInfrastructureWorker::class.java) {
+            it.apiServer.set(apiServer)
+            it.authServer.set(authServer)
+            it.clientID.set(credentials.map { it.username!! })
+            it.clientSecret.set(credentials.map { it.password!! })
+            it.flowIds.set(
+                flowIds.zip(suffix.orElse("")) { flowIds, suffix ->
                     flowIds.map {
                         flowIdWithSuffix(it, suffix)
                     }

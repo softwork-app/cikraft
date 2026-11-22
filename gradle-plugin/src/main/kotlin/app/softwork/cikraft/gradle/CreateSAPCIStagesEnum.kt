@@ -17,7 +17,6 @@ import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.submit
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
@@ -38,7 +37,7 @@ internal interface EnumStage : Named {
 }
 
 @CacheableTask
-abstract class CreateSAPCIStagesEnum : DefaultTask() {
+public abstract class CreateSAPCIStagesEnum : DefaultTask() {
     init {
         group = "cikraft"
     }
@@ -47,27 +46,25 @@ abstract class CreateSAPCIStagesEnum : DefaultTask() {
     internal abstract val classpath: ConfigurableFileCollection
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Nested
     internal abstract val stages: NamedDomainObjectContainer<EnumStage>
 
     @get:OutputDirectory
-    abstract val outputDir: DirectoryProperty
+    public abstract val outputDir: DirectoryProperty
 
     init {
         outputDir.convention(project.layout.buildDirectory.dir("cikraft/generated/stages"))
     }
 
     @TaskAction
-    internal fun execute() {
+    protected fun execute() {
         workerExecutor.classLoaderIsolation {
-            this.classpath.from(this@CreateSAPCIStagesEnum.classpath)
-        }.submit(CreateSAPCIStagesEnumWorker::class) {
-            this.stages.putAll(
-                this@CreateSAPCIStagesEnum.stages.associateBy { it.name },
-            )
-            this.outputDir.set(this@CreateSAPCIStagesEnum.outputDir)
+            it.classpath.from(classpath)
+        }.submit(CreateSAPCIStagesEnumWorker::class.java) {
+            it.stages.putAll(stages.associateBy { it.name })
+            it.outputDir.set(outputDir)
         }
     }
 }

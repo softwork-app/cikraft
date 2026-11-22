@@ -4,8 +4,8 @@ import org.gradle.api.Named
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.provider.Property
 
-interface IntegrationPackage : Named {
-    val description: Property<String>
+public interface IntegrationPackage : Named {
+    public val description: Property<String>
 
-    val integrationFlows: NamedDomainObjectContainer<IntegrationFlow>
+    public val integrationFlows: NamedDomainObjectContainer<IntegrationFlow>
 }

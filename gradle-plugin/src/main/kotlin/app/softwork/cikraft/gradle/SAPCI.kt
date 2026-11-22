@@ -3,20 +3,20 @@ package app.softwork.cikraft.gradle
 import org.gradle.api.*
 import org.gradle.api.attributes.*
 
-interface SAPCI : Named {
-    companion object {
-        val attribute: Attribute<SAPCI> = Attribute.of("app.softwork.cikraft", SAPCI::class.java)
+public interface SAPCI : Named {
+    public companion object {
+        public val attribute: Attribute<SAPCI> = Attribute.of("app.softwork.cikraft", SAPCI::class.java)
 
-        const val JSON_ENTRYPOINTS = "entrypoints-json"
-        const val API = "api"
-        const val STAGES = "stages"
-        const val OPENAPI = "openApi"
-        const val OPENAPI_PROXY = "openApiProxy"
-        const val STAGE_PROPERTIES = "stageProperties"
+        public const val JSON_ENTRYPOINTS: String = "entrypoints-json"
+        public const val API: String = "api"
+        public const val STAGES: String = "stages"
+        public const val OPENAPI: String = "openApi"
+        public const val OPENAPI_PROXY: String = "openApiProxy"
+        public const val STAGE_PROPERTIES: String = "stageProperties"
     }
 }
 
-const val SAPCI_USAGE = "sap-ci"
+public const val SAPCI_USAGE: String = "sap-ci"
 
-const val SAPCI_JVM_TARGET = 8
+public const val SAPCI_JVM_TARGET: Int = 8
 internal const val SAPCI_JVM_TARGET_STRING = "JVM_1_8"

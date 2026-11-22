@@ -1,5 +1,6 @@
 plugins {
-    `kotlin-dsl`
+    id("java-gradle-plugin")
+    kotlin("jvm")
     id("setup")
     id("java-test-fixtures")
     id("jvm-test-suite")
@@ -7,6 +8,7 @@ plugins {
 
 kotlin {
     jvmToolchain(21)
+    explicitApi()
     compilerOptions {
         optIn.add("kotlin.uuid.ExperimentalUuidApi")
 

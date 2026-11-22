@@ -15,52 +15,52 @@ import org.gradle.workers.*
 import javax.inject.*
 
 @CacheableTask
-abstract class GeneratePropertiesTask : DefaultTask() {
+public abstract class GeneratePropertiesTask : DefaultTask() {
     init {
         group = "cikraft"
     }
 
     @get:Input
-    abstract val stage: Property<String>
+    public abstract val stage: Property<String>
 
     @get:InputFiles
     @get:SkipWhenEmpty
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
     @get:PathSensitive(PathSensitivity.NONE)
-    abstract val createdFlows: ConfigurableFileCollection
+    public abstract val createdFlows: ConfigurableFileCollection
 
     @get:InputFiles
     @get:SkipWhenEmpty
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val propertiesFiles: ConfigurableFileCollection
+    public abstract val propertiesFiles: ConfigurableFileCollection
 
     @get:OutputDirectory
-    abstract val propertiesFolder: DirectoryProperty
+    public abstract val propertiesFolder: DirectoryProperty
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun generate() {
+    protected fun generate() {
         val worker = workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
+            it.classpath.from(workerClasspath)
         }
         val propertiesFiles = propertiesFiles.asFileTree
         for (createdFlow in createdFlows.asFileTree) {
-            worker.submit(GenerateProperties::class) {
-                this.createdFlow.set(createdFlow)
-                this.propertyFile.set(
+            worker.submit(GenerateProperties::class.java) {
+                it.createdFlow.set(createdFlow)
+                it.propertyFile.set(
                     propertiesFiles.single {
                         it.parentFile.name == stage.get() && it.nameWithoutExtension == createdFlow.nameWithoutExtension
                     },
                 )
-                this.outputDirectory.set(propertiesFolder)
+                it.outputDirectory.set(propertiesFolder)
             }
         }
     }

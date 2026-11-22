@@ -7,13 +7,12 @@ import org.gradle.api.provider.*
 import org.gradle.api.provider.Provider
 import org.gradle.api.services.ServiceReference
 import org.gradle.api.tasks.*
-import org.gradle.kotlin.dsl.*
 import org.gradle.workers.*
 import javax.inject.*
 import kotlin.String
 
 @UntrackedTask(because = "Create infrastructure is a remote operation")
-abstract class ApiProxiesTask(stageName: String) : DefaultTask() {
+public abstract class ApiProxiesTask(stageName: String) : DefaultTask() {
     init {
         group = "cikraft"
         val isOffline = project.gradle.startParameter.isOffline
@@ -31,7 +30,7 @@ abstract class ApiProxiesTask(stageName: String) : DefaultTask() {
 
     @get:Input
     internal val credentials: Provider<PasswordCredentials> = project.providers.credentials(
-        PasswordCredentials::class,
+        PasswordCredentials::class.java,
         "${SAP_CI_CREDENTIALS}Api$stageName",
     )
 
@@ -39,21 +38,14 @@ abstract class ApiProxiesTask(stageName: String) : DefaultTask() {
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 }
 
 @UntrackedTask(because = "Create infrastructure is a remote operation")
-abstract class DeployApiProxiesTask @Inject constructor(private val apiName: String, stageName: String) :
-    ApiProxiesTask(
-        stageName,
-    ) {
-    init {
-        val isOffline = project.gradle.startParameter.isOffline
-        onlyIf { !isOffline }
-    }
-
+public abstract class DeployApiProxiesTask @Inject constructor(private val apiName: String, stageName: String) :
+    ApiProxiesTask(stageName) {
     @get:ServiceReference("apiTransportParallelService")
-    abstract val apiTransportParallelBuildService: Property<ApiTransportParallelBuildService>
+    internal abstract val apiTransportParallelBuildService: Property<ApiTransportParallelBuildService>
 
     @get:Input
     internal abstract val virtualHostId: Property<String>
@@ -61,36 +53,32 @@ abstract class DeployApiProxiesTask @Inject constructor(private val apiName: Str
     @TaskAction
     internal fun deploy() {
         workerExecutor.processIsolation {
-            classpath.from(workerClasspath)
-        }.submit(CreateApiProxiesWorker::class) {
-            this.apiName.set(this@DeployApiProxiesTask.apiName)
-            this.httpSuffix.set(this@DeployApiProxiesTask.httpSuffix)
-            this.apiPortalServer.set(this@DeployApiProxiesTask.apiPortalServer)
-            this.apiPortalClientId.set(this@DeployApiProxiesTask.credentials.map { it.username })
-            this.apiPortalClientSecret.set(this@DeployApiProxiesTask.credentials.map { it.password })
-            this.authServer.set(this@DeployApiProxiesTask.authServer)
-            this.virtualHostId.set(this@DeployApiProxiesTask.virtualHostId)
+            it.classpath.from(workerClasspath)
+        }.submit(CreateApiProxiesWorker::class.java) {
+            it.apiTransportParallelBuildService.set(apiTransportParallelBuildService)
+            it.apiName.set(apiName)
+            it.httpSuffix.set(httpSuffix)
+            it.apiPortalServer.set(apiPortalServer)
+            it.apiPortalClientId.set(credentials.map { it.username })
+            it.apiPortalClientSecret.set(credentials.map { it.password })
+            it.authServer.set(authServer)
+            it.virtualHostId.set(virtualHostId)
         }
     }
 }
 
 @UntrackedTask(because = "Create infrastructure is a remote operation")
-abstract class UnDeployApiProxiesTask @Inject constructor(stageName: String) : ApiProxiesTask(stageName) {
-    init {
-        val isOffline = project.gradle.startParameter.isOffline
-        onlyIf { !isOffline }
-    }
-
+public abstract class UnDeployApiProxiesTask @Inject constructor(stageName: String) : ApiProxiesTask(stageName) {
     @TaskAction
     internal fun deploy() {
         workerExecutor.processIsolation {
-            classpath.from(workerClasspath)
-        }.submit(DeleteApiProxiesWorker::class) {
-            this.httpSuffix.set(this@UnDeployApiProxiesTask.httpSuffix)
-            this.apiPortalServer.set(this@UnDeployApiProxiesTask.apiPortalServer)
-            this.apiPortalClientId.set(this@UnDeployApiProxiesTask.credentials.map { it.username })
-            this.apiPortalClientSecret.set(this@UnDeployApiProxiesTask.credentials.map { it.password })
-            this.authServer.set(this@UnDeployApiProxiesTask.authServer)
+            it.classpath.from(workerClasspath)
+        }.submit(DeleteApiProxiesWorker::class.java) {
+            it.httpSuffix.set(httpSuffix)
+            it.apiPortalServer.set(apiPortalServer)
+            it.apiPortalClientId.set(credentials.map { it.username })
+            it.apiPortalClientSecret.set(credentials.map { it.password })
+            it.authServer.set(authServer)
         }
     }
 }

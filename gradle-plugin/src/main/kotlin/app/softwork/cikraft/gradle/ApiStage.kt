@@ -2,9 +2,9 @@ package app.softwork.cikraft.gradle
 
 import org.gradle.api.provider.Property
 
-interface ApiStage : Stage {
-    val apiServer: Property<String>
-    val authServer: Property<String>
+public interface ApiStage : Stage {
+    public val apiServer: Property<String>
+    public val authServer: Property<String>
 
-    val apiPortalServer: Property<String>
+    public val apiPortalServer: Property<String>
 }

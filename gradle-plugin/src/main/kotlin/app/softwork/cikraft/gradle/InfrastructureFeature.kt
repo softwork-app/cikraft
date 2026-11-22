@@ -12,11 +12,10 @@ import org.gradle.features.dsl.bindProjectFeature
 import org.gradle.features.file.ProjectFeatureLayout
 import org.gradle.features.registration.ConfigurationRegistrar
 import org.gradle.features.registration.TaskRegistrar
-import org.gradle.kotlin.dsl.named
 import javax.inject.Inject
 
 @BindsProjectFeature(InfrastructureFeature::class)
-abstract class InfrastructureFeature :
+public abstract class InfrastructureFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(project: Project) {}
@@ -25,16 +24,16 @@ abstract class InfrastructureFeature :
             .withBuildModelImplementationType(DefaultSAPCIInfrastructureBuildModel::class.java)
     }
 
-    abstract class ApplyAction :
+    protected abstract class ApplyAction :
         ProjectFeatureApplyAction<SAPCIInfrastructureDefinition, SAPCIInfrastructureBuildModel, CiKraftBaseDefinition> {
         @get:Inject
-        abstract val configurations: ConfigurationRegistrar
+        protected abstract val configurations: ConfigurationRegistrar
 
         @get:Inject
-        abstract val tasks: TaskRegistrar
+        protected abstract val tasks: TaskRegistrar
 
         @get:Inject
-        abstract val layout: ProjectFeatureLayout
+        protected abstract val layout: ProjectFeatureLayout
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -51,45 +50,45 @@ abstract class InfrastructureFeature :
 
             // workaround until Gradle provider migration for Test.environment
             val writeStages = tasks.register("writeStages", WriteStages::class.java) {
-                this.runtimeStages.putAll(
+                it.runtimeStages.putAll(
                     buildModel.apiStages.elements.map {
                         it.associate {
                             it.name to it.httpServer.get()
                         }
                     },
                 )
-                this.runtimeStages.putAll(
+                it.runtimeStages.putAll(
                     buildModel.transportStages.elements.map {
                         it.associate {
                             it.name to it.httpServer.get()
                         }
                     },
                 )
-                this.virtualApiHosts.putAll(
+                it.virtualApiHosts.putAll(
                     buildModel.apiStages.elements.map {
                         it.associate {
                             it.name to it.apiVirtualHosts.associate { it.name to it.apiHttpServer.get() }
                         }
                     },
                 )
-                this.virtualApiHosts.putAll(
+                it.virtualApiHosts.putAll(
                     buildModel.transportStages.elements.map {
                         it.associate {
                             it.name to it.apiVirtualHosts.associate { it.name to it.apiHttpServer.get() }
                         }
                     },
                 )
-                this.httpSuffix.set(buildModel.httpSuffix)
-                this.output.set(layout.contextBuildDirectory.map { it.file("cikraft/stages.properties") })
+                it.httpSuffix.set(buildModel.httpSuffix)
+                it.output.set(layout.contextBuildDirectory.map { it.file("cikraft/stages.properties") })
             }
 
             configurations.consumable("apiStages") {
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                    attribute(SAPCI.attribute, named(SAPCI.STAGES))
+                it.attributes {
+                    it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, SAPCI_USAGE))
+                    it.attribute(SAPCI.attribute, it.named(SAPCI::class.java, SAPCI.STAGES))
                 }
-                outgoing {
-                    artifact(writeStages)
+                it.outgoing {
+                    it.artifact(writeStages)
                 }
             }
         }

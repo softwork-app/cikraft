@@ -10,21 +10,21 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
 @CacheableTask
-abstract class WriteStages : DefaultTask() {
+public abstract class WriteStages : DefaultTask() {
     @get:Input
-    abstract val runtimeStages: MapProperty<String, String>
+    public abstract val runtimeStages: MapProperty<String, String>
 
     @get:Input
-    abstract val virtualApiHosts: MapProperty<String, Map<String, String>>
+    public abstract val virtualApiHosts: MapProperty<String, Map<String, String>>
 
     @get:Input
-    abstract val httpSuffix: Property<String>
+    public abstract val httpSuffix: Property<String>
 
     @get:OutputFile
-    abstract val output: RegularFileProperty
+    public abstract val output: RegularFileProperty
 
     @TaskAction
-    internal fun writeStage() {
+    protected fun writeStage() {
         val httpSuffix = httpSuffix.get()
 
         val runtimeStages = runtimeStages.get().map { (stage, httpUrl) ->

@@ -31,6 +31,7 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
         public val apiPortalClientSecret: Property<String>
         public val virtualHostId: Property<String>
         public val authServer: Property<String>
+        public val apiTransportParallelBuildService: Property<ApiTransportParallelBuildService>
     }
 
     private val gradleLogger = GradleLogger.getLogger(CreateApiProxiesWorker::class.qualifiedName)
@@ -59,7 +60,7 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
 
         if (found != null) {
             runBlocking {
-                val transportClient = HttpClient(CIO) {
+                HttpClient(CIO) {
                     Logging {
                         setupGradleLogging(gradleLogger)
                     }
@@ -83,11 +84,13 @@ public abstract class CreateApiProxiesWorker : WorkAction<CreateApiProxiesWorker
                         )
                     }
                     expectSuccess = true
+                }.use { transportClient ->
+                    parameters.apiTransportParallelBuildService.get()
+                    transportClient.transportProxy(
+                        virtualHost = parameters.virtualHostId.get(),
+                        apiProxyAsBase64 = found.toBase64(),
+                    )
                 }
-                transportClient.transportProxy(
-                    virtualHost = parameters.virtualHostId.get(),
-                    apiProxyAsBase64 = found.toBase64(),
-                )
             }
         }
     }

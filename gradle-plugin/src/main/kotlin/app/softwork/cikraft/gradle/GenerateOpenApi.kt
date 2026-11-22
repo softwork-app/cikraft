@@ -10,7 +10,6 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
@@ -21,69 +20,68 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.submit
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import org.gradle.workers.WorkerExecutor
 import java.util.ServiceLoader
 import javax.inject.Inject
 
-interface Server {
+public interface Server {
     @get:Input
-    val http: Property<String>
+    public val http: Property<String>
 
     @get:Input
     @get:Optional
-    val description: Property<String>
+    public val description: Property<String>
 }
 
 @CacheableTask
-abstract class GenerateOpenApi : DefaultTask() {
+public abstract class GenerateOpenApi : DefaultTask() {
     init {
         group = "cikraft"
     }
 
     @get:OutputFile
-    abstract val openApiFile: RegularFileProperty
+    public abstract val openApiFile: RegularFileProperty
 
     @get:InputFiles
     @get:PathSensitive(PathSensitivity.NONE)
-    abstract val createdFlows: ConfigurableFileCollection
+    public abstract val createdFlows: ConfigurableFileCollection
 
     @get:Input
-    abstract val title: Property<String>
+    public abstract val title: Property<String>
 
     @get:Input
     @get:Optional
-    abstract val apiDescription: Property<String>
+    public abstract val apiDescription: Property<String>
 
     @get:Input
-    val version = project.version.toString()
+    public val version: String = project.version.toString()
 
     @get:Nested
-    abstract val servers: ListProperty<Server>
+    public abstract val servers: ListProperty<Server>
 
     @get:Classpath
-    abstract val transformers: ConfigurableFileCollection
+    public abstract val transformers: ConfigurableFileCollection
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun generate() {
+    protected fun generate() {
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath, transformers)
-        }.submit(GenerateOpenApiWorker::class) {
-            this.createdFlows.setFrom(this@GenerateOpenApi.createdFlows.asFileTree)
-            this.openApiFile.set(this@GenerateOpenApi.openApiFile)
-            this.name.set(this@GenerateOpenApi.title)
-            this.description.set(this@GenerateOpenApi.apiDescription)
-            this.version.set(this@GenerateOpenApi.version)
-            this.servers.set(
-                this@GenerateOpenApi.servers.map {
+            it.classpath.from(workerClasspath, transformers)
+        }.submit(GenerateOpenApiWorker::class.java) {
+            it.createdFlows.setFrom(createdFlows.asFileTree)
+            it.openApiFile.set(openApiFile)
+            it.name.set(title)
+            it.description.set(apiDescription)
+            it.version.set(version)
+            it.servers.set(
+                servers.map {
                     it.map {
                         it.http.get() to it.description.orNull
                     }
@@ -99,7 +97,7 @@ abstract class GenerateOpenApi : DefaultTask() {
             val name: Property<String>
             val description: Property<String>
             val version: Property<String>
-            val servers: SetProperty<Pair<String, String?>>
+            val servers: ListProperty<Pair<String, String?>>
         }
 
         override fun execute() {
@@ -136,4 +134,3 @@ abstract class GenerateOpenApi : DefaultTask() {
         }
     }
 }
-// /Users/philipwedemann/GitHub/sapci/gradle-plugin/src/testFixtures/resources/createProxy/infra/build/resources/apiProxiesOpenApi

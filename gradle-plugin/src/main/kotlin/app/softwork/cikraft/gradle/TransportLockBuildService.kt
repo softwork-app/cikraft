@@ -6,28 +6,26 @@ import org.gradle.api.provider.Property
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
-import org.gradle.kotlin.dsl.credentials
-import org.gradle.kotlin.dsl.submit
 import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
 
-abstract class TransportLockBuildService : BuildService<TransportLockBuildService.Parameters> {
-    interface Parameters : BuildServiceParameters {
-        val apiServer: Property<String>
-        val authServer: Property<String>
+public abstract class TransportLockBuildService : BuildService<TransportLockBuildService.Parameters> {
+    public interface Parameters : BuildServiceParameters {
+        public val apiServer: Property<String>
+        public val authServer: Property<String>
 
-        val packageName: Property<String>
-        val packageID: Property<String>
-        val packageVersion: Property<String>
-        val packageDescription: Property<String>
+        public val packageName: Property<String>
+        public val packageID: Property<String>
+        public val packageVersion: Property<String>
+        public val packageDescription: Property<String>
 
-        val apiSourceStage: Property<String>
+        public val apiSourceStage: Property<String>
 
-        val workerClasspath: ConfigurableFileCollection
+        public val workerClasspath: ConfigurableFileCollection
     }
 
     @get:Inject
-    internal abstract val providers: ProviderFactory
+    protected abstract val providers: ProviderFactory
 
     private var initialized = false
 
@@ -37,23 +35,23 @@ abstract class TransportLockBuildService : BuildService<TransportLockBuildServic
 
         val apiSourceStage = parameters.apiSourceStage.get()
         val credentials = providers.credentials(
-            PasswordCredentials::class,
+            PasswordCredentials::class.java,
             SAP_CI_CREDENTIALS + apiSourceStage,
         )
 
         val queue = workerExecutor.classLoaderIsolation {
-            classpath.from(parameters.workerClasspath)
+            it.classpath.from(parameters.workerClasspath)
         }
-        queue.submit(CreateIntegrationPackageForTransportWorker::class) {
-            apiServer.set(parameters.apiServer)
-            authServer.set(parameters.authServer)
-            clientID.set(credentials.map { it.username })
-            clientSecret.set(credentials.map { it.password })
+        queue.submit(CreateIntegrationPackageForTransportWorker::class.java) {
+            it.apiServer.set(parameters.apiServer)
+            it.authServer.set(parameters.authServer)
+            it.clientID.set(credentials.map { it.username })
+            it.clientSecret.set(credentials.map { it.password })
 
-            packageName.set(parameters.packageName)
-            packageID.set(parameters.packageID)
-            packageVersion.set(parameters.packageVersion)
-            packageDescription.set(parameters.packageDescription)
+            it.packageName.set(parameters.packageName)
+            it.packageID.set(parameters.packageID)
+            it.packageVersion.set(parameters.packageVersion)
+            it.packageDescription.set(parameters.packageDescription)
         }
         queue.await()
         initialized = true

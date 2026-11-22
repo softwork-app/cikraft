@@ -29,24 +29,24 @@ import org.gradle.features.annotations.RegistersProjectFeatures
     KotlinTestJvmTestSuiteFeature::class,
     TestFixturesFeature::class,
 )
-abstract class SAPCIEcosystemPlugin : Plugin<Settings> {
+public abstract class SAPCIEcosystemPlugin : Plugin<Settings> {
     override fun apply(settings: Settings) {
         settings.dependencyResolutionManagement.components.withModule(R8_MODULE, R8VersionRule::class.java)
 
         settings.gradle.lifecycle.beforeProject {
-            dependencies.attributesSchema {
-                attribute(SAPCI.attribute)
+            it.dependencies.attributesSchema {
+                it.attribute(SAPCI.attribute)
             }
         }
         settings.dependencyResolutionManagement {
-            versionCatalogs.register("cikraftLibs") {
-                library("sapci-script-api", SAPCI_SCRIPT_API)
-                library("sapci-generic-api", SAPCI_GENERIC_API)
-                library("sapci-adapter-api", SAPCI_ADAPTER)
-                library("sapci-groovy", SAPCI_GROOVY)
+            it.versionCatalogs.register("cikraftLibs") {
+                it.library("sapci-script-api", SAPCI_SCRIPT_API)
+                it.library("sapci-generic-api", SAPCI_GENERIC_API)
+                it.library("sapci-adapter-api", SAPCI_ADAPTER)
+                it.library("sapci-groovy", SAPCI_GROOVY)
 
-                library("runtime", "app.softwork.cikraft:runtime:$VERSION")
-                library("core", "app.softwork.cikraft:core:$VERSION")
+                it.library("runtime", "app.softwork.cikraft:runtime:$VERSION")
+                it.library("core", "app.softwork.cikraft:core:$VERSION")
             }
         }
     }

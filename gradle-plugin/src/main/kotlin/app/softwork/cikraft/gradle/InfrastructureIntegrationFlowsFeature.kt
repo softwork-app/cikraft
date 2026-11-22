@@ -32,8 +32,6 @@ import org.gradle.internal.component.external.model.ProjectDerivedCapability
 import org.gradle.jvm.tasks.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JavaToolchainService
-import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.newInstance
 import org.gradle.util.internal.TextUtil
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
@@ -43,7 +41,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinWithJavaCompilation
 import javax.inject.Inject
 
 @BindsProjectFeature(InfrastructureIntegrationFlowsFeature::class)
-abstract class InfrastructureIntegrationFlowsFeature :
+public abstract class InfrastructureIntegrationFlowsFeature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(target: Project) {}
@@ -59,31 +57,31 @@ abstract class InfrastructureIntegrationFlowsFeature :
             .withUnsafeDefinition()
     }
 
-    abstract class ApplyAction :
+    protected abstract class ApplyAction :
         ProjectFeatureApplyAction<SAPCIIFlowsDefinition, SAPCIIFlowsBuildModel, SAPCIInfrastructureDefinition> {
         @get:Inject
-        abstract val configurations: ConfigurationRegistrar
+        protected abstract val configurations: ConfigurationRegistrar
 
         @get:Inject
-        abstract val configurationContainer: ConfigurationContainer
+        protected abstract val configurationContainer: ConfigurationContainer
 
         @get:Inject
-        abstract val tasks: TaskRegistrar
+        protected abstract val tasks: TaskRegistrar
 
         @get:Inject
-        abstract val layout: ProjectFeatureLayout
+        protected abstract val layout: ProjectFeatureLayout
 
         @get:Inject
-        abstract val dependencyFactory: DependencyFactory
+        protected abstract val dependencyFactory: DependencyFactory
 
         @get:Inject
-        abstract val project: ProjectInternal
+        protected abstract val project: ProjectInternal
 
         @get:Inject
-        abstract val sourceSets: SourceSetContainer
+        protected abstract val sourceSets: SourceSetContainer
 
         @get:Inject
-        abstract val objectFactory: ObjectFactory
+        protected abstract val objectFactory: ObjectFactory
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -102,71 +100,71 @@ abstract class InfrastructureIntegrationFlowsFeature :
             val projectVersion = project.version.toString().takeUnless { it == Project.DEFAULT_VERSION }
 
             val apiWorker = configurations.dependencyScope("apiWorker") {
-                dependencies.add(dependencyFactory.create("app.softwork.cikraft:api:$VERSION"))
-                dependencies.add(dependencyFactory.create("app.softwork.cikraft:core:$VERSION"))
-                dependencies.add(dependencyFactory.create("app.softwork.cikraft:flow-dsl:$VERSION"))
-                dependencies.add(dependencyFactory.create(KTOR_CIO))
-                dependencies.add(dependencyFactory.create(KTOR_LOGGING))
+                it.dependencies.add(dependencyFactory.create("app.softwork.cikraft:api:$VERSION"))
+                it.dependencies.add(dependencyFactory.create("app.softwork.cikraft:core:$VERSION"))
+                it.dependencies.add(dependencyFactory.create("app.softwork.cikraft:flow-dsl:$VERSION"))
+                it.dependencies.add(dependencyFactory.create(KTOR_CIO))
+                it.dependencies.add(dependencyFactory.create(KTOR_LOGGING))
             }
             val apiWorkerClasspath = configurations.resolvable("apiWorkerClasspath") {
-                extendsFrom(apiWorker)
+                it.extendsFrom(apiWorker)
             }
 
             val generator = configurations.dependencyScope("generatorWorker") {
-                dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
+                it.dependencies.add(dependencyFactory.create("app.softwork.cikraft:generator:$VERSION"))
             }
             val generatorClasspath = configurations.resolvable("generatorWorkerClasspath") {
-                extendsFrom(generator)
+                it.extendsFrom(generator)
             }
 
             definition.dependencies.implementation.add("app.softwork.cikraft:integration-flow-builder-runtime:$VERSION")
 
             val integrationFlowsSourceSet = sourceSets.create("integrationFlows") {
-                configurationContainer.named(implementationConfigurationName) {
-                    fromDependencyCollector(definition.dependencies.implementation)
+                configurationContainer.named(it.implementationConfigurationName) {
+                    it.fromDependencyCollector(definition.dependencies.implementation)
                 }
-                configurationContainer.named(runtimeOnlyConfigurationName) {
-                    fromDependencyCollector(definition.dependencies.runtimeOnly)
+                configurationContainer.named(it.runtimeOnlyConfigurationName) {
+                    it.fromDependencyCollector(definition.dependencies.runtimeOnly)
                 }
-                configurationContainer.named(compileOnlyConfigurationName) {
-                    fromDependencyCollector(definition.dependencies.compileOnly)
+                configurationContainer.named(it.compileOnlyConfigurationName) {
+                    it.fromDependencyCollector(definition.dependencies.compileOnly)
                 }
-                configurationContainer.named(annotationProcessorConfigurationName) {
-                    fromDependencyCollector(definition.dependencies.annotationProcessor)
+                configurationContainer.named(it.annotationProcessorConfigurationName) {
+                    it.fromDependencyCollector(definition.dependencies.annotationProcessor)
                 }
             }
 
             val integrationFlowsSourceSetJar = tasks.register(integrationFlowsSourceSet.name + "Jar", Jar::class.java)
             integrationFlowsSourceSetJar.configure {
-                description = "Assembles a jar archive containing the classes of the 'integration-flow' feature."
-                group = BasePlugin.BUILD_GROUP
-                from(integrationFlowsSourceSet.output)
-                archiveClassifier.set(TextUtil.camelToKebabCase("integrationFlows"))
+                it.description = "Assembles a jar archive containing the classes of the 'integration-flow' feature."
+                it.group = BasePlugin.BUILD_GROUP
+                it.from(integrationFlowsSourceSet.output)
+                it.archiveClassifier.set(TextUtil.camelToKebabCase("integrationFlows"))
             }
 
             configurations.consumable("integrationFlowsRuntimeElements") {
-                attributes {
-                    attribute(
+                it.attributes {
+                    it.attribute(
                         Usage.USAGE_ATTRIBUTE,
-                        named(Usage::class.java, Usage.JAVA_RUNTIME),
+                        it.named(Usage::class.java, Usage.JAVA_RUNTIME),
                     )
-                    attribute(
+                    it.attribute(
                         Category.CATEGORY_ATTRIBUTE,
-                        named(Category::class.java, Category.LIBRARY),
+                        it.named(Category::class.java, Category.LIBRARY),
                     )
-                    attribute(
+                    it.attribute(
                         LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
-                        named(LibraryElements::class.java, LibraryElements.JAR),
+                        it.named(LibraryElements::class.java, LibraryElements.JAR),
                     )
-                    attribute(
+                    it.attribute(
                         Bundling.BUNDLING_ATTRIBUTE,
-                        named(Bundling::class.java, Bundling.EXTERNAL),
+                        it.named(Bundling::class.java, Bundling.EXTERNAL),
                     )
                 }
-                outgoing {
-                    capability(ProjectDerivedCapability(project, "integrationFlows"))
-                    artifact(integrationFlowsSourceSetJar)
-                    attributes.attribute(
+                it.outgoing {
+                    it.capability(ProjectDerivedCapability(project, "integrationFlows"))
+                    it.artifact(integrationFlowsSourceSetJar)
+                    it.attributes.attribute(
                         ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE,
                         ArtifactTypeDefinition.JAR_TYPE,
                     )
@@ -179,7 +177,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 ) { apiStages, transportStages ->
                     val stages = apiStages + transportStages
                     stages.map { stage ->
-                        objectFactory.newInstance<EnumStage>(stage.name).apply {
+                        objectFactory.newInstance(EnumStage::class.java, stage.name).apply {
                             stageDescription.set(stage.description)
                             httpServer.set(
                                 stage.httpServer.zip(buildModel.httpSuffix) { server, suffix ->
@@ -190,20 +188,20 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         }
                     }
                 }
-                stages.addAllLater(enumStages)
+                it.stages.addAllLater(enumStages)
 
-                classpath.from(generatorClasspath)
+                it.classpath.from(generatorClasspath)
             }
             integrationFlowsSourceSet.kotlin.srcDir(generateStages)
 
             val entrypointsJsonProjectDeps = configurations.dependencyScope("cikraftEntrypointsDeps") {
-                dependencies.add(dependencyFactory.createProjectDependency())
+                it.dependencies.add(dependencyFactory.createProjectDependency())
             }
             val entrypointsJsonProject = configurations.resolvable("cikraftEntrypoints") {
-                extendsFrom(entrypointsJsonProjectDeps)
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                    attribute(SAPCI.attribute, named(SAPCI.JSON_ENTRYPOINTS))
+                it.extendsFrom(entrypointsJsonProjectDeps)
+                it.attributes {
+                    it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, SAPCI_USAGE))
+                    it.attribute(SAPCI.attribute, it.named(SAPCI::class.java, SAPCI.JSON_ENTRYPOINTS))
                 }
             }
 
@@ -211,8 +209,8 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 "generateTypedKotlinFlowAccessor",
                 GenerateTypedKotlinStepBuilderTask::class.java,
             ) {
-                this.jsonScriptEntry.from(entrypointsJsonProject)
-                this.workerClasspath.from(generatorClasspath)
+                it.jsonScriptEntry.from(entrypointsJsonProject)
+                it.workerClasspath.from(generatorClasspath)
             }
             integrationFlowsSourceSet.kotlin.srcDirs(generateTypedKotlinScriptAccessors)
 
@@ -223,11 +221,11 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 "createInfrastructureDryRun",
                 CreateInfrastructureDryRun::class.java,
             ) {
-                this.stageNames.addAll(parentBuildModel.apiStages.names)
-                this.stageNames.addAll(parentBuildModel.transportStages.names)
+                it.stageNames.addAll(parentBuildModel.apiStages.names)
+                it.stageNames.addAll(parentBuildModel.transportStages.names)
 
-                this.outputFolder.convention(createInfrastructureDryRunOutputFolder)
-                classpath.from(
+                it.outputFolder.convention(createInfrastructureDryRunOutputFolder)
+                it.classpath.from(
                     integrationFlowsSourceSet.kotlin.classesDirectory,
                     integrationFlowsSourceSet.runtimeClasspath,
                     apiWorkerClasspath,
@@ -243,53 +241,45 @@ abstract class InfrastructureIntegrationFlowsFeature :
                 val taskName = stage.name.replaceFirstChar { it.uppercase() }
 
                 tasks.register("undeploy${taskName}Infrastructure", UndeployInfrastructure::class.java) {
-                    this.stageName.set(stage.name)
-                    this.apiServer.set(stage.apiServer)
-                    this.authServer.set(stage.authServer)
+                    it.stageName.set(stage.name)
+                    it.apiServer.set(stage.apiServer)
+                    it.authServer.set(stage.authServer)
 
-                    workerClasspath.from(apiWorkerClasspath)
+                    it.workerClasspath.from(apiWorkerClasspath)
 
-                    suffix.convention(parentBuildModel.suffix)
+                    it.suffix.convention(parentBuildModel.suffix)
                 }
             }
 
-            definition.integrationPackages.all {
-                val integrationPackage = this
-
-                parentBuildModel.apiStages.all {
-                    val stage = this
+            definition.integrationPackages.all { integrationPackage ->
+                parentBuildModel.apiStages.all { stage ->
                     tasks.register(
                         "create${integrationPackage.name}On${stage.name}",
                         CreateIntegrationPackageTask::class.java,
                         stage.name,
                     ).configure {
-                        this.apiServer.set(stage.apiServer)
-                        this.authServer.set(stage.authServer)
+                        it.apiServer.set(stage.apiServer)
+                        it.authServer.set(stage.authServer)
 
-                        this.packageName.set(integrationPackage.name)
-                        this.packageID.set(integrationPackage.name.replace("_", ""))
-                        this.packageVersion.set(projectVersion)
-                        this.packageDescription.set(integrationPackage.description)
+                        it.packageName.set(integrationPackage.name)
+                        it.packageID.set(integrationPackage.name.replace("_", ""))
+                        it.packageVersion.set(projectVersion)
+                        it.packageDescription.set(integrationPackage.description)
 
-                        workerClasspath.from(apiWorkerClasspath)
+                        it.workerClasspath.from(apiWorkerClasspath)
                     }
                 }
-                parentBuildModel.transportStages.all {
-                    val transportStage = this
-
-                    transportStage.apiSourceStages.all {
-                        val apiSourceStage = this
-
+                parentBuildModel.transportStages.all { transportStage ->
+                    transportStage.apiSourceStages.all { apiSourceStage ->
                         tasks.register(
                             "transport${integrationPackage.name}To${transportStage.name}From${apiSourceStage.name}",
                         ).configure {
-                            group = "cikraft"
+                            it.group = "cikraft"
                         }
                     }
                 }
 
-                this.integrationFlows.all {
-                    val integrationFlowM = this
+                integrationPackage.integrationFlows.all { integrationFlowM ->
                     val iFlowBuildModel = context.getBuildModel(integrationFlowM)
                     iFlowBuildModel as DefaultIntegrationFlowBuildModel
                     iFlowBuildModel.internalName = integrationFlowM.name
@@ -316,18 +306,18 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         configurations.resolvable(
                             "cikraft${iFlowBuildModel.name}ProjectJars",
                         ) {
-                            fromDependencyCollector(integrationFlowM.dependencies.implementation)
-                            attributes {
-                                attribute(Usage.USAGE_ATTRIBUTE, named(Usage.JAVA_RUNTIME))
+                            it.fromDependencyCollector(integrationFlowM.dependencies.implementation)
+                            it.attributes {
+                                it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, Usage.JAVA_RUNTIME))
                             }
                         },
                     )
 
                     val entrypointsJson = configurations.resolvable("cikraft${iFlowBuildModel.name}Entrypoints") {
-                        fromDependencyCollector(integrationFlowM.dependencies.implementation)
-                        attributes {
-                            attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                            attribute(SAPCI.attribute, named(SAPCI.JSON_ENTRYPOINTS))
+                        it.fromDependencyCollector(integrationFlowM.dependencies.implementation)
+                        it.attributes {
+                            it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, SAPCI_USAGE))
+                            it.attribute(SAPCI.attribute, it.named(SAPCI::class.java, SAPCI.JSON_ENTRYPOINTS))
                         }
                     }
 
@@ -335,15 +325,15 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         "generate${iFlowBuildModel.name}GroovyEntrypoints",
                         GenerateGroovyEntryPoints::class.java,
                     ) {
-                        this.groovyEntryPoints.convention(
+                        it.groovyEntryPoints.convention(
                             layout.contextBuildDirectory.map {
                                 it.file(
                                     "cikraft/${iFlowBuildModel.name}/entrypoints.groovy",
                                 )
                             },
                         )
-                        this.scripts.from(entrypointsJson)
-                        this.workerClasspath.from(generatorClasspath)
+                        it.scripts.from(entrypointsJson)
+                        it.workerClasspath.from(generatorClasspath)
                     }
 
                     iFlowBuildModel.generatedScripts.from(generateGroovyEntrypoints)
@@ -352,15 +342,15 @@ abstract class InfrastructureIntegrationFlowsFeature :
                         "generate${iFlowBuildModel.name}KotlinEntrypoints",
                         CreateKotlinEntryPoints::class.java,
                     ) {
-                        kotlinEntryPoints.convention(
+                        it.kotlinEntryPoints.convention(
                             layout.contextBuildDirectory.map {
                                 it.dir(
                                     "cikraft/${iFlowBuildModel.name}/entrypoints/kotlin",
                                 )
                             },
                         )
-                        this.scripts.from(entrypointsJson)
-                        this.workerClasspath.from(generatorClasspath)
+                        it.scripts.from(entrypointsJson)
+                        it.workerClasspath.from(generatorClasspath)
                     }
 
                     val kotlinExtension = project.extensions.getByName("kotlin") as KotlinBaseExtension
@@ -369,87 +359,86 @@ abstract class InfrastructureIntegrationFlowsFeature :
                     val compileKotlinEntrypointCompilation = kotlinJvmExtension.target.compilations.create(
                         iFlowBuildModel.name.replace("_", ""),
                     ) {
-                        this as KotlinWithJavaCompilation<*, *>
-                        defaultSourceSet.kotlin.srcDir(generateKotlinEntryPointsTask)
-                        compileTaskProvider.configure {
-                            (compilerOptions as KotlinJvmCompilerOptions).jvmTarget.set(
+                        it as KotlinWithJavaCompilation<*, *>
+                        it.defaultSourceSet.kotlin.srcDir(generateKotlinEntryPointsTask)
+                        it.compileTaskProvider.configure {
+                            (it.compilerOptions as KotlinJvmCompilerOptions).jvmTarget.set(
                                 JvmTarget.valueOf(SAPCI_JVM_TARGET_STRING),
                             )
                         }
-                        compileJavaTaskProvider.configure {
-                            options.release.set(SAPCI_JVM_TARGET)
+                        it.compileJavaTaskProvider.configure {
+                            it.options.release.set(SAPCI_JVM_TARGET)
                         }
-                        configurationContainer.getByName(implementationConfigurationName) {
-                            fromDependencyCollector(integrationFlowM.dependencies.implementation)
-                            extendsFrom(configurationContainer.getByName("implementation"))
-                            dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
-                            dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
-                            dependencies.add(dependencyFactory.create(SAPCI_CAMEL))
-                            dependencies.add(dependencyFactory.create(SAPCI_ACTIVATION))
+                        configurationContainer.getByName(it.implementationConfigurationName) {
+                            it.fromDependencyCollector(integrationFlowM.dependencies.implementation)
+                            it.extendsFrom(configurationContainer.getByName("implementation"))
+                            it.dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
+                            it.dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
+                            it.dependencies.add(dependencyFactory.create(SAPCI_CAMEL))
+                            it.dependencies.add(dependencyFactory.create(SAPCI_ACTIVATION))
                         }
                     }
 
                     iFlowBuildModel.kotlinEntryPointsClasses.from(compileKotlinEntrypointCompilation.output.classesDirs)
 
                     val jar = tasks.register("cikraft" + iFlowBuildModel.name + "Jar", Jar::class.java) {
-                        from(iFlowBuildModel.kotlinEntryPointsClasses)
-                        destinationDirectory.set(
+                        it.from(iFlowBuildModel.kotlinEntryPointsClasses)
+                        it.destinationDirectory.set(
                             layout.contextBuildDirectory.map {
                                 it.dir("cikraft/${iFlowBuildModel.name}")
                             },
                         )
-                        archiveFileName.set("entrypoints.jar")
+                        it.archiveFileName.set("entrypoints.jar")
                     }
 
                     iFlowBuildModel.libs.from(jar, iFlowBuildModel.dependenciesJars)
 
                     val generateTypedKotlinIntegrationFlowBuilder = tasks.register(
-                        "generateFlowAccessor$name",
+                        "generateFlowAccessor${iFlowBuildModel.name}",
                         GenerateTypedKotlinIntegrationFlowBuilderTask::class.java,
                     ) {
-                        this.jsonScriptEntry.from(entrypointsJson)
-                        this.packageName.set(integrationPackage.name)
-                        this.packageDescription.set(integrationPackage.description)
-                        this.flowName.set(iFlowBuildModel.name)
-                        this.flowDescription.set(iFlowBuildModel.description)
-                        this.flowSource.addAll(iFlowBuildModel.source)
-                        this.flowTarget.addAll(iFlowBuildModel.target)
+                        it.jsonScriptEntry.from(entrypointsJson)
+                        it.packageName.set(integrationPackage.name)
+                        it.packageDescription.set(integrationPackage.description)
+                        it.flowName.set(iFlowBuildModel.name)
+                        it.flowDescription.set(iFlowBuildModel.description)
+                        it.flowSource.addAll(iFlowBuildModel.source)
+                        it.flowTarget.addAll(iFlowBuildModel.target)
 
-                        suffix.set(parentBuildModel.suffix)
-                        this.baseUrl.set(buildModel.httpSuffix)
-                        this.workerClasspath.from(generatorClasspath)
-                        this.groovyScripts.from(iFlowBuildModel.scripts)
-                        this.autoNumbering.set(iFlowBuildModel.autoNumbering)
+                        it.suffix.set(parentBuildModel.suffix)
+                        it.baseUrl.set(buildModel.httpSuffix)
+                        it.workerClasspath.from(generatorClasspath)
+                        it.groovyScripts.from(iFlowBuildModel.scripts)
+                        it.autoNumbering.set(iFlowBuildModel.autoNumbering)
                     }
 
                     integrationFlowsSourceSet.kotlin.srcDirs(generateTypedKotlinIntegrationFlowBuilder)
 
                     createInfrastructureDryRun.configure {
-                        this.expectedRawIFlowsIds.add(iFlowBuildModel.name.replace("_", ""))
-                        entryPoints.from(entrypointsJson)
+                        it.expectedRawIFlowsIds.add(iFlowBuildModel.name.replace("_", ""))
+                        it.entryPoints.from(entrypointsJson)
                     }
 
                     val generateTypedKotlinScriptAccessors = tasks.register(
-                        "generateTypedKotlinFlowAccessor$name",
+                        "generateTypedKotlinFlowAccessor${iFlowBuildModel.name}",
                         GenerateTypedKotlinStepBuilderTask::class.java,
                     ) {
-                        this.jsonScriptEntry.from(entrypointsJson)
-                        this.workerClasspath.from(generatorClasspath)
+                        it.jsonScriptEntry.from(entrypointsJson)
+                        it.workerClasspath.from(generatorClasspath)
                     }
                     integrationFlowsSourceSet.kotlin.srcDirs(generateTypedKotlinScriptAccessors)
 
                     val generateTypeGroovyScriptAccessors = tasks.register(
-                        "generateTypedGroovyFlowAccessor$name",
+                        "generateTypedGroovyFlowAccessor${iFlowBuildModel.name}",
                         GenerateTypedGroovyStepBuilderTask::class.java,
                     ) {
-                        this.groovyScripts.from(iFlowBuildModel.scripts)
-                        this.workerClasspath.from(generatorClasspath)
+                        it.groovyScripts.from(iFlowBuildModel.scripts)
+                        it.workerClasspath.from(generatorClasspath)
                     }
 
                     integrationFlowsSourceSet.kotlin.srcDirs(generateTypeGroovyScriptAccessors)
 
-                    parentBuildModel.apiStages.all {
-                        val stage = this
+                    parentBuildModel.apiStages.all { stage ->
                         val stageName = stage.name.replaceFirstChar { it.uppercase() }
 
                         val uploadIFlow = tasks.register(
@@ -458,21 +447,21 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             stage.name,
                         )
                         uploadIFlow.configure {
-                            dependsOn("create${integrationPackage.name}On${stage.name}")
-                            this.libs.from(iFlowBuildModel.libs)
-                            this.scripts.from(iFlowBuildModel.scripts)
-                            this.scripts.from(iFlowBuildModel.generatedScripts)
-                            this.flowXmlDefinition.set(
+                            it.dependsOn("create${integrationPackage.name}On$stageName")
+                            it.libs.from(iFlowBuildModel.libs)
+                            it.scripts.from(iFlowBuildModel.scripts)
+                            it.scripts.from(iFlowBuildModel.generatedScripts)
+                            it.flowXmlDefinition.set(
                                 createInfrastructureDryRun.flatMap { it.outputFolder }
                                     .map { it.file("definitions/${iFlowBuildModel.name}.xml") },
                             )
 
-                            this.apiServer.set(stage.apiServer)
-                            this.authServer.set(stage.authServer)
+                            it.apiServer.set(stage.apiServer)
+                            it.authServer.set(stage.authServer)
 
-                            this.packageID.set(integrationPackage.name.replace("_", ""))
+                            it.packageID.set(integrationPackage.name.replace("_", ""))
 
-                            this.flowName.set(
+                            it.flowName.set(
                                 parentBuildModel.suffix.orElse("").map { suffix ->
                                     if (suffix.isBlank()) {
                                         iFlowBuildModel.name
@@ -482,17 +471,17 @@ abstract class InfrastructureIntegrationFlowsFeature :
                                     }
                                 },
                             )
-                            this.flowID.set(iFlowBuildModel.flowID)
-                            this.flowDescription.set(iFlowBuildModel.description)
-                            this.flowSource.set(iFlowBuildModel.source)
-                            this.flowTarget.set(iFlowBuildModel.target)
-                            this.parametersFile.set(
+                            it.flowID.set(iFlowBuildModel.flowID)
+                            it.flowDescription.set(iFlowBuildModel.description)
+                            it.flowSource.set(iFlowBuildModel.source)
+                            it.flowTarget.set(iFlowBuildModel.target)
+                            it.parametersFile.set(
                                 createInfrastructureDryRun.flatMap { it.outputFolder }
                                     .map { it.file("properties/$stageName/${iFlowBuildModel.name}.properties") },
                             )
 
-                            workerClasspath.from(apiWorkerClasspath)
-                            this.version.set(projectVersion)
+                            it.workerClasspath.from(apiWorkerClasspath)
+                            it.version.set(projectVersion)
                         }
 
                         val deployIFlow = tasks.register(
@@ -501,29 +490,27 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             stage.name,
                         )
                         deployIFlow.configure {
-                            dependsOn("upload${iFlowBuildModel.name}On${stage.name}")
+                            it.dependsOn("upload${iFlowBuildModel.name}On${stage.name}")
 
-                            this.apiServer.set(stage.apiServer)
-                            this.authServer.set(stage.authServer)
+                            it.apiServer.set(stage.apiServer)
+                            it.authServer.set(stage.authServer)
 
-                            this.flowID.set(iFlowBuildModel.flowID)
-                            this.version.set(projectVersion)
+                            it.flowID.set(iFlowBuildModel.flowID)
+                            it.version.set(projectVersion)
 
-                            workerClasspath.from(apiWorkerClasspath)
+                            it.workerClasspath.from(apiWorkerClasspath)
                         }
 
-                        deployToStage[this]!!.configure {
-                            dependsOn(deployIFlow)
+                        deployToStage[stage]!!.configure {
+                            it.dependsOn(deployIFlow)
                         }
-                        undeployToStage[this]!!.configure {
-                            flowIds.add(iFlowBuildModel.name)
+                        undeployToStage[stage]!!.configure {
+                            it.flowIds.add(iFlowBuildModel.name)
                         }
                     }
-                    parentBuildModel.transportStages.all {
-                        val transportStage = this
+                    parentBuildModel.transportStages.all { transportStage ->
                         val transportStageName = transportStage.name
-                        apiSourceStages.all {
-                            val apiSourceStage = this
+                        transportStage.apiSourceStages.all { apiSourceStage ->
                             val stage = parentBuildModel.apiStages.named(apiSourceStage.name)
 
                             val service = project.gradle.sharedServices.registerIfAbsent(
@@ -533,16 +520,16 @@ abstract class InfrastructureIntegrationFlowsFeature :
                                 ) + apiSourceStage.name,
                                 TransportLockBuildService::class.java,
                             ) {
-                                parameters {
-                                    this.packageID.set(integrationPackage.name.replace("_", ""))
-                                    this.apiSourceStage.set(apiSourceStage.name)
+                                it.parameters {
+                                    it.packageID.set(integrationPackage.name.replace("_", ""))
+                                    it.apiSourceStage.set(apiSourceStage.name)
 
-                                    this.apiServer.set(stage.flatMap { it.apiServer })
-                                    this.authServer.set(stage.flatMap { it.authServer })
-                                    this.packageName.set(integrationPackage.name)
-                                    this.packageDescription.set(integrationPackage.description)
-                                    this.packageVersion.set(projectVersion)
-                                    this.workerClasspath.from(apiWorkerClasspath)
+                                    it.apiServer.set(stage.flatMap { it.apiServer })
+                                    it.authServer.set(stage.flatMap { it.authServer })
+                                    it.packageName.set(integrationPackage.name)
+                                    it.packageDescription.set(integrationPackage.description)
+                                    it.packageVersion.set(projectVersion)
+                                    it.workerClasspath.from(apiWorkerClasspath)
                                 }
                             }
 
@@ -553,22 +540,22 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             )
 
                             uploadIFlow.configure {
-                                this.libs.from(iFlowBuildModel.libs)
-                                this.scripts.from(iFlowBuildModel.scripts)
-                                this.scripts.from(iFlowBuildModel.generatedScripts)
-                                this.flowXmlDefinition.set(
+                                it.libs.from(iFlowBuildModel.libs)
+                                it.scripts.from(iFlowBuildModel.scripts)
+                                it.scripts.from(iFlowBuildModel.generatedScripts)
+                                it.flowXmlDefinition.set(
                                     createInfrastructureDryRun.flatMap { it.outputFolder }
                                         .map { it.file("definitions/${iFlowBuildModel.name}.xml") },
                                 )
 
-                                this.lockService.set(service)
+                                it.lockService.set(service)
 
-                                this.apiServer.set(stage.flatMap { it.apiServer })
-                                this.authServer.set(stage.flatMap { it.authServer })
+                                it.apiServer.set(stage.flatMap { it.apiServer })
+                                it.authServer.set(stage.flatMap { it.authServer })
 
-                                this.packageID.set(integrationPackage.name.replace("_", ""))
+                                it.packageID.set(integrationPackage.name.replace("_", ""))
 
-                                this.flowName.set(
+                                it.flowName.set(
                                     parentBuildModel.suffix.orElse("").map { suffix ->
                                         if (suffix.isBlank()) {
                                             iFlowBuildModel.name
@@ -578,11 +565,11 @@ abstract class InfrastructureIntegrationFlowsFeature :
                                         }
                                     },
                                 )
-                                this.flowID.set(iFlowBuildModel.flowID)
-                                this.flowDescription.set(iFlowBuildModel.description)
-                                this.flowSource.set(iFlowBuildModel.source)
-                                this.flowTarget.set(iFlowBuildModel.target)
-                                this.parametersFile.set(
+                                it.flowID.set(iFlowBuildModel.flowID)
+                                it.flowDescription.set(iFlowBuildModel.description)
+                                it.flowSource.set(iFlowBuildModel.source)
+                                it.flowTarget.set(iFlowBuildModel.target)
+                                it.parametersFile.set(
                                     createInfrastructureDryRun.flatMap { it.outputFolder }
                                         .map {
                                             it.file(
@@ -591,8 +578,8 @@ abstract class InfrastructureIntegrationFlowsFeature :
                                         },
                                 )
 
-                                workerClasspath.from(apiWorkerClasspath)
-                                this.version.set(projectVersion)
+                                it.workerClasspath.from(apiWorkerClasspath)
+                                it.version.set(projectVersion)
                             }
 
                             val transportIPTask = project.tasks.named(
@@ -600,7 +587,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             )
 
                             transportIPTask.configure {
-                                dependsOn(uploadIFlow)
+                                it.dependsOn(uploadIFlow)
                             }
                         }
                     }
@@ -608,13 +595,13 @@ abstract class InfrastructureIntegrationFlowsFeature :
             }
 
             configurations.consumable("aggregatedDryRun") {
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                    attribute(SAPCI.attribute, named(SAPCI.API))
+                it.attributes {
+                    it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, SAPCI_USAGE))
+                    it.attribute(SAPCI.attribute, it.named(SAPCI::class.java, SAPCI.API))
                 }
-                outgoing {
+                it.outgoing {
                     val createdFlowsArtifact = objectFactory.newInstance(
-                        LazyDirectoryArtifact::class,
+                        LazyDirectoryArtifact::class.java,
                         ArtifactTypeDefinition.DIRECTORY_TYPE,
                         "createdFlows",
                         createInfrastructureDryRun,
@@ -622,18 +609,18 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             it.dir("flows")
                         },
                     )
-                    artifact(createdFlowsArtifact)
+                    it.artifact(createdFlowsArtifact)
                 }
             }
 
             configurations.consumable("cikraftProperties") {
-                attributes {
-                    attribute(Usage.USAGE_ATTRIBUTE, named(SAPCI_USAGE))
-                    attribute(SAPCI.attribute, named(SAPCI.STAGE_PROPERTIES))
+                it.attributes {
+                    it.attribute(Usage.USAGE_ATTRIBUTE, it.named(Usage::class.java, SAPCI_USAGE))
+                    it.attribute(SAPCI.attribute, it.named(SAPCI::class.java, SAPCI.STAGE_PROPERTIES))
                 }
-                outgoing {
+                it.outgoing {
                     val propertiesStageArtifact = objectFactory.newInstance(
-                        LazyDirectoryArtifact::class,
+                        LazyDirectoryArtifact::class.java,
                         "properties",
                         "properties",
                         createInfrastructureDryRun,
@@ -641,7 +628,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
                             it.dir("properties")
                         },
                     )
-                    artifact(propertiesStageArtifact)
+                    it.artifact(propertiesStageArtifact)
                 }
             }
         }
@@ -651,7 +638,7 @@ abstract class InfrastructureIntegrationFlowsFeature :
 internal val SourceSet.kotlin get() = extensions.getByName("kotlin") as org.gradle.api.file.SourceDirectorySet
 
 @BindsProjectFeature(InfrastructureIntegrationFlowsR8Feature::class)
-abstract class InfrastructureIntegrationFlowsR8Feature :
+public abstract class InfrastructureIntegrationFlowsR8Feature :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(target: Project) {}
@@ -663,21 +650,21 @@ abstract class InfrastructureIntegrationFlowsR8Feature :
             .withUnsafeApplyAction()
     }
 
-    abstract class ApplyAction : ProjectFeatureApplyAction<R8Definition, R8BuildModel, IntegrationFlow> {
+    protected abstract class ApplyAction : ProjectFeatureApplyAction<R8Definition, R8BuildModel, IntegrationFlow> {
         @get:Inject
-        abstract val tasks: TaskRegistrar
+        protected abstract val tasks: TaskRegistrar
 
         @get:Inject
-        abstract val configurations: ConfigurationRegistrar
+        protected abstract val configurations: ConfigurationRegistrar
 
         @get:Inject
-        abstract val layout: ProjectFeatureLayout
+        protected abstract val layout: ProjectFeatureLayout
 
         @get:Inject
-        abstract val dependencyFactory: DependencyFactory
+        protected abstract val dependencyFactory: DependencyFactory
 
         @get:Inject
-        abstract val javaToolchainService: JavaToolchainService
+        protected abstract val javaToolchainService: JavaToolchainService
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -699,39 +686,39 @@ abstract class InfrastructureIntegrationFlowsR8Feature :
             )
 
             val r8ClasspathConfig = configurations.resolvable("r8Classpath${iFlowBuildModel.name}") {
-                fromDependencyCollector(buildModel.r8DependencyCollector)
+                it.fromDependencyCollector(buildModel.r8DependencyCollector)
             }
 
             val libs = layout.contextBuildDirectory.map { it.dir("cikraft/${iFlowBuildModel.name}/libs") }
 
             val sapciRuntimeLibs = configurations.dependencyScope("sapciRuntimeLibs${iFlowBuildModel.name}") {
-                dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
-                dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
-                dependencies.add(dependencyFactory.create(SAPCI_CAMEL))
-                dependencies.add(dependencyFactory.create(SAPCI_ACTIVATION))
+                it.dependencies.add(dependencyFactory.create(SAPCI_SCRIPT_API))
+                it.dependencies.add(dependencyFactory.create(SAPCI_GENERIC_API))
+                it.dependencies.add(dependencyFactory.create(SAPCI_CAMEL))
+                it.dependencies.add(dependencyFactory.create(SAPCI_ACTIVATION))
             }
 
             val r8LibJars = configurations.resolvable("r8LibJars${iFlowBuildModel.name}") {
-                extendsFrom(sapciRuntimeLibs)
+                it.extendsFrom(sapciRuntimeLibs)
             }
 
             val r8Jar = tasks.register("r8Jar${iFlowBuildModel.name}", R8JarTask::class.java) {
-                this.r8Jar.set(libs.map { it.file("r8.jar") })
-                this.additionalRules.addAll(
+                it.r8Jar.set(libs.map { it.file("r8.jar") })
+                it.additionalRules.addAll(
                     "-dontobfuscate",
                     "-allowaccessmodification",
                     "-keepattributes SourceFile, LineNumberTable",
                     "-keep,allowoptimization public class CiKraftEntrypointsKt { <methods>; }",
                 )
-                this.additionalRules.addAll(buildModel.additionalRules)
-                this.programFiles.from(iFlowBuildModel.kotlinEntryPointsClasses, iFlowBuildModel.dependenciesJars)
-                this.libJars.from(r8LibJars)
-                this.javaHome.set(
+                it.additionalRules.addAll(buildModel.additionalRules)
+                it.programFiles.from(iFlowBuildModel.kotlinEntryPointsClasses, iFlowBuildModel.dependenciesJars)
+                it.libJars.from(r8LibJars)
+                it.javaHome.set(
                     javaToolchainService.launcherFor {
-                        languageVersion.set(JavaLanguageVersion.of(SAPCI_JVM_TARGET))
+                        it.languageVersion.set(JavaLanguageVersion.of(SAPCI_JVM_TARGET))
                     }.map { it.metadata.installationPath },
                 )
-                this.r8Classpath.setFrom(r8ClasspathConfig)
+                it.r8Classpath.setFrom(r8ClasspathConfig)
             }
 
             iFlowBuildModel.libs.setFrom(r8Jar)

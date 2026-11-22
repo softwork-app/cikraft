@@ -21,39 +21,39 @@ import org.gradle.workers.WorkerExecutor
 import javax.inject.Inject
 
 @CacheableTask
-abstract class GenerateTypeApiRuntimeProviders : DefaultTask() {
+public abstract class GenerateTypeApiRuntimeProviders : DefaultTask() {
     @get:Nested
-    abstract val apiRuntimeProviders: NamedDomainObjectContainer<ApiRuntimeProvider>
+    public abstract val apiRuntimeProviders: NamedDomainObjectContainer<ApiRuntimeProvider>
 
     @get:OutputDirectory
-    abstract val outputDirectory: DirectoryProperty
+    public abstract val outputDirectory: DirectoryProperty
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
-    internal abstract val workerClasspath: ConfigurableFileCollection
+    public abstract val workerClasspath: ConfigurableFileCollection
 
-    abstract class ApiRuntimeProvider @Inject constructor(private val name: String) : Named {
+    public abstract class ApiRuntimeProvider @Inject constructor(private val name: String) : Named {
         @Input
         override fun getName(): String = name
 
         @get:Input
         @get:Optional
-        abstract val description: Property<String>
+        public abstract val description: Property<String>
     }
 
     @TaskAction
     protected fun generate() {
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
+            it.classpath.from(workerClasspath)
         }.submit(GenerateTypeApiRuntimeProvidersWorker::class.java) {
-            apiRuntimeProviders.addAll(
+            it.apiRuntimeProviders.addAll(
                 this@GenerateTypeApiRuntimeProviders.apiRuntimeProviders.map {
                     it.name to it.description.orNull
                 },
             )
-            outputDirectory.set(this@GenerateTypeApiRuntimeProviders.outputDirectory)
+            it.outputDirectory.set(this@GenerateTypeApiRuntimeProviders.outputDirectory)
         }
     }
 }

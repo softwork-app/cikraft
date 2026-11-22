@@ -33,8 +33,6 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.UntrackedTask
-import org.gradle.kotlin.dsl.credentials
-import org.gradle.kotlin.dsl.submit
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import org.gradle.workers.WorkerExecutor
@@ -76,7 +74,7 @@ internal abstract class UploadIFlow @Inject constructor(
 
     @get:Input
     internal val credentials: Provider<PasswordCredentials> = project.providers.credentials(
-        PasswordCredentials::class,
+        PasswordCredentials::class.java,
         SAP_CI_CREDENTIALS + stageName,
     )
 
@@ -109,32 +107,32 @@ internal abstract class UploadIFlow @Inject constructor(
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @TaskAction
-    internal fun create() {
+    protected fun create() {
         lockService.orNull?.initialize(workerExecutor)
 
         workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
-        }.submit(UploadIFlowWorker::class) {
-            apiServer.set(this@UploadIFlow.apiServer)
-            authServer.set(this@UploadIFlow.authServer)
-            clientID.set(this@UploadIFlow.credentials.map { it.username })
-            clientSecret.set(this@UploadIFlow.credentials.map { it.password })
+            it.classpath.from(workerClasspath)
+        }.submit(UploadIFlowWorker::class.java) {
+            it.apiServer.set(apiServer)
+            it.authServer.set(authServer)
+            it.clientID.set(credentials.map { it.username })
+            it.clientSecret.set(credentials.map { it.password })
 
-            packageID.set(this@UploadIFlow.packageID)
-            flowName.set(this@UploadIFlow.flowName)
-            flowID.set(this@UploadIFlow.flowID)
-            flowDescription.set(this@UploadIFlow.flowDescription)
-            flowSource.set(this@UploadIFlow.flowSource)
-            flowTarget.set(this@UploadIFlow.flowTarget)
+            it.packageID.set(packageID)
+            it.flowName.set(flowName)
+            it.flowID.set(flowID)
+            it.flowDescription.set(flowDescription)
+            it.flowSource.set(flowSource)
+            it.flowTarget.set(flowTarget)
 
-            definitions.set(this@UploadIFlow.flowXmlDefinition)
-            parametersFile.set(this@UploadIFlow.parametersFile)
-            libs.from(this@UploadIFlow.libs)
-            scripts.from(this@UploadIFlow.scripts)
-            version.set(this@UploadIFlow.version)
+            it.definitions.set(flowXmlDefinition)
+            it.parametersFile.set(parametersFile)
+            it.libs.from(libs)
+            it.scripts.from(scripts)
+            it.version.set(version)
         }
     }
 }

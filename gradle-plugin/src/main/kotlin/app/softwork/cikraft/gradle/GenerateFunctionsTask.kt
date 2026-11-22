@@ -13,7 +13,7 @@ import org.gradle.workers.*
 import javax.inject.*
 
 @CacheableTask
-abstract class GenerateFunctionsTask : DefaultTask() {
+public abstract class GenerateFunctionsTask : DefaultTask() {
     init {
         group = "cikraft"
     }
@@ -23,31 +23,31 @@ abstract class GenerateFunctionsTask : DefaultTask() {
     @get:IgnoreEmptyDirectories
     @get:NormalizeLineEndings
     @get:PathSensitive(PathSensitivity.NONE)
-    abstract val createdFlows: ConfigurableFileCollection
+    public abstract val createdFlows: ConfigurableFileCollection
 
     @get:Input
-    abstract val functions: SetProperty<String>
+    public abstract val functions: SetProperty<String>
 
     @get:OutputDirectory
-    abstract val functionsFolder: DirectoryProperty
+    public abstract val functionsFolder: DirectoryProperty
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun generate() {
+    protected fun generate() {
         val worker = workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
+            it.classpath.from(workerClasspath)
         }
         val functions = functions.get()
         for (createdFlow in createdFlows.asFileTree) {
             if (functions.isEmpty() || createdFlow.nameWithoutExtension in functions) {
-                worker.submit(GenerateFunctions::class) {
-                    this.createdFlow.set(createdFlow)
-                    this.outputDirectory.set(functionsFolder)
+                worker.submit(GenerateFunctions::class.java) {
+                    it.createdFlow.set(createdFlow)
+                    it.outputDirectory.set(functionsFolder)
                 }
             }
         }

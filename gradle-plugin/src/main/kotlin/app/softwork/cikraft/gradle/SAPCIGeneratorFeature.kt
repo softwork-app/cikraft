@@ -18,7 +18,7 @@ import org.gradle.features.dsl.bindProjectFeature
 import javax.inject.Inject
 
 @BindsProjectFeature(SAPCIGeneratorTestSuiteWrapper::class)
-abstract class SAPCIGeneratorTestSuiteWrapper :
+public abstract class SAPCIGeneratorTestSuiteWrapper :
     Plugin<Project>,
     ProjectFeatureBinding {
     override fun apply(project: Project) {}
@@ -30,7 +30,7 @@ abstract class SAPCIGeneratorTestSuiteWrapper :
             .withUnsafeApplyAction()
     }
 
-    abstract class JvmDclTestSuiteApplyAction :
+    protected abstract class JvmDclTestSuiteApplyAction :
         ProjectFeatureApplyAction<SAPCIGeneratorDefinition, SAPCIGeneratorBuildModel, JvmDclTestSuite> {
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -45,10 +45,10 @@ abstract class SAPCIGeneratorTestSuiteWrapper :
         }
     }
 
-    abstract class JavaTestFixturesApplyAction :
+    protected abstract class JavaTestFixturesApplyAction :
         ProjectFeatureApplyAction<SAPCIGeneratorDefinition, SAPCIGeneratorBuildModel, TestFixturesDefinition> {
         @get:Inject
-        abstract val sourceSets: SourceSetContainer
+        protected abstract val sourceSets: SourceSetContainer
 
         override fun apply(
             context: ProjectFeatureApplicationContext,
@@ -63,15 +63,15 @@ abstract class SAPCIGeneratorTestSuiteWrapper :
     }
 }
 
-interface SAPCIGeneratorDefinition : Definition<SAPCIGeneratorBuildModel>
+public interface SAPCIGeneratorDefinition : Definition<SAPCIGeneratorBuildModel>
 
-interface SAPCIGeneratorBuildModel :
+public interface SAPCIGeneratorBuildModel :
     BuildModel,
     Named {
-    val sourceDirectorySet: SourceDirectorySet
+    public val sourceDirectorySet: SourceDirectorySet
 }
 
-abstract class DefaultSAPCIGeneratorBuildModel : SAPCIGeneratorBuildModel {
+internal abstract class DefaultSAPCIGeneratorBuildModel : SAPCIGeneratorBuildModel {
     override fun getName(): String = internalName
     lateinit var internalName: String
     override lateinit var sourceDirectorySet: SourceDirectorySet

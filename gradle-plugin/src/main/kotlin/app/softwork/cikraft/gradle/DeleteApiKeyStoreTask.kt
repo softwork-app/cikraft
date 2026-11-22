@@ -16,48 +16,48 @@ import org.gradle.api.file.*
 import org.gradle.api.provider.*
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.*
-import org.gradle.kotlin.dsl.*
 import org.gradle.workers.*
 import javax.inject.*
 import org.gradle.api.logging.Logging as GradleLogger
 
 @UntrackedTask(because = "Deleting an API keystore is a remote operation")
-abstract class DeleteApiKeyStoreTask @Inject constructor(stageName: String) : DefaultTask() {
+public abstract class DeleteApiKeyStoreTask @Inject constructor(stageName: String) : DefaultTask() {
     init {
         val isOffline = project.gradle.startParameter.isOffline
         onlyIf { !isOffline }
     }
 
-    @get:Input abstract val apiKeyStoreName: Property<String>
+    @get:Input
+    public abstract val apiKeyStoreName: Property<String>
 
     @get:Input
-    abstract val apiPortalServer: Property<String>
+    public abstract val apiPortalServer: Property<String>
 
     @get:Input
-    abstract val authServer: Property<String>
+    public abstract val authServer: Property<String>
 
     @get:Input
     internal val credentials: Provider<PasswordCredentials> = project.providers.credentials(
-        PasswordCredentials::class,
+        PasswordCredentials::class.java,
         "${SAP_CI_CREDENTIALS}Api$stageName",
     )
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun deleteApiKeyStore() {
+    protected fun deleteApiKeyStore() {
         workerExecutor.processIsolation {
-            this.classpath.from(workerClasspath)
-        }.submit(DeleteApiKeyStoreWorker::class) {
-            this.apiPortalServer.set(this@DeleteApiKeyStoreTask.apiPortalServer)
-            this.apiPortalClientId.set(this@DeleteApiKeyStoreTask.credentials.map { it.username })
-            this.apiPortalClientSecret.set(this@DeleteApiKeyStoreTask.credentials.map { it.password })
-            this.authServer.set(this@DeleteApiKeyStoreTask.authServer)
-            this.name.set(this@DeleteApiKeyStoreTask.apiKeyStoreName)
+            it.classpath.from(workerClasspath)
+        }.submit(DeleteApiKeyStoreWorker::class.java) {
+            it.apiPortalServer.set(apiPortalServer)
+            it.apiPortalClientId.set(credentials.map { it.username })
+            it.apiPortalClientSecret.set(credentials.map { it.password })
+            it.authServer.set(authServer)
+            it.name.set(apiKeyStoreName)
         }
     }
 }

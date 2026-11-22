@@ -7,15 +7,15 @@ import org.gradle.api.tasks.Nested
 import org.gradle.features.binding.BuildModel
 import org.gradle.features.binding.Definition
 
-interface OpenApiDefinition : Definition<BuildModel.None> {
-    val title: Property<String>
-    val description: Property<String>
+public interface OpenApiDefinition : Definition<BuildModel.None> {
+    public val title: Property<String>
+    public val description: Property<String>
 
     @get:Nested
-    val dependencies: OpenApiDependencies
+    public val dependencies: OpenApiDependencies
 }
 
-interface OpenApiDependencies : Dependencies {
-    val infrastructure: DependencyCollector
-    val transformers: DependencyCollector
+public interface OpenApiDependencies : Dependencies {
+    public val infrastructure: DependencyCollector
+    public val transformers: DependencyCollector
 }

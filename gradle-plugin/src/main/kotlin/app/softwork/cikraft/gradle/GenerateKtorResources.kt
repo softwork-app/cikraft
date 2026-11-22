@@ -12,7 +12,7 @@ import org.gradle.workers.*
 import javax.inject.*
 
 @CacheableTask
-abstract class GenerateKtorResources : DefaultTask() {
+public abstract class GenerateKtorResources : DefaultTask() {
     init {
         group = "cikraft"
     }
@@ -24,23 +24,23 @@ abstract class GenerateKtorResources : DefaultTask() {
     public abstract val createdFlows: ConfigurableFileCollection
 
     @get:OutputDirectory
-    abstract val ktorApi: DirectoryProperty
+    public abstract val ktorApi: DirectoryProperty
 
     @get:Inject
-    internal abstract val workerExecutor: WorkerExecutor
+    protected abstract val workerExecutor: WorkerExecutor
 
     @get:Classpath
     internal abstract val workerClasspath: ConfigurableFileCollection
 
     @TaskAction
-    internal fun generate() {
+    protected fun generate() {
         val worker = workerExecutor.classLoaderIsolation {
-            classpath.from(workerClasspath)
+            it.classpath.from(workerClasspath)
         }
         for (createdFlow in createdFlows.asFileTree) {
-            worker.submit(GenerateKtorResourcesWorker::class) {
-                this.createdFlow.set(createdFlow)
-                this.outputDirectory.set(ktorApi)
+            worker.submit(GenerateKtorResourcesWorker::class.java) {
+                it.createdFlow.set(createdFlow)
+                it.outputDirectory.set(ktorApi)
             }
         }
     }
