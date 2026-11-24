@@ -1,3 +1,7 @@
+import app.softwork.cikraft.gradle.SAPCI
+import app.softwork.cikraft.gradle.SAPCIStage
+import org.gradle.api.attributes.Usage
+
 jvmApplication {
   dependencies {
     implementation(projects.app)
@@ -48,4 +52,31 @@ jvmApplication {
       }
     }
   }
+}
+
+listOf(
+    "Unstaged" to null,
+    "Dev" to "Dev",
+    "Prod" to "Prod",
+).forEach { (name, stage) ->
+    val configurationName = "${name.lowercase()}Properties"
+    val configuration = configurations.create(configurationName) {
+        isCanBeConsumed = false
+        isCanBeResolved = true
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage::class.java, "sap-ci"))
+            attribute(SAPCI.attribute, objects.named(SAPCI::class.java, SAPCI.STAGE_PROPERTIES))
+            stage?.let {
+                attribute(SAPCIStage.attribute, objects.named(SAPCIStage::class.java, it))
+            }
+        }
+    }
+    dependencies.add(configurationName, project(":infra"))
+
+    tasks.register("resolve${name}Properties") {
+        inputs.files(configuration)
+        doLast {
+            println("resolved=${inputs.files.singleFile}")
+        }
+    }
 }
